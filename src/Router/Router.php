@@ -50,7 +50,7 @@ class Router
                 return $url === $pattern;
                 break;
             case self::SC_STR:
-                return (strpos($pattern, $url) !== false);
+                return (strpos($url, $pattern) !== false);
                 break;
             case self::SC_REG:
                 return (bool) preg_match($pattern, $url);
