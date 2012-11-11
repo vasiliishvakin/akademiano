@@ -1,0 +1,15 @@
+{
+    "name": "orbisnull/router",
+    "description": "Simple router for php applications",
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "orbisnull",
+            "email": "zen4dev@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-0": { "Router": "src/" }
+    }
+
+}
