@@ -1,5 +1,5 @@
 <?php
-namespace  Router;
+namespace  Kindrouter;
 
 /**
  * класс осуществляет роутинг и вызывает нужные обработчики

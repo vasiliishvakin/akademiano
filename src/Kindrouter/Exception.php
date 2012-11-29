@@ -1,4 +1,4 @@
 <?php
-namespace Router;
+namespace Kindrouter;
 
 class Exception extends \Exception {}
