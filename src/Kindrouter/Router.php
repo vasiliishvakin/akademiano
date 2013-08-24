@@ -15,7 +15,7 @@ class Router
     protected $urls=[];
     protected $isRun = false;
 
-    public function setUrl($pattern, $callback, $method = self::METHOD_ALL)
+    public function setUrl($pattern, $callback, $method = self::METHOD_ALL, $args = null)
     {
         if (!is_callable($callback)) {
             throw new Exception('Bad callback function');
@@ -40,7 +40,12 @@ class Router
             $scheme = self::SC_STR;
         }
 
-        $this->urls[$method][$pattern] = ['pattern'=>$pattern, 'scheme'=>$scheme, 'callback' => $callback];
+        $urlParams = ['pattern'=>$pattern, 'scheme'=>$scheme, 'callback' => $callback];
+        if (!is_null($args)) {
+            $urlParams['args'] = $args;
+        }
+
+        $this->urls[$method][$pattern] = $urlParams;
     }
 
     public function testUrl($url, $pattern, $scheme)
@@ -89,7 +94,11 @@ class Router
             $currUrls = empty($this->urls[$method]) ? [] : $this->urls[$method];
             foreach ($currUrls as &$urlData) {
                 if ($this->testUrl($strUrl, $urlData['pattern'], $urlData['scheme'])) {
-                    return call_user_func($urlData['callback']);
+                    if (isset($urlData['args'])) {
+                        return call_user_func_array($urlData['callback'], $urlData['args']);
+                    } else {
+                        return call_user_func($urlData['callback']);
+                    }
                 }
             }
         }
