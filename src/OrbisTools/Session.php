@@ -30,7 +30,7 @@ class Session {
         foreach ($closures as $action=>$closure)
         {
             if (is_callable($closure)) {
-                $closures[$action] = $closure;
+                $this->closures[$action] = $closure;
             }
         }
     }
