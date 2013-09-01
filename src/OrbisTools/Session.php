@@ -14,6 +14,8 @@ class Session {
 
     protected $closures = [];
 
+    protected $started = false;
+
     //protected $actions = ['start', 'destroy', 'status', 'set', 'get', 'rm'];
 
     function __construct(array $closures = null)
@@ -76,6 +78,7 @@ class Session {
             return call_user_func_array($closure, [$name, $value]);
         }
         $_SESSION[$name] = $value;
+        return true;
     }
 
     public function has($name)
@@ -103,6 +106,7 @@ class Session {
             return call_user_func($closure, $name);
         }
         unset($_SESSION[$name]);
+        return true;
     }
 
 
