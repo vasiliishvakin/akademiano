@@ -10,6 +10,9 @@
     ],
     "autoload": {
         "psr-0": { "Kindrouter": "src/" }
+    },
+    "require": {
+        "orbisnull/orbistools": "dev-master"
     }
 
 }

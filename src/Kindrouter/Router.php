@@ -1,6 +1,9 @@
 <?php
 namespace  Kindrouter;
 
+use OrbisTools\Request;
+use OrbisTools\ErrorHandler;
+
 /**
  * класс осуществляет роутинг и вызывает нужные обработчики
  */
@@ -14,6 +17,30 @@ class Router
 
     protected $urls=[];
     protected $isRun = false;
+
+    /**
+     * @var Request
+     */
+    protected $request;
+
+    /**
+     * @param \OrbisTools\Request $request
+     */
+    public function setRequest($request)
+    {
+        $this->request = $request;
+    }
+
+    /**
+     * @return \OrbisTools\Request
+     */
+    public function getRequest()
+    {
+        if (is_null($this->request)) {
+            $this->request = new Request();
+        }
+        return $this->request;
+    }
 
     public function setUrl($pattern, $callback, $method = self::METHOD_ALL, $args = null)
     {
@@ -73,46 +100,62 @@ class Router
         }
     }
 
-    public static function getUrlNormal()
+    protected function chooseUrlLong(array $urls)
     {
-        static $url;
-        if (is_null($url)) {
-            $url = $_SERVER['REQUEST_URI'];
-
-            if (($pos = strpos($url, '?')) !== false) {
-                $url = substr($url, 0, $pos);
-            }
-            $url = preg_replace('~(\/){2,}~', '/', $url);
-            if (empty($url)) {
-                $url = '/';
+        $max = 0;
+        $url = false;
+        foreach ($urls as $urlItem) {
+            $length = strlen($urlItem['pattern']);
+            if ($length > $max) {
+                $url = $urlItem;
             }
         }
         return $url;
     }
 
-    //если 0 - сразу
-    // если 3  - наибольший
-    // если 6  - по порядку
-    // если 9 - наибольший
-    //TODO implement this!
+    protected function chooseUrlFirst(array $urls)
+    {
+        return reset($urls);
+    }
+
+    // если 0 - первый
+    // если 3 - длинный
+    // если 6 - первый
+    // если 9 - длинный
     public function chooseUrl(array $urls)
     {
         ksort($urls);
-        foreach ($urls as $priority=>$urlsIntrList) {
-            ///
+        foreach ($urls as $priority=>$urlList) {
+            switch ($priority) {
+                case 0:
+                case 6:
+                    $url = $this->chooseUrlFirst($urlList);
+                    if ($url) {
+                        return $url;
+                    }
+                    break;
+                case 3:
+                case 9:
+                    $url = $this->chooseUrlLong($urlList);
+                    if ($url) {
+                        return $url;
+                    }
+                    break;
+                default:
+                    throw new \LogicException("Choose method for url priority $priority not defined");
+            }
         }
-
+        throw new \LogicException('urls not defined');
     }
 
     //TODO add prefix to str ^ - stop prefix search on this prefix
     public function run()
     {
-        if ($this->isRun) { return; }
+        if ($this->isRun) { return; } //fix double run
         $this->isRun = true;
 
-        $methods  = [self::METHOD_ALL, $_SERVER['REQUEST_METHOD']];
-        $strUrl = $this->getUrlNormal();
-
+        $methods  = [self::METHOD_ALL, $this->getRequest()->getMethod()];
+        $strUrl = $this->getRequest()->getUriNormal();
 
         $suitableUrls = [];
         $topPr = 99;
