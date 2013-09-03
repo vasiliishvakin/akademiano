@@ -94,6 +94,7 @@ class Router
     // если 3  - наибольший
     // если 6  - по порядку
     // если 9 - наибольший
+    //TODO implement this!
     public function chooseUrl(array $urls)
     {
         ksort($urls);
