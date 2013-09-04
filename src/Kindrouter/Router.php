@@ -90,7 +90,7 @@ class Router
                 return $url === $pattern;
                 break;
             case self::SC_STR:
-                return (strpos($url, $pattern) !== false);
+                return (strpos($url, $pattern) === 0);
                 break;
             case self::SC_REG:
                 return (bool) preg_match($pattern, $url);
@@ -145,7 +145,7 @@ class Router
                     throw new \LogicException("Choose method for url priority $priority not defined");
             }
         }
-        throw new \LogicException('urls not defined');
+        return null;
     }
 
     //TODO add prefix to str ^ - stop prefix search on this prefix
