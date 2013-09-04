@@ -94,7 +94,7 @@ class Session {
     {
         $closure = $this->getClosure('get');
         if ($closure) {
-            return call_user_func_array($closure, $name, $default);
+            return call_user_func_array($closure, [$name, $default]);
         }
         return isset($_SESSION[$name]) ? $_SESSION[$name] : $default;
     }
