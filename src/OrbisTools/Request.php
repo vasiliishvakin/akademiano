@@ -77,7 +77,7 @@ class Request
      */
     public function getVar($name, $default = null)
     {
-        return $this->hasParam($name, $default);
+        return $this->getParam($name, $default);
     }
 
     public function getDecodeJson($key, $default = null)

@@ -6,13 +6,20 @@ class TmpFile
 {
     protected  $fileName;
 
-    public function __construct($path)
+    public function __construct($path = null, $ext = null)
     {
+        if (is_null($path)) {
+            $path = sys_get_temp_dir();
+        }
+        if (is_null($ext)) {
+            $ext = '.tmp';
+        }
+
         if (!is_writable($path)) {
             throw new \RuntimeException('Tmp directory is not writable');
         }
         do {
-            $file = $path . "/" . mt_rand() . '.jpg';
+            $file = $path . "/" . mt_rand() . $ext;
             $fp = @fopen($file, 'x');
         } while (!$fp);
 
