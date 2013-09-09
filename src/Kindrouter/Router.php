@@ -23,6 +23,13 @@ class Router
      */
     protected $request;
 
+    function __construct(Request $request = null)
+    {
+        if (!is_null($request)) {
+            $this->setRequest($request);
+        }
+    }
+
     /**
      * @param \OrbisTools\Request $request
      */
