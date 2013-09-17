@@ -118,7 +118,7 @@ class FileSystem
 
     public static function getFiles($path, $resultType=self::LIST_SCALAR, $level = 1, $showHidden = false)
     {
-        return self::getItems($path, $resultType, self::FST_DIR, $level, $showHidden);
+        return self::getItems($path, $resultType, self::FST_FILE, $level, $showHidden);
     }
 
 }
