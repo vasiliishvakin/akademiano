@@ -11,11 +11,11 @@ class Time
 {
     public static function toSeconds($timeStr)
     {
-        $timeStr = trim($timeStr);
-        $unit = substr($timeStr, -1, 1);
-        if (is_int($unit)) {
+        if (is_int($timeStr)) {
             return $timeStr;
         }
+        $timeStr = trim($timeStr);
+        $unit = substr($timeStr, -1, 1);
         $time =(int)substr($timeStr, 0, -1);
         switch ($unit) {
             case 'd' :
