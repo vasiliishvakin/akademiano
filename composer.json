@@ -1,0 +1,14 @@
+{
+    "name": "orbisnull/DeltaSkeletonApplication",
+    "description": "Skeleton application on delta framework",
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "Vasiliy Shvakin",
+            "email": "zen4dev@gmail.com"
+        }
+    ],
+    "require": {
+	"orbisnull/delta": "dev-master"
+    }
+}

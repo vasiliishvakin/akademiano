@@ -1,0 +1,128 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+    ],
+    "hash": "2f047302ef6b961be2f51cfbc0f3ddcf",
+    "packages": [
+        {
+            "name": "orbisnull/delta",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/orbisnull/Delta.git",
+                "reference": "a3ce48a459b31e29b38d9deae6759f68d9128118"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/orbisnull/Delta/zipball/a3ce48a459b31e29b38d9deae6759f68d9128118",
+                "reference": "a3ce48a459b31e29b38d9deae6759f68d9128118",
+                "shasum": ""
+            },
+            "require": {
+                "orbisnull/kindrouter": "dev-master",
+                "orbisnull/orbistools": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Delta": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Vasiliy Shvakin",
+                    "email": "zen4dev@gmail.com"
+                }
+            ],
+            "description": "Delta PHP framework - fast, light, easy",
+            "time": "2013-09-17 12:40:24"
+        },
+        {
+            "name": "orbisnull/kindrouter",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/orbisnull/kindrouter.git",
+                "reference": "8e38b5e455cadc772c7287c3fba70cc0ebd06c44"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/orbisnull/kindrouter/zipball/8e38b5e455cadc772c7287c3fba70cc0ebd06c44",
+                "reference": "8e38b5e455cadc772c7287c3fba70cc0ebd06c44",
+                "shasum": ""
+            },
+            "require": {
+                "orbisnull/orbistools": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Kindrouter": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Vasiliy Shvakin",
+                    "email": "zen4dev@gmail.com"
+                }
+            ],
+            "description": "Simple router for php applications",
+            "time": "2013-09-09 05:01:46"
+        },
+        {
+            "name": "orbisnull/orbistools",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/orbisnull/orbistools.git",
+                "reference": "b5959f8a1d8db56f169ddee7d927e11ebc61acf1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/orbisnull/orbistools/zipball/b5959f8a1d8db56f169ddee7d927e11ebc61acf1",
+                "reference": "b5959f8a1d8db56f169ddee7d927e11ebc61acf1",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "OrbisTools": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Vasiliy Shvakin",
+                    "email": "zen4dev@gmail.com"
+                }
+            ],
+            "description": "request, session and other tools for web development",
+            "time": "2013-09-17 14:25:26"
+        }
+    ],
+    "packages-dev": [
+
+    ],
+    "aliases": [
+
+    ],
+    "minimum-stability": "dev",
+    "stability-flags": {
+        "orbisnull/delta": 20
+    },
+    "platform": [
+
+    ],
+    "platform-dev": [
+
+    ]
+}
