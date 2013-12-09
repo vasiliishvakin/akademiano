@@ -1,18 +1,16 @@
 <?php
 
-abstract class ModelDb extends ModelDbBase
+namespace DeltaDb;
+
+abstract class AbstractObject extends Table
 {
+    use RepositoriesTrait;
+
     // change in class
-    protected static $table = 'undefined';
-    protected static $modelClass = 'ModelDbExternal';
-    protected static $modelTplClass = 'ModelTpl';
+    protected static $classMapTableName;
 
     //do not touch
     protected $isNewEntity = true;
-
-    protected static $modelExternal;
-
-    protected static $modelTpl;
 
     protected $id;
 
@@ -24,32 +22,19 @@ abstract class ModelDb extends ModelDbBase
     }
 
     /**
-     * @return ModelDbExternal
+     * Do not Use!!!
+     * @param mixed $table
+     * @throws \LogicException
      */
-    public static function model()
+    public function setTableName($table)
     {
-        if (is_null(static::$modelExternal)) {
-            $model = static::$modelClass;
-            static::$modelExternal = new $model(get_called_class(), static::$table);
-        }
-        return static::$modelExternal;
+        throw new \LogicException('You cannot change table in class object');
     }
 
-    /**
-     * @return ModelTpl
-     */
-    public static function modelTpl()
-    {
-        if (is_null(static::$modelTpl)) {
-            $model = static::$modelTplClass;
-            static::$modelTpl = new $model(get_called_class());
-        }
-        return static::$modelTpl;
-    }
 
-    public function getTable()
+    public function getTableName()
     {
-        return self::model()->getTable();
+        return static::$classMapTableName;
     }
 
     public function isNew()

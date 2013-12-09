@@ -1,58 +1,16 @@
 <?php
 
-class ModelDbExternal extends ModelDbBase
+namespace DeltaDb\Repository;
+
+use DeltaDb\AbstractObject;
+
+class Repository extends AbstractRepository
 {
-    protected $class;
-    protected $table;
-    protected $dbFields;
-
-    public function __construct($class, $table)
-    {
-        $this->setClass($class);
-        $this->setTable($table);
-    }
-
-    /**
-     * @param mixed $class
-     */
-    public function setClass($class)
-    {
-        $this->class = $class;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getClass()
-    {
-        return $this->class;
-    }
-
-    /**
-     * @param mixed $table
-     */
-    protected function setTable($table)
-    {
-        $this->table = $table;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTable()
-    {
-        return $this->table;
-    }
-
-    public function getDao()
-    {
-        throw new LogicException('not implemented');
-    }
 
     protected function createEntity($data)
     {
         $class = $this->getClass();
-        /** @var $entity ModelDb */
+        /** @var $entity AbstractObject */
         $entity = new $class;
         $entity->load($data);
         $entity->setLoaded();
@@ -74,7 +32,7 @@ class ModelDbExternal extends ModelDbBase
     /**
      * @param array $data
      * @param bool $keyFromId
-     * @return ModelDb[]
+     * @return AbstractObject[]
      */
     public function createEntities(array $data, $keyFromId = false)
     {
@@ -98,7 +56,7 @@ class ModelDbExternal extends ModelDbBase
     public function getDbFields()
     {
         if (is_null($this->dbFields)) {
-            /** @var ModelDb $obj */
+            /** @var AbstractObject $obj */
             $class = $this->getClass();
             $obj = new $class();
             $this->dbFields = $obj->getDbFieldsList();
