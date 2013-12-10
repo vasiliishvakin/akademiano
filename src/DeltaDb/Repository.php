@@ -1,11 +1,36 @@
 <?php
 
-namespace DeltaDb\Repository;
+namespace DeltaDb;
 
-use DeltaDb\AbstractObject;
+use OrbisTools\Parts\GetRequest;
 
-class Repository extends AbstractRepository
+/**
+ * Class Repository
+ * @package DeltaDb
+ * @method  __construct(array $params) Params: ['class', 'table', 'dbaName' => null]
+ */
+class Repository extends Table
 {
+    use GetRequest;
+
+    protected $class;
+    protected $dbFields;
+
+    /**
+     * @param mixed $class
+     */
+    public function setClass($class)
+    {
+        $this->class = $class;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getClass()
+    {
+        return $this->class;
+    }
 
     protected function createEntity($data)
     {
@@ -62,5 +87,15 @@ class Repository extends AbstractRepository
             $this->dbFields = $obj->getDbFieldsList();
         }
         return $this->dbFields;
+    }
+
+    public function getRequestFields()
+    {
+        $request = $this->getRequest();
+        $dbFields = $this->getRepository()->getDbFields();
+        $dbFields[] = 'id';
+        $newFields = $request->getParams($dbFields);
+        $newFields = array_filter($newFields, function ($var) {return !is_null($var);});
+        return $newFields;
     }
 }

@@ -4,17 +4,25 @@ namespace DeltaDb;
 
 abstract class AbstractObject extends Table
 {
-    use RepositoriesTrait;
-
     // change in class
     protected static $classMapTableName;
+    protected static $repositoryClass = '\DeltaDb\Repository\Repository';
 
     //do not touch
+    protected static $repository;
+
     protected $isNewEntity = true;
-
     protected $id;
-
     protected $dbFieldsList;
+
+    public static function repository()
+    {
+        if (is_null(static::$repository)) {
+            $repository = static::$repositoryClass;
+            static::$repository = new $repository(get_called_class(), static::$table);
+        }
+        return static::$repository;
+    }
 
     public function getExcludedFields()
     {
