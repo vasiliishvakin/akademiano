@@ -1,8 +1,8 @@
 <?php
 
-use Delta\Controller;
+use DeltaCore\AbstractController;
 
-class IndexController extends Controller
+class IndexController extends AbstractController
 {
     public function IndexAction()
     {

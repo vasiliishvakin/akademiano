@@ -3,30 +3,99 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "2f047302ef6b961be2f51cfbc0f3ddcf",
+    "hash": "522f4c53809a3468b7534112a9f858e3",
     "packages": [
         {
-            "name": "orbisnull/delta",
+            "name": "monolog/monolog",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/orbisnull/Delta.git",
-                "reference": "a3ce48a459b31e29b38d9deae6759f68d9128118"
+                "url": "https://github.com/Seldaek/monolog.git",
+                "reference": "5ad421d6a1d5d7066a45b617e5164d309c4e2852"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/orbisnull/Delta/zipball/a3ce48a459b31e29b38d9deae6759f68d9128118",
-                "reference": "a3ce48a459b31e29b38d9deae6759f68d9128118",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/5ad421d6a1d5d7066a45b617e5164d309c4e2852",
+                "reference": "5ad421d6a1d5d7066a45b617e5164d309c4e2852",
                 "shasum": ""
             },
             "require": {
+                "php": ">=5.3.0",
+                "psr/log": "~1.0"
+            },
+            "require-dev": {
+                "aws/aws-sdk-php": "~2.4.8",
+                "doctrine/couchdb": "dev-master",
+                "mlehner/gelf-php": "1.0.*",
+                "phpunit/phpunit": "~3.7.0",
+                "raven/raven": "0.5.*",
+                "ruflin/elastica": "0.90.*"
+            },
+            "suggest": {
+                "aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB",
+                "doctrine/couchdb": "Allow sending log messages to a CouchDB server",
+                "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
+                "ext-mongo": "Allow sending log messages to a MongoDB server",
+                "mlehner/gelf-php": "Allow sending log messages to a GrayLog2 server",
+                "raven/raven": "Allow sending log messages to a Sentry server",
+                "ruflin/elastica": "Allow sending log messages to an Elastic Search server"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.7.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Monolog": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be",
+                    "homepage": "http://seld.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Sends your logs to files, sockets, inboxes, databases and various web services",
+            "homepage": "http://github.com/Seldaek/monolog",
+            "keywords": [
+                "log",
+                "logging",
+                "psr-3"
+            ],
+            "time": "2013-12-02 09:38:32"
+        },
+        {
+            "name": "orbisnull/deltacore",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/orbisnull/DeltaCore.git",
+                "reference": "0e5bebe928ae9505603da61a3f1b31a33e9e1d13"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/orbisnull/DeltaCore/zipball/0e5bebe928ae9505603da61a3f1b31a33e9e1d13",
+                "reference": "0e5bebe928ae9505603da61a3f1b31a33e9e1d13",
+                "shasum": ""
+            },
+            "require": {
+                "monolog/monolog": "1.*",
                 "orbisnull/kindrouter": "dev-master",
-                "orbisnull/orbistools": "dev-master"
+                "orbisnull/orbistools": "dev-master",
+                "twig/twig": "1.*"
             },
             "type": "library",
             "autoload": {
                 "psr-0": {
-                    "Delta": "src/"
+                    "DeltaCore": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -39,8 +108,8 @@
                     "email": "zen4dev@gmail.com"
                 }
             ],
-            "description": "Delta PHP framework - fast, light, easy",
-            "time": "2013-09-17 12:40:24"
+            "description": "Delta PHP framework - fast, light, easy (core)",
+            "time": "2013-12-13 16:19:00"
         },
         {
             "name": "orbisnull/kindrouter",
@@ -68,7 +137,7 @@
             "notification-url": "https://packagist.org/downloads/",
             "authors": [
                 {
-                    "name": "Vasiliy Shvakin",
+                    "name": "orbisnull",
                     "email": "zen4dev@gmail.com"
                 }
             ],
@@ -81,12 +150,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/orbisnull/orbistools.git",
-                "reference": "b5959f8a1d8db56f169ddee7d927e11ebc61acf1"
+                "reference": "02ba36f1643897de77e3bb3e520bdbfb9ea1f63c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/orbisnull/orbistools/zipball/b5959f8a1d8db56f169ddee7d927e11ebc61acf1",
-                "reference": "b5959f8a1d8db56f169ddee7d927e11ebc61acf1",
+                "url": "https://api.github.com/repos/orbisnull/orbistools/zipball/02ba36f1643897de77e3bb3e520bdbfb9ea1f63c",
+                "reference": "02ba36f1643897de77e3bb3e520bdbfb9ea1f63c",
                 "shasum": ""
             },
             "type": "library",
@@ -106,7 +175,99 @@
                 }
             ],
             "description": "request, session and other tools for web development",
-            "time": "2013-09-17 14:25:26"
+            "time": "2013-12-09 16:44:13"
+        },
+        {
+            "name": "psr/log",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/log.git",
+                "reference": "5144da9525d24346bf009ff28f10cbaa1f0f166e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/5144da9525d24346bf009ff28f10cbaa1f0f166e",
+                "reference": "5144da9525d24346bf009ff28f10cbaa1f0f166e",
+                "shasum": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Psr\\Log\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for logging libraries",
+            "keywords": [
+                "log",
+                "psr",
+                "psr-3"
+            ],
+            "time": "2013-12-05 15:25:07"
+        },
+        {
+            "name": "twig/twig",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fabpot/Twig.git",
+                "reference": "6387fc457792f38189bdd5729b500772bbddfa4d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fabpot/Twig/zipball/6387fc457792f38189bdd5729b500772bbddfa4d",
+                "reference": "6387fc457792f38189bdd5729b500772bbddfa4d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.4"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.15-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Twig_": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Armin Ronacher",
+                    "email": "armin.ronacher@active-4.com"
+                }
+            ],
+            "description": "Twig, the flexible, fast, and secure template language for PHP",
+            "homepage": "http://twig.sensiolabs.org",
+            "keywords": [
+                "templating"
+            ],
+            "time": "2013-12-10 10:23:00"
         }
     ],
     "packages-dev": [
@@ -117,7 +278,7 @@
     ],
     "minimum-stability": "dev",
     "stability-flags": {
-        "orbisnull/delta": 20
+        "orbisnull/deltacore": 20
     },
     "platform": [
 

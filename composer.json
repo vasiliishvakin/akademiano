@@ -9,6 +9,6 @@
         }
     ],
     "require": {
-	"orbisnull/delta": "dev-master"
+        "orbisnull/deltacore": "dev-master"
     }
 }

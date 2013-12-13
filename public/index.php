@@ -15,7 +15,7 @@ get_include_path());
 $loader = include_once ROOT_DIR . "/vendor/autoload.php";
 $loader->setUseIncludePath(true);
 
-use Delta\Application;
+use DeltaCore\Application;
 
 $app = new Application();
 
