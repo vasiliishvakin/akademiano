@@ -5,14 +5,18 @@
 
 namespace OrbisTools;
 
+use DeltaCore\Config;
+use OrbisTools\Parts\Configurable;
+
 class Response
 {
-    protected $body;
+    use Configurable;
 
+    protected $body;
     protected $code = 200;
     protected $contentType = 'text/html';
     protected $charset = 'utf-8';
-    protected $language = 'ru';
+    protected $language = 'en';
     protected $modified;
     protected $timeToCache;
     protected $etag;
@@ -62,7 +66,7 @@ class Response
      */
     public function getCharset()
     {
-        return $this->charset;
+        return !is_null($this->charset) ? $this->charset : $this->getConfig('charset');
     }
 
     /**
@@ -97,8 +101,6 @@ class Response
         return $this->modified;
     }
 
-
-
     /**
      * @param string $language
      */
@@ -112,7 +114,7 @@ class Response
      */
     public function getLanguage()
     {
-        return $this->language;
+        return !is_null($this->language) ? $this->language : $this->getConfig('language');
     }
 
     /**
@@ -155,8 +157,6 @@ class Response
         return $this->etag;
     }
 
-
-
     public function sendHeaders()
     {
         if (headers_sent()) {
@@ -167,10 +167,8 @@ class Response
         header("Content-Language: {$this->getLanguage()}");
 
         $modified = $this->getModified();
-        if (!empty($modified)) {
-            Header::modified($modified);
-        }
-        Header::modified();
+        Header::modified($modified);
+
         $cacheTime = $this->getTimeToCache();
         if ($cacheTime>0) {
             Header::cache($cacheTime);
@@ -204,6 +202,4 @@ class Response
         $this->sendHeaders();
         echo $this->getBody();
     }
-
-
 }
