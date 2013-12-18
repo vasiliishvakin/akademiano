@@ -1,0 +1,17 @@
+{
+    "name": "orbisnull/dtpl",
+    "description": "small base template engine",
+    "license": "GPL-3.0+",
+    "authors": [
+        {
+            "name": "orbisnull",
+            "email": "zen4dev@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-0": {
+            "dTpl": "src/"
+        }
+    }
+}
