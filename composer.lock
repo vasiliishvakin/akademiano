@@ -11,12 +11,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "5ad421d6a1d5d7066a45b617e5164d309c4e2852"
+                "reference": "c9db00f8821b2cc7238732529f8d4007296a630c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/5ad421d6a1d5d7066a45b617e5164d309c4e2852",
-                "reference": "5ad421d6a1d5d7066a45b617e5164d309c4e2852",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/c9db00f8821b2cc7238732529f8d4007296a630c",
+                "reference": "c9db00f8821b2cc7238732529f8d4007296a630c",
                 "shasum": ""
             },
             "require": {
@@ -70,7 +70,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2013-12-02 09:38:32"
+            "time": "2013-12-14 13:52:08"
         },
         {
             "name": "orbisnull/deltacore",
@@ -78,16 +78,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/orbisnull/DeltaCore.git",
-                "reference": "0e5bebe928ae9505603da61a3f1b31a33e9e1d13"
+                "reference": "223f05cf755b5669368a79e120b2b33fc9b0df12"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/orbisnull/DeltaCore/zipball/0e5bebe928ae9505603da61a3f1b31a33e9e1d13",
-                "reference": "0e5bebe928ae9505603da61a3f1b31a33e9e1d13",
+                "url": "https://api.github.com/repos/orbisnull/DeltaCore/zipball/223f05cf755b5669368a79e120b2b33fc9b0df12",
+                "reference": "223f05cf755b5669368a79e120b2b33fc9b0df12",
                 "shasum": ""
             },
             "require": {
                 "monolog/monolog": "1.*",
+                "orbisnull/dtpl": "dev-master",
                 "orbisnull/kindrouter": "dev-master",
                 "orbisnull/orbistools": "dev-master",
                 "twig/twig": "1.*"
@@ -109,7 +110,40 @@
                 }
             ],
             "description": "Delta PHP framework - fast, light, easy (core)",
-            "time": "2013-12-13 16:19:00"
+            "time": "2013-12-19 12:06:34"
+        },
+        {
+            "name": "orbisnull/dtpl",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/orbisnull/dTpl.git",
+                "reference": "24d2da8788d853f82f0a2cb5807def8d6bb8f6c0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/orbisnull/dTpl/zipball/24d2da8788d853f82f0a2cb5807def8d6bb8f6c0",
+                "reference": "24d2da8788d853f82f0a2cb5807def8d6bb8f6c0",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "dTpl": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Vasiliy Shvakin",
+                    "email": "zen4dev@gmail.com"
+                }
+            ],
+            "description": "small base template engine",
+            "time": "2013-12-19 12:05:08"
         },
         {
             "name": "orbisnull/kindrouter",
@@ -150,12 +184,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/orbisnull/orbistools.git",
-                "reference": "02ba36f1643897de77e3bb3e520bdbfb9ea1f63c"
+                "reference": "42134f48c81e8384c56a6402ee8d0598f07bb2df"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/orbisnull/orbistools/zipball/02ba36f1643897de77e3bb3e520bdbfb9ea1f63c",
-                "reference": "02ba36f1643897de77e3bb3e520bdbfb9ea1f63c",
+                "url": "https://api.github.com/repos/orbisnull/orbistools/zipball/42134f48c81e8384c56a6402ee8d0598f07bb2df",
+                "reference": "42134f48c81e8384c56a6402ee8d0598f07bb2df",
                 "shasum": ""
             },
             "type": "library",
@@ -175,7 +209,7 @@
                 }
             ],
             "description": "request, session and other tools for web development",
-            "time": "2013-12-09 16:44:13"
+            "time": "2013-12-15 08:38:21"
         },
         {
             "name": "psr/log",
