@@ -178,6 +178,6 @@ abstract class AbstractView implements InterfaceView
         return $content;
     }
 
-    abstract public function render($template = null, $params = []);
+    abstract public function render($params = [], $templateName = null);
 
 } 

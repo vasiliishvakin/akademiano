@@ -57,10 +57,10 @@ class View extends AbstractView implements InterfaceView
         return $this->filterContent($content);
     }
 
-    public function render($template = null, $params = [])
+    public function render($templateName = null, $params = [])
     {
-        if (!is_null($template)) {
-            $this->template = $template;
+        if (!is_null($templateName)) {
+            $this->setTemplate($templateName);
         }
         $globalVars = $this->getGlobalVars();
         $vars = $this->getAssignedVars();

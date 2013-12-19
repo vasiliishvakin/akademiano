@@ -22,6 +22,6 @@ interface InterfaceView
 
     public function getGlobalVars();
 
-    public function render($template = null, $params = []);
+    public function render($params = [], $templateName = null);
 
 }
