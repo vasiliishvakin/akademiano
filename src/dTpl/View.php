@@ -44,7 +44,7 @@ class View extends AbstractView implements InterfaceView
             if (is_null($templatePath)) {
                 throw new \RuntimeException("Template $templateFile not exist in array templates and template dirs");
             }
-            var_export($vars);
+            extract($vars);
             try {
                 ob_start();
                 include $templatePath;

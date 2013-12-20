@@ -40,7 +40,7 @@ abstract class AbstractView implements InterfaceView
     {
         $rootDir = defined('ROOT_DIR') ? ROOT_DIR : null;
         if (is_null($rootDir)) {
-            $rootDir = realpath(__DIR__ . '../../../../../');
+            $rootDir = realpath(__DIR__ . '/../../../../../');
             define('ROOT_DIR', $rootDir);
         }
         return $rootDir;
@@ -147,7 +147,7 @@ abstract class AbstractView implements InterfaceView
         $this->templateDirs = $templateDirs;
     }
 
-    public function addTemplateDirs($directory)
+    public function addTemplateDir($directory)
     {
         $this->templateDirs[] = $directory;
     }
@@ -158,7 +158,9 @@ abstract class AbstractView implements InterfaceView
     public function getTemplateDirs()
     {
         $config = $this->getConfig();
-        $dirs = (array) isset($config['templateDirs']) ? $config['templateDirs'] : 'public/templates';
+        $dirs = isset($config['templateDirs']) ? $config['templateDirs'] : 'public/templates';
+        $dirs = (array) $dirs;
+        $dirs = array_merge($this->templateDirs, $dirs);
         $realDirs = [];
         foreach ($dirs as $dir) {
             if(strpos($dir, '/') === 0) {
