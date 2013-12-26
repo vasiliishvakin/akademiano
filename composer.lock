@@ -3,95 +3,26 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "522f4c53809a3468b7534112a9f858e3",
+    "hash": "b8f9381bf3b7d15c474f8d28b3149929",
     "packages": [
-        {
-            "name": "monolog/monolog",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "c9db00f8821b2cc7238732529f8d4007296a630c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/c9db00f8821b2cc7238732529f8d4007296a630c",
-                "reference": "c9db00f8821b2cc7238732529f8d4007296a630c",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0",
-                "psr/log": "~1.0"
-            },
-            "require-dev": {
-                "aws/aws-sdk-php": "~2.4.8",
-                "doctrine/couchdb": "dev-master",
-                "mlehner/gelf-php": "1.0.*",
-                "phpunit/phpunit": "~3.7.0",
-                "raven/raven": "0.5.*",
-                "ruflin/elastica": "0.90.*"
-            },
-            "suggest": {
-                "aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB",
-                "doctrine/couchdb": "Allow sending log messages to a CouchDB server",
-                "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
-                "ext-mongo": "Allow sending log messages to a MongoDB server",
-                "mlehner/gelf-php": "Allow sending log messages to a GrayLog2 server",
-                "raven/raven": "Allow sending log messages to a Sentry server",
-                "ruflin/elastica": "Allow sending log messages to an Elastic Search server"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.7.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Monolog": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jordi Boggiano",
-                    "email": "j.boggiano@seld.be",
-                    "homepage": "http://seld.be",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Sends your logs to files, sockets, inboxes, databases and various web services",
-            "homepage": "http://github.com/Seldaek/monolog",
-            "keywords": [
-                "log",
-                "logging",
-                "psr-3"
-            ],
-            "time": "2013-12-14 13:52:08"
-        },
         {
             "name": "orbisnull/deltacore",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/orbisnull/DeltaCore.git",
-                "reference": "223f05cf755b5669368a79e120b2b33fc9b0df12"
+                "reference": "99a2d7d444917bacd9b41dbc38e299d2375ae4c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/orbisnull/DeltaCore/zipball/223f05cf755b5669368a79e120b2b33fc9b0df12",
-                "reference": "223f05cf755b5669368a79e120b2b33fc9b0df12",
+                "url": "https://api.github.com/repos/orbisnull/DeltaCore/zipball/99a2d7d444917bacd9b41dbc38e299d2375ae4c1",
+                "reference": "99a2d7d444917bacd9b41dbc38e299d2375ae4c1",
                 "shasum": ""
             },
             "require": {
-                "monolog/monolog": "1.*",
                 "orbisnull/dtpl": "dev-master",
                 "orbisnull/kindrouter": "dev-master",
-                "orbisnull/orbistools": "dev-master",
-                "twig/twig": "1.*"
+                "orbisnull/orbistools": "dev-master"
             },
             "type": "library",
             "autoload": {
@@ -110,7 +41,7 @@
                 }
             ],
             "description": "Delta PHP framework - fast, light, easy (core)",
-            "time": "2013-12-19 12:06:34"
+            "time": "2013-12-19 12:29:59"
         },
         {
             "name": "orbisnull/dtpl",
@@ -118,12 +49,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/orbisnull/dTpl.git",
-                "reference": "24d2da8788d853f82f0a2cb5807def8d6bb8f6c0"
+                "reference": "59296fb1bfb437fd854e57df227f509454e623fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/orbisnull/dTpl/zipball/24d2da8788d853f82f0a2cb5807def8d6bb8f6c0",
-                "reference": "24d2da8788d853f82f0a2cb5807def8d6bb8f6c0",
+                "url": "https://api.github.com/repos/orbisnull/dTpl/zipball/59296fb1bfb437fd854e57df227f509454e623fc",
+                "reference": "59296fb1bfb437fd854e57df227f509454e623fc",
                 "shasum": ""
             },
             "type": "library",
@@ -138,12 +69,12 @@
             ],
             "authors": [
                 {
-                    "name": "Vasiliy Shvakin",
+                    "name": "orbisnull",
                     "email": "zen4dev@gmail.com"
                 }
             ],
             "description": "small base template engine",
-            "time": "2013-12-19 12:05:08"
+            "time": "2013-12-20 08:46:50"
         },
         {
             "name": "orbisnull/kindrouter",
@@ -210,49 +141,6 @@
             ],
             "description": "request, session and other tools for web development",
             "time": "2013-12-15 08:38:21"
-        },
-        {
-            "name": "psr/log",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-fig/log.git",
-                "reference": "5144da9525d24346bf009ff28f10cbaa1f0f166e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/5144da9525d24346bf009ff28f10cbaa1f0f166e",
-                "reference": "5144da9525d24346bf009ff28f10cbaa1f0f166e",
-                "shasum": ""
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Psr\\Log\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "PHP-FIG",
-                    "homepage": "http://www.php-fig.org/"
-                }
-            ],
-            "description": "Common interface for logging libraries",
-            "keywords": [
-                "log",
-                "psr",
-                "psr-3"
-            ],
-            "time": "2013-12-05 15:25:07"
         },
         {
             "name": "twig/twig",

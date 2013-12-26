@@ -2,10 +2,14 @@
 
 return [
     'view' => [
-        'adapter' => 'Twig',
+        'adapter' => 'twig',
         'templateDirs' => [
             'public/templates',
-        ]
+        ],
+        'options' => [
+            'cache' => 'data/cache',
+            'auto_reload' => true,
+        ],
     ]
 
 ];

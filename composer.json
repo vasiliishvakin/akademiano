@@ -9,6 +9,7 @@
         }
     ],
     "require": {
-        "orbisnull/deltacore": "dev-master"
+        "orbisnull/deltacore": "dev-master",
+        "twig/twig": "1.*"
     }
 }

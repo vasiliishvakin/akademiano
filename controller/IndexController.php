@@ -6,8 +6,10 @@ class IndexController extends AbstractController
 {
     public function IndexAction()
     {
-        $this->getResponse()->setModified(1379422093);
-        $this->getResponse()->setTimeToCache("1d");
+        $this->getView()->assign("assignedVar", "Index Controller [Delta]");
+
+//        $this->getResponse()->setModified(1387690174);
+//        $this->getResponse()->setTimeToCache("1d");
     }
 
 }
