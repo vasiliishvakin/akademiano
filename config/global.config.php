@@ -4,7 +4,7 @@ return [
     'view' => [
         'adapter' => 'twig',
         'templateDirs' => [
-            'public/templates',
+            'templates',
         ],
         'options' => [
             'cache' => 'data/cache',
