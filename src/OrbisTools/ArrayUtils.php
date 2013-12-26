@@ -22,18 +22,19 @@ class ArrayUtils {
         return $merged;
     }
 
-    public static function getByPath(array $array, array $path = null, $default = null)
+    public static function getByPath(array $array, $path = null, $default = null)
     {
         if (is_null($path)) {
             return $array;
         }
+        $path = (array) $path;
 
         $current = $array;
         foreach($path as $item) {
             if (!isset($current[$item])) {
                 return $default;
             }
-            $current = $item;
+            $current = $current[$item];
         }
         return $current;
     }

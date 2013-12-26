@@ -11,7 +11,7 @@ trait Configurable
      */
     protected $config;
 
-    public function setConfig(Config $config)
+    public function setConfig(Config $config = null)
     {
         $this->config = $config;
     }
