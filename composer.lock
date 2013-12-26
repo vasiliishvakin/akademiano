@@ -11,12 +11,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/orbisnull/DeltaCore.git",
-                "reference": "99a2d7d444917bacd9b41dbc38e299d2375ae4c1"
+                "reference": "988b11cf0ec7bbafbe95203b018462ac67076994"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/orbisnull/DeltaCore/zipball/99a2d7d444917bacd9b41dbc38e299d2375ae4c1",
-                "reference": "99a2d7d444917bacd9b41dbc38e299d2375ae4c1",
+                "url": "https://api.github.com/repos/orbisnull/DeltaCore/zipball/988b11cf0ec7bbafbe95203b018462ac67076994",
+                "reference": "988b11cf0ec7bbafbe95203b018462ac67076994",
                 "shasum": ""
             },
             "require": {
@@ -41,7 +41,7 @@
                 }
             ],
             "description": "Delta PHP framework - fast, light, easy (core)",
-            "time": "2013-12-19 12:29:59"
+            "time": "2013-12-26 17:09:30"
         },
         {
             "name": "orbisnull/dtpl",
@@ -49,12 +49,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/orbisnull/dTpl.git",
-                "reference": "59296fb1bfb437fd854e57df227f509454e623fc"
+                "reference": "5f2de3bc1edaa85619cfbc6a1ba3341b3d99585d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/orbisnull/dTpl/zipball/59296fb1bfb437fd854e57df227f509454e623fc",
-                "reference": "59296fb1bfb437fd854e57df227f509454e623fc",
+                "url": "https://api.github.com/repos/orbisnull/dTpl/zipball/5f2de3bc1edaa85619cfbc6a1ba3341b3d99585d",
+                "reference": "5f2de3bc1edaa85619cfbc6a1ba3341b3d99585d",
                 "shasum": ""
             },
             "type": "library",
@@ -69,12 +69,12 @@
             ],
             "authors": [
                 {
-                    "name": "orbisnull",
+                    "name": "Vasiliy Shvakin",
                     "email": "zen4dev@gmail.com"
                 }
             ],
             "description": "small base template engine",
-            "time": "2013-12-20 08:46:50"
+            "time": "2013-12-26 17:10:21"
         },
         {
             "name": "orbisnull/kindrouter",
@@ -115,12 +115,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/orbisnull/orbistools.git",
-                "reference": "42134f48c81e8384c56a6402ee8d0598f07bb2df"
+                "reference": "07852c335f8ea62998ad1e6def319cb92b497d61"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/orbisnull/orbistools/zipball/42134f48c81e8384c56a6402ee8d0598f07bb2df",
-                "reference": "42134f48c81e8384c56a6402ee8d0598f07bb2df",
+                "url": "https://api.github.com/repos/orbisnull/orbistools/zipball/07852c335f8ea62998ad1e6def319cb92b497d61",
+                "reference": "07852c335f8ea62998ad1e6def319cb92b497d61",
                 "shasum": ""
             },
             "type": "library",
@@ -140,7 +140,7 @@
                 }
             ],
             "description": "request, session and other tools for web development",
-            "time": "2013-12-15 08:38:21"
+            "time": "2013-12-26 17:11:13"
         },
         {
             "name": "twig/twig",
