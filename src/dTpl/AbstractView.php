@@ -6,6 +6,8 @@
 namespace dTpl;
 
 
+use DeltaCore\Config;
+
 abstract class AbstractView implements InterfaceView
 {
     const TPL_EXT = 'tpl';
@@ -158,8 +160,10 @@ abstract class AbstractView implements InterfaceView
     public function getTemplateDirs()
     {
         $config = $this->getConfig();
-        $dirs = isset($config['templateDirs']) ? $config['templateDirs'] : 'public/templates';
-        $dirs = (array) $dirs;
+        $dirs = isset($config['templateDirs']) ? $config['templateDirs'] : 'public/templates2';
+        if ($dirs instanceof Config) {
+            $dirs = $dirs->toArray();
+        }
         $dirs = array_merge($this->templateDirs, $dirs);
         $realDirs = [];
         foreach ($dirs as $dir) {
