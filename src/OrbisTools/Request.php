@@ -123,6 +123,20 @@ class Request
         return $this->uriNormal;
     }
 
+    public function getUriPartByNum($num = 0, $default = null)
+    {
+        $uri = trim($this->getUriNormal(), '/');
+        if ($num === 0) {
+            return $uri;
+        }
+        $uri = explode('/', $uri);
+        $num = ($num < 0) ? $num = count($uri) + $num : $num = $num - 1;
+        if ($num > count($uri) -1) {
+            return $default;
+        }
+        return $uri[$num];
+    }
+
 
 
 } 
