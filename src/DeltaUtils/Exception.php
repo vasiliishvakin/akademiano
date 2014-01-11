@@ -1,4 +1,4 @@
 <?php
-namespace OrbisTools;
+namespace DeltaUtils;
 
 class Exception extends \Exception {}

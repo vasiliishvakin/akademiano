@@ -1,6 +1,6 @@
 {
-    "name": "orbisnull/orbistools",
-    "description": "request, session and other tools for web development",
+    "name": "deltaphp/deltautils",
+    "description": "good tools and utils",
     "license": "GPL-3.0+",
     "authors": [
         {
@@ -10,9 +10,6 @@
     ],
     "minimum-stability": "dev",
     "autoload": {
-        "psr-0": { "OrbisTools": "src/" }
-    },
-    "require": {
-
+        "psr-0": { "DeltaUtils": "src/" }
     }
 }

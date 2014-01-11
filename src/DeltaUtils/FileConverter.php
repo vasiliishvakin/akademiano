@@ -1,8 +1,8 @@
 <?php
 
-namespace OrbisTools;
+namespace DeltaUtils;
 
-use OrbisTools\Object\TmpFile;
+use DeltaUtils\Object\TmpFile;
 
 class FileConverter
 {

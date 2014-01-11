@@ -8,7 +8,7 @@
  * @package   Zend_Stdlib
  */
 
-namespace OrbisTools;
+namespace DeltaUtils;
 
 use ErrorException;
 

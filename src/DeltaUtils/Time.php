@@ -4,7 +4,7 @@
  * Date: 07.09.13
  */
 
-namespace OrbisTools;
+namespace DeltaUtils;
 
 
 class Time

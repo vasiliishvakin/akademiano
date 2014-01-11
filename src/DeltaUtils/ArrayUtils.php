@@ -3,7 +3,7 @@
  * User: Vasiliy Shvakin (orbisnull) zen4dev@gmail.com
  */
 
-namespace OrbisTools;
+namespace DeltaUtils;
 
 class ArrayUtils {
     const FIRST_IN_ARRAY = '____first';

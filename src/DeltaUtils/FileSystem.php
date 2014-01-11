@@ -3,9 +3,9 @@
  * User: Vasiliy Shvakin (aka orbisnull)
  */
 
-namespace OrbisTools;
+namespace DeltaUtils;
 
-use OrbisTools\Object\File;
+use DeltaUtils\Object\File;
 
 class FileSystem
 {

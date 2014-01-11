@@ -1,7 +1,7 @@
 <?php
-namespace OrbisTools\Object;
+namespace DeltaUtils\Object;
 
-use OrbisTools\FileSystem as FS;
+use DeltaUtils\FileSystem as FS;
 use \SplFileInfo;
 
 class File

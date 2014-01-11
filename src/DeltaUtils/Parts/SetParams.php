@@ -1,6 +1,6 @@
 <?php
 
-namespace OrbisTools\Parts;
+namespace DeltaUtils\Parts;
 
 trait SetParams
 {

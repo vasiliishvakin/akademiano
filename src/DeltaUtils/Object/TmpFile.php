@@ -1,6 +1,6 @@
 <?php
 
-namespace OrbisTools\Object;
+namespace DeltaUtils\Object;
 
 class TmpFile
 {
