@@ -1,8 +1,8 @@
 <?php
 
-namespace OrbisTools\Parts;
+namespace HttpWarp\Parts;
 
-use OrbisTools\Request;
+use HttpWarp\Request;
 
 trait GetRequest
 {

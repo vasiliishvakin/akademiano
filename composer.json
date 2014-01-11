@@ -1,6 +1,6 @@
 {
-    "name": "orbisnull/orbistools",
-    "description": "request, session and other tools for web development",
+    "name": "deltaphp/httpwarp",
+    "description": "request, response, session and other tools for base web development",
     "license": "GPL-3.0+",
     "authors": [
         {
@@ -10,9 +10,9 @@
     ],
     "minimum-stability": "dev",
     "autoload": {
-        "psr-0": { "OrbisTools": "src/" }
+        "psr-0": { "HttpWarp": "src/" }
     },
     "require": {
-
+        "deltaphp/deltautils": "dev-master"
     }
 }

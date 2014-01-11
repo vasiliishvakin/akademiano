@@ -4,9 +4,9 @@
  * Date: 07.09.13
  */
 
-namespace OrbisTools;
+namespace HttpWarp;
 
-use OrbisTools\Time;
+use DeltaUtils\Time;
 
 class Header 
 {

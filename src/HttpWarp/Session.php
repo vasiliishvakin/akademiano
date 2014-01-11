@@ -7,7 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-namespace OrbisTools;
+namespace HttpWarp;
 
 
 class Session {

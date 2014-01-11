@@ -3,15 +3,11 @@
  * User: Vasiliy Shvakin (orbisnull) zen4dev@gmail.com
  */
 
-namespace OrbisTools;
-
-use DeltaCore\Config;
-use OrbisTools\Parts\Configurable;
+namespace HttpWarp;
 
 class Response
 {
-    use Configurable;
-
+    protected $config = [];
     protected $body;
     protected $code = 200;
     protected $contentType = 'text/html';
@@ -20,6 +16,28 @@ class Response
     protected $modified;
     protected $timeToCache;
     protected $etag;
+
+    /**
+     * @param array $config
+     */
+    public function setConfig($config)
+    {
+        $this->config = $config;
+    }
+
+    /**
+     * @return array
+     */
+    public function getConfig($section = null, $default = null)
+    {
+        if (is_null($section)) {
+            return $this->config;
+        }
+        if (isset($this->config[$section])) {
+            return $this->config[$section];
+        }
+        return $default;
+    }
 
     /**
      * @param mixed $body

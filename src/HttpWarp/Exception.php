@@ -1,4 +1,4 @@
 <?php
-namespace OrbisTools;
+namespace HttpWarp;
 
 class Exception extends \Exception {}
