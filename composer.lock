@@ -3,26 +3,27 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "b8f9381bf3b7d15c474f8d28b3149929",
+    "hash": "4467cc97b2969479612b7c0c08294d57",
     "packages": [
         {
-            "name": "orbisnull/deltacore",
+            "name": "deltaphp/deltacore",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/orbisnull/DeltaCore.git",
-                "reference": "988b11cf0ec7bbafbe95203b018462ac67076994"
+                "url": "https://github.com/DeltaPHP/DeltaCore.git",
+                "reference": "5484e3aea2e71638f350b3c8881ed80f5d83c28b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/orbisnull/DeltaCore/zipball/988b11cf0ec7bbafbe95203b018462ac67076994",
-                "reference": "988b11cf0ec7bbafbe95203b018462ac67076994",
+                "url": "https://api.github.com/repos/DeltaPHP/DeltaCore/zipball/5484e3aea2e71638f350b3c8881ed80f5d83c28b",
+                "reference": "5484e3aea2e71638f350b3c8881ed80f5d83c28b",
                 "shasum": ""
             },
             "require": {
-                "orbisnull/dtpl": "dev-master",
-                "orbisnull/kindrouter": "dev-master",
-                "orbisnull/orbistools": "dev-master"
+                "deltaphp/deltarouter": "dev-master",
+                "deltaphp/deltautils": "dev-master",
+                "deltaphp/dtpl": "dev-master",
+                "deltaphp/httpwarp": "dev-master"
             },
             "type": "library",
             "autoload": {
@@ -36,25 +37,91 @@
             ],
             "authors": [
                 {
-                    "name": "Vasiliy Shvakin",
+                    "name": "orbisnull",
                     "email": "zen4dev@gmail.com"
                 }
             ],
             "description": "Delta PHP framework - fast, light, easy (core)",
-            "time": "2013-12-26 17:09:30"
+            "time": "2014-01-13 02:27:34"
         },
         {
-            "name": "orbisnull/dtpl",
+            "name": "deltaphp/deltarouter",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/orbisnull/dTpl.git",
-                "reference": "5f2de3bc1edaa85619cfbc6a1ba3341b3d99585d"
+                "url": "https://github.com/DeltaPHP/DeltaRouter.git",
+                "reference": "c2626176b6c650f10418c4957b2dfafbe8707efb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/orbisnull/dTpl/zipball/5f2de3bc1edaa85619cfbc6a1ba3341b3d99585d",
-                "reference": "5f2de3bc1edaa85619cfbc6a1ba3341b3d99585d",
+                "url": "https://api.github.com/repos/DeltaPHP/DeltaRouter/zipball/c2626176b6c650f10418c4957b2dfafbe8707efb",
+                "reference": "c2626176b6c650f10418c4957b2dfafbe8707efb",
+                "shasum": ""
+            },
+            "require": {
+                "deltaphp/httpwarp": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "DeltaRouter": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "orbisnull",
+                    "email": "zen4dev@gmail.com"
+                }
+            ],
+            "description": "Simple router for php applications",
+            "time": "2014-01-13 04:22:01"
+        },
+        {
+            "name": "deltaphp/deltautils",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DeltaPHP/DeltaUtils.git",
+                "reference": "1c82edc932cb4dcd7d40039e74214db98256861f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DeltaPHP/DeltaUtils/zipball/1c82edc932cb4dcd7d40039e74214db98256861f",
+                "reference": "1c82edc932cb4dcd7d40039e74214db98256861f",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "DeltaUtils": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Vasiliy Shvakin",
+                    "email": "zen4dev@gmail.com"
+                }
+            ],
+            "description": "good tools and utils",
+            "time": "2014-01-11 17:04:19"
+        },
+        {
+            "name": "deltaphp/dtpl",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DeltaPHP/dTpl.git",
+                "reference": "86bbab75e6b83b7dee1f23c09ee0597bc8f1cff2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DeltaPHP/dTpl/zipball/86bbab75e6b83b7dee1f23c09ee0597bc8f1cff2",
+                "reference": "86bbab75e6b83b7dee1f23c09ee0597bc8f1cff2",
                 "shasum": ""
             },
             "type": "library",
@@ -69,64 +136,34 @@
             ],
             "authors": [
                 {
-                    "name": "Vasiliy Shvakin",
-                    "email": "zen4dev@gmail.com"
-                }
-            ],
-            "description": "small base template engine",
-            "time": "2013-12-26 17:10:21"
-        },
-        {
-            "name": "orbisnull/kindrouter",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/orbisnull/kindrouter.git",
-                "reference": "8e38b5e455cadc772c7287c3fba70cc0ebd06c44"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/orbisnull/kindrouter/zipball/8e38b5e455cadc772c7287c3fba70cc0ebd06c44",
-                "reference": "8e38b5e455cadc772c7287c3fba70cc0ebd06c44",
-                "shasum": ""
-            },
-            "require": {
-                "orbisnull/orbistools": "dev-master"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Kindrouter": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "authors": [
-                {
                     "name": "orbisnull",
                     "email": "zen4dev@gmail.com"
                 }
             ],
-            "description": "Simple router for php applications",
-            "time": "2013-09-09 05:01:46"
+            "description": "small base template engine",
+            "time": "2014-01-13 04:20:54"
         },
         {
-            "name": "orbisnull/orbistools",
+            "name": "deltaphp/httpwarp",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/orbisnull/orbistools.git",
-                "reference": "07852c335f8ea62998ad1e6def319cb92b497d61"
+                "url": "https://github.com/DeltaPHP/HttpWarp.git",
+                "reference": "bf11bedf1d0efbb27d3c6c7d535cc8f4aa9f4385"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/orbisnull/orbistools/zipball/07852c335f8ea62998ad1e6def319cb92b497d61",
-                "reference": "07852c335f8ea62998ad1e6def319cb92b497d61",
+                "url": "https://api.github.com/repos/DeltaPHP/HttpWarp/zipball/bf11bedf1d0efbb27d3c6c7d535cc8f4aa9f4385",
+                "reference": "bf11bedf1d0efbb27d3c6c7d535cc8f4aa9f4385",
                 "shasum": ""
+            },
+            "require": {
+                "deltaphp/deltautils": "dev-master"
             },
             "type": "library",
             "autoload": {
                 "psr-0": {
-                    "OrbisTools": "src/"
+                    "HttpWarp": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -139,8 +176,8 @@
                     "email": "zen4dev@gmail.com"
                 }
             ],
-            "description": "request, session and other tools for web development",
-            "time": "2013-12-26 17:11:13"
+            "description": "request, response, session and other tools for base web development",
+            "time": "2014-01-11 18:13:45"
         },
         {
             "name": "twig/twig",
@@ -148,12 +185,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/fabpot/Twig.git",
-                "reference": "6387fc457792f38189bdd5729b500772bbddfa4d"
+                "reference": "ae89c8853582f074c1e8f26ac3b67b2c4fff2609"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Twig/zipball/6387fc457792f38189bdd5729b500772bbddfa4d",
-                "reference": "6387fc457792f38189bdd5729b500772bbddfa4d",
+                "url": "https://api.github.com/repos/fabpot/Twig/zipball/ae89c8853582f074c1e8f26ac3b67b2c4fff2609",
+                "reference": "ae89c8853582f074c1e8f26ac3b67b2c4fff2609",
                 "shasum": ""
             },
             "require": {
@@ -189,7 +226,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2013-12-10 10:23:00"
+            "time": "2014-01-08 07:21:35"
         }
     ],
     "packages-dev": [
@@ -200,7 +237,7 @@
     ],
     "minimum-stability": "dev",
     "stability-flags": {
-        "orbisnull/deltacore": 20
+        "deltaphp/deltacore": 20
     },
     "platform": [
 

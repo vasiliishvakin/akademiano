@@ -1,5 +1,5 @@
 {
-    "name": "orbisnull/DeltaSkeletonApplication",
+    "name": "deltaphp/DeltaSkeletonApplication",
     "description": "Skeleton application on delta framework",
     "minimum-stability": "dev",
     "authors": [
@@ -9,7 +9,7 @@
         }
     ],
     "require": {
-        "orbisnull/deltacore": "dev-master",
+        "deltaphp/deltacore": "dev-master",
         "twig/twig": "1.*"
     }
 }
