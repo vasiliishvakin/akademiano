@@ -116,6 +116,9 @@ class Response
      */
     public function getModified()
     {
+        if (is_null($this->modified)) {
+            $this->modified = time();
+        }
         return $this->modified;
     }
 
