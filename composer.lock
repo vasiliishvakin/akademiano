@@ -1,0 +1,94 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+    ],
+    "hash": "5fcc6647405d53116dc7bf57e2b483ee",
+    "packages": [
+        {
+            "name": "deltaphp/deltautils",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DeltaPHP/DeltaUtils.git",
+                "reference": "1c82edc932cb4dcd7d40039e74214db98256861f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DeltaPHP/DeltaUtils/zipball/1c82edc932cb4dcd7d40039e74214db98256861f",
+                "reference": "1c82edc932cb4dcd7d40039e74214db98256861f",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "DeltaUtils": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Vasiliy Shvakin",
+                    "email": "zen4dev@gmail.com"
+                }
+            ],
+            "description": "good tools and utils",
+            "time": "2014-01-11 17:04:19"
+        },
+        {
+            "name": "deltaphp/httpwarp",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DeltaPHP/HttpWarp.git",
+                "reference": "bf11bedf1d0efbb27d3c6c7d535cc8f4aa9f4385"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DeltaPHP/HttpWarp/zipball/bf11bedf1d0efbb27d3c6c7d535cc8f4aa9f4385",
+                "reference": "bf11bedf1d0efbb27d3c6c7d535cc8f4aa9f4385",
+                "shasum": ""
+            },
+            "require": {
+                "deltaphp/deltautils": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "HttpWarp": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Vasiliy Shvakin",
+                    "email": "zen4dev@gmail.com"
+                }
+            ],
+            "description": "request, response, session and other tools for base web development",
+            "time": "2014-01-11 18:13:45"
+        }
+    ],
+    "packages-dev": [
+
+    ],
+    "aliases": [
+
+    ],
+    "minimum-stability": "dev",
+    "stability-flags": {
+        "deltaphp/httpwarp": 20
+    },
+    "platform": [
+
+    ],
+    "platform-dev": [
+
+    ]
+}

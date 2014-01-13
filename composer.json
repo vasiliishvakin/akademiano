@@ -1,5 +1,5 @@
 {
-    "name": "orbisnull/kindrouter",
+    "name": "deltaphp/deltarouter",
     "description": "Simple router for php applications",
     "minimum-stability": "dev",
     "authors": [
@@ -9,10 +9,10 @@
         }
     ],
     "autoload": {
-        "psr-0": { "Kindrouter": "src/" }
+        "psr-0": { "DeltaRouter": "src/" }
     },
     "require": {
-        "orbisnull/orbistools": "dev-master"
+        "deltaphp/httpwarp": "dev-master"
     }
 
 }

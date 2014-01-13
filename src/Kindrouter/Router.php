@@ -1,8 +1,7 @@
 <?php
-namespace  Kindrouter;
+namespace  DeltaRouter;
 
-use OrbisTools\Request;
-use OrbisTools\ErrorHandler;
+use HttpWarp\Request;
 
 /**
  * класс осуществляет роутинг и вызывает нужные обработчики
@@ -31,7 +30,7 @@ class Router
     }
 
     /**
-     * @param \OrbisTools\Request $request
+     * @param Request $request
      */
     public function setRequest($request)
     {
@@ -39,7 +38,7 @@ class Router
     }
 
     /**
-     * @return \OrbisTools\Request
+     * @return Request
      */
     public function getRequest()
     {
@@ -212,6 +211,4 @@ class Router
         $_SERVER['REDIRECT_STATUS'] = 404;
         return "<h1>Not Found</h1>";
     }
-
-
 }
