@@ -149,12 +149,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/HttpWarp.git",
-                "reference": "bf11bedf1d0efbb27d3c6c7d535cc8f4aa9f4385"
+                "reference": "25c7215c1abcae3a90d3f5064cfd97d45f4ec9c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/HttpWarp/zipball/bf11bedf1d0efbb27d3c6c7d535cc8f4aa9f4385",
-                "reference": "bf11bedf1d0efbb27d3c6c7d535cc8f4aa9f4385",
+                "url": "https://api.github.com/repos/DeltaPHP/HttpWarp/zipball/25c7215c1abcae3a90d3f5064cfd97d45f4ec9c4",
+                "reference": "25c7215c1abcae3a90d3f5064cfd97d45f4ec9c4",
                 "shasum": ""
             },
             "require": {
@@ -177,7 +177,7 @@
                 }
             ],
             "description": "request, response, session and other tools for base web development",
-            "time": "2014-01-11 18:13:45"
+            "time": "2014-01-13 07:36:40"
         },
         {
             "name": "twig/twig",
