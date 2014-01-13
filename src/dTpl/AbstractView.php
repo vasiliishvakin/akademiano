@@ -159,7 +159,7 @@ abstract class AbstractView implements InterfaceView
     {
         $config = $this->getConfig();
         $dirs = isset($config['templateDirs']) ? $config['templateDirs'] : 'public/templates';
-        if ($dirs instanceof Config) {
+        if (is_object($dirs) && method_exists($dirs, 'toArray')) {
             $dirs = $dirs->toArray();
         }
         $dirs = array_merge($this->templateDirs, $dirs);
