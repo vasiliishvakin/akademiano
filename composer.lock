@@ -11,12 +11,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/DeltaCore.git",
-                "reference": "5484e3aea2e71638f350b3c8881ed80f5d83c28b"
+                "reference": "25e713ce80f2db7d6a62e83da481832df124735d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/DeltaCore/zipball/5484e3aea2e71638f350b3c8881ed80f5d83c28b",
-                "reference": "5484e3aea2e71638f350b3c8881ed80f5d83c28b",
+                "url": "https://api.github.com/repos/DeltaPHP/DeltaCore/zipball/25e713ce80f2db7d6a62e83da481832df124735d",
+                "reference": "25e713ce80f2db7d6a62e83da481832df124735d",
                 "shasum": ""
             },
             "require": {
@@ -37,12 +37,12 @@
             ],
             "authors": [
                 {
-                    "name": "orbisnull",
+                    "name": "Vasiliy Shvakin",
                     "email": "zen4dev@gmail.com"
                 }
             ],
             "description": "Delta PHP framework - fast, light, easy (core)",
-            "time": "2014-01-13 02:27:34"
+            "time": "2014-01-14 07:34:53"
         },
         {
             "name": "deltaphp/deltarouter",

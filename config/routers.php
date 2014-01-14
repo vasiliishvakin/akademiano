@@ -1,5 +1,6 @@
 <?php
 
 return [
-    ['full::/', ['index', 'index']],
+    ['full::/', ['delta', 'index']],
+    ['/deltaphp', ['delta', 'index']],
 ];

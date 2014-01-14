@@ -1,0 +1,136 @@
+{% extends "layout.twig" %}
+
+{% block head %}
+    <link href="/static/css/delta.css" rel="stylesheet">
+
+    <script src="/static/lib/syntaxhighlighter/scripts/shCore.js" type="text/javascript"></script>
+    <link href="/static/lib/syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css" />
+    <link href="/static/lib/syntaxhighlighter/styles/shThemeDefault.css" rel="stylesheet" type="text/css" />
+    <script src="/static/lib/syntaxhighlighter/scripts/shBrushPhp.js" type="text/javascript"></script>
+    <script src="/static/lib/syntaxhighlighter/scripts/shBrushBash.js" type="text/javascript"></script>
+    <script src="/static/lib/syntaxhighlighter/scripts/shBrushXml.js" type="text/javascript"></script>
+    <script src="/static/lib/syntaxhighlighter/scripts/shBrushPlain.js" type="text/javascript"></script>
+{% endblock head %}
+
+{% block container %}
+    <div class="container-narrow">
+    <div class="jumbotron">
+        <h1>
+            DeltaPHP Demo
+        </h1>
+
+        <p class="lead">
+            Simple and fast PHP 5.4+ MVC framework with a modular organization.
+        </p>
+        <a class="btn btn-large btn-success" href="https://github.com/DeltaPHP">Github</a>
+    </div>
+    <hr>
+    <div class="row-fluid marketing">
+        <div class="span6 liDesc">
+            <h4>
+                Router
+            </h4>
+
+            <p>
+                Fast router with powerful routes based on nginx locations.
+            </p>
+            <h4>
+                AbstractController
+            </h4>
+
+            <p>
+                Provides access to the base objects Request, Response, View. It select the default template, and
+                rendering its.
+            </p>
+            <h4>
+                Utils
+            </h4>
+
+            <p>
+                Collection of useful tools.
+            </p>
+        </div>
+        <div class="span6 liDesc">
+            <h4>
+                Application
+            </h4>
+
+            <p>
+                Preparation and launching of request processing.
+            </p>
+            <h4>
+                HttpWarp
+            </h4>
+
+            <p>
+                Request, Response, Sessions.
+            </p>
+            <h4>
+                Composer, Twig
+            </h4>
+
+            <p>
+                Composer for a modular structure, and easy expansion. Twig for templates.
+            </p>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="docs">
+            <h2>
+                Documentation
+            </h2>
+
+            <div>
+                <h4>Clone Delta Skeleton Application</h4>
+                <pre class="brush: bash">git clone https://github.com/DeltaPHP/DeltaSkeletonApplication.git</pre>
+
+
+                <h4>Create new Controller</h4>
+<pre class="brush: php">use DeltaCore\AbstractController;
+
+class NewController extends AbstractController
+{
+    public function IndexAction()
+    {
+
+    }
+
+}
+</pre>
+                <h4>Add route to config/routers.php</h4>
+                <pre class="brush:php">['/newcontroller', ['newcontroller', 'index']],</pre>
+
+
+
+                <h4>Create View</h4>
+               <pre class="brush: html">&lt;!doctype html&gt;
+&lt;head&gt;
+    &lt;title&gt;{{ pageTitle | default("Default Title") }}&lt;/title&gt;
+&lt;/head&gt;
+&lt;html&gt;
+    &lt;div class=”header”&gt;Header content&lt;/div&gt;
+    &lt;div class=”body”&gt;
+                   {% block content %}
+                       Big text about DeltaPHP - new fast PHP framework...
+                       Current version: {{ version }}
+                   {% endblock %}
+                   &lt;/div&gt;
+    &lt;div class=”footer”&gt;&lt;/div&gt;
+&lt;/html&gt;</pre>
+
+                <h4>Assign vars to view</h4>
+                <pre class="brush: php">$this->getView()->assign('pageTitle', 'Main page');</pre>
+                </p>
+
+                <h4>All done!</h4>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        SyntaxHighlighter.defaults['toolbar'] = false;
+        SyntaxHighlighter.defaults['smart-tabs'] = false;
+        SyntaxHighlighter.all()
+    </script>
+</div>
+{% endblock container %}

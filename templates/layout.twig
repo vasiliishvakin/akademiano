@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
-    <title>{{ pageTitle | default('Delta Skeleton Application')}}</title>
-    <meta name="description" content="{{ pageDescription | default('Skeleton application on Delta php framework') }}" />
+    <title>{{ pageTitle | default('DeltaPHP Demo Site')}}</title>
+    <meta name="description" content="{{ pageDescription | default('Simple and fast PHP 5.4+ MVC framework with a modular organization') }}" />
     <meta charset="utf-8">
     <base href="/">
+    {% if canonicalRef %}
+        <link rel="canonical" href="{{ canonicalRef }}"/>
+    {% endif %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="static/lib/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="static/lib/bootstrap/css/bootstrap-responsive.min.css">
@@ -19,7 +22,7 @@
 </head>
 <body>
 
-<header>
+{#<header>
     <div class="container">
         <div class="row">
             <div class="span12">
@@ -42,7 +45,7 @@
             </div>
         </div>
     </div>
-</header>
+</header>#}
 
 <div id="content">
     {% block container %}
@@ -56,6 +59,13 @@
             </div>
         </div>
     {% endblock container %}
+</div>
+
+<hr>
+<div class="footer">
+    <p style="text-align: center">
+        © <a href="http://deltaphp.org">DeltaPHP</a> 2014
+    </p>
 </div>
 
 {% block counter %}
