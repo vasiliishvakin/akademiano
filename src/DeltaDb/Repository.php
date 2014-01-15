@@ -2,8 +2,6 @@
 
 namespace DeltaDb;
 
-use OrbisTools\Parts\GetRequest;
-
 /**
  * Class Repository
  * @package DeltaDb
@@ -11,8 +9,6 @@ use OrbisTools\Parts\GetRequest;
  */
 class Repository extends Table
 {
-    use GetRequest;
-
     protected $class;
     protected $dbFields;
 
@@ -89,13 +85,12 @@ class Repository extends Table
         return $this->dbFields;
     }
 
-    public function getRequestFields()
+    public function filterToDbFields(array $data)
     {
-        $request = $this->getRequest();
         $dbFields = $this->getRepository()->getDbFields();
         $dbFields[] = 'id';
-        $newFields = $request->getParams($dbFields);
-        $newFields = array_filter($newFields, function ($var) {return !is_null($var);});
-        return $newFields;
+        $dbData = array_intersect_key($data, rray_flip($dbFields));
+        $dbData = array_filter($dbData, function ($var) {return !is_null($var);});
+        return $dbData;
     }
 }

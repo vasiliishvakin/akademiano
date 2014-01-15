@@ -1,7 +1,7 @@
 <?php
 
 namespace DeltaDb;
-use OrbisTools\Parts\SetParams;
+use DeltaUtils\Parts\SetParams;
 
 /**
  * Class AbstractDbTable
