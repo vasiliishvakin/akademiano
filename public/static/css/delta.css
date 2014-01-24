@@ -16,6 +16,7 @@ body {
 .jumbotron {
     margin: 60px 0;
     text-align: center;
+    background-color: #ffffff;
 }
 .jumbotron h1 {
     font-size: 72px;

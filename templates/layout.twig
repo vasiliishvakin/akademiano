@@ -1,57 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>{{ pageTitle | default('DeltaPHP Demo Site')}}</title>
-    <meta name="description" content="{{ pageDescription | default('Simple and fast PHP 5.4+ MVC framework with a modular organization') }}" />
+    <title>{{ pageTitle | default('DeltaPHP Demo Site') }}</title>
+    <meta name="description"
+          content="{{ pageDescription | default('Simple and fast PHP 5.4+ MVC framework with a modular organization') }}"/>
     <meta charset="utf-8">
     <base href="/">
     {% if canonicalRef %}
         <link rel="canonical" href="{{ canonicalRef }}"/>
     {% endif %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="static/lib/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="static/lib/bootstrap/css/bootstrap-responsive.min.css">
+    <link rel="stylesheet" href="static/lib/bootstrap3/css/bootstrap.min.css">
     <!--[if lt IE 9]>
     <script src="static/lib/js/html5shiv.js"></script>
+    <script src="static/lib/js/respond.min.js"></script>
     <![endif]-->
-    <script type='text/javascript' src="static/lib/jquery/jquery-1.10.2.min.js"></script>
-    <script type='text/javascript' src="static/lib/bootstrap/js/bootstrap.min.js"></script>
+    <script type='text/javascript' src="static/lib/jquery/jquery-1.11.0.min.js"></script>
+    <script type='text/javascript' src="static/lib/bootstrap3/js/bootstrap.min.js"></script>
     {% block head %}
 
     {% endblock head %}
 </head>
 <body>
 
-{#<header>
-    <div class="container">
-        <div class="row">
-            <div class="span12">
-                <div class="navbar">
-                    <div class="navbar-inner">
-                        <a class="brand" href="#">Delta Skeleton Application</a>
-                        <ul class="nav">
-                            <li class="{% if _controller == "index" %}active{% endif %}">
-                                <a href="/">Home</a>
-                            </li>
-                            <li>
-                                <a href="https://github.com/DeltaPHP/DeltaSkeletonApplication">Github</a>
-                            </li>
-                            <li>
-                                <a href="https://github.com/DeltaPHP">Framework</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>#}
-
 <div id="content">
     {% block container %}
         <div class="container">
             <div class="row">
-                <div class="span12">
+                <div class="col-md-12">
                     {% block content %}
 
                     {% endblock content %}
