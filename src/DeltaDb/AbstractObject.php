@@ -6,7 +6,7 @@ abstract class AbstractObject extends Table
 {
     // change in class
     protected static $classMapTableName;
-    protected static $repositoryClass = '\DeltaDb\Repository\Repository';
+    protected static $repositoryClass = '\DeltaDb\Repository';
 
     //do not touch
     protected static $repository;
