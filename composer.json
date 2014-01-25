@@ -10,7 +10,6 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "orbisnull/dbsimple": "dev-master",
         "deltaphp/deltautils": "dev-master"
     }
 }
