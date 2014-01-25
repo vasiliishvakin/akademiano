@@ -1,5 +1,5 @@
 {
-    "name": "orbisnull/deltadb",
+    "name": "deltaphp/deltadb",
     "description": "DB models for delta framework",
     "license": "GPL-3.0+",
     "authors": [
