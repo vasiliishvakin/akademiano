@@ -36,6 +36,19 @@ class Repository implements RepositoryInterface
         ]
     ];
 
+    protected $selfCache = [];
+
+    public function setSelfCache($id, $data)
+    {
+        $this->selfCache[$id] = $data;
+    }
+
+    public function getSelfCache($id)
+    {
+        return (!isset($this->selfCache[$id])) ? null : $this->selfCache[$id];
+    }
+
+
     public function getEntityClass($table = null)
     {
         $meta = $this->getMetaInfo();
@@ -84,9 +97,13 @@ class Repository implements RepositoryInterface
 
     public function getTableName($entity = null)
     {
+        $entityClass = (is_null($entity)) ? null : is_object($entity) ? '\\' .get_class($entity) : $entity;
+        $cacheId = "tableName|{$entityClass}|";
+        if ($tableName = $this->getSelfCache($cacheId)) {
+            return $tableName;
+        }
         $meta = $this->getMetaInfo();
         $tables = array_keys($meta);
-        $entityClass = (is_null($entity)) ? null : is_object($entity) ? '\\' .get_class($entity) : $entity;
         $tableName = null;
         if (is_null($entityClass)) {
             $tableName = reset($tables);
@@ -98,6 +115,7 @@ class Repository implements RepositoryInterface
                 }
             }
         }
+        $this->setSelfCache($cacheId, $tableName);
         return $tableName;
     }
 
