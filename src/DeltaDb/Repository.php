@@ -157,7 +157,7 @@ class Repository implements RepositoryInterface
         if (is_null($getMethod) || !method_exists($entity, $getMethod)) {
             return null;
         }
-        $value =  $entity->{$getMethod};
+        $value =  $entity->{$getMethod}();
         if (!is_null($outputFilter) && method_exists($entity, $outputFilter)) {
             $value = $entity->{$outputFilter}($value);
         }
@@ -170,7 +170,6 @@ class Repository implements RepositoryInterface
         if (is_null($table)) {
             $table = $this->getTableName();
         }
-        $query = "select * from {$table}";
         $data = $adapter->selectBy($table, $criteria);
         return $data;
     }
@@ -181,10 +180,14 @@ class Repository implements RepositoryInterface
             $table = $this->getTableName();
         }
         $idName = $this->getIdField($table);
-        if (isset($data[$idName]) && !empty($data[$idName])) {
-            $this->updateRaw($table, $fields);
+        if (isset($fields[$idName]) && !empty($fields[$idName])) {
+            return $this->updateRaw($fields, $table);
         } else {
-            $this->insertRaw($table, $fields);
+            $result = $this->insertRaw($fields, $table);
+            if (empty($result)) {
+                return false;
+            }
+            return $result;
         }
     }
 
@@ -194,7 +197,11 @@ class Repository implements RepositoryInterface
         if (is_null($table)) {
             $table = $this->getTableName();
         }
-        return $adapter->insert($table, $fields);
+        $idField = $this->getIdField($table);
+        if (isset($fields[$idField]) || array_key_exists($idField, $fields)) {
+            unset($fields[$idField]);
+        }
+        return $adapter->insert($table, $fields, $idField);
     }
 
     public function updateRaw($fields, $table = null)
@@ -235,7 +242,17 @@ class Repository implements RepositoryInterface
     {
         $data = $this->reserve($entity);
         $table = $this->getTableName($entity);
-        return $this->saveRaw($data, $table);
+        $idField = $this->getIdField($table);
+        if (isset($data[$idField]) && !empty($data[$idField])) {
+            return $this->updateRaw($data, $table);
+        } else {
+            $result = $this->insertRaw($data, $table);
+            if (!$result) {
+                return false;
+            }
+            $this->setField($entity, $idField, $result);
+            return true;
+        }
     }
 
     public function delete(EntityInterface $entity)

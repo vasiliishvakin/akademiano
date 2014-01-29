@@ -30,7 +30,7 @@ interface AdapterInterface
 
     public function rollBack ();
 
-    public function insert($table, $fields);
+    public function insert($table, $fields, $idName = null);
 
     public function update($table, $fields, array $criteria);
 

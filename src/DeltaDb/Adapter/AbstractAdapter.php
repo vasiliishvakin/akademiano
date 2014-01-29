@@ -18,7 +18,6 @@ abstract class AbstractAdapter implements AdapterInterface
         }
     }
 
-
     /**
      * @param mixed $dsn
      */
@@ -26,7 +25,6 @@ abstract class AbstractAdapter implements AdapterInterface
     {
         $this->dsn = $dsn;
     }
-
 
     public function getDsn()
     {
@@ -53,23 +51,5 @@ abstract class AbstractAdapter implements AdapterInterface
     {
         return $this->connection;
     }
-
-    abstract public function connect($dsn = null);
-
-    abstract public function select($query);
-
-    abstract public function selectRow($query);
-
-    abstract public function selectCol($query);
-
-    abstract public function selectCell($query);
-
-    abstract public function query($query);
-
-    abstract public function begin();
-
-    abstract public function commit();
-
-    abstract public function rollBack();
 
 } 
