@@ -20,7 +20,7 @@ class DbaStorage {
 
     /**
      * @param string $name
-     * @return \DbSimple_Generic
+     * @return \DeltaDb\Adapter\AdapterInterface
      * @throws \RuntimeException
      */
     public static function getDba($name = self::DBA_DEFAULT)

@@ -2,95 +2,263 @@
 
 namespace DeltaDb;
 
-/**
- * Class Repository
- * @package DeltaDb
- * @method  __construct(array $params) Params: ['class', 'table', 'dbaName' => null]
- */
-class Repository extends Table
+
+use DeltaDb\Adapter\AdapterInterface;
+
+class Repository implements RepositoryInterface
 {
-    protected $class;
-    protected $dbFields;
+    const METHOD_SET = 'set';
+    const METHOD_GET = 'get';
+    const FILTER_IN = 'input';
+    const FILTER_OUT = 'output';
 
     /**
-     * @param mixed $class
+     * @var AdapterInterface
      */
-    public function setClass($class)
+    protected $adapter;
+
+    protected $metaInfo = [
+        'tableName' => [
+            'class' => 'Entity',
+            'id'     => 'id_field',
+            'fields' => [
+                'field_name' => [
+                    'set'     => 'setMethodInEntity',
+                    'get'     => 'getMethodInEntity',
+                    'filters' => [
+                        'input'  => 'filterFromDbToEntity',
+                        'output' => 'filterFromEntityDb',
+                    ]
+                ]
+            ]
+        ]
+    ];
+
+    public function getEntityClass($table = null)
     {
-        $this->class = $class;
+        $meta = $this->getMetaInfo();
+        if (is_null($table)) {
+            $table = $this->getTableName();
+        }
+        return $meta[$table]['class'];
+    }
+
+    public function setAdapter(AdapterInterface $adapter)
+    {
+        $this->adapter = $adapter;
+    }
+
+    public function getAdapter()
+    {
+        return $this->adapter;
     }
 
     /**
-     * @return mixed
+     * @return array
      */
-    public function getClass()
+    public function getMetaInfo()
     {
-        return $this->class;
+        return $this->metaInfo;
     }
 
-    protected function createEntity($data)
+    public function getTableName($entity = null)
     {
-        $class = $this->getClass();
-        /** @var $entity AbstractObject */
-        $entity = new $class;
-        $entity->load($data);
-        $entity->setLoaded();
+        $meta = $this->getMetaInfo();
+        $tables = array_keys($meta);
+        $entityClass = (is_null($entity)) ? null : is_object($entity) ? get_class($entity) : $entity;
+        if (is_null($entityClass)) {
+            $tableName = reset($tables);
+        } else {
+            foreach ($tables as $table) {
+                if ($meta[$table]['class'] === $entityClass) {
+                    $tableName = $table;
+                    break;
+                }
+            }
+        }
+        return $tableName;
+    }
+
+    public function getIdField($table)
+    {
+        $meta = $this->getMetaInfo();
+        return $meta[$table]['id'];
+    }
+
+    public function getFields($table)
+    {
+        $meta = $this->getMetaInfo();
+        $fields = array_keys($meta[$table]['fields']);
+        return $fields;
+    }
+
+    public function getFieldMethod($table, $field, $method)
+    {
+        $meta = $this->getMetaInfo();
+        if (!isset($meta[$table]['fields'][$field][$method])) {
+            return null;
+        }
+        $fieldMethod = $meta[$table]['fields'][$field][$method];
+        return $fieldMethod;
+    }
+
+    public function getFieldFilter($table, $field, $filter)
+    {
+        $meta = $this->getMetaInfo();
+        if (!isset($meta[$table]['fields'][$field]['filters'][$filter])) {
+            return null;
+        }
+        $fieldFilter = $meta[$table]['fields'][$field]['filters'][$filter];
+        return $fieldFilter;
+    }
+
+    public function setField(EntityInterface $entity, $field, $value)
+    {
+        $table = $this->getTableName($entity);
+        $setMethod = $this->getFieldMethod($table, $field, self::METHOD_SET);
+        $inputFilter = $this->getFieldFilter($table, $field, self::FILTER_IN);
+        if (!is_null($inputFilter) && method_exists($entity, $inputFilter)) {
+            $value = $entity->{$inputFilter}($value);
+        }
+
+        if (!is_null($setMethod) && method_exists($entity, $setMethod)) {
+            return $entity->{$setMethod}($value);
+        }
+    }
+
+    public function getField(EntityInterface $entity, $field)
+    {
+        $table = $this->getTableName($entity);
+        $getMethod = $this->getFieldMethod($table, $field, self::METHOD_GET);
+        $outputFilter = $this->getFieldFilter($table, $field, self::FILTER_OUT);
+        if (is_null($getMethod) || !method_exists($entity, $getMethod)) {
+            return null;
+        }
+        $value =  $entity->{$getMethod};
+        if (!is_null($outputFilter) && method_exists($entity, $outputFilter)) {
+            $value = $entity->{$outputFilter}($value);
+        }
+        return $value;
+    }
+
+    public function findRaw(array $criteria = [], $table = null)
+    {
+        $adapter = $this->getAdapter();
+        if (is_null($table)) {
+            $table = $this->getTableName();
+        }
+        $query = "select * from {$table}";
+        $data = $adapter->select($query);
+        return $data;
+    }
+
+    public function saveRaw(array $fields, $table = null)
+    {
+        if (is_null($table)) {
+            $table = $this->getTableName();
+        }
+        $idName = $this->getIdField($table);
+        if (isset($data[$idName]) && !empty($data[$idName])) {
+            $this->updateRaw($table, $data);
+        } else {
+            $this->insertRaw($table, $data);
+        }
+    }
+
+    public function insertRaw( array $fields, $table = null)
+    {
+        $adapter = $this->getAdapter();
+        if (is_null($table)) {
+            $table = $this->getTableName();
+        }
+        return $adapter->insert($table, $fields);
+    }
+
+    public function updateRaw($fields, $table = null)
+    {
+        $adapter = $this->getAdapter();
+        if (is_null($table)) {
+            $table = $this->getTableName();
+        }
+        $idField = $this->getIdField($table);
+        $id = $fields[$idField];
+        unset($fields[$idField]);
+        return $adapter->update($table, $fields, [$idField => $id]);
+    }
+
+    public function deleteById($id, $table = null)
+    {
+        $adapter = $this->getAdapter();
+        if (is_null($table)) {
+            $table = $this->getTableName();
+        }
+        $idField = $this->getIdField($table);
+        return $adapter->delete($table, [$idField => $id]);
+    }
+
+    public function create(array $data = null, $entityClass = null)
+    {
+        if (is_null($entityClass)) {
+            $entityClass = $this->getEntityClass();
+        }
+        $entity = new $entityClass;
+        if (!is_null($data)) {
+            $this->load($entity, $data);
+        }
         return $entity;
     }
 
-    public function getById($id)
+    public function save(EntityInterface $entity)
     {
-        $data = $this->getByIdRaw($id);
-        return (empty($data)) ? null : $this->createEntity($data);
+        $data = $this->reserve($entity);
+        $table = $this->getTableName($entity);
+        return $this->saveRaw($data, $table);
     }
 
-    public function getAll()
+    public function delete(EntityInterface $entity)
     {
-        $data = $this->getAllRaw();
-        return (empty($data)) ? [] : $this->createEntities($data);
-    }
-
-    /**
-     * @param array $data
-     * @param bool $keyFromId
-     * @return AbstractObject[]
-     */
-    public function createEntities(array $data, $keyFromId = false)
-    {
-        $entities = [];
-        foreach ($data as $row) {
-            $entity = $this->createEntity($row);
-            if ($keyFromId) {
-                $entities[$entity->getId()] = $entity;
-            } else {
-                $entities[] = $entity;
-            }
+        $table= $this->getTableName();
+        $idName = $this->getIdField($table);
+        $id = $this->getField($entity, $idName);
+        if (empty($id)) {
+            return false ;
         }
-        return $entities;
+        return $this->deleteById($id, $table);
     }
 
-    public function deleteById($id)
+    public function find(array $criteria = [], $entityClass = null)
     {
-        return $this->deleteRaw($id);
-    }
-
-    public function getDbFields()
-    {
-        if (is_null($this->dbFields)) {
-            /** @var AbstractObject $obj */
-            $class = $this->getClass();
-            $obj = new $class();
-            $this->dbFields = $obj->getDbFieldsList();
+        if (is_null($entityClass)) {
+            $entityClass = $this->getEntityClass();
         }
-        return $this->dbFields;
+        $table = $this->getTableName($entityClass);
+        $data = $this->findRaw($criteria, $table);
+        $items = [];
+        foreach($data as $row) {
+            $items[] = $this->create($row, $entityClass);
+        }
+        return $items;
     }
 
-    public function filterToDbFields(array $data)
+    public function load(EntityInterface $entity, array $data)
     {
-        $dbFields = $this->getRepository()->getDbFields();
-        $dbFields[] = 'id';
-        $dbData = array_intersect_key($data, rray_flip($dbFields));
-        $dbData = array_filter($dbData, function ($var) {return !is_null($var);});
-        return $dbData;
+        $table = $this->getTableName();
+        $fields = $this->getFields($table);
+        $fields = array_flip($fields);
+        $data =array_intersect_key($data, $fields);
+        foreach($data as $field=>$value) {
+            $this->setField($entity, $field, $value);
+        }
+    }
+
+    public function reserve(EntityInterface $entity)
+    {
+        $table = $this->getTableName();
+        $fields = $this->getFields($table);
+        $data = [];
+        foreach($fields as $field) {
+            $data[$field] = $this->getField($entity, $field);
+        }
+        return $data;
     }
 }

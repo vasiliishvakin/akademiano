@@ -3,10 +3,7 @@
 namespace DeltaDb;
 use DeltaUtils\Parts\SetParams;
 
-/**
- * Class AbstractDbTable
- */
-class Table
+class Entity
 {
     use SetParams;
 
