@@ -188,7 +188,7 @@ class Repository implements RepositoryInterface
         }
     }
 
-    public function insertRaw( array $fields, $table = null)
+    public function insertRaw(array $fields, $table = null)
     {
         $adapter = $this->getAdapter();
         if (is_null($table)) {
