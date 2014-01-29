@@ -17,6 +17,8 @@ class Repository implements RepositoryInterface
      */
     protected $adapter;
 
+    protected $dba = DbaStorage::DBA_DEFAULT;
+
     protected $metaInfo = [
         'tableName' => [
             'class' => 'Entity',
@@ -43,6 +45,22 @@ class Repository implements RepositoryInterface
         return $meta[$table]['class'];
     }
 
+    /**
+     * @param mixed $dba
+     */
+    public function setDba($dba)
+    {
+        $this->dba = $dba;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDba()
+    {
+        return $this->dba;
+    }
+
     public function setAdapter(AdapterInterface $adapter)
     {
         $this->adapter = $adapter;
@@ -50,6 +68,9 @@ class Repository implements RepositoryInterface
 
     public function getAdapter()
     {
+        if (is_null($this->adapter)) {
+            $this->adapter = DbaStorage::getDba($this->getDba());
+        }
         return $this->adapter;
     }
 
@@ -65,7 +86,8 @@ class Repository implements RepositoryInterface
     {
         $meta = $this->getMetaInfo();
         $tables = array_keys($meta);
-        $entityClass = (is_null($entity)) ? null : is_object($entity) ? get_class($entity) : $entity;
+        $entityClass = (is_null($entity)) ? null : is_object($entity) ? '\\' .get_class($entity) : $entity;
+        $tableName = null;
         if (is_null($entityClass)) {
             $tableName = reset($tables);
         } else {
@@ -124,6 +146,7 @@ class Repository implements RepositoryInterface
         if (!is_null($setMethod) && method_exists($entity, $setMethod)) {
             return $entity->{$setMethod}($value);
         }
+        return false;
     }
 
     public function getField(EntityInterface $entity, $field)
@@ -148,7 +171,7 @@ class Repository implements RepositoryInterface
             $table = $this->getTableName();
         }
         $query = "select * from {$table}";
-        $data = $adapter->select($query);
+        $data = $adapter->selectBy($table, $criteria);
         return $data;
     }
 
@@ -159,9 +182,9 @@ class Repository implements RepositoryInterface
         }
         $idName = $this->getIdField($table);
         if (isset($data[$idName]) && !empty($data[$idName])) {
-            $this->updateRaw($table, $data);
+            $this->updateRaw($table, $fields);
         } else {
-            $this->insertRaw($table, $data);
+            $this->insertRaw($table, $fields);
         }
     }
 

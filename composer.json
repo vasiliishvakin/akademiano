@@ -9,6 +9,11 @@
         }
     ],
     "minimum-stability": "dev",
+    "autoload": {
+        "psr-0": {
+            "DeltaDb": "src/"
+        }
+    },
     "require": {
         "deltaphp/deltautils": "dev-master"
     }

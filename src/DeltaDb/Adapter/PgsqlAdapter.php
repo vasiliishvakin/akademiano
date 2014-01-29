@@ -104,6 +104,11 @@ class PgsqlAdapter extends AbstractAdapter
         // TODO: Implement insert() method.
     }
 
+    public function getWhere(array $criteria)
+    {
+
+    }
+
     public function update($table, $fields, array $criteria)
     {
         // TODO: Implement update() method.
