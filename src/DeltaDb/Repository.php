@@ -12,6 +12,8 @@ class Repository implements RepositoryInterface
     const FILTER_IN = 'input';
     const FILTER_OUT = 'output';
 
+    protected $dbaName;
+
     /**
      * @var AdapterInterface
      */
@@ -34,6 +36,25 @@ class Repository implements RepositoryInterface
         ]
     ];
 
+    /**
+     * @param mixed $dbaName
+     */
+    public function setDbaName($dbaName)
+    {
+        $this->dbaName = $dbaName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDbaName()
+    {
+        if (is_null($this->dbaName)) {
+            $this->dbaName = DbaStorage::DBA_DEFAULT;
+        }
+        return $this->dbaName;
+    }
+
     public function getEntityClass($table = null)
     {
         $meta = $this->getMetaInfo();
@@ -50,6 +71,9 @@ class Repository implements RepositoryInterface
 
     public function getAdapter()
     {
+        if (is_null($this->adapter)) {
+            $this->adapter = DbaStorage::getDba($this->dbaName);
+        }
         return $this->adapter;
     }
 
@@ -165,7 +189,7 @@ class Repository implements RepositoryInterface
         }
     }
 
-    public function insertRaw( array $fields, $table = null)
+    public function insertRaw(array $fields, $table = null)
     {
         $adapter = $this->getAdapter();
         if (is_null($table)) {

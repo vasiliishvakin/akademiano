@@ -51,9 +51,14 @@ class PgsqlAdapter extends AbstractAdapter
         } else {
             $params = func_get_args();
             array_shift($params);
-            $result = pg_query_params($query, $params);
+            $result = $this->queryParams($query, $params);
         }
         return $result;
+    }
+
+    public function queryParams($query, $params)
+    {
+        return pg_query_params($query, $params);
     }
 
     /**
@@ -99,9 +104,27 @@ class PgsqlAdapter extends AbstractAdapter
         $this->setIsTransaction(false);
     }
 
-    public function insert($table, $fields)
+    public function insert($table, $fields, $idName = null)
     {
-        // TODO: Implement insert() method.
+        $fieldsList = $placeholders = array_keys($fields);
+        $fieldsList = implode(', ', $fieldsList);
+        array_map(function ($value) {return '?';}, $placeholders);
+        $placeholders = implode(', ', $placeholders);
+        if (!is_null($idName)) {
+            $idName = "RETURNING {$idName}";
+        }
+
+        $query = "insert into {$table} ({$fieldsList}) VALUES({$placeholders}) {$$idName}";
+        $result = $this->queryParams($query, $fields);
+        if ($result === false) {
+            return false;
+        }
+
+        if (is_null($idName)) {
+            return (pg_affected_rows($result) >0);
+        } else {
+            return pg_fetch_result($result, 0, 0);
+        }
     }
 
     public function update($table, $fields, array $criteria)

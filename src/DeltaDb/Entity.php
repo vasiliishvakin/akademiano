@@ -1,62 +1,9 @@
 <?php
 
 namespace DeltaDb;
-use DeltaUtils\Parts\SetParams;
 
 class Entity
 {
-    use SetParams;
-
-    protected $dbaName;
-    protected $tableName;
-
-    /**
-     * @param array $params ['dbaName' = null]
-     */
-    function __construct(array $params = [])
-    {
-        $this->setParams($params);
-    }
-
-    /**
-     * @param mixed $dbaName
-     */
-    public function setDbaName($dbaName)
-    {
-        $this->dbaName = $dbaName;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDbaName()
-    {
-        return $this->dbaName;
-    }
-
-    /**
-     * @param mixed $table
-     */
-    public function setTableName($table)
-    {
-        $this->tableName = $table;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTableName()
-    {
-        return $this->tableName;
-    }
-
-    /**
-     * @return \DbSimple_Generic
-     */
-    public function getDba()
-    {
-        return DbaStorage::getDba($this->getDbaName());
-    }
 
     public function insertRaw($data)
     {
