@@ -20,6 +20,8 @@ interface RepositoryInterface
 
     public function find(array $criteria = [], $entityClass = null);
 
+    public function findById($id, $entityClass = null);
+
     public function load(EntityInterface $entity, array $data);
 
     public function reserve(EntityInterface $entity);

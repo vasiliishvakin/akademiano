@@ -21,15 +21,18 @@ class Repository implements RepositoryInterface
 
     protected $metaInfo = [
         'tableName' => [
-            'class' => 'Entity',
+            'class'  => 'Entity',
             'id'     => 'id_field',
             'fields' => [
                 'field_name' => [
-                    'set'     => 'setMethodInEntity',
-                    'get'     => 'getMethodInEntity',
-                    'filters' => [
+                    'set'        => 'setMethodInEntity',
+                    'get'        => 'getMethodInEntity',
+                    'filters'    => [
                         'input'  => 'filterFromDbToEntity',
                         'output' => 'filterFromEntityDb',
+                    ],
+                    'validators' => [
+
                     ]
                 ]
             ]
@@ -150,6 +153,31 @@ class Repository implements RepositoryInterface
         }
         $fieldFilter = $meta[$table]['fields'][$field]['filters'][$filter];
         return $fieldFilter;
+    }
+
+    public function getFieldValidators($table, $field)
+    {
+        $meta = $this->getMetaInfo();
+        if (!isset($meta[$table]['fields'][$field]['validators'])) {
+            return null;
+        }
+        $validators = $meta[$table]['fields'][$field]['validators'];
+        return $validators;
+    }
+
+    public function validateField($entity, $field, $value)
+    {
+        $table = $this->getTableName($entity);
+        $validators = $this->getFieldValidators($table, $field);
+        foreach($validators as $validator) {
+            if (method_exists($entity, $validator)) {
+                $result = $entity->{$validator}($value);
+                if ($result === false) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public function setField(EntityInterface $entity, $field, $value)
@@ -296,6 +324,26 @@ class Repository implements RepositoryInterface
             $items[] = $this->create($row, $entityClass);
         }
         return $items;
+    }
+
+    public function findOne(array $criteria = [], $entityClass = null)
+    {
+        $items = $this->find($criteria, $entityClass);
+        if (empty($items)) {
+            return null;
+        }
+        return reset($items);
+    }
+
+    public function findById($id, $entityClass = null)
+    {
+        $table = $this->getTableName($entityClass);
+        $idName = $this->getIdField($table);
+        $items = $this->find([$idName=>$id], $entityClass);
+        if (empty($items)) {
+            return null;
+        }
+        return reset($items);
     }
 
     public function load(EntityInterface $entity, array $data)
