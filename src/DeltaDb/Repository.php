@@ -351,7 +351,7 @@ class Repository implements RepositoryInterface
         $table = $this->getTableName();
         $fields = $this->getFields($table);
         $fields = array_flip($fields);
-        $data =array_intersect_key($data, $fields);
+        $data = array_intersect_key($data, $fields);
         foreach($data as $field=>$value) {
             $this->setField($entity, $field, $value);
         }

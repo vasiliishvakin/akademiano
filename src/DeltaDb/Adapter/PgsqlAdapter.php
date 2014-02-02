@@ -28,7 +28,7 @@ class PgsqlAdapter extends AbstractAdapter
     public function selectRow($query)
     {
         $result = call_user_func_array([$this, 'query'], func_get_args());
-        return pg_fetch_row($result);
+        return pg_fetch_row($result, 0, PGSQL_ASSOC);
     }
 
     public function selectCol($query)
