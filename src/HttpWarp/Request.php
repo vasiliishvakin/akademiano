@@ -5,6 +5,7 @@
 
 namespace HttpWarp;
 
+use DeltaUtils\ErrorHandler;
 
 class Request
 {
@@ -135,6 +136,13 @@ class Request
             return $default;
         }
         return $uri[$num];
+    }
+
+    public function getUriPartsCount()
+    {
+        $uri = trim($this->getUriNormal(), '/');
+        $uri = explode('/', $uri);
+        return count($uri);
     }
 
 

@@ -25,6 +25,9 @@ class Session {
         }
     }
 
+    /**
+     * @param \Closure[] $closures
+     */
     protected function setClosures(array $closures)
     {
         foreach ($closures as $action=>$closure)
@@ -35,6 +38,10 @@ class Session {
         }
     }
 
+    /**
+     * @param $action
+     * @return bool|\Closure
+     */
     protected function getClosure($action)
     {
         if (isset($this->closures[$action]) && is_callable($this->closures[$action])) {
@@ -62,6 +69,15 @@ class Session {
         return session_status();
     }
 
+    public function prepare()
+    {
+        if (empty($this->closures)) {
+            if (!$this->started) {
+                return $this->start();
+            }
+        }
+    }
+
     public function destroy()
     {
         $closure = $this->getClosure('destroy');
@@ -77,6 +93,7 @@ class Session {
         if ($closure) {
             return call_user_func_array($closure, [$name, $value]);
         }
+        $this->prepare();
         $_SESSION[$name] = $value;
         return true;
     }
@@ -87,6 +104,7 @@ class Session {
         if ($closure) {
             return call_user_func($closure, $name);
         }
+        $this->prepare();
         return isset($_SESSION[$name]);
     }
 
@@ -96,6 +114,7 @@ class Session {
         if ($closure) {
             return call_user_func_array($closure, [$name, $default]);
         }
+        $this->prepare();
         return isset($_SESSION[$name]) ? $_SESSION[$name] : $default;
     }
 
@@ -105,7 +124,10 @@ class Session {
         if ($closure) {
             return call_user_func($closure, $name);
         }
-        unset($_SESSION[$name]);
+        $this->prepare();
+        if (isset($_SESSION[$name])) {
+            unset($_SESSION[$name]);
+        }
         return true;
     }
 

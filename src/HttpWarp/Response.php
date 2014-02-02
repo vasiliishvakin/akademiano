@@ -223,4 +223,9 @@ class Response
         $this->sendHeaders();
         echo $this->getBody();
     }
+
+    public function redirect($url)
+    {
+        header("Location: $url");
+    }
 }
