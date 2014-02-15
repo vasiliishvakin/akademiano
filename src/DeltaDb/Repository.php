@@ -135,13 +135,25 @@ class Repository implements RepositoryInterface
         return $fields;
     }
 
-    public function getFieldMethod($table, $field, $method)
+    public function getFieldMeta($table, $field)
     {
         $meta = $this->getMetaInfo();
-        if (!isset($meta[$table]['fields'][$field][$method])) {
+        if (!isset($meta[$table]['fields'][$field])) {
             return null;
         }
-        $fieldMethod = $meta[$table]['fields'][$field][$method];
+        return $meta[$table]['fields'][$field];
+    }
+
+    public function getFieldMethod($table, $field, $method)
+    {
+        $fieldMeta = $this->getFieldMeta($table, $field);
+        if ((!is_array($fieldMeta) || empty($fieldMeta)) || (!isset($fieldMeta["set"]) && !isset($fieldMeta["get"]))) {
+            return $method . ucfirst($field);
+        }
+        if (!isset($fieldMeta[$method])) {
+            return null;
+        }
+        $fieldMethod = $fieldMeta[$method];
         return $fieldMethod;
     }
 
