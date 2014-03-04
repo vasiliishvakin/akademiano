@@ -8,5 +8,9 @@ namespace DeltaDb;
 
 interface EntityInterface
 {
+    /**
+     * @return array
+     */
+    public function getFieldsList();
 
 } 

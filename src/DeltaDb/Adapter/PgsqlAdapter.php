@@ -22,7 +22,11 @@ class PgsqlAdapter extends AbstractAdapter
     public function select($query)
     {
         $result = call_user_func_array([$this, 'query'], func_get_args());
-        return pg_fetch_all($result);
+        $rows = pg_fetch_all($result);
+        if(!is_array($rows)) {
+            return [];
+        }
+        return $rows;
     }
 
     public function selectRow($query)
@@ -181,7 +185,7 @@ class PgsqlAdapter extends AbstractAdapter
 
     public function selectBy($table, array $criteria = [])
     {
-        $query = "select * from {$table}";
+        $query = "select * from \"{$table}\"";
         if (empty($criteria)) {
             return $this->select($query);
         }

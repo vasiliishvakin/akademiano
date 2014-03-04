@@ -4,9 +4,13 @@ namespace DeltaDb;
 
 
 use DeltaDb\Adapter\AdapterInterface;
+use DeltaUtils\ArrayUtils;
+use DeltaUtils\Parts\InnerCache;
 
 class Repository implements RepositoryInterface
 {
+    use InnerCache;
+
     const METHOD_SET = 'set';
     const METHOD_GET = 'get';
     const FILTER_IN = 'input';
@@ -39,19 +43,6 @@ class Repository implements RepositoryInterface
         ]
     ];
 
-    protected $selfCache = [];
-
-    public function setSelfCache($id, $data)
-    {
-        $this->selfCache[$id] = $data;
-    }
-
-    public function getSelfCache($id)
-    {
-        return (!isset($this->selfCache[$id])) ? null : $this->selfCache[$id];
-    }
-
-
     public function getEntityClass($table = null)
     {
         $meta = $this->getMetaInfo();
@@ -70,7 +61,7 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @return mixed
+     * @return AdapterInterface
      */
     public function getDba()
     {
@@ -102,7 +93,7 @@ class Repository implements RepositoryInterface
     {
         $entityClass = (is_null($entity)) ? null : is_object($entity) ? '\\' .get_class($entity) : $entity;
         $cacheId = "tableName|{$entityClass}|";
-        if ($tableName = $this->getSelfCache($cacheId)) {
+        if ($tableName = $this->getInnerCache($cacheId)) {
             return $tableName;
         }
         $meta = $this->getMetaInfo();
@@ -118,7 +109,10 @@ class Repository implements RepositoryInterface
                 }
             }
         }
-        $this->setSelfCache($cacheId, $tableName);
+        if (empty ($tableName)) {
+            throw new \Exception("Meta info for entity $entityClass not defined");
+        }
+        $this->setInnerCache($cacheId, $tableName);
         return $tableName;
     }
 
@@ -128,10 +122,20 @@ class Repository implements RepositoryInterface
         return $meta[$table]['id'];
     }
 
-    public function getFields($table)
+    public function getFieldsList($table)
     {
+        $cacheId = "fieldList|{$table}|";
+        if ($fields = $this->getInnerCache($cacheId)) {
+            return $fields;
+        }
         $meta = $this->getMetaInfo();
-        $fields = array_keys($meta[$table]['fields']);
+        $fieldsData = $meta[$table]['fields'];
+        if (ArrayUtils::isAssoc($fieldsData)) {
+            $fields = array_keys($fieldsData);
+        } else {
+            $fields = array_values($fieldsData);
+        }
+        $this->setInnerCache($cacheId, $fields);
         return $fields;
     }
 
@@ -201,7 +205,7 @@ class Repository implements RepositoryInterface
             $value = $entity->{$inputFilter}($value);
         }
 
-        if (!is_null($setMethod) && method_exists($entity, $setMethod)) {
+        if (!is_null($setMethod) && is_callable([$entity, $setMethod])) {
             return $entity->{$setMethod}($value);
         }
         return false;
@@ -212,11 +216,11 @@ class Repository implements RepositoryInterface
         $table = $this->getTableName($entity);
         $getMethod = $this->getFieldMethod($table, $field, self::METHOD_GET);
         $outputFilter = $this->getFieldFilter($table, $field, self::FILTER_OUT);
-        if (is_null($getMethod) || !method_exists($entity, $getMethod)) {
+        if (is_null($getMethod) || !is_callable([$entity, $getMethod])) {
             return null;
         }
         $value =  $entity->{$getMethod}();
-        if (!is_null($outputFilter) && method_exists($entity, $outputFilter)) {
+        if (!is_null($outputFilter) && is_callable([$entity, $outputFilter])) {
             $value = $entity->{$outputFilter}($value);
         }
         return $value;
@@ -351,17 +355,14 @@ class Repository implements RepositoryInterface
     {
         $table = $this->getTableName($entityClass);
         $idName = $this->getIdField($table);
-        $items = $this->find([$idName=>$id], $entityClass);
-        if (empty($items)) {
-            return null;
-        }
-        return reset($items);
+        $item = $this->findOne([$idName=>$id], $entityClass);
+        return $item;
     }
 
     public function load(EntityInterface $entity, array $data)
     {
-        $table = $this->getTableName();
-        $fields = $this->getFields($table);
+        $table = $this->getTableName($entity);
+        $fields = $this->getFieldsList($table);
         $fields = array_flip($fields);
         $data = array_intersect_key($data, $fields);
         foreach($data as $field=>$value) {
@@ -372,7 +373,7 @@ class Repository implements RepositoryInterface
     public function reserve(EntityInterface $entity)
     {
         $table = $this->getTableName();
-        $fields = $this->getFields($table);
+        $fields = $this->getFieldsList($table);
         $data = [];
         foreach($fields as $field) {
             $data[$field] = $this->getField($entity, $field);
