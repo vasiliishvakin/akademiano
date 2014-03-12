@@ -157,6 +157,10 @@ class Router
     //TODO add prefix to str ^ - stop prefix search on this prefix
     public function run()
     {
+        if (empty($this->urls)) {
+            throw new \Exception("In this router urls is not defined");
+        }
+
         if ($this->isRun) { return; } //fix double run
         $this->isRun = true;
 
