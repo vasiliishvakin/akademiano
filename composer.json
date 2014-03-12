@@ -8,8 +8,15 @@
             "email": "zen4dev@gmail.com"
         }
     ],
+    "autoload": {
+        "psr-0": {
+            "Model": "./",
+            "Controller": "./"
+        }
+    },
     "require": {
         "deltaphp/deltacore": "dev-master",
+        "deltaphp/deltaskeletonmodule": "dev-master",
         "twig/twig": "1.*"
     }
 }

@@ -18,5 +18,6 @@ $loader->setUseIncludePath(true);
 use DeltaCore\Application;
 
 $app = new Application();
+$app->setLoader($loader);
 
 $app->run();

@@ -10,6 +10,9 @@ return [
             'cache' => 'data/cache',
             'auto_reload' => true,
         ],
+    ],
+    "modules" => [
+        "DeltaSkeletonModule",
     ]
 
 ];

@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "4467cc97b2969479612b7c0c08294d57",
+    "hash": "65e45464ac7329c4d133edf19782089f",
     "packages": [
         {
             "name": "deltaphp/deltacore",
@@ -11,19 +11,20 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/DeltaCore.git",
-                "reference": "25e713ce80f2db7d6a62e83da481832df124735d"
+                "reference": "db0403c14ea7e522fd752aa4b4a719baf6b29a9b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/DeltaCore/zipball/25e713ce80f2db7d6a62e83da481832df124735d",
-                "reference": "25e713ce80f2db7d6a62e83da481832df124735d",
+                "url": "https://api.github.com/repos/DeltaPHP/DeltaCore/zipball/db0403c14ea7e522fd752aa4b4a719baf6b29a9b",
+                "reference": "db0403c14ea7e522fd752aa4b4a719baf6b29a9b",
                 "shasum": ""
             },
             "require": {
                 "deltaphp/deltarouter": "dev-master",
                 "deltaphp/deltautils": "dev-master",
                 "deltaphp/dtpl": "dev-master",
-                "deltaphp/httpwarp": "dev-master"
+                "deltaphp/httpwarp": "dev-master",
+                "pimple/pimple": "2.0.*@dev"
             },
             "type": "library",
             "autoload": {
@@ -42,7 +43,7 @@
                 }
             ],
             "description": "Delta PHP framework - fast, light, easy (core)",
-            "time": "2014-01-14 07:34:53"
+            "time": "2014-03-12 10:17:52"
         },
         {
             "name": "deltaphp/deltarouter",
@@ -50,12 +51,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/DeltaRouter.git",
-                "reference": "c2626176b6c650f10418c4957b2dfafbe8707efb"
+                "reference": "225140905e052c86261e22a0363101f06f6ac5a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/DeltaRouter/zipball/c2626176b6c650f10418c4957b2dfafbe8707efb",
-                "reference": "c2626176b6c650f10418c4957b2dfafbe8707efb",
+                "url": "https://api.github.com/repos/DeltaPHP/DeltaRouter/zipball/225140905e052c86261e22a0363101f06f6ac5a4",
+                "reference": "225140905e052c86261e22a0363101f06f6ac5a4",
                 "shasum": ""
             },
             "require": {
@@ -70,12 +71,48 @@
             "notification-url": "https://packagist.org/downloads/",
             "authors": [
                 {
-                    "name": "orbisnull",
+                    "name": "Vasiliy Shvakin",
                     "email": "zen4dev@gmail.com"
                 }
             ],
             "description": "Simple router for php applications",
-            "time": "2014-01-13 04:22:01"
+            "time": "2014-03-12 10:22:41"
+        },
+        {
+            "name": "deltaphp/deltaskeletonmodule",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DeltaPHP/DeltaSkeletonModule.git",
+                "reference": "c6471c4005e4910e1217d3dca46474d500ae2fe0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DeltaPHP/DeltaSkeletonModule/zipball/c6471c4005e4910e1217d3dca46474d500ae2fe0",
+                "reference": "c6471c4005e4910e1217d3dca46474d500ae2fe0",
+                "shasum": ""
+            },
+            "require": {
+                "deltaphp/deltacore": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "DeltaSkeletonModule": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3+"
+            ],
+            "authors": [
+                {
+                    "name": "orbisnull",
+                    "email": "zen4dev@gmail.com"
+                }
+            ],
+            "description": "DeltaSkeletonModule",
+            "time": "2014-03-12 13:07:03"
         },
         {
             "name": "deltaphp/deltautils",
@@ -83,12 +120,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/DeltaUtils.git",
-                "reference": "1c82edc932cb4dcd7d40039e74214db98256861f"
+                "reference": "cae703cefd3b5f25034a3dc508a87d777083ab32"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/DeltaUtils/zipball/1c82edc932cb4dcd7d40039e74214db98256861f",
-                "reference": "1c82edc932cb4dcd7d40039e74214db98256861f",
+                "url": "https://api.github.com/repos/DeltaPHP/DeltaUtils/zipball/cae703cefd3b5f25034a3dc508a87d777083ab32",
+                "reference": "cae703cefd3b5f25034a3dc508a87d777083ab32",
                 "shasum": ""
             },
             "type": "library",
@@ -108,7 +145,7 @@
                 }
             ],
             "description": "good tools and utils",
-            "time": "2014-01-11 17:04:19"
+            "time": "2014-03-12 10:23:30"
         },
         {
             "name": "deltaphp/dtpl",
@@ -149,12 +186,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/HttpWarp.git",
-                "reference": "25c7215c1abcae3a90d3f5064cfd97d45f4ec9c4"
+                "reference": "ee6ff3bb2974bc4bf7db71ecb7a49535fffde321"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/HttpWarp/zipball/25c7215c1abcae3a90d3f5064cfd97d45f4ec9c4",
-                "reference": "25c7215c1abcae3a90d3f5064cfd97d45f4ec9c4",
+                "url": "https://api.github.com/repos/DeltaPHP/HttpWarp/zipball/ee6ff3bb2974bc4bf7db71ecb7a49535fffde321",
+                "reference": "ee6ff3bb2974bc4bf7db71ecb7a49535fffde321",
                 "shasum": ""
             },
             "require": {
@@ -172,12 +209,60 @@
             ],
             "authors": [
                 {
-                    "name": "Vasiliy Shvakin",
+                    "name": "orbisnull",
                     "email": "zen4dev@gmail.com"
                 }
             ],
             "description": "request, response, session and other tools for base web development",
-            "time": "2014-01-13 07:36:40"
+            "time": "2014-02-02 05:49:28"
+        },
+        {
+            "name": "pimple/pimple",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fabpot/Pimple.git",
+                "reference": "a9e94d9fd6cb9e8f097551a25ffec73ff2480a24"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fabpot/Pimple/zipball/a9e94d9fd6cb9e8f097551a25ffec73ff2480a24",
+                "reference": "a9e94d9fd6cb9e8f097551a25ffec73ff2480a24",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Pimple": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
+                }
+            ],
+            "description": "Pimple is a simple Dependency Injection Container for PHP 5.3",
+            "homepage": "http://pimple.sensiolabs.org",
+            "keywords": [
+                "container",
+                "dependency injection"
+            ],
+            "time": "2014-03-06 16:54:55"
         },
         {
             "name": "twig/twig",
@@ -185,12 +270,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/fabpot/Twig.git",
-                "reference": "9ed963c99d0e5f10eeeb1a135d80389f4a56d866"
+                "reference": "8c5844a56fe5cbe13ef3becd9ed9f7b3ade104a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Twig/zipball/9ed963c99d0e5f10eeeb1a135d80389f4a56d866",
-                "reference": "9ed963c99d0e5f10eeeb1a135d80389f4a56d866",
+                "url": "https://api.github.com/repos/fabpot/Twig/zipball/8c5844a56fe5cbe13ef3becd9ed9f7b3ade104a2",
+                "reference": "8c5844a56fe5cbe13ef3becd9ed9f7b3ade104a2",
                 "shasum": ""
             },
             "require": {
@@ -214,11 +299,19 @@
             "authors": [
                 {
                     "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
                 },
                 {
                     "name": "Armin Ronacher",
-                    "email": "armin.ronacher@active-4.com"
+                    "email": "armin.ronacher@active-4.com",
+                    "role": "Project Founder"
+                },
+                {
+                    "name": "Twig Team",
+                    "homepage": "https://github.com/fabpot/Twig/graphs/contributors",
+                    "role": "Contributors"
                 }
             ],
             "description": "Twig, the flexible, fast, and secure template language for PHP",
@@ -226,7 +319,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2014-01-24 15:03:15"
+            "time": "2014-02-24 15:39:56"
         }
     ],
     "packages-dev": [
@@ -237,7 +330,8 @@
     ],
     "minimum-stability": "dev",
     "stability-flags": {
-        "deltaphp/deltacore": 20
+        "deltaphp/deltacore": 20,
+        "deltaphp/deltaskeletonmodule": 20
     },
     "platform": [
 

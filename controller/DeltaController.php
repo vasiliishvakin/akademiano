@@ -3,6 +3,8 @@
  * User: Vasiliy Shvakin (orbisnull) zen4dev@gmail.com
  */
 
+namespace Controller;
+
 use DeltaCore\AbstractController;
 
 class DeltaController extends AbstractController
