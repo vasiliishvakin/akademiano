@@ -25,6 +25,19 @@ class ArrayUtils {
         return $merged;
     }
 
+    public static function setByPath(array $array, array $path, $value)
+    {
+        $current = &$array;
+        foreach($path as $item) {
+            if (!isset($current[$item])) {
+                $current[$item] = null;
+            }
+            $current = &$current[$item];
+        }
+        $current = $value;
+        return $array;
+    }
+
     public static function getByPath(array $array, $path = null, $default = null)
     {
         if (is_null($path)) {
