@@ -1,0 +1,15 @@
+{
+    "name": "deltaphp/deltaskeletonmodule",
+    "description": "DeltaSkeletonModule",
+    "license": "GPL-3+",
+    "authors": [
+        {
+            "name": "orbisnull",
+            "email": "zen4dev@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "deltaphp/deltacore": "dev-master"
+    }
+}
