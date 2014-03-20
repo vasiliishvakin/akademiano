@@ -147,9 +147,13 @@ abstract class AbstractView implements InterfaceView
         $this->templateDirs = $templateDirs;
     }
 
-    public function addTemplateDir($directory)
+    public function addTemplateDir($directory, $append = true)
     {
-        $this->templateDirs[] = $directory;
+        if ($append) {
+            $this->templateDirs[] = $directory;
+        } else {
+            array_unshift($this->templateDirs, $directory);
+        }
     }
 
     /**
@@ -162,7 +166,7 @@ abstract class AbstractView implements InterfaceView
         if (is_object($dirs) && method_exists($dirs, 'toArray')) {
             $dirs = $dirs->toArray();
         }
-        $dirs = array_merge($this->templateDirs, $dirs);
+        $dirs = array_merge($dirs, $this->templateDirs);
         $realDirs = [];
         foreach ($dirs as $dir) {
             if(strpos($dir, '/') === 0) {
