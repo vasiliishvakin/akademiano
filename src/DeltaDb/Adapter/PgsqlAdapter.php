@@ -134,18 +134,52 @@ class PgsqlAdapter extends AbstractAdapter
         }
     }
 
+    public function escapeIdentifier($field)
+    {
+        if (strpos($field, ".") === false) {
+            return pg_escape_identifier($field);
+        }
+        $fieldArr = explode(".", $field);
+        return $fieldArr[0] . "." . pg_escape_identifier($fieldArr[1]);
+    }
+
     public function getWhere(array $criteria, $num = 0)
     {
-        $where = array_keys($criteria);
-        $where = array_map(function ($value) use($num) {
-            $num ++;
-            return pg_escape_identifier($value) . '= $' . $num;
-        }, $where);
+        $where = [];
+        foreach ($criteria as $field => $value) {
+            if (!is_array($value)) {
+                $num++;
+                $where[] = $this->escapeIdentifier($field) . '=$' . $num;
+            } else {
+                $inParams = [];
+                foreach($value as $valueItem){
+                    $num++;
+                    $inParams[] = "\${$num}";
+                }
+                $inParams = implode(', ', $inParams);
+                $where[] = $this->escapeIdentifier($field) . " in ({$inParams})";
+            }
+        }
         $where = implode(' and ', $where);
         if (!empty($where)){
             $where = ' where ' . $where;
         }
         return $where;
+    }
+
+    public function getWhereParams(array $criteria)
+    {
+        $whereParams = [];
+        foreach($criteria as $field=>$value) {
+            if (!is_array($value)) {
+                $whereParams[] = $value;
+            } else {
+                foreach($value as $valueItem) {
+                    $whereParams[] = $valueItem;
+                }
+            }
+        }
+        return $whereParams;
     }
 
     public function update($table, $fields, array $criteria)
@@ -164,7 +198,7 @@ class PgsqlAdapter extends AbstractAdapter
         $query .= $fieldsNames;
         $query .= $this->getWhere($criteria, $num);
         $fieldsValues = array_values($fields);
-        $whereParams = array_values($criteria);
+        $whereParams = $this->getWhereParams($criteria);
         $queryParam = array_merge($fieldsValues, $whereParams);
         $result = $this->queryParams($query, $queryParam);
         return ($result === false) ? false : pg_affected_rows($result);
@@ -177,23 +211,56 @@ class PgsqlAdapter extends AbstractAdapter
             return false;
         }
         $query .= $this->getWhere($criteria);
-        $whereParams = array_values($criteria);
+        $whereParams = $this->getWhereParams($criteria);
         $result = $this->queryParams($query, $whereParams);
 
         return ($result === false) ? false : pg_affected_rows($result);
     }
 
-    public function selectBy($table, array $criteria = [])
+    public function getLimitPartSql($limit = null, $offset = null)
+    {
+        $sql = "";
+        if (!is_null($limit)) {
+            $limit = (integer)$limit;
+            $sql .= " limit {$limit}";
+        }
+        if (!is_null($offset)) {
+            $offset = (integer) $offset;
+            $sql .= " offset {$offset}";
+        }
+        return $sql;
+    }
+
+    public function selectBy($table, array $criteria = [], $limit = null, $offset = null)
     {
         $query = "select * from \"{$table}\"";
+        $limitSql = $this->getLimitPartSql($limit, $offset);
         if (empty($criteria)) {
+            $query .= $limitSql;
             return $this->select($query);
         }
         $query .= $this->getWhere($criteria);
-        $whereParams = array_values($criteria);
+        $query .= $limitSql;
+        $whereParams = $this->getWhereParams($criteria);
         array_unshift($whereParams, $query);
         return call_user_func_array([$this, 'select'],  $whereParams);
     }
+
+    public function count($table, array $criteria = [])
+    {
+        $query = "select count(*) from \"{$table}\"";
+        if (empty($criteria)) {
+            $result = $this->selectCell($query);
+        } else {
+            $query .= $this->getWhere($criteria);
+            $whereParams = $this->getWhereParams($criteria);
+            array_unshift($whereParams, $query);
+            $result = call_user_func_array([$this, 'selectCell'], $whereParams);
+        }
+        return (integer)$result;
+    }
+
+
 
 
 } 

@@ -21,6 +21,13 @@ class Repository implements RepositoryInterface
      */
     protected $adapter;
 
+    /**
+     * @var IdentityMap[]
+     */
+    protected $idMaps = [];
+
+    protected $referredIds = [];
+
     protected $dba = DbaStorage::DBA_DEFAULT;
 
     protected $metaInfo = [
@@ -79,6 +86,35 @@ class Repository implements RepositoryInterface
             $this->adapter = DbaStorage::getDba($this->getDba());
         }
         return $this->adapter;
+    }
+
+    public function setIdMap(IdentityMap $idMap, $entityClass = null)
+    {
+        $entityClass = $entityClass ?: $this->getEntityClass();
+        $this->idMaps[$entityClass] = $idMap;
+    }
+
+    public function getIdMap($entityClass = null)
+    {
+        $entityClass = $entityClass ? : $this->getEntityClass();
+        if (empty($this->idMaps[$entityClass])) {
+            $this->idMaps[$entityClass] = new IdentityMap();
+        }
+        return $this->idMaps[$entityClass];
+    }
+
+    public function addReferredIds(array $ids)
+    {
+        $ids = array_diff($ids, $this->referredIds);
+        $this->referredIds = array_merge($this->referredIds, $ids);
+    }
+
+    /**
+     * @return array
+     */
+    public function getReferredIds()
+    {
+        return $this->referredIds;
     }
 
     /**
@@ -226,13 +262,13 @@ class Repository implements RepositoryInterface
         return $value;
     }
 
-    public function findRaw(array $criteria = [], $table = null)
+    public function findRaw(array $criteria = [], $table = null, $limit = null, $offset = null)
     {
         $adapter = $this->getAdapter();
         if (is_null($table)) {
             $table = $this->getTableName();
         }
-        $data = $adapter->selectBy($table, $criteria);
+        $data = $adapter->selectBy($table, $criteria, $limit, $offset);
         return $data;
     }
 
@@ -328,16 +364,25 @@ class Repository implements RepositoryInterface
         return $this->deleteById($id, $table);
     }
 
-    public function find(array $criteria = [], $entityClass = null)
+    public function find(array $criteria = [], $entityClass = null, $limit = null, $offset = null)
     {
         if (is_null($entityClass)) {
             $entityClass = $this->getEntityClass();
         }
         $table = $this->getTableName($entityClass);
-        $data = $this->findRaw($criteria, $table);
+        $idField = $this->getIdField($table);
+        $data = $this->findRaw($criteria, $table, $limit, $offset);
         $items = [];
+        $idMap = $this->getIdMap($entityClass);
         foreach($data as $row) {
-            $items[] = $this->create($row, $entityClass);
+            $idValue = $row[$idField];
+            if ($idMap->has($idValue)) {
+                $item = $idMap->get($idValue);
+            } else {
+                $item = $this->create($row, $entityClass);
+                $idMap->set($idValue, $item);
+            }
+            $items[] = $item;
         }
         return $items;
     }
@@ -355,8 +400,25 @@ class Repository implements RepositoryInterface
     {
         $table = $this->getTableName($entityClass);
         $idName = $this->getIdField($table);
+        $idMap = $this->getIdMap($entityClass);
+        if ($idMap->has($id)) {
+            return $idMap->get($id);
+        }
         $item = $this->findOne([$idName=>$id], $entityClass);
         return $item;
+    }
+
+    public function findByIds(array $ids, $entityClass = null)
+    {
+        $table = $this->getTableName($entityClass);
+        $idName = $this->getIdField($table);
+        $idMap = $this->getIdMap($entityClass);
+        $needFindIds = $idMap->getDiff($ids);
+        if (!empty($needFindIds)) {
+            $this->find([$idName=>$needFindIds], $entityClass);
+        }
+        $items = $idMap->getIds($ids);
+        return $items;
     }
 
     public function load(EntityInterface $entity, array $data)
@@ -379,5 +441,12 @@ class Repository implements RepositoryInterface
             $data[$field] = $this->getField($entity, $field);
         }
         return $data;
+    }
+
+    public function count(array $criteria = [], $entityClass = null)
+    {
+        $adapter = $this->getAdapter();
+        $table = $this->getTableName($entityClass);
+        return $adapter->count($table, $criteria);
     }
 }

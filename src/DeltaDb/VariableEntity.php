@@ -65,5 +65,18 @@ class VariableEntity extends AbstractEntity
         }
     }
 
+    function __get($field)
+    {
+        if (!$this->isFieldExist($field)) {
+            throw new \BadMethodCallException("field $field not exist");
+        }
+        return $this->getField($field);
+    }
+
+    function __isset($field)
+    {
+        return $this->isFieldExist($field);
+    }
+
 
 } 
