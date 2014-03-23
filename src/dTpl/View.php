@@ -71,5 +71,16 @@ class View extends AbstractView implements InterfaceView
         return $this->processTemplate($vars);
     }
 
+    public function exist($template)
+    {
+        $templateFile = $template . '.' . $this->getTemplateExtension();
+        $arrayTemplates = $this->getArrayTemplates();
+        if(isset($arrayTemplates[$templateFile])) {
+            return true;
+        };
+        $path = $this->getFilePath($templateFile);
+        return file_exists($path);
+    }
+
 
 } 

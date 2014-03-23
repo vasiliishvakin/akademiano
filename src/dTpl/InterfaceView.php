@@ -24,4 +24,6 @@ interface InterfaceView
 
     public function render($params = [], $templateName = null);
 
+    public function exist($template);
+
 }
