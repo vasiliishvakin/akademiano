@@ -104,7 +104,7 @@ class ArrayUtils {
         return $array;
     }
 
-    public static function onlyPath($array, $path, $default = null)
+    public static function getSlice($array, $path, $default = null)
     {
         $valArray = [];
         foreach($array as $key=>$value) {
@@ -127,4 +127,5 @@ class ArrayUtils {
     public static function isAssoc(array $array) {
         return (bool)count(array_filter(array_keys($array), 'is_string'));
     }
+
 }
