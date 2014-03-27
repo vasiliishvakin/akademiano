@@ -5,7 +5,9 @@
 
 namespace HttpWarp;
 
+use DeltaUtils\ArrayUtils;
 use DeltaUtils\ErrorHandler;
+use HttpWarp\File\UploadFile;
 
 class Request
 {
@@ -86,7 +88,7 @@ class Request
         ErrorHandler::start();
         $params = json_decode($this->getParam($key), $default);
         ErrorHandler::stop();
-        return (array) $params;
+        return (array)$params;
     }
 
     /**
@@ -132,7 +134,7 @@ class Request
         }
         $uri = explode('/', $uri);
         $num = ($num < 0) ? $num = count($uri) + $num : $num = $num - 1;
-        if ($num > count($uri) -1) {
+        if ($num > count($uri) - 1) {
             return $default;
         }
         return $uri[$num];
@@ -146,5 +148,44 @@ class Request
     }
 
 
+    /**
+     * @param string $name
+     * @param null $type
+     * @param null $maxSize
+     * @param bool $withErrors
+     * @return UploadFile[]
+     */
+    public function getFiles($name = "files", $type = null, $maxSize = null, $withErrors = false)
+    {
+        $files = [];
+        if (!isset($_FILES) || empty($_FILES) || !isset($_FILES[$name])) {
+            return $files;
+        }
+        $inFiles = $_FILES[$name];
+        $countFiles = count($inFiles["name"]);
+        if ($countFiles > 0) {
+            $newInFiles = [];
+            foreach ($inFiles as $key => $info) {
+                for ($i = 0; $i < $countFiles; $i++) {
+                    $newInFiles[$i][$key] = $info[$i];
+                }
+            }
+            $inFiles = $newInFiles;
+        }
 
-} 
+        foreach ($inFiles as $fileData) {
+            if (!$withErrors && $fileData["error"] !== 0) {
+                continue;
+            }
+            $file = new UploadFile($fileData["name"], $fileData["tmp_name"], $fileData["error"]);
+            if ($type && !$file->checkType($type)) {
+                continue;
+            }
+            if ($maxSize && $file->getSize() > $maxSize) {
+                continue;
+            }
+            $files[] = $file;
+        }
+        return $files;
+    }
+}
