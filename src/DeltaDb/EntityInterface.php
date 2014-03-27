@@ -8,6 +8,8 @@ namespace DeltaDb;
 
 interface EntityInterface
 {
+    public function getId();
+
     /**
      * @return array
      */

@@ -78,5 +78,13 @@ class VariableEntity extends AbstractEntity
         return $this->isFieldExist($field);
     }
 
+    public function getId()
+    {
+        if (!$this->isFieldExist("id")) {
+            throw new \BadMethodCallException("id field not defined");
+        }
+        return $this->getField("id");
+    }
+
 
 } 

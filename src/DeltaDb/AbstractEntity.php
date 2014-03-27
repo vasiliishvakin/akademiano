@@ -8,6 +8,9 @@ namespace DeltaDb;
 
 abstract class AbstractEntity implements EntityInterface
 {
+
+    abstract public function getId();
+
     /**
      * @return array
      */
