@@ -36,11 +36,15 @@ interface AdapterInterface
 
     public function delete($table, array $criteria);
 
-    public function selectBy($table, array $criteria = [], $limit = null, $offset = null);
+    public function selectBy($table, array $criteria = [], $limit = null, $offset = null, $orderBy = null);
 
     public function getWhere(array $criteria, $num = 0);
 
     public function getWhereParams(array $criteria);
+
+    public function getOrderBy($orderBy);
+
+    public function getLimit($limit, $offset);
 
     public function count($table, array $criteria = []);
 

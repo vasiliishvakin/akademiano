@@ -182,6 +182,22 @@ class PgsqlAdapter extends AbstractAdapter
         return $whereParams;
     }
 
+    public function getOrderBy($orderBy)
+    {
+        $orderStr = "";
+        if (!is_null($orderBy)) {
+            if (is_array($orderBy)) {
+                $orderField = $orderBy[0];
+                $orderDirect = $orderBy[1];
+                $orderStr = " order by {$orderField} {$orderDirect}";
+            } else {
+                $orderStr = " order by {$orderBy}";
+            }
+        }
+        return $orderStr;
+    }
+
+
     public function update($table, $fields, array $criteria)
     {
         $query = "update {$table}";
@@ -217,7 +233,7 @@ class PgsqlAdapter extends AbstractAdapter
         return ($result === false) ? false : pg_affected_rows($result);
     }
 
-    public function getLimitPartSql($limit = null, $offset = null)
+    public function getLimit($limit = null, $offset = null)
     {
         $sql = "";
         if (!is_null($limit)) {
@@ -231,15 +247,17 @@ class PgsqlAdapter extends AbstractAdapter
         return $sql;
     }
 
-    public function selectBy($table, array $criteria = [], $limit = null, $offset = null)
+    public function selectBy($table, array $criteria = [], $limit = null, $offset = null, $orderBy = null)
     {
         $query = "select * from \"{$table}\"";
-        $limitSql = $this->getLimitPartSql($limit, $offset);
+        $limitSql = $this->getLimit($limit, $offset);
         if (empty($criteria)) {
             $query .= $limitSql;
             return $this->select($query);
         }
+        $orderStr = "";
         $query .= $this->getWhere($criteria);
+        $query .= $orderStr;
         $query .= $limitSql;
         $whereParams = $this->getWhereParams($criteria);
         array_unshift($whereParams, $query);

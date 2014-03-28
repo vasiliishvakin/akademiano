@@ -262,13 +262,13 @@ class Repository implements RepositoryInterface
         return $value;
     }
 
-    public function findRaw(array $criteria = [], $table = null, $limit = null, $offset = null)
+    public function findRaw(array $criteria = [], $table = null, $limit = null, $offset = null, $orderBy = null)
     {
         $adapter = $this->getAdapter();
         if (is_null($table)) {
             $table = $this->getTableName();
         }
-        $data = $adapter->selectBy($table, $criteria, $limit, $offset);
+        $data = $adapter->selectBy($table, $criteria, $limit, $offset, $orderBy);
         return $data;
     }
 
@@ -364,14 +364,14 @@ class Repository implements RepositoryInterface
         return $this->deleteById($id, $table);
     }
 
-    public function find(array $criteria = [], $entityClass = null, $limit = null, $offset = null)
+    public function find(array $criteria = [], $entityClass = null, $limit = null, $offset = null, $orderBy = null)
     {
         if (is_null($entityClass)) {
             $entityClass = $this->getEntityClass();
         }
         $table = $this->getTableName($entityClass);
         $idField = $this->getIdField($table);
-        $data = $this->findRaw($criteria, $table, $limit, $offset);
+        $data = $this->findRaw($criteria, $table, $limit, $offset, $orderBy);
         $items = [];
         $idMap = $this->getIdMap($entityClass);
         foreach($data as $row) {
