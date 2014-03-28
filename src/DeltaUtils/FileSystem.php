@@ -121,4 +121,28 @@ class FileSystem
         return self::getItems($path, $resultType, self::FST_FILE, $level, $showHidden);
     }
 
+    public static function inDir($parentDir, $dir, $checkRealPath = true)
+    {
+        if ($checkRealPath) {
+            $parentDir = realpath($parentDir);
+            $dir = realpath($dir);
+        }
+        if (strlen($parentDir) >  strlen($dir)) {
+            return false;
+        }
+        $partDir = substr($dir, 0, strlen($parentDir));
+        if ((!$parentDir || !$dir || !$partDir) || ($parentDir !== $partDir)) {
+            return false;
+        }
+        return $dir;
+    }
+
+    public static function getDirName($path, $level = 1)
+    {
+        for($i = 1; $i<=$level; $i++) {
+            $path = dirname($path);
+        }
+        return $path;
+    }
+
 }
