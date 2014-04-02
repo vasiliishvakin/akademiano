@@ -1,6 +1,7 @@
 <?php
 namespace  DeltaRouter;
 
+use DeltaRouter\Exception\NotFoundException;
 use HttpWarp\Request;
 
 /**
@@ -51,7 +52,7 @@ class Router
     public function setUrl($pattern, $callback, $method = self::METHOD_ALL, $args = null)
     {
         if (!is_callable($callback)) {
-            throw new Exception('Bad callback function');
+            throw new \Exception('Bad callback function');
         }
 
         $priority = 9;
@@ -189,8 +190,7 @@ class Router
         //TODO more good 404
         $urlData = $this->chooseUrl($suitableUrls);
         if (empty($urlData)) {
-            echo $this->exception404();
-            return;
+            throw new NotFoundException();
         }
 
         if (isset($urlData['args'])) {
