@@ -156,7 +156,17 @@ class Response
 
     public function getHttpCode()
     {
-        return $this->getCode();
+        $code = $this->getCode();
+        switch ($code) {
+            case 404:
+                return "404  Not Found";
+                break;
+            case 403:
+                return "403 Forbidden";
+                break;
+            default :
+                return $code;
+        }
     }
 
     /**

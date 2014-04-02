@@ -38,7 +38,7 @@ class Request
                     parse_str(file_get_contents('php://input'), $this->params);
                     break;
                 default:
-                    throw new Exception('Method ' . $this->getMethod() . 'not supported');
+                    throw new \Exception('Method ' . $this->getMethod() . 'not supported');
             }
         }
         return $this->params;
