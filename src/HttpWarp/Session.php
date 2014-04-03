@@ -73,7 +73,10 @@ class Session {
     {
         if (empty($this->closures)) {
             if (!$this->started) {
-                return $this->start();
+                if ($this->status() !== PHP_SESSION_ACTIVE) {
+                    $this->start();
+                }
+                $this->started = true;
             }
         }
     }
