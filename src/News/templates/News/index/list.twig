@@ -1,0 +1,92 @@
+{% extends "layoutAdmin.twig" %}
+{% block head %}
+    <link rel="stylesheet" href="static/lib/colorbox/colorbox.css"/>
+    <script type='text/javascript' src="static/lib/colorbox/jquery.colorbox-min.js"></script>
+    <script type='text/javascript' src="static/lib/colorbox/jquery.colorbox-ru.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $(".images").colorbox({
+                rel: 'images',
+                slideshow: true,
+                slideshowSpeed: 7000,
+                slideshowAuto: false,
+//            transition:"none",
+                speed: 400,
+                maxWidth: "100%", maxHeight: "100%",
+                "isFitWidth": true,
+
+                current: "{current} из {total}",
+                slideshowStart: "начать слайдшоу",
+                slideshowStop: "остановить слайдшоу"
+            });
+        });
+    </script>
+{% endblock head %}
+
+{% block content %}
+    <h1>News {% if currentCategory %}in "{{ currentCategory.name }}" {% endif %} ({{ countItems }})</h1>
+    <div>
+        {% for article in items %}
+            <div>
+                <h2>{{ article.title }} <sup>{{ article.id }}</sup></h2>
+                <ul class="nav nav-pills">
+                    {% for category in article.categories %}
+                        <li><a href="/admin/news/category/{{ category.id }}">{{ category.name }}</a></li>
+                    {% endfor %}
+                </ul>
+                <hr class=""/>
+                <p>{{ article.text }}</p>
+
+                <div class="photos">
+                    {% for image in article.images %}
+                        <a class='images' href="/{{ image.uri("origin") }}" title="{{ image.name }} - {{ image.description }}">
+                            <img src="/{{ image.uri("thumb") }}" title="{{ image.name }}" alt="{{ image.description }}"/>
+                        </a>
+                    {% endfor %}
+                </div>
+                <a href="/admin/news/edit/{{ article.id }}" class="btn btn-sm btn-warning"><span class="glyphicon glyphicon-edit"></span></a>
+                <a href="/admin/news/rm/{{ article.id }}" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-remove"></span></a>
+            </div>
+            <br/>
+        {% endfor %}
+
+        {#paginator#}
+        <div>
+            {% if not currentCategory %}
+                <ul class="pagination">
+                    {% if showFirstPage %}
+                        <li><a href="/admin/news">&laquo;</a></li>
+                    {% endif %}
+                    {% for page in pages %}
+                        <li class="{% if page.active %}active{% endif %}"><a href="/admin/news?p={{ page.id }}">{{ page.id }}</a></li>
+                    {% endfor %}
+                    {% if showLastPage %}
+                        <li><a href="/admin/news?p={{ countPages }}">&raquo;</a></li>
+                    {% endif %}
+                </ul>
+            {% endif %}
+
+            {% if currentCategory %}
+                <ul class="pagination">
+                    {% if showFirstPage %}
+                        <li><a href="/admin/news/category/{{ currentCategory.id }}">&laquo;</a></li>
+                    {% endif %}
+                    {% for page in pages %}
+                        <li class="{% if page.active %}active{% endif %}"><a href="/admin/news/category/{{ currentCategory.id }}?p={{ page.id }}">{{ page.id }}</a></li>
+                    {% endfor %}
+                    {% if showLastPage %}
+                        <li><a href="/admin/news/category/{{ currentCategory.id }}?p={{ countPages }}">&raquo;</a></li>
+                    {% endif %}
+                    <li class="disabled"><a href="#">&nbsp;</a></li>
+                    <li>
+                        <a href="/admin/news/"><span class="glyphicon glyphicon-list"></span> Show All</a>
+                    </li>
+                </ul>
+            {% endif %}
+        </div>
+
+    </div>
+    <a href="/admin/news/add" class="btn btn-lg btn-success"><span class="glyphicon glyphicon-file"></span> Add New</a>
+{% endblock %}
+

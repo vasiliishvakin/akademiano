@@ -1,0 +1,24 @@
+{
+    "name": "deltainc/news",
+    "description": "News/Blog module",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "orbisnull",
+            "email": "zen4dev@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-0": {
+            "News": "src/"
+        }
+    },
+    "require": {
+	"deltaphp/deltacore": "dev-master",
+	"deltaphp/deltadb": "dev-postdb",
+	"deltaphp/acl": "dev-master",
+	"deltaphp/attach": "dev-master",
+	"deltaphp/dictdir": "dev-master"
+    }
+}
