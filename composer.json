@@ -1,0 +1,21 @@
+{
+    "name": "deltaphp/attach",
+    "description": "Attach files to othe objects",
+    "license": "GPL-3.0+",
+    "authors": [
+        {
+            "name": "orbisnull",
+            "email": "zen4dev@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-0": {
+            "Attach": "src/"
+        }
+    },
+    "require": {
+	"deltaphp/deltadb": "dev-postdb",
+	"deltaphp/sequence": "dev-master"
+    }
+}
