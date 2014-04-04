@@ -1,0 +1,21 @@
+{
+    "name": "deltaphp/image-processor",
+    "description": "Resize and othe operations on images by request",
+    "license": "GPL-3.0+",
+    "authors": [
+        {
+            "name": "orbisnull",
+            "email": "zen4dev@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-0": {
+            "ImageProcessor": "src/"
+        }
+    },
+    "require": {
+	"deltaphp/deltacore": "dev-master",
+	"orbisnull/orbisconvert": "dev-master"
+    }
+}
