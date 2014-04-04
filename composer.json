@@ -1,0 +1,22 @@
+{
+    "name": "deltaphp/acl",
+    "description": "Acl for user manager module",
+    "license": "GPL-3.0+",
+    "authors": [
+        {
+            "name": "orbisnull",
+            "email": "zen4dev@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-0": {
+            "Acl": "src/"
+        }
+    },
+    "require": {
+	"deltaphp/deltacore": "dev-master",
+	"deltaphp/deltadb": "dev-postdb",
+	"deltaphp/user": "dev-master"
+    }
+}
