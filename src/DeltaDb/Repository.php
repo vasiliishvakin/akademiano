@@ -272,16 +272,16 @@ class Repository implements RepositoryInterface
         return $data;
     }
 
-    public function saveRaw(array $fields, $table = null)
+    public function saveRaw(array $fields, $table = null, $rawFields = null)
     {
         if (is_null($table)) {
             $table = $this->getTableName();
         }
         $idName = $this->getIdField($table);
         if (isset($fields[$idName]) && !empty($fields[$idName])) {
-            return $this->updateRaw($fields, $table);
+            return $this->updateRaw($fields, $table, $rawFields);
         } else {
-            $result = $this->insertRaw($fields, $table);
+            $result = $this->insertRaw($fields, $table, $rawFields);
             if (empty($result)) {
                 return false;
             }
@@ -289,7 +289,7 @@ class Repository implements RepositoryInterface
         }
     }
 
-    public function insertRaw(array $fields, $table = null)
+    public function insertRaw(array $fields, $table = null, $rawFields = null)
     {
         $adapter = $this->getAdapter();
         if (is_null($table)) {
@@ -299,10 +299,10 @@ class Repository implements RepositoryInterface
         if (isset($fields[$idField]) || array_key_exists($idField, $fields)) {
             unset($fields[$idField]);
         }
-        return $adapter->insert($table, $fields, $idField);
+        return $adapter->insert($table, $fields, $idField, $rawFields);
     }
 
-    public function updateRaw($fields, $table = null)
+    public function updateRaw($fields, $table = null, $rawFields = null)
     {
         $adapter = $this->getAdapter();
         if (is_null($table)) {
@@ -311,7 +311,7 @@ class Repository implements RepositoryInterface
         $idField = $this->getIdField($table);
         $id = $fields[$idField];
         unset($fields[$idField]);
-        return $adapter->update($table, $fields, [$idField => $id]);
+        return $adapter->update($table, $fields, [$idField => $id], $rawFields);
     }
 
     public function deleteById($id, $table = null)
@@ -339,12 +339,14 @@ class Repository implements RepositoryInterface
     public function save(EntityInterface $entity)
     {
         $data = $this->reserve($entity);
+        $fields = isset($data["fields"]) ? $data["fields"] : $data;
+        $rawFields = isset($data["rawFields"]) ? $data["rawFields"] : null;
         $table = $this->getTableName($entity);
         $idField = $this->getIdField($table);
-        if (isset($data[$idField]) && !empty($data[$idField])) {
-            return $this->updateRaw($data, $table);
+        if (isset($fields[$idField]) && !empty($fields[$idField])) {
+            return $this->updateRaw($fields, $table, $rawFields);
         } else {
-            $result = $this->insertRaw($data, $table);
+            $result = $this->insertRaw($fields, $table, $rawFields);
             if (!$result) {
                 return false;
             }
@@ -440,7 +442,7 @@ class Repository implements RepositoryInterface
         foreach($fields as $field) {
             $data[$field] = $this->getField($entity, $field);
         }
-        return $data;
+        return ["fields" => $data];
     }
 
     public function count(array $criteria = [], $entityClass = null)

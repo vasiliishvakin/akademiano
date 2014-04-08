@@ -108,21 +108,29 @@ class PgsqlAdapter extends AbstractAdapter
         $this->setIsTransaction(false);
     }
 
-    public function insert($table, $fields, $idName = null)
+    public function insert($table, $fields, $idName = null, $rawFields = null)
     {
-        $fieldsList = $placeholders = array_keys($fields);
+        $rawFields = array_flip((array)$rawFields);
+        $fieldsList = array_keys($fields);
+        $fieldsNames = $fieldsList;
         $fieldsList = implode(', ', $fieldsList);
         $num = 0;
-        $placeholders = array_map(function ($value) use(&$num) {
-            $num ++;
-            return '$' . $num;
-        }, $placeholders);
-        $placeholders = implode(', ', $placeholders);
+        $fieldsQuery = [];
+        foreach($fieldsNames as $fieldName) {
+            if (!isset($rawFields[$fieldName])) {
+                $num++;
+                $fieldsQuery[] = '$' . $num;
+            } else {
+                $fieldsQuery[] = $fields[$fieldName];
+                unset($fields[$fieldName]);
+            }
+        }
+        $fieldsQuery = implode(', ', $fieldsQuery);
         if (!is_null($idName)) {
             $idName = "returning {$idName}";
         }
 
-        $query = "insert into {$table} ({$fieldsList}) values({$placeholders}) {$idName}";
+        $query = "insert into {$table} ({$fieldsList}) values({$fieldsQuery}) {$idName}";
         $result = $this->queryParams($query, $fields);
         if ($result === false) {
             return false;
@@ -197,21 +205,27 @@ class PgsqlAdapter extends AbstractAdapter
         return $orderStr;
     }
 
-
-    public function update($table, $fields, array $criteria)
+    public function update($table, $fields, array $criteria, $rawFields = null)
     {
         $query = "update {$table}";
         if (empty($criteria) || empty($fields)) {
             return false;
         }
+        $rawFields = array_flip((array)$rawFields);
         $fieldsNames = array_keys($fields);
         $num = 0;
-        $fieldsNames = array_map(function ($value) use(&$num) {
-            $num ++;
-            return pg_escape_identifier($value) . '=$' . $num;
-        }, $fieldsNames);
-        $fieldsNames = ' set ' . implode(', ', $fieldsNames);
-        $query .= $fieldsNames;
+        $fieldsQuery = [];
+        foreach($fieldsNames as $fieldName) {
+            if (!isset($rawFields[$fieldName])) {
+                $num++;
+                $fieldsQuery[] = pg_escape_identifier($fieldName) . '=$' . $num;
+            } else {
+                $fieldsQuery[] = pg_escape_identifier($fieldName) . '=' . $fields[$fieldName];
+                unset($fields[$fieldName]);
+            }
+        }
+        $fieldsQuery = ' set ' . implode(', ', $fieldsQuery);
+        $query .= $fieldsQuery;
         $query .= $this->getWhere($criteria, $num);
         $fieldsValues = array_values($fields);
         $whereParams = $this->getWhereParams($criteria);
@@ -277,8 +291,5 @@ class PgsqlAdapter extends AbstractAdapter
         }
         return (integer)$result;
     }
-
-
-
 
 } 
