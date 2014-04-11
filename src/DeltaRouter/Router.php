@@ -51,6 +51,9 @@ class Router
 
     public function setUrl($pattern, $callback, $method = self::METHOD_ALL, $args = null)
     {
+        if (is_null($callback)) {
+            return;
+        }
         if (!is_callable($callback)) {
             throw new \Exception('Bad callback function');
         }
