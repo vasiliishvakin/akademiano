@@ -188,6 +188,16 @@ class Response
         return $this->etag;
     }
 
+    public function getLength()
+    {
+        return mb_strlen($this->getBody());
+    }
+
+    public function getLengthByte()
+    {
+        return mb_strlen($this->getBody(), '8bit');
+    }
+
     public function sendHeaders()
     {
         if (headers_sent()) {
