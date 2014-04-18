@@ -140,9 +140,10 @@ class File extends AbstractEntity
         return pathinfo($this->getPath(), PATHINFO_DIRNAME);
     }
 
-    public function getUri($template)
+    public function getUri($template = null)
     {
-        return $this->getFileDirectory() . "/" . $template . "/" . $this->getFileName();
+
+        return $this->getFileDirectory() . (($template) ? "/" . $template  : "") .  "/" . $this->getFileName();
     }
 
 
