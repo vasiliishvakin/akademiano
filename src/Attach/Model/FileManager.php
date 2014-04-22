@@ -23,6 +23,8 @@ class FileManager extends Repository
     /** @var  SequenceManagerInterface */
     protected $sequenceManager;
 
+    protected $rootUri;
+
     protected $metaInfo = [
         "files" => [
             "class"  => "\\Attach\\Model\\File",
@@ -88,6 +90,30 @@ class FileManager extends Repository
         return $sequence;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getRootUri()
+    {
+        if (is_null($this->rootUri)) {
+            $this->rootUri = "http://";
+            if ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+                || $_SERVER['SERVER_PORT'] == 443) {
+                $this->rootUri = "https://";
+            }
+            $this->rootUri .= $_SERVER["SERVER_NAME"];
+        }
+        return $this->rootUri;
+    }
+
+    /**
+     * @param mixed $rootUri
+     */
+    public function setRootUri($rootUri)
+    {
+        $this->rootUri = $rootUri;
+    }
+
     public function getSection($entityClass)
     {
         $typesConfig = $this->getSectionsConfig();
@@ -137,6 +163,15 @@ class FileManager extends Repository
         };
         return $newFile;
     }
+
+    public function create(array $data = null, $entityClass = null)
+    {
+        /** @var File $entity */
+        $entity = parent::create($data, $entityClass);
+        $entity->setRootUri($this->getRootUri());
+        return $entity;
+    }
+
 
     public function saveFileForObject(EntityInterface $object, FileInterface $file, $name = null, $description = null)
     {

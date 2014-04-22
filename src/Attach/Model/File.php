@@ -17,6 +17,7 @@ class File extends AbstractEntity
     protected $name;
     protected $description;
     protected $path;
+    protected $rootUri;
 
     /**
      * @param mixed $description
@@ -140,10 +141,27 @@ class File extends AbstractEntity
         return pathinfo($this->getPath(), PATHINFO_DIRNAME);
     }
 
+    /**
+     * @return mixed
+     */
+    public function getRootUri()
+    {
+        return $this->rootUri;
+    }
+
+    /**
+     * @param mixed $rootUrl
+     */
+    public function setRootUri($rootUrl)
+    {
+        $this->rootUri = $rootUrl;
+    }
+
+
     public function getUri($template = null)
     {
 
-        return $this->getFileDirectory() . (($template) ? "/" . $template  : "") .  "/" . $this->getFileName();
+        return $this->getRootUri() . "/" .  $this->getFileDirectory() . (($template) ? "/" . $template  : "") .  "/" . $this->getFileName();
     }
 
 
