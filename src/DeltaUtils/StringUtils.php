@@ -48,4 +48,25 @@ class StringUtils
             $text);
         return (!is_null($newText)) ? $newText : $text;
     }
+
+    public static function cutStr ($text, $length = 160) {
+        $text = strip_tags($text);
+        $buf = 10;
+        if (mb_strlen($text) <= $length + $buf) {
+            return $text;
+        }
+        $preStr = mb_substr($text, 0, $length + $buf);
+        $chars = [".", "!", ",", "\n", " ",];
+        $startPos = $length - $buf;
+        foreach ($chars as $char) {
+            $pos = mb_strpos($preStr, $char, $startPos);
+            if ($pos!== false) {
+                break;
+            }
+        }
+        if (!$pos) {
+            $pos = $length + $buf;
+        }
+        return trim(mb_substr($text, 0, $pos + 1));
+    }
 } 
