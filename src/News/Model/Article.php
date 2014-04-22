@@ -8,6 +8,7 @@ namespace News\Model;
 
 use Attach\Model\FileManager;
 use DeltaDb\AbstractEntity;
+use DeltaUtils\StringUtils;
 use DictDir\Model\ComboDirectoryManager;
 use DictDir\Model\UniDirectoryManager;
 
@@ -26,6 +27,7 @@ class Article extends AbstractEntity
 
     /** @var  FileManager */
     protected $fileManager;
+
 
     /**
      * @param mixed $categoryManager
@@ -64,6 +66,9 @@ class Article extends AbstractEntity
      */
     public function setCreated($created)
     {
+        if (!$created instanceof \DateTime) {
+            $created = new \DateTime($created);
+        }
         $this->created = $created;
     }
 
@@ -88,6 +93,10 @@ class Article extends AbstractEntity
      */
     public function getDescription()
     {
+        if (is_null($this->description)) {
+            $text = $this->getText();
+            $this->description = StringUtils::cutStr($text, 160);
+        }
         return $this->description;
     }
 
@@ -180,6 +189,15 @@ class Article extends AbstractEntity
             $this->images = $fm->getFilesForObject($this);
         }
         return $this->images;
+    }
+
+    public function getTitleImage()
+    {
+        $images = $this->getImages();
+        if (empty($images)) {
+            return null;
+        }
+        return reset($images);
     }
 
 
