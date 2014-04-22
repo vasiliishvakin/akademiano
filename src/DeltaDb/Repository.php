@@ -188,6 +188,16 @@ class Repository implements RepositoryInterface
     {
         $fieldMeta = $this->getFieldMeta($table, $field);
         if ((!is_array($fieldMeta) || empty($fieldMeta)) || (!isset($fieldMeta["set"]) && !isset($fieldMeta["get"]))) {
+            if(strpos($field, "_")) {
+                $fieldParts = explode("_", $field);
+                foreach($fieldParts as $key=>$part) {
+                    if ($key === 0) {
+                        continue;
+                    }
+                    $fieldParts[$key] = ucfirst($part);
+                }
+                $field = implode("", $fieldParts);
+            }
             return $method . ucfirst($field);
         }
         if (!isset($fieldMeta[$method])) {
