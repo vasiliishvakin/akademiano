@@ -10,6 +10,7 @@ use Attach\Model\FileManager;
 use DeltaDb\Adapter\PgsqlAdapter;
 use DeltaDb\EntityInterface;
 use DeltaDb\Repository;
+use DeltaUtils\ArrayUtils;
 use DictDir\Model\UniDirectoryManager;
 
 class NewsManager extends Repository
@@ -244,8 +245,17 @@ class NewsManager extends Repository
     public function getDates()
     {
         $table = $this->getTableName();
-        $sql = "select created from {$table}";
+        $sql = "select distinct to_char(created, 'YYYY-MM-DD') from {$table}";
         return $this->getAdapter()->selectCol($sql);
+    }
+
+    public function getMonths()
+    {
+        $table = $this->getTableName();
+        $sql = "select distinct to_char(created, 'YYYY-MM') from {$table}";
+        $months = $this->getAdapter()->selectCol($sql);
+        $months = array_map(function($value) {return new \DateTime($value);}, ArrayUtils::filterNulls($months));
+        return $months;
     }
 
 
