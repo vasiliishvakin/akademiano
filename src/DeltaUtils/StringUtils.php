@@ -69,4 +69,11 @@ class StringUtils
         }
         return trim(mb_substr($text, 0, $pos + 1));
     }
+
+    public static function cutClassName($class)
+    {
+        $class = explode("\\", $class);
+        $class = end($class);
+        return $class;
+    }
 } 
