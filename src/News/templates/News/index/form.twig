@@ -106,7 +106,7 @@
                     <ul>
                         {% for image in item.images %}
                             <li>
-                                <img src="/{{ image.uri("thumb") }}" alt=""/>
+                                <img src="{{ image.uri("thumb") }}" alt=""/>
                                 <label class="checkbox-inline">
                                     <input type="checkbox" name="filesRm[]" value="{{ image.id }}">
                                 </label>

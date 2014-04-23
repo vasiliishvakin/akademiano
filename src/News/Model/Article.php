@@ -20,6 +20,7 @@ class Article extends AbstractEntity
     protected $description;
     protected $text;
     protected $created;
+    protected $changed;
     protected $images;
 
     /** @var  UniDirectoryManager|ComboDirectoryManager */
@@ -78,6 +79,25 @@ class Article extends AbstractEntity
     public function getCreated()
     {
         return $this->created;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getChanged()
+    {
+        return $this->changed;
+    }
+
+    /**
+     * @param mixed $changed
+     */
+    public function setChanged($changed)
+    {
+        if (!$changed instanceof \DateTime) {
+            $changed = new \DateTime($changed);
+        }
+        $this->changed = $changed;
     }
 
     /**
