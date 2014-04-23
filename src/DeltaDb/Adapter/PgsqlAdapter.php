@@ -6,6 +6,9 @@
 namespace DeltaDb\Adapter;
 
 
+use DeltaDb\Adapter\WhereParams\Between;
+use DeltaUtils\StringUtils;
+
 class PgsqlAdapter extends AbstractAdapter
 {
     protected $isTransaction = 0;
@@ -155,10 +158,21 @@ class PgsqlAdapter extends AbstractAdapter
     {
         $where = [];
         foreach ($criteria as $field => $value) {
-            if (!is_array($value)) {
-                $num++;
-                $where[] = $this->escapeIdentifier($field) . '=$' . $num;
-            } else {
+            if (is_object($value)) {
+                $class = StringUtils::cutClassName(get_class($value));
+                switch($class) {
+                    case "Between":
+                        /** @var Between $value*/
+                        $num++;
+                        $num2 = $num + 1;
+                        $where[] = $this->escapeIdentifier($field) . " between \${$num} and \${$num2}";
+                        $num = $num2;
+                        break;
+                    default :
+                        throw new \InvalidArgumentException("where class $class not implement");
+                }
+
+            } elseif (is_array($value)) {
                 $inParams = [];
                 foreach($value as $valueItem){
                     $num++;
@@ -166,6 +180,9 @@ class PgsqlAdapter extends AbstractAdapter
                 }
                 $inParams = implode(', ', $inParams);
                 $where[] = $this->escapeIdentifier($field) . " in ({$inParams})";
+            } else {
+                $num++;
+                $where[] = $this->escapeIdentifier($field) . '=$' . $num;
             }
         }
         $where = implode(' and ', $where);
@@ -178,13 +195,25 @@ class PgsqlAdapter extends AbstractAdapter
     public function getWhereParams(array $criteria)
     {
         $whereParams = [];
-        foreach($criteria as $field=>$value) {
-            if (!is_array($value)) {
-                $whereParams[] = $value;
-            } else {
-                foreach($value as $valueItem) {
+        foreach ($criteria as $field => $value) {
+            if (is_object($value)) {
+                $class = StringUtils::cutClassName(get_class($value));
+                switch ($class) {
+                    case "Between":
+                        /** @var Between $value */
+                        $whereParams[] = $value->getStart();
+                        $whereParams[] = $value->getEnd();
+                        break;
+                    default :
+                        throw new \InvalidArgumentException("where class $class not implement");
+                }
+
+            } elseif (is_array($value)) {
+                foreach ($value as $valueItem) {
                     $whereParams[] = $valueItem;
                 }
+            } else {
+                $whereParams[] = $value;
             }
         }
         return $whereParams;
