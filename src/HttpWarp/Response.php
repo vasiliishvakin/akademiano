@@ -5,6 +5,8 @@
 
 namespace HttpWarp;
 
+use DeltaUtils\Time;
+
 class Response
 {
     protected $config = [];
