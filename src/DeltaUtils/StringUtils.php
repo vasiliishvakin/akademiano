@@ -76,4 +76,9 @@ class StringUtils
         $class = end($class);
         return $class;
     }
+
+    public static function nl2Array($string)
+    {
+        return explode("\n", $string);
+    }
 } 
