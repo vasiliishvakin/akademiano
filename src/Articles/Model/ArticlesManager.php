@@ -3,7 +3,7 @@
  * User: Vasiliy Shvakin (orbisnull) zen4dev@gmail.com
  */
 
-namespace News\Model;
+namespace Articles\Model;
 
 
 use Attach\Model\FileManager;
@@ -13,7 +13,7 @@ use DeltaDb\Repository;
 use DeltaUtils\ArrayUtils;
 use DictDir\Model\UniDirectoryManager;
 
-class NewsManager extends Repository
+class ArticlesManager extends Repository
 {
     const CATEGORIES_MIDDLE_TABLE = "news_categories";
 

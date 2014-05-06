@@ -3,15 +3,15 @@
  * User: Vasiliy Shvakin (orbisnull) zen4dev@gmail.com
  */
 
-namespace News\Controller;
+namespace Articles\Controller;
 
 use Acl\Model\Parts\AclController;
 use DeltaCore\AbstractController;
 use DeltaUtils\FileSystem;
-use News\Model\Article;
-use News\Model\NewsManager;
+use Articles\Model\Article;
+use Articles\Model\ArticlesManager;
 
-class IndexController extends AbstractController
+class AdminController extends AbstractController
 {
     use AclController;
 
@@ -23,7 +23,7 @@ class IndexController extends AbstractController
     }
 
     /**
-     * @return NewsManager
+     * @return ArticlesManager
      */
     public function getNewsManager()
     {

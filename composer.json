@@ -1,6 +1,6 @@
 {
-    "name": "deltainc/news",
-    "description": "News/Blog module",
+    "name": "deltainc/articles",
+    "description": "Articles module",
     "license": "proprietary",
     "authors": [
         {
@@ -11,14 +11,14 @@
     "minimum-stability": "dev",
     "autoload": {
         "psr-0": {
-            "News": "src/"
+            "Articles": "src/"
         }
     },
     "require": {
-	"deltaphp/deltacore": "dev-master",
-	"deltaphp/deltadb": "dev-postdb",
-	"deltaphp/acl": "dev-master",
-	"deltaphp/attach": "dev-master",
-	"deltaphp/dictdir": "dev-master"
+        "deltaphp/deltacore": "dev-master",
+        "deltaphp/deltadb": "dev-postdb",
+        "deltaphp/acl": "dev-master",
+        "deltaphp/attach": "dev-master",
+        "deltaphp/dictdir": "dev-master"
     }
 }

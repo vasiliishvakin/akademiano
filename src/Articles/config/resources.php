@@ -4,9 +4,9 @@
  */
 return [
     "NewsManager" => function ($c) {
-            $nm = new \News\Model\NewsManager();
+            $nm = new \Articles\Model\ArticlesManager();
             $df = $c["directoryFactory"];
-            $cm = $df->getManager("categories");
+            $cm = $df->getManager("article_categories");
             $nm->setCategoryManager($cm);
             $fm = $c["fileManager"];
             $nm->setFileManager($fm);
