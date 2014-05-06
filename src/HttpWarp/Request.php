@@ -24,7 +24,7 @@ class Request
         return $this->method;
     }
 
-    public function getParams()
+    public function getParams($emptyStringNull = true)
     {
         if (is_null($this->params)) {
             switch ($this->getMethod()) {
@@ -39,6 +39,13 @@ class Request
                     break;
                 default:
                     throw new \Exception('Method ' . $this->getMethod() . 'not supported');
+            }
+            if ($emptyStringNull) {
+                foreach($this->params as $key=>$value) {
+                    if ($value==="") {
+                        $this->params[$key] = null;
+                    }
+                }
             }
         }
         return $this->params;
