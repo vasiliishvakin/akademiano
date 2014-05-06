@@ -7,21 +7,18 @@ namespace Attach\Model;
 
 
 use DeltaCore\Config;
+use DeltaCore\Parts\Configurable;
 use DeltaDb\EntityInterface;
 use DeltaDb\Repository;
 use HttpWarp\File\FileInterface;
 use HttpWarp\File\UploadFile;
+use Sequence\Model\Parts\Sequence;
 use Sequence\Model\SequenceManagerInterface;
 
 class FileManager extends Repository
 {
-    /**
-     * @var Config
-     */
-    protected $config;
-
-    /** @var  SequenceManagerInterface */
-    protected $sequenceManager;
+    use Configurable;
+    use Sequence;
 
     protected $rootUri;
 
@@ -40,38 +37,6 @@ class FileManager extends Repository
             ]
         ],
     ];
-
-    /**
-     * @param Config $config
-     */
-    public function setConfig(Config $config)
-    {
-        $this->config = $config;
-    }
-
-    /**
-     * @return Config
-     */
-    public function getConfig()
-    {
-        return $this->config;
-    }
-
-    /**
-     * @param \Sequence\Model\SequenceManagerInterface $sequenceManager
-     */
-    public function setSequenceManager(SequenceManagerInterface $sequenceManager)
-    {
-        $this->sequenceManager = $sequenceManager;
-    }
-
-    /**
-     * @return \Sequence\Model\SequenceManagerInterface
-     */
-    public function getSequenceManager()
-    {
-        return $this->sequenceManager;
-    }
 
     public function getRelationsConfig()
     {
