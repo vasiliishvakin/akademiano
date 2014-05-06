@@ -15,7 +15,7 @@ use DictDir\Model\UniDirectoryManager;
 
 class ArticlesManager extends Repository
 {
-    const CATEGORIES_MIDDLE_TABLE = "news_categories";
+    const CATEGORIES_MIDDLE_TABLE = "article_categories_matrix";
 
     /**
      * @var UniDirectoryManager
@@ -26,8 +26,8 @@ class ArticlesManager extends Repository
     protected $fileManager;
 
     protected $metaInfo = [
-        'news' => [
-            'class'  => '\\News\\Model\\Article',
+        'articles' => [
+            'class'  => '\\Articles\\Model\\Article',
             'id'     => 'id',
             'fields' => [
                 "id",
@@ -87,7 +87,7 @@ class ArticlesManager extends Repository
             } else {
                 switch($field) {
                     case "category" :
-                        $nc["nc.category"] = $value;
+                        $nc["mct.category"] = $value;
                         break;
                 }
             }
@@ -104,9 +104,9 @@ class ArticlesManager extends Repository
         }
         $midCatTable = self::CATEGORIES_MIDDLE_TABLE;
         $whereJoin = "";
-        if (isset($criteria["category"])) {
-            $whereJoin = "join {$midCatTable} nc on nc.news=mt.id";
-        }
+//        if (isset($criteria["category"])) {
+//            $whereJoin = "join {$midCatTable} mct on mct.article=mt.id";
+//        }
         $criteria = $this->prepareCriteria($criteria);
         $where = $adapter->getWhere($criteria);
 
@@ -114,7 +114,7 @@ class ArticlesManager extends Repository
             string_agg(mct.category::text, ',') categories
             from {$table} mt
             {$whereJoin}
-            left join {$midCatTable} mct on mct.news=mt.id
+            left join {$midCatTable} mct on mct.article=mt.id
             {$where}
             group by mt.id";
         $orderStr = $adapter->getOrderBy($orderBy);
@@ -136,7 +136,7 @@ class ArticlesManager extends Repository
         $midCatTable = self::CATEGORIES_MIDDLE_TABLE;
         $whereJoin = "";
         if (isset($criteria["category"])) {
-            $whereJoin = "join {$midCatTable} nc on nc.news=mt.id";
+            $whereJoin = "join {$midCatTable} mct on mct.article=mt.id";
         }
         $criteria = $this->prepareCriteria($criteria);
         $where = $adapter->getWhere($criteria);
@@ -187,7 +187,7 @@ class ArticlesManager extends Repository
     {
         $adapter = $this->getAdapter();
         $midCatTable = self::CATEGORIES_MIDDLE_TABLE;
-        $criteria = ["news" => $articleId];
+        $criteria = ["article" => $articleId];
         return $adapter->delete($midCatTable, $criteria);
     }
 
@@ -196,7 +196,7 @@ class ArticlesManager extends Repository
         $adapter = $this->getAdapter();
         $midCatTable = self::CATEGORIES_MIDDLE_TABLE;
         foreach ($categories as $category) {
-            $adapter->insert($midCatTable, ["news" => $articleId, "category" => $category]);
+            $adapter->insert($midCatTable, ["article" => $articleId, "category" => $category]);
         }
     }
 

@@ -6,12 +6,11 @@
 namespace Articles\Controller;
 
 use Acl\Model\Parts\AclController;
-use DeltaCore\AbstractController;
 use DeltaUtils\FileSystem;
 use Articles\Model\Article;
 use Articles\Model\ArticlesManager;
 
-class AdminController extends AbstractController
+class AdminController extends IndexController
 {
     use AclController;
 
@@ -22,55 +21,33 @@ class AdminController extends AbstractController
         return $this->isAllow();
     }
 
-    /**
-     * @return ArticlesManager
-     */
-    public function getNewsManager()
-    {
-        $app = $this->getApplication();
-        return $app["NewsManager"];
-    }
-
-    public function listAction()
-    {
-        $nm = $this->getNewsManager();
-        $countNews = $nm->count();
-        $pageInfo = $this->getPageInfo($countNews, self::ITEMS_PER_PAGE);
-        $criteria = [];
-        $orderBy = "id";
-        $news = $nm->find($criteria, null, $pageInfo["perPage"], $pageInfo["offsetForPage"], $orderBy);
-        $this->getView()->assign("items", $news);
-        $this->getView()->assignArray($pageInfo);
-        $this->getView()->assign("countItems", $countNews);
-    }
-
     public function categoryListAction()
     {
         $this->setViewTemplate("list");
         $categoryId = $this->getRequest()->getUriPartByNum(4);
         if (empty($categoryId)) {
-            $this->getResponse()->redirect("/admin/news");
+            $this->getResponse()->redirect("/admin/articles");
         }
-        $nm = $this->getNewsManager();
+        $nm = $this->getArticlesManager();
         $cm = $nm->getCategoryManager();
         $category = $cm->findById($categoryId);
         $this->getView()->assign("currentCategory", $category);
 
 
         $criteria = ["category" => $categoryId];
-        $countNews = $nm->count($criteria);
-        $pageInfo = $this->getPageInfo($countNews, self::ITEMS_PER_PAGE);
+        $countArticles = $nm->count($criteria);
+        $pageInfo = $this->getPageInfo($countArticles, self::ITEMS_PER_PAGE);
         $orderBy = "id";
-        $news = $nm->find($criteria, null, $pageInfo["perPage"], $pageInfo["offsetForPage"], $orderBy);
-        $this->getView()->assign("items", $news);
+        $articles = $nm->find($criteria, null, $pageInfo["perPage"], $pageInfo["offsetForPage"], $orderBy);
+        $this->getView()->assign("items", $articles);
         $this->getView()->assignArray($pageInfo);
-        $this->getView()->assign("countItems", $countNews);
+        $this->getView()->assign("countItems", $countArticles);
     }
 
     public function addAction()
     {
         $this->getView()->assign("action", "Add");
-        $categories = $this->getNewsManager()->getCategories();
+        $categories = $this->getArticlesManager()->getCategories();
         $this->getView()->assign("categories", $categories);
     }
 
@@ -82,11 +59,11 @@ class AdminController extends AbstractController
     public function editAction()
     {
         $id = $this->getId();
-        $nm = $this->getNewsManager();
+        $nm = $this->getArticlesManager();
         $item = $nm->findById($id);
         $this->getView()->assign("action", "Edit");
         $this->getView()->assign("item", $item);
-        $categories = $this->getNewsManager()->getCategories();
+        $categories = $this->getArticlesManager()->getCategories();
         $itemCategories = array_flip($item->getCategoriesIds());
         $viewCats = [];
         foreach($categories as $category) {
@@ -101,8 +78,8 @@ class AdminController extends AbstractController
     {
         $this->autoRenderOff();
         $id = $this->getId();
-        $this->getNewsManager()->deleteById($id);
-        $this->getResponse()->redirect("/admin/news");
+        $this->getArticlesManager()->deleteById($id);
+        $this->getResponse()->redirect("/admin/articles");
     }
 
     public function saveAction()
@@ -111,7 +88,7 @@ class AdminController extends AbstractController
         //save item
         $request = $this->getRequest();
         $requestParams = $request->getParams();
-        $nm = $this->getNewsManager();
+        $nm = $this->getArticlesManager();
         /** @var Article $item */
         $item = isset($requestParams["id"]) ? $nm->findById($requestParams["id"]) : $nm->create();
         if (empty($item)) {
@@ -129,7 +106,7 @@ class AdminController extends AbstractController
         }
 
         //save files
-        $maxFileSize = $this->getConfig(["News", "Attach", "Size"], 400*1024);
+        $maxFileSize = $this->getConfig(["Articles", "Attach", "Size"], 400*1024);
         $files = $request->getFiles("files", FileSystem::FST_IMAGE, $maxFileSize);
         $filesTitle = $request->getParam("filesTitle", []);
         $filesDescription = $request->getParam("filesDescription", []);
@@ -142,7 +119,7 @@ class AdminController extends AbstractController
         }
 
 
-        $this->getResponse()->redirect("/admin/news");
+        $this->getResponse()->redirect("/admin/articles");
     }
 
 } 

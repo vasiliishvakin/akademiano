@@ -3,7 +3,7 @@
  * User: Vasiliy Shvakin (orbisnull) zen4dev@gmail.com
  */
 return [
-    "NewsManager" => function ($c) {
+    "ArticlesManager" => function ($c) {
             $nm = new \Articles\Model\ArticlesManager();
             $df = $c["directoryFactory"];
             $cm = $df->getManager("article_categories");

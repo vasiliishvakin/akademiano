@@ -1,92 +1,62 @@
-{% extends "layoutAdmin.twig" %}
+{% extends "layout-2.0.twig" %}
+
 {% block head %}
     <link rel="stylesheet" href="static/lib/colorbox/colorbox.css"/>
+    <link rel="stylesheet" href="static/lib/jquery-ui/css/ui-lightness/jquery-ui-1.10.4.min.css">
+
     <script type='text/javascript' src="static/lib/colorbox/jquery.colorbox-min.js"></script>
     <script type='text/javascript' src="static/lib/colorbox/jquery.colorbox-ru.js"></script>
+    <script src="static/js/colorbox.js"></script>
 
-    <script>
-        $(document).ready(function () {
-            $(".images").colorbox({
-                rel: 'images',
-                slideshow: true,
-                slideshowSpeed: 7000,
-                slideshowAuto: false,
-//            transition:"none",
-                speed: 400,
-                maxWidth: "100%", maxHeight: "100%",
-                "isFitWidth": true,
+    <script type='text/javascript' src="static/lib/jquery-ui/js/jquery-ui-1.10.4.min.js"></script>
+    <script type="text/javascript" src="static/js/calendar.js"></script>
 
-                current: "{current} из {total}",
-                slideshowStart: "начать слайдшоу",
-                slideshowStop: "остановить слайдшоу"
-            });
-        });
-    </script>
+    <link rel="stylesheet" href="static/css/place-2.0.css">
 {% endblock head %}
 
-{% block content %}
-    <h1>News {% if currentCategory %}in "{{ currentCategory.name }}" {% endif %} ({{ countItems }})</h1>
-    <div>
-        {% for article in items %}
-            <div>
-                <h2>{{ article.title }} <sup>{{ article.id }}</sup></h2>
-                <ul class="nav nav-pills">
-                    {% for category in article.categories %}
-                        <li><a href="/admin/news/category/{{ category.id }}">{{ category.name }}</a></li>
-                    {% endfor %}
-                </ul>
-                <hr class=""/>
-                <p>{{ article.text }}</p>
+{% block navbar %}
+    <li><a class="nav" href="/">О сайте</a></li>
+    <li><a href="/places">Каталог</a></li>
+    <li class="active"><a href="/articles">Статьи</a></li>
+{% endblock navbar %}
 
-                <div class="photos">
-                    {% for image in article.images %}
-                        <a class='images' href="/{{ image.uri("origin") }}" title="{{ image.name }} - {{ image.description }}">
-                            <img src="/{{ image.uri("thumb") }}" title="{{ image.name }}" alt="{{ image.description }}"/>
-                        </a>
+
+{% block aside %}
+    <section>
+        <div class="calendar"></div>
+    </section>
+{% endblock aside %}
+
+{% block article %}
+    <br/>
+    <br/>
+    {% for item in items %}
+        <section>
+            <h2 class="blog-post-title">{{ item.title }}</h2>
+
+            <div>
+                <span class="label label-warning">{{ item.created|date("d.m.Y") }}</span>
+
+                <div class="pull-right">
+                    {% for category in item.categories %}
+                        <span class="label label-success"><a href="/articles/category/{{ category.id }}">{{ category.name }}</a></span>
                     {% endfor %}
                 </div>
-                <a href="/admin/news/edit/{{ article.id }}" class="btn btn-sm btn-warning"><span class="glyphicon glyphicon-edit"></span></a>
-                <a href="/admin/news/rm/{{ article.id }}" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-remove"></span></a>
             </div>
-            <br/>
-        {% endfor %}
 
-        {#paginator#}
-        <div>
-            {% if not currentCategory %}
-                <ul class="pagination">
-                    {% if showFirstPage %}
-                        <li><a href="/admin/news">&laquo;</a></li>
-                    {% endif %}
-                    {% for page in pages %}
-                        <li class="{% if page.active %}active{% endif %}"><a href="/admin/news?p={{ page.id }}">{{ page.id }}</a></li>
-                    {% endfor %}
-                    {% if showLastPage %}
-                        <li><a href="/admin/news?p={{ countPages }}">&raquo;</a></li>
-                    {% endif %}
-                </ul>
-            {% endif %}
+            <div class="list-article">
+                {% if item.titleImage %}
+                    <div class="item-thumb">
+                        <a class="photo-thumb" href="{{ item.titleImage.uri("origin") }}">
+                            <img src="{{ item.titleImage.uri("thumb") }}"/>
+                        </a>
+                    </div>
+                {% endif %}
+                <p>{{ item.description }}</p>
+            </div>
+            <a class="btn btn-sm btn-default pull-right" href="/articles/id{{ "%09s"|format(item.id) }}">Читать дальше</a>
 
-            {% if currentCategory %}
-                <ul class="pagination">
-                    {% if showFirstPage %}
-                        <li><a href="/admin/news/category/{{ currentCategory.id }}">&laquo;</a></li>
-                    {% endif %}
-                    {% for page in pages %}
-                        <li class="{% if page.active %}active{% endif %}"><a href="/admin/news/category/{{ currentCategory.id }}?p={{ page.id }}">{{ page.id }}</a></li>
-                    {% endfor %}
-                    {% if showLastPage %}
-                        <li><a href="/admin/news/category/{{ currentCategory.id }}?p={{ countPages }}">&raquo;</a></li>
-                    {% endif %}
-                    <li class="disabled"><a href="#">&nbsp;</a></li>
-                    <li>
-                        <a href="/admin/news/"><span class="glyphicon glyphicon-list"></span> Show All</a>
-                    </li>
-                </ul>
-            {% endif %}
-        </div>
-
-    </div>
-    <a href="/admin/news/add" class="btn btn-lg btn-success"><span class="glyphicon glyphicon-file"></span> Add New</a>
-{% endblock %}
-
+            <div class="clearfix"></div>
+        </section>
+    {% endfor %}
+{% endblock article %}

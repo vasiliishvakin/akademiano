@@ -1,0 +1,88 @@
+{% extends "layout-2.0.twig" %}
+
+{% block head %}
+    <meta property="og:title" content="{{ pageTitle }}"/>
+    <meta property="og:description" content="{{ pageDescription }}"/>
+    {% if item.titlePhoto %}
+        <meta property="og:image" content="{{ item.titlePhoto.uri("medium") }}"/>
+    {% endif %}
+
+    <link rel="stylesheet" href="static/lib/colorbox/colorbox.css"/>
+    <link rel="stylesheet" href="static/lib/jquery-ui/css/ui-lightness/jquery-ui-1.10.4.min.css">
+
+    <script type="text/javascript" src="//vk.com/js/api/openapi.js?111"></script>
+
+    <script type='text/javascript' src="static/lib/colorbox/jquery.colorbox-min.js"></script>
+    <script type='text/javascript' src="static/lib/colorbox/jquery.colorbox-ru.js"></script>
+    <script src="static/js/colorbox.js"></script>
+
+    <script type='text/javascript' src="static/lib/jquery-ui/js/jquery-ui-1.10.4.min.js"></script>
+    <script type="text/javascript" src="static/js/calendar.js"></script>
+
+    <link rel="stylesheet" href="static/css/place-2.0.css">
+
+    <script>
+        $("document").ready(function () {
+            VK.init({apiId: 4306345, onlyWidgets: true});
+            VK.Widgets.Comments("vk_comments", {limit: 15, width: "520", attach: "photo,video,link"});
+        });
+    </script>
+{% endblock head %}
+
+{% block navbar %}
+    <li><a class="nav" href="/">О сайте</a></li>
+    <li><a href="/places">Каталог</a></li>
+    <li class="active"><a href="/articles">Статьи</a></li>
+{% endblock navbar %}
+
+
+{% block aside %}
+    <section>
+        <div class="calendar"></div>
+    </section>
+{% endblock aside %}
+
+{% block article %}
+    <div class="page-header">
+        <h1>{{ item.title }}<sup>
+                <small><span class="label label-warning">{{ item.type.name }}</span></small>
+            </sup></h1>
+    </div>
+    <div>
+        <span class="label label-warning">{{ item.date|date("d.m.Y") }}</span>
+
+        <div class="pull-right">
+            {% for category in item.categories %}
+                <span class="label label-success"><a href="/category/{{ category.id }}">{{ category.name }}</a></span>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div>
+        {% if item.titleImage %}
+            <div class="article-thumb">
+                <a class="photo-thumb" href="{{ item.titleImage.uri("origin") }}">
+                    <img src="{{ item.titleImage.uri("thumb") }}"/>
+                </a>
+            </div>
+        {% endif %}
+        <div class="text">
+            {{ item.text }}
+        </div>
+
+        {% if item.images %}
+            <div class="photos">
+                {% for image in item.images %}
+                    <div class="thumbnail">
+                        <a class="photo-thumb" href="{{ image.uri("origin") }}">
+                            <img src="{{ image.uri("medium") }}"/>
+                        </a>
+                        {#<div class="caption">
+                        </div>#}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <div class="clearfix"></div>
+{% endblock article %}
