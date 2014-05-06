@@ -37,6 +37,18 @@
 
 
 {% block aside %}
+    {% if item.description %}
+        <section class="panel panel-default">
+            <div class="panel-heading">
+                Кратко
+            </div>
+            <div class="panel-body">
+                <p>
+                    {{ item.description }}
+                </p>
+            </div>
+        </section>
+    {% endif %}
     <section>
         <div class="calendar"></div>
     </section>
@@ -44,11 +56,9 @@
 
 {% block article %}
     <div class="page-header">
-        <h1>{{ item.title }}<sup>
-                <small><span class="label label-warning">{{ item.type.name }}</span></small>
-            </sup></h1>
+        <h1>{{ item.title }}</h1>
     </div>
-    <div>
+    <div class="article-labels">
         <span class="label label-warning">{{ item.date|date("d.m.Y") }}</span>
 
         <div class="pull-right">
@@ -57,22 +67,26 @@
             {% endfor %}
         </div>
     </div>
+    <div class="clearfix"></div>
 
     <div>
         {% if item.titleImage %}
-            <div class="article-thumb">
+            <div class="article-thumb thumbnail">
                 <a class="photo-thumb" href="{{ item.titleImage.uri("origin") }}">
                     <img src="{{ item.titleImage.uri("thumb") }}"/>
                 </a>
             </div>
         {% endif %}
-        <div class="text">
+        <div class="article-text">
             {{ item.text }}
         </div>
 
         {% if item.images %}
-            <div class="photos">
-                {% for image in item.images %}
+            <div class="article-photos">
+                <h3>Фотографии к статье</h3>
+
+                <div class="list">
+                    {% for image in item.images %}
                     <div class="thumbnail">
                         <a class="photo-thumb" href="{{ image.uri("origin") }}">
                             <img src="{{ image.uri("medium") }}"/>
@@ -80,9 +94,14 @@
                         {#<div class="caption">
                         </div>#}
                     </div>
+                </div>
                 {% endfor %}
             </div>
+            <div class="clearfix"></div>
         {% endif %}
     </div>
-    <div class="clearfix"></div>
+    <hr/>
+    <section class="comments">
+        <div id="vk_comments"></div>
+    </section>
 {% endblock article %}
