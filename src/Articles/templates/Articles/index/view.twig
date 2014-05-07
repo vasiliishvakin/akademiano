@@ -3,8 +3,8 @@
 {% block head %}
     <meta property="og:title" content="{{ pageTitle }}"/>
     <meta property="og:description" content="{{ pageDescription }}"/>
-    {% if item.titlePhoto %}
-        <meta property="og:image" content="{{ item.titlePhoto.uri("medium") }}"/>
+    {% if item.titleImage %}
+        <meta property="og:image" content="{{ item.titleImage.uri("medium") }}"/>
     {% endif %}
 
     <link rel="stylesheet" href="static/lib/colorbox/colorbox.css"/>
