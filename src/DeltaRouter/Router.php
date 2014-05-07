@@ -52,6 +52,9 @@ class Router
     public function setUrl($pattern, $callback, $method = self::METHOD_ALL, $args = null)
     {
         if (is_null($callback)) {
+            if (isset($this->urls[$method][$pattern])) {
+                unset($this->urls[$method][$pattern]);
+            }
             return;
         }
         if (!is_callable($callback)) {
@@ -118,6 +121,7 @@ class Router
             $length = strlen($urlItem['pattern']);
             if ($length > $max) {
                 $url = $urlItem;
+                $max = $length;
             }
         }
         return $url;
