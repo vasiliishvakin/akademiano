@@ -78,7 +78,7 @@
             </div>
         {% endif %}
         <div class="article-text">
-            {{ item.text }}
+            {{ item.text|urlToTag|nl2p }}
         </div>
 
         {% if item.images %}
