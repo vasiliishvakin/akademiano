@@ -15,9 +15,10 @@
 {% endblock head %}
 
 {% block navbar %}
-    <li><a class="nav" href="/">О сайте</a></li>
+    <li><a class="nav" href="/">Главная</a></li>
     <li><a href="/places">Каталог</a></li>
     <li class="active"><a href="/articles">Статьи</a></li>
+    <li><a href="/photos">Фото</a></li>
 {% endblock navbar %}
 
 
@@ -32,7 +33,7 @@
     <br/>
     {% for item in items %}
         <section>
-            <h2 class="article-title">{{ item.title }}</h2>
+            <h2 class="article-title"><a href="/articles/id{{ "%09s"|format(item.id) }}">{{ item.title }}</a></h2>
 
             <div class="article-labels">
                 <span class="label label-warning">{{ item.created|date("d.m.Y") }}</span>
