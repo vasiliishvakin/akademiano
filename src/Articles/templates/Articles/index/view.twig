@@ -1,12 +1,6 @@
 {% extends "layout-2.0.twig" %}
 
 {% block head %}
-    <meta property="og:title" content="{{ pageTitle }}"/>
-    <meta property="og:description" content="{{ pageDescription }}"/>
-    {% if item.titleImage %}
-        <meta property="og:image" content="{{ item.titleImage.uri("medium") }}"/>
-    {% endif %}
-
     <link rel="stylesheet" href="static/lib/colorbox/colorbox.css"/>
     <link rel="stylesheet" href="static/lib/jquery-ui/css/ui-lightness/jquery-ui-1.10.4.min.css">
 

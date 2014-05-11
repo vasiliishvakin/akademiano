@@ -70,6 +70,7 @@ class IndexController extends AbstractController
         $this->getView()->assign("item", $item);
         $this->getView()->assign("pageTitle", "{$item->getTitle()}" );
         $this->getView()->assign("pageDescription", "{$item->getDescription()}" );
+        $this->getView()->assign("pageImage", $item->getTitleImage() ? $item->getTitleImage()->getUri("medium") : false);
     }
 
 } 
