@@ -198,7 +198,7 @@ class Request
 
     public function isHttps()
     {
-        return ($_SERVER['HTTPS'] && $_SERVER['HTTPS']==="on");
+        return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']==="on");
     }
 
     public function getProtocol()
