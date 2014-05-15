@@ -18,7 +18,12 @@ class MysqlPdoAdapter extends AbstractAdapter
         if (!is_null($dsn)) {
             $this->setDsn($dsn);
         }
-        $connection = new \PDO($this->getDsn());
+        $user = "root";
+        $pass = "123";
+        $options = array(
+            \PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
+        );
+        $connection = new \PDO($this->getDsn(), $user, $pass, $options);
         $this->setConnection($connection);
     }
 
@@ -32,14 +37,14 @@ class MysqlPdoAdapter extends AbstractAdapter
 
     public function query($query)
     {
-        $connection = $this->getConnection();
         if (func_num_args() === 1) {
-            $result = $connection->query($query);
+            $params = [];
         } else {
             $params = func_get_args();
             array_shift($params);
-            $result = $this->queryParams($query, $params);
         }
+        $result = $this->queryParams($query, $params);
+
         return $result;
     }
 
@@ -48,12 +53,13 @@ class MysqlPdoAdapter extends AbstractAdapter
     {
         $connection = $this->getConnection();
         $pQuery = $connection->prepare($query);
+        $count = count($params);
         $params = array_values($params);
-        foreach ($params as $key=>$value) {
-            $pQuery->bindValue($key, $value);
+        for($i=1; $i<=$count; $i++) {
+            $pQuery->bindValue($i, $params[$i-1]);
         }
-        $result = $connection->query($query);
-        return $result;
+        $result = $pQuery->execute();
+        return $pQuery;
 
     }
 
@@ -61,6 +67,9 @@ class MysqlPdoAdapter extends AbstractAdapter
     {
         /** @var \PDOStatement $result */
         $result = call_user_func_array([$this, 'query'], func_get_args());
+        if (!$result) {
+            return [];
+        }
 
         $rows = $result->fetchAll(\PDO::FETCH_ASSOC);
         if(!is_array($rows)) {
@@ -152,7 +161,7 @@ class MysqlPdoAdapter extends AbstractAdapter
         }
         $fieldsQuery = implode(', ', $fieldsQuery);
 
-        $query = "insert into {$table} ({$fieldsList}) values({$fieldsQuery}) {$idName}";
+        $query = "insert into `{$table}` ({$fieldsList}) values ({$fieldsQuery})";
         $result = $this->queryParams($query, $fields);
         if ($result === false) {
             return false;
@@ -184,7 +193,7 @@ class MysqlPdoAdapter extends AbstractAdapter
                         /** @var Between $value*/
                         $num++;
                         $num2 = $num + 1;
-                        $where[] = $this->escapeIdentifier($field) . " between \${$num} and \${$num2}";
+                        $where[] = $this->escapeIdentifier($field) . " between ? and ?";
                         $num = $num2;
                         break;
                     default :
@@ -201,7 +210,7 @@ class MysqlPdoAdapter extends AbstractAdapter
                 $where[] = $this->escapeIdentifier($field) . " in ({$inParams})";
             } else {
                 $num++;
-                $where[] = $this->escapeIdentifier($field) . '=$' . $num;
+                $where[] = $this->escapeIdentifier($field) . '=?';
             }
         }
         $where = implode(' and ', $where);
@@ -266,7 +275,7 @@ class MysqlPdoAdapter extends AbstractAdapter
         foreach($fieldsNames as $fieldName) {
             if (!isset($rawFields[$fieldName])) {
                 $num++;
-                $fieldsQuery[] = $this->escapeIdentifier($fieldName) . '=$' . $num;
+                $fieldsQuery[] = $this->escapeIdentifier($fieldName) . '=?';
             } else {
                 $fieldsQuery[] = $this->escapeIdentifier($fieldName) . '=' . $fields[$fieldName];
                 unset($fields[$fieldName]);
@@ -284,7 +293,7 @@ class MysqlPdoAdapter extends AbstractAdapter
 
     public function delete($table, array $criteria)
     {
-        $query = "delete from {$table}";
+        $query = "delete from `{$table}`";
         if (empty($criteria)) {
             return false;
         }
@@ -311,7 +320,7 @@ class MysqlPdoAdapter extends AbstractAdapter
 
     public function selectBy($table, array $criteria = [], $limit = null, $offset = null, $orderBy = null)
     {
-        $query = "select * from \"{$table}\"";
+        $query = "select * from `{$table}`";
         $limitSql = $this->getLimit($limit, $offset);
         if (empty($criteria)) {
             $query .= $limitSql;
@@ -328,7 +337,7 @@ class MysqlPdoAdapter extends AbstractAdapter
 
     public function count($table, array $criteria = [])
     {
-        $query = "select count(*) from \"{$table}\"";
+        $query = "select count(*) from `{$table}`";
         if (empty($criteria)) {
             $result = $this->selectCell($query);
         } else {

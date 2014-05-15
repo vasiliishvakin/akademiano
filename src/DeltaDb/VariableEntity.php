@@ -14,8 +14,22 @@ class VariableEntity extends AbstractEntity
     {
         $newKeys = array_diff_key($fields, $this->getFieldsList());
         $newArray = array_fill_keys($newKeys, null);
-        $newFields = array_merge($this->fields, $newArray);
-        $this->fields = $newFields;
+        $newFields = array_keys(array_merge($this->fields, $newArray));
+        $prepareFields = [];
+        foreach ($newFields as $key => $field) {
+            if (strpos($field, "_")) {
+                $fieldParts = explode("_", $field);
+                foreach ($fieldParts as $key => $part) {
+                    if ($key === 0) {
+                        continue;
+                    }
+                    $fieldParts[$key] = ucfirst($part);
+                }
+                $field = implode("", $fieldParts);
+            }
+            $prepareFields[$field] = null;
+        }
+        $this->fields = $prepareFields;
     } 
   
     public function getFieldsList()
