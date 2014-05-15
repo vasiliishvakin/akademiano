@@ -16,6 +16,6 @@
     },
     "require": {
 	"deltaphp/deltacore": "dev-master",
-	"deltaphp/deltadb": "dev-postdb"
+	"deltaphp/deltadb": "dev-master"
     }
 }
