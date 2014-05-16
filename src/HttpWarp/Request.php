@@ -170,7 +170,9 @@ class Request
         }
         $inFiles = $_FILES[$name];
         $countFiles = count($inFiles["name"]);
-        if ($countFiles > 0) {
+        if ($countFiles == 1) {
+            $inFiles = [$inFiles];
+        } elseif ($countFiles > 1) {
             $newInFiles = [];
             foreach ($inFiles as $key => $info) {
                 for ($i = 0; $i < $countFiles; $i++) {
