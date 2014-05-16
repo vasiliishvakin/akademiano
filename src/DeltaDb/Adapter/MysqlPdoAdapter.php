@@ -89,14 +89,14 @@ class MysqlPdoAdapter extends AbstractAdapter
     {
         /** @var \PDOStatement $result */
         $result = call_user_func_array([$this, 'query'], func_get_args());
-        return $result->fetchColumn();
+        return $result->fetchAll(\PDO::FETCH_COLUMN, 0);
     }
 
     public function selectCell($query)
     {
         /** @var \PDOStatement $result */
         $result = call_user_func_array([$this, 'query'], func_get_args());
-        return reset($result->fetchColumn());
+        return $result->fetchColumn(0);
     }
 
     /**
