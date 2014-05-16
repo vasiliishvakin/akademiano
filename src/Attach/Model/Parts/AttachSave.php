@@ -59,10 +59,8 @@ trait AttachSave
 
     public function replaceFile(EntityInterface $item, $maxFileSize, $type = FileSystem::FST_IMAGE)
     {
-        $fm = $this->getFileManager();
         //rm files
         $request = $this->getRequest();
-
         //save files
         $files = $request->getFiles("files", $type, $maxFileSize);
         if (empty($files)) {
@@ -71,6 +69,12 @@ trait AttachSave
         $file = reset($files);
         $title = $request->getParam("fileTitle");
         $description = $request->getParam("fileDescription");
+
+        $fm = $this->getFileManager();
+        $filesRm = $fm->getFilesForObject($item);
+        foreach ($filesRm as $fileRm) {
+            $fm->deleteById($fileRm->getId());
+        }
         $fm->saveFileForObject($item, $file, $title, $description);
     }
 } 
