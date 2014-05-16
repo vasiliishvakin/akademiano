@@ -150,6 +150,7 @@ class FileManager extends Repository
             "section" => $section,
             "object" => $objId,
             "path" => $path,
+            "type" => $file->getType(),
         ];
         if (!is_null($name)) {
             $fileInfo["name"] = $name;

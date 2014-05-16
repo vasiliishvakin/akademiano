@@ -23,7 +23,18 @@ trait AttachSave
      */
     abstract public function getRequest();
 
+    /**
+     * @param EntityInterface $item
+     * @param $maxFileSize
+     * @param string $type
+     * @deprecated
+     */
     public function processRequest(EntityInterface $item, $maxFileSize, $type = FileSystem::FST_IMAGE)
+    {
+        return $this->processFilesRequest($item, $maxFileSize, $type);
+    }
+
+    public function processFilesRequest(EntityInterface $item, $maxFileSize, $type = FileSystem::FST_IMAGE)
     {
         $fm = $this->getFileManager();
         //rm files
@@ -44,5 +55,22 @@ trait AttachSave
             $description = isset($filesDescription[$fileFieldName]) ? $filesDescription[$fileFieldName] : null;
             $fm->saveFileForObject($item, $file, $title, $description);
         }
+    }
+
+    public function replaceFile(EntityInterface $item, $maxFileSize, $type = FileSystem::FST_IMAGE)
+    {
+        $fm = $this->getFileManager();
+        //rm files
+        $request = $this->getRequest();
+
+        //save files
+        $files = $request->getFiles("files", $type, $maxFileSize);
+        if (empty($files)) {
+            return;
+        }
+        $file = reset($files);
+        $title = $request->getParam("fileTitle");
+        $description = $request->getParam("fileDescription");
+        $fm->saveFileForObject($item, $file, $title, $description);
     }
 } 
