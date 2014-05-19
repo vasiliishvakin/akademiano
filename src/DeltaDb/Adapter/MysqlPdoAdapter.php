@@ -147,6 +147,9 @@ class MysqlPdoAdapter extends AbstractAdapter
         $rawFields = array_flip((array)$rawFields);
         $fieldsList = array_keys($fields);
         $fieldsNames = $fieldsList;
+        foreach($fieldsList as $key=>$name) {
+            $fieldsList[$key] = $this->escapeIdentifier($name);
+        }
         $fieldsList = implode(', ', $fieldsList);
         $num = 0;
         $fieldsQuery = [];
