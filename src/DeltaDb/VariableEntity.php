@@ -6,6 +6,8 @@
 namespace DeltaDb;
 
 
+use DeltaUtils\StringUtils;
+
 class VariableEntity extends AbstractEntity
 {
     protected $fields = [];
@@ -37,14 +39,18 @@ class VariableEntity extends AbstractEntity
         return array_keys($this->fields);
     }
 
+    /**
+     * @param $name
+     * @return bool
+     */
     public function isFieldExist($name)
     {
-        $fieldList = array_flip($this->getFieldsList());
-        return isset($fieldList[$name]);
+        return $this->__isset($name);
     }
 
     public function setField($field, $value)
     {
+        $field = StringUtils::lowDashToCamelCase($field);
         if (!$this->isFieldExist($field)) {
             throw new \BadMethodCallException("Field $field not exist");
         }
@@ -53,6 +59,7 @@ class VariableEntity extends AbstractEntity
 
     public function getField($field)
     {
+        $field = StringUtils::lowDashToCamelCase($field);
         if (!$this->isFieldExist($field)) {
             throw new \BadMethodCallException("Field $field not exist");
         }
@@ -81,6 +88,7 @@ class VariableEntity extends AbstractEntity
 
     function __get($field)
     {
+        $field = StringUtils::lowDashToCamelCase($field);
         if (!$this->isFieldExist($field)) {
             throw new \BadMethodCallException("field $field not exist");
         }
@@ -89,7 +97,9 @@ class VariableEntity extends AbstractEntity
 
     function __isset($field)
     {
-        return $this->isFieldExist($field);
+        $field = StringUtils::lowDashToCamelCase($field);
+        $fieldList = array_flip($this->getFieldsList());
+        return isset($fieldList[$field]);
     }
 
     public function getId()

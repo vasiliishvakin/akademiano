@@ -6,6 +6,7 @@ namespace DeltaDb;
 use DeltaDb\Adapter\AdapterInterface;
 use DeltaUtils\ArrayUtils;
 use DeltaUtils\Parts\InnerCache;
+use DeltaUtils\StringUtils;
 
 class Repository implements RepositoryInterface
 {
@@ -188,16 +189,7 @@ class Repository implements RepositoryInterface
     {
         $fieldMeta = $this->getFieldMeta($table, $field);
         if ((!is_array($fieldMeta) || empty($fieldMeta)) || (!isset($fieldMeta["set"]) && !isset($fieldMeta["get"]))) {
-            if(strpos($field, "_")) {
-                $fieldParts = explode("_", $field);
-                foreach($fieldParts as $key=>$part) {
-                    if ($key === 0) {
-                        continue;
-                    }
-                    $fieldParts[$key] = ucfirst($part);
-                }
-                $field = implode("", $fieldParts);
-            }
+            $field = StringUtils::lowDashToCamelCase($field);
             return $method . ucfirst($field);
         }
         if (!isset($fieldMeta[$method])) {
