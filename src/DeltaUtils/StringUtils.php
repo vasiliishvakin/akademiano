@@ -81,4 +81,19 @@ class StringUtils
     {
         return explode("\n", $string);
     }
+
+    public static function lowDashToCamelCase($string)
+    {
+        if(strpos($string, "_")) {
+            $stringParts = explode("_", $string);
+            foreach($stringParts as $key=>$part) {
+                if ($key === 0) {
+                    continue;
+                }
+                $stringParts[$key] = ucfirst($part);
+            }
+            $string = implode("", $stringParts);
+        }
+        return $string;
+    }
 } 
