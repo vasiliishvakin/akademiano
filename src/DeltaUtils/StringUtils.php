@@ -96,4 +96,14 @@ class StringUtils
         }
         return $string;
     }
+
+    public static function toIdStr9($id)
+    {
+        return sprintf("id%09s", (integer) $id);
+    }
+
+    public static function idFromStr($string)
+    {
+        return (integer) substr($string, 2);
+    }
 } 
