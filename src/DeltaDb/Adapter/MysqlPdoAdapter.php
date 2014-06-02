@@ -13,16 +13,18 @@ class MysqlPdoAdapter extends AbstractAdapter
 {
     protected $isTransaction = 0;
 
-    public function connect($dsn = null)
+    public function connect($dsn = null, $params = [])
     {
         if (!is_null($dsn)) {
             $this->setDsn($dsn);
         }
-        $user = "root";
-        $pass = "123";
-        $options = array(
-            \PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
-        );
+        if (!empty($params)) {
+            $this->setParams($params);
+        }
+        $params = $this->getParams();
+        $user = isset($params["user"]) ? $params["user"] : "root";
+        $pass = isset($params["password"]) ? $params["password"] : "root";
+        $options = isset($params["options"]) ? $params["options"] : [\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'];
         $connection = new \PDO($this->getDsn(), $user, $pass, $options);
         $this->setConnection($connection);
     }

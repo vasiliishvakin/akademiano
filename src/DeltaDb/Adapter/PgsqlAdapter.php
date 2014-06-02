@@ -13,7 +13,7 @@ class PgsqlAdapter extends AbstractAdapter
 {
     protected $isTransaction = 0;
 
-    public function connect($dsn = null)
+    public function connect($dsn = null, $params = [])
     {
         if (!is_null($dsn)) {
             $this->setDsn($dsn);

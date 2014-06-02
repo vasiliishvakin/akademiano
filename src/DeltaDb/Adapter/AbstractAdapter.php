@@ -10,11 +10,15 @@ abstract class AbstractAdapter implements AdapterInterface
 {
     protected $connection;
     protected $dsn;
+    protected $params = [];
 
-    function __construct($dsn = null)
+    function __construct($dsn = null, $params = [])
     {
         if (!is_null($dsn)) {
             $this->setDsn($dsn);
+        }
+        if (!empty($params)) {
+            $this->setParams($params);
         }
     }
 
@@ -29,6 +33,22 @@ abstract class AbstractAdapter implements AdapterInterface
     public function getDsn()
     {
         return $this->dsn;
+    }
+
+    /**
+     * @return array
+     */
+    public function getParams()
+    {
+        return $this->params;
+    }
+
+    /**
+     * @param array $params
+     */
+    public function setParams(array $params)
+    {
+        $this->params = $params;
     }
 
     public function IsConnect()
