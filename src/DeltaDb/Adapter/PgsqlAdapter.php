@@ -219,21 +219,6 @@ class PgsqlAdapter extends AbstractAdapter
         return $whereParams;
     }
 
-    public function getOrderBy($orderBy)
-    {
-        $orderStr = "";
-        if (!is_null($orderBy)) {
-            if (is_array($orderBy)) {
-                $orderField = $orderBy[0];
-                $orderDirect = $orderBy[1];
-                $orderStr = " order by {$orderField} {$orderDirect}";
-            } else {
-                $orderStr = " order by {$orderBy}";
-            }
-        }
-        return $orderStr;
-    }
-
     public function update($table, $fields, array $criteria, $rawFields = null)
     {
         $query = "update {$table}";
@@ -298,7 +283,7 @@ class PgsqlAdapter extends AbstractAdapter
             $query .= $limitSql;
             return $this->select($query);
         }
-        $orderStr = "";
+        $orderStr = $this->getOrderBy($orderBy);
         $query .= $this->getWhere($criteria);
         $query .= $orderStr;
         $query .= $limitSql;

@@ -252,21 +252,6 @@ class MysqlPdoAdapter extends AbstractAdapter
         return $whereParams;
     }
 
-    public function getOrderBy($orderBy)
-    {
-        $orderStr = "";
-        if (!is_null($orderBy)) {
-            if (is_array($orderBy)) {
-                $orderField = $orderBy[0];
-                $orderDirect = $orderBy[1];
-                $orderStr = " order by {$orderField} {$orderDirect}";
-            } else {
-                $orderStr = " order by {$orderBy}";
-            }
-        }
-        return $orderStr;
-    }
-
     public function update($table, $fields, array $criteria, $rawFields = null)
     {
         $query = "update {$table}";
@@ -327,11 +312,12 @@ class MysqlPdoAdapter extends AbstractAdapter
     {
         $query = "select * from `{$table}`";
         $limitSql = $this->getLimit($limit, $offset);
+        $orderStr = $this->getOrderBy($orderBy);
         if (empty($criteria)) {
             $query .= $limitSql;
+            $query .= $orderStr;
             return $this->select($query);
         }
-        $orderStr = "";
         $query .= $this->getWhere($criteria);
         $query .= $orderStr;
         $query .= $limitSql;

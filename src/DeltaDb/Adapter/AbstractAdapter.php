@@ -72,4 +72,19 @@ abstract class AbstractAdapter implements AdapterInterface
         return $this->connection;
     }
 
+    public function getOrderBy($orderBy)
+    {
+        $orderStr = "";
+        if (!is_null($orderBy)) {
+            if (is_array($orderBy)) {
+                $orderField = $orderBy[0];
+                $orderDirect = $orderBy[1];
+                $orderStr = " order by {$orderField} {$orderDirect}";
+            } else {
+                $orderStr = " order by {$orderBy}";
+            }
+        }
+        return $orderStr;
+    }
+
 } 
