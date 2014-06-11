@@ -209,7 +209,7 @@ class MysqlPdoAdapter extends AbstractAdapter
                 $inParams = [];
                 foreach($value as $valueItem){
                     $num++;
-                    $inParams[] = "\${$num}";
+                    $inParams[] = "?";
                 }
                 $inParams = implode(', ', $inParams);
                 $where[] = $this->escapeIdentifier($field) . " in ({$inParams})";
