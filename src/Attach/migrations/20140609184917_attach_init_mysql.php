@@ -26,8 +26,8 @@ class AttachInitMysql extends AbstractMigration
             ->addColumn('section', 'integer', array('default' => null, "null" => false))
             ->addColumn('object', 'integer', array('default' => null, "null" => false))
             ->addColumn('type', 'string', array('limit' => 150))
-            ->addColumn('name', 'string', array('limit' => 150))
-            ->addColumn('description', 'string', array('limit' => 250))
+            ->addColumn('name', 'string', array('limit' => 150, 'default' => null, "null" => true))
+            ->addColumn('description', 'string', array('limit' => 250, 'default' => null, "null" => true))
             ->addColumn('path', 'string', array('limit' => 250))
             ->save();
     }
