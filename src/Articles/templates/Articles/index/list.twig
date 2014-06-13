@@ -1,17 +1,12 @@
-{% extends "layout-2.0.twig" %}
+{% extends "layout.twig" %}
 
 {% block head %}
-    <link rel="stylesheet" href="static/lib/colorbox/colorbox.css"/>
-    <link rel="stylesheet" href="static/lib/jquery-ui/css/ui-lightness/jquery-ui-1.10.4.min.css">
-
-    <script type='text/javascript' src="static/lib/colorbox/jquery.colorbox-min.js"></script>
-    <script type='text/javascript' src="static/lib/colorbox/jquery.colorbox-ru.js"></script>
-    <script src="static/js/colorbox.js"></script>
-
-    <script type='text/javascript' src="static/lib/jquery-ui/js/jquery-ui-1.10.4.min.js"></script>
+    {% include "colorbox.twig" %}
+    <link rel="stylesheet" href="static/lib/jquery-ui/themes/ui-lightness/jquery-ui.min.css">
+    <script type='text/javascript' src="static/lib/jquery-ui/ui/minified/jquery-ui.min.js"></script>
+    <script type='text/javascript' src="static/lib/jquery-ui/ui/minified/i18n/jquery.ui.datepicker-ru.min.js"></script>
     <script type="text/javascript" src="static/js/calendar.js"></script>
-
-    <link rel="stylesheet" href="static/css/place-2.0.css">
+    <link rel="stylesheet" href="static/css/place.css">
 {% endblock head %}
 
 {% block navbar %}
@@ -29,8 +24,6 @@
 {% endblock aside %}
 
 {% block article %}
-    <br/>
-    <br/>
     {% for item in items %}
         <section>
             <h2 class="article-title"><a href="/articles/id{{ "%09s"|format(item.id) }}">{{ item.title }}</a></h2>

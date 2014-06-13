@@ -1,20 +1,12 @@
-{% extends "layout-2.0.twig" %}
+{% extends "layout.twig" %}
 
 {% block head %}
-    <link rel="stylesheet" href="static/lib/colorbox/colorbox.css"/>
-    <link rel="stylesheet" href="static/lib/jquery-ui/css/ui-lightness/jquery-ui-1.10.4.min.css">
-
-    <script type="text/javascript" src="//vk.com/js/api/openapi.js?111"></script>
-
-    <script type='text/javascript' src="static/lib/colorbox/jquery.colorbox-min.js"></script>
-    <script type='text/javascript' src="static/lib/colorbox/jquery.colorbox-ru.js"></script>
-    <script src="static/js/colorbox.js"></script>
-
-    <script type='text/javascript' src="static/lib/jquery-ui/js/jquery-ui-1.10.4.min.js"></script>
+    {% include "colorbox.twig" %}
+    <script type="text/javascript" src="http://vk.com/js/api/openapi.js?111"></script>
+    <link rel="stylesheet" href="static/lib/jquery-ui/themes/ui-lightness/jquery-ui.min.css">
+    <script type='text/javascript' src="static/lib/jquery-ui/ui/minified/jquery-ui.min.js"></script>
     <script type="text/javascript" src="static/js/calendar.js"></script>
-
-    <link rel="stylesheet" href="static/css/place-2.0.css">
-
+    <link rel="stylesheet" href="static/css/place.css">
     <script>
         $("document").ready(function () {
             VK.init({apiId: 4306345, onlyWidgets: true});
@@ -75,7 +67,6 @@
         <div class="article-text">
             {{ item.text|raw }}
         </div>
-
         {% if item.images %}
             <div class="article-photos">
                 <h3>Фотографии к статье</h3>
