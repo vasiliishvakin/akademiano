@@ -1,55 +1,8 @@
 {% extends "layoutAdmin.twig" %}
+
 {% block head %}
-    <script src="static/lib/ckeditor/ckeditor.js"></script>
-    <script>
-        function previewImage(name, dataUri) {
-            name = name.replace(".", "_");
-            var div = $(document.createElement("div"));
-            var img = $(document.createElement("img"));
-            img.attr("src", dataUri);
-            img.width(150);
-            img.height(100);
-            img.css("margin", "3px");
-
-            var title = $(document.createElement("input"));
-            title.attr("type", "text");
-            title.attr("name", "filesTitle["+name+"]");
-
-            var description = $(document.createElement("textarea"));
-            description.attr("name", "filesDescription["+name+"]");
-
-            img.appendTo(div);
-            title.appendTo(div);
-            description.appendTo(div);
-            div.appendTo("#preview");
-        };
-
-        $(document).ready(function () {
-            CKEDITOR.replace( '.ckeditor' );
-
-            function displayUnicodeKeyValue(e){
-                var unicode = e.keyCode ? e.keyCode : e.charCode;
-                alert(unicode);
-                if(unicode === 112) {
-                    alert("F11");
-                }
-            };
-            $(document).on('change', '#files', function () {
-                var preview = $("#preview");
-                preview.html('');
-                var files = $("#files")[0].files;
-                for (var i = 0; i < files.length; i++) {
-                    var file = files[i];
-                    var reader = new FileReader();
-                    reader.onload = function(event) {
-                        var dataUri = event.target.result;
-                        previewImage(file.name, dataUri);
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-        });
-    </script>
+    <script src="static/js/photoUploader.js"></script>
+    {% include "ckeditor.twig" %}
 {% endblock head %}
 
 {% block content %}
@@ -132,7 +85,7 @@
 
             <div class="form-group">
                 <div class="col-md-4 col-md-offset-4">
-                    <a href="/admin/news" class="btn btn-warning"><span class="glyphicon glyphicon-backward"></span> Back</a>
+                    <a href="/admin/articles" class="btn btn-warning"><span class="glyphicon glyphicon-backward"></span> Back</a>
                     <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-save"></span> Save</button>
                 </div>
             </div>

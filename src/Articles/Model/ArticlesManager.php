@@ -162,18 +162,19 @@ class ArticlesManager extends Repository
 
     public function load(EntityInterface $entity, array $data)
     {
-        if (isset($data["categories"])) {
-            $data["categories"] = is_array($data["categories"]) ? $data["categories"] : explode(',', $data["categories"]);
-            foreach ($data["categories"] as $key => $category) {
-                $data["categories"][$key] = (integer)$category;
+        if (isset($data["projects"])) {
+            $data["projects"] = is_array($data["projects"]) ? $data["projects"] : explode(',', $data["projects"]);
+            foreach ($data["projects"] as $key => $category) {
+                $data["projects"][$key] = (integer)$category;
             }
         } else {
-            $data["categories"] = [];
+            $data["projects"] = [];
         }
-        $cm = $this->getCategoryManager();
-        $cm->addReferredIds($data["categories"]);
+        if (!empty($data["projects"])) {
+            $cm = $this->getCategoryManager();
+            $cm->addReferredIds($data["projects"]);
+        }
         parent::load($entity, $data);
-        $entity->setCategories($data["categories"]);
         return $entity;
     }
 
