@@ -7,6 +7,7 @@ use DeltaDb\Adapter\AdapterInterface;
 use DeltaUtils\ArrayUtils;
 use DeltaUtils\Parts\InnerCache;
 use DeltaUtils\StringUtils;
+use Psr\Log\InvalidArgumentException;
 
 class Repository implements RepositoryInterface
 {
@@ -50,6 +51,28 @@ class Repository implements RepositoryInterface
             ]
         ]
     ];
+
+    public function setTable($table, array $tableData = [], $merge = true)
+    {
+        $currentMeta = $this->getMetaInfo();
+        if (isset($currentMeta[$table]) && $merge) {
+            $metaAdd =  [$table => $tableData];
+            $this->metaInfo = ArrayUtils::merge_recursive($currentMeta, $metaAdd);
+        } else {
+            $this->metaInfo[$table] = $tableData;
+        }
+    }
+
+    public function renameTable($oldName, $newName)
+    {
+        $currentMeta = $this->getMetaInfo();
+        if (!isset($currentMeta[$oldName])) {
+            throw new InvalidArgumentException("Table {$oldName} not exist in " . __CLASS__);
+        }
+        $tableInfo = $currentMeta[$oldName];
+        unset($this->metaInfo[$oldName]);
+        $this->setTable($newName, $tableInfo, false);
+    }
 
     public function getEntityClass($table = null)
     {
@@ -442,6 +465,7 @@ class Repository implements RepositoryInterface
         $fields = $this->getFieldsList($table);
         $data = [];
         foreach($fields as $field) {
+            //TODO Filter fields to get id from Entity
             $data[$field] = $this->getField($entity, $field);
         }
         return ["fields" => $data];
