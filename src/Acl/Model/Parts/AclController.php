@@ -5,7 +5,6 @@
 
 namespace Acl\Model\Parts;
 
-
 trait AclController
 {
     public function isAllow($resource = null, User $user= null)
@@ -17,6 +16,9 @@ trait AclController
             /** @var Request $request */
             $request = $app['request'];
             $resource = $request->getUriNormal();
+        }
+        if (!$user) {
+            $user = $this->getCurrentUser();
         }
         return $aclManager->isAllow($resource, $user);
     }

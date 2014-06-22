@@ -5,16 +5,21 @@
 
 namespace Acl\Model;
 
+use Acl\Model\Adapter\AdapterInterface;
+use User\Model\UserManager;
+use User\Model\User;
 
-class AclManager 
+
+class AclManager
 {
-    /**
-     * @var UserManager
-     */
+    /** @var  UserManager */
     protected $userManager;
 
+    /** @var  AdapterInterface */
+    protected $aclAdapter;
+
     /**
-     * @param \Model\UserManager $userManager
+     * @param UserManager $userManager
      */
     public function setUserManager($userManager)
     {
@@ -22,22 +27,35 @@ class AclManager
     }
 
     /**
-     * @return \Model\UserManager
+     * @return UserManager
      */
     public function getUserManager()
     {
         return $this->userManager;
     }
 
-    public function isAllow($resource, User $user = null)
+    /**
+     * @return AdapterInterface
+     */
+    public function getAclAdapter()
+    {
+        return $this->aclAdapter;
+    }
+
+    /**
+     * @param AdapterInterface $aclAdapter
+     */
+    public function setAclAdapter($aclAdapter)
+    {
+        $this->aclAdapter = $aclAdapter;
+    }
+
+    public function isAllow($resource, User $user = null, $owner = null)
     {
         if (is_null($user)) {
-            $user = $this->getUserManager()->getCurrentUser();
-            if (!$user) {
-                return false;
-            }
+            $user = $this->getUserManager()->getGuest();
         }
-        return true;
+        return $this->getAclAdapter()->isAllow($user->getGroup()->getName(), $resource, $user->getId(), $owner);
     }
 
 } 
