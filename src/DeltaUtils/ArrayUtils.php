@@ -128,4 +128,13 @@ class ArrayUtils {
         return (bool)count(array_filter(array_keys($array), 'is_string'));
     }
 
+    public static function implodePairs($glue, $array, $operator = "=")
+    {
+        $preparedArray = [];
+        foreach($array as $key=>$value) {
+            $preparedArray[] = $key . $operator . $value;
+        }
+        return implode($glue, $preparedArray);
+    }
+
 }
