@@ -7,12 +7,33 @@ namespace User\Model;
 
 use DeltaDb\AbstractEntity;
 use DeltaDb\EntityInterface;
+use DeltaDb\Repository;
 
 class User extends AbstractEntity implements EntityInterface
 {
     protected $id;
     protected $email;
     protected $password;
+    protected $group;
+
+    /** @var  Repository */
+    protected $groupManager;
+
+    /**
+     * @return Repository
+     */
+    public function getGroupManager()
+    {
+        return $this->groupManager;
+    }
+
+    /**
+     * @param Repository $groupManager
+     */
+    public function setGroupManager($groupManager)
+    {
+        $this->groupManager = $groupManager;
+    }
 
     /**
      * @param mixed $id
@@ -82,6 +103,23 @@ class User extends AbstractEntity implements EntityInterface
         return $this->password;
     }
 
+    /**
+     * @param mixed $group
+     */
+    public function setGroup($group)
+    {
+        $this->group = $group;
+    }
 
+    /**
+     * @return mixed
+     */
+    public function getGroup()
+    {
+        if (!is_null($this->group) && !is_object($this->group)) {
+            $this->group = $this->getGroupManager()->findById($this->group);
+        }
+        return $this->group;
+    }
 
-} 
+}

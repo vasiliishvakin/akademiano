@@ -53,9 +53,9 @@ class UserController extends AbstractController
         if (!$user) {
             throw new NotFoundException('user not defined');
         }
-        if (!$this->isAllow()) {
+        /*if (!$this->isAllow()) {
             throw new AccessDeniedException();
-        }
+        }*/
         $this->getView()->assign('user', $user);
     }
 

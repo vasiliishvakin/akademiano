@@ -5,6 +5,7 @@
 
 namespace User\Model;
 
+use DeltaDb\EntityInterface;
 use DeltaDb\Repository;
 
 class UserManager extends Repository
@@ -18,6 +19,7 @@ class UserManager extends Repository
                 'id',
                 'email',
                 'password',
+                'group'
             ]
         ]
     ];
@@ -31,6 +33,11 @@ class UserManager extends Repository
      * @var User|null
      */
     protected $currentUser;
+
+    /** @var  Repository */
+    protected $groupManager;
+
+    protected $guest;
 
     /**
      * @param \HttpWarp\Session $session
@@ -48,12 +55,49 @@ class UserManager extends Repository
         return $this->session;
     }
 
+    /**
+     * @return Repository
+     */
+    public function getGroupManager()
+    {
+        return $this->groupManager;
+    }
+
+    /**
+     * @param Repository $groupManager
+     */
+    public function setGroupManager($groupManager)
+    {
+        $this->groupManager = $groupManager;
+    }
+
+    public function create(array $data = null, $entityClass = null)
+    {
+        $item = parent::create($data, $entityClass);
+        $item->setGroupManager($this->getGroupManager());
+        return $item;
+    }
+
+    public function reserve(EntityInterface $entity)
+    {
+        $data = parent::reserve($entity);
+        $fields = isset($data["fields"]) ? $data["fields"] : $data;
+        if ($fields["group"] && is_object($fields["group"])) {
+            $fields["group"] = $fields["group"]->getId();
+        }
+        return $data;
+    }
+
+
     public function authenticate($email, $password)
     {
-        $adapter = $this->getAdapter();
         $table = $this->getTableName("\\User\\Model\\User");
-        $sql = "select id, password from {$table} where email=$1";
-        $data = $adapter->selectRow($sql, $email);
+        $adapter = $this->getAdapter();
+        $data = $adapter->selectBy($table, ["email" => $email]);
+        if (empty($data)) {
+            return false;
+        }
+        $data = reset($data);
         return (empty($data)) ? false :
             !User::verifyPassword($password,$data['password']) ? false : $this->findById($data['id']);
     }
@@ -74,12 +118,19 @@ class UserManager extends Repository
     {
         if (is_null($this->currentUser)) {
             $session = $this->getSession();
-            if (null === ($uid = $session->get(self::SESSION_CURRENT_USER))) {
-                return null;
+            if (null !== ($uid = $session->get(self::SESSION_CURRENT_USER))) {
+                $this->currentUser = $this->findById($uid);
             }
-            $this->currentUser = $this->findById($uid);
+            if (is_null($this->currentUser)) {
+                $this->currentUser = $this->getGuest();
+            }
         }
         return $this->currentUser;
+    }
+
+    public function isAuth()
+    {
+        return ! $this->getCurrentUser() instanceof GuestUser;
     }
 
     public function logout()
@@ -100,6 +151,15 @@ class UserManager extends Repository
         $user->setNewPassword($password);
         $this->save($user);
         return $user;
+    }
+
+    public function getGuest()
+    {
+        if (is_null($this->guest)) {
+            $this->guest = new GuestUser();
+            $this->guest->setGroup(new GuestGroup());
+        }
+        return $this->guest;
     }
 
 } 
