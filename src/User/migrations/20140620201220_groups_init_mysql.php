@@ -25,8 +25,8 @@ class GroupsInitMysql extends AbstractMigration
         $groups = $this->table("groups")
             ->addColumn('name', 'string', array('limit' => 150))
             ->save();
-        $count = $this->execute('insert into groups (id, name) values (1, "user")');
-        $persons = $this->table('persons')
+        $this->execute('insert into groups (id, name) values (1, "user")');
+        $users = $this->table('users')
             ->addColumn('group', 'integer', array('default' => 1, "null" => false))
             ->addForeignKey('group', 'groups', 'id', array('delete' => 'RESTRICT', 'update' => 'RESTRICT'))
             ->save();
