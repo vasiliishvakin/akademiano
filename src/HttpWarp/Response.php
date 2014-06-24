@@ -13,8 +13,8 @@ class Response
     protected $body;
     protected $code = 200;
     protected $contentType = 'text/html';
-    protected $charset = 'utf-8';
-    protected $language = 'en';
+    protected $charset;
+    protected $language;
     protected $modified;
     protected $timeToCache;
     protected $etag;
@@ -86,7 +86,7 @@ class Response
      */
     public function getCharset()
     {
-        return !is_null($this->charset) ? $this->charset : $this->getConfig('charset');
+        return !is_null($this->charset) ? $this->charset : $this->getConfig('charset', "utf-8");
     }
 
     /**
@@ -137,7 +137,7 @@ class Response
      */
     public function getLanguage()
     {
-        return !is_null($this->language) ? $this->language : $this->getConfig('language');
+        return !is_null($this->language) ? $this->language : $this->getConfig('language', "en");
     }
 
     /**
