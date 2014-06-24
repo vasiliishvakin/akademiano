@@ -324,6 +324,10 @@ class Repository implements RepositoryInterface
         if (isset($fields[$idField]) || array_key_exists($idField, $fields)) {
             unset($fields[$idField]);
         }
+        $fields = ArrayUtils::filterNulls($fields);
+        if (!empty($rawFields)) {
+            $rawFields = ArrayUtils::filterNulls($rawFields);
+        }
         return $adapter->insert($table, $fields, $idField, $rawFields);
     }
 
