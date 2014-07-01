@@ -8,8 +8,17 @@ namespace DeltaDb;
 
 abstract class AbstractEntity implements EntityInterface
 {
+    protected $id;
 
-    abstract public function getId();
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * @return array
