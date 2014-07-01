@@ -133,6 +133,11 @@ class Repository implements RepositoryInterface
         $this->referredIds = array_merge($this->referredIds, $ids);
     }
 
+    public function clearReferredIds()
+    {
+        $this->referredIds = [];
+    }
+
     /**
      * @return array
      */
@@ -324,6 +329,10 @@ class Repository implements RepositoryInterface
         if (isset($fields[$idField]) || array_key_exists($idField, $fields)) {
             unset($fields[$idField]);
         }
+        $fields = ArrayUtils::filterNulls($fields);
+        if (!empty($rawFields)) {
+            $rawFields = ArrayUtils::filterNulls($rawFields);
+        }
         return $adapter->insert($table, $fields, $idField, $rawFields);
     }
 
@@ -423,6 +432,14 @@ class Repository implements RepositoryInterface
         return reset($items);
     }
 
+    public function findReferredIds()
+    {
+        $refIds = $this->getReferredIds();
+        $items = $this->findByIds($refIds);
+        $this->clearReferredIds();
+        return $items;
+    }
+
     public function findById($id, $entityClass = null)
     {
         $table = $this->getTableName($entityClass);
@@ -430,6 +447,13 @@ class Repository implements RepositoryInterface
         $idMap = $this->getIdMap($entityClass);
         if ($idMap->has($id)) {
             return $idMap->get($id);
+        }
+        $refIds = $this->getReferredIds();
+        if (in_array($id, $refIds)) {
+            $this->findReferredIds();
+            if ($idMap->has($id)) {
+                return $idMap->get($id);
+            }
         }
         $item = $this->findOne([$idName=>$id], $entityClass);
         return $item;
