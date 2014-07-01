@@ -49,6 +49,19 @@ class FileSystem
         return strpos($name, '.') === 0;
     }
 
+    public static function getFileTypeConst($path)
+    {
+            if (is_dir($path)) {
+                return self::FST_DIR;
+            } else if (self::isWebImage($path)) {
+                return self::FST_IMAGE;
+            } elseif (is_file($path)) {
+                return self::FST_FILE;
+            } else {
+                return self::FST_ALL;
+            }
+    }
+
     public static function checkType($path, $type)
     {
         switch ($type) {
