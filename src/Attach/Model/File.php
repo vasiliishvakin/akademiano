@@ -160,8 +160,12 @@ class File extends AbstractEntity
 
     public function getUri($template = null)
     {
+        $fileDir = $this->getFileDirectory();
+        if (strpos($fileDir, "public/") === 0) {
+            $fileDir = substr($fileDir, 7);
+        }
 
-        return $this->getRootUri() . "/" .  $this->getFileDirectory() . (($template) ? "/" . $template  : "") .  "/" . $this->getFileName();
+        return $this->getRootUri() . "/" .  $fileDir . (($template) ? "/" . $template  : "") .  "/" . $this->getFileName();
     }
 
 

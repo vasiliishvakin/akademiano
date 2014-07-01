@@ -10,6 +10,7 @@ use DeltaCore\Config;
 use DeltaCore\Parts\Configurable;
 use DeltaDb\EntityInterface;
 use DeltaDb\Repository;
+use DeltaUtils\FileSystem;
 use HttpWarp\File\FileInterface;
 use HttpWarp\File\UploadFile;
 use Sequence\Model\Parts\Sequence;
@@ -96,28 +97,49 @@ class FileManager extends Repository
         return $next;
     }
 
-    public function getSavePath()
+    public function getSavePath($ext = null, $currentPath = null)
     {
-        return $this->getConfig()->get(["Attach", "filesPath"]);
+        $configPaths = [];
+        if ($ext) {
+            $configPaths[] = ["Attach", "filesPath", $ext];
+        }
+        if ($currentPath) {
+            $fileMime = FileSystem::getFileType($currentPath);
+            $configPaths[] = ["Attach", "filesPath", $fileMime];
+            $fileType = FileSystem::getFileTypeConst($currentPath);
+            $configPaths[] = ["Attach", "filesPath", $fileType];
+        }
+        $configPaths[] = ["Attach", "filesPath", "default"];
+        $configPaths[] = ["Attach", "filesPath"];
+
+        $path = $this->getConfig()->getOneIs($configPaths);
+        if (is_array($path)) {
+            throw new \RuntimeException("Many option for file path available");
+        }
+        return $path;
     }
 
     //TODO realise with brain use
-    public function getNewFilePath($ext = 'xxx')
+    public function getNewFilePath($ext = null, $currentPath = null)
     {
         $sequence = $this->getNextSequence();
         $name = str_pad($sequence, 9, "0", STR_PAD_LEFT);
         $dir2 = substr($name, 0, 3);
         $dir1 = substr($name, 3, 3);
         $subdirs = $dir1 . "/" . $dir2;
-        $savedPath = $this->getSavePath();
-        $name = "{$savedPath}/{$subdirs}/{$name}.{$ext}";
+        $savedPath = $this->getSavePath($ext, $currentPath);
+        if ($ext) {
+            $ext = ".{$ext}";
+        }
+        $name = "{$savedPath}/{$subdirs}/{$name}{$ext}";
         return $name;
     }
 
     public function saveFileIO(UploadFile $file)
     {
         $fileExt = $file->getExt();
-        $newFile = $this->getNewFilePath($fileExt);
+        $tmpPath = $file->getPath();
+        $newFile = $this->getNewFilePath($fileExt, $tmpPath);
         $fullNewPath = ROOT_DIR . "/" . $newFile;
         $dir = dirname($fullNewPath);
         if (!file_exists($dir)) {

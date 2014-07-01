@@ -1,9 +1,14 @@
 <?php
 
+use DeltaUtils\FileSystem;
+
 return [
     "Attach" => [
         "sequence" => "attach_files",
-        "filesPath" => "data/images"
+        "filesPath" => [
+            FileSystem::FST_IMAGE => "data/images",
+            "default" => "public/data/files",
+        ]
     ],
     "Sequence" => [
         "sequences" => [
