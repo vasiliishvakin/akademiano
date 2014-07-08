@@ -18,6 +18,13 @@ interface RepositoryInterface
 
     public function delete(EntityInterface $entity);
 
+    /**
+     * @param array $criteria
+     * @param null|string $entityClass
+     * @param null|integer $limit
+     * @param null|integer $offset
+     * @return EntityInterface[]
+     */
     public function find(array $criteria = [], $entityClass = null, $limit = null, $offset = null);
 
     public function findById($id, $entityClass = null);
