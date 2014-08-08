@@ -116,6 +116,13 @@ class PgsqlAdapter extends AbstractAdapter
         $rawFields = array_flip((array)$rawFields);
         $fieldsList = array_keys($fields);
         $fieldsNames = $fieldsList;
+        foreach($fieldsList as $key => $value) {
+            $nameParts = explode(".", $value);
+            foreach($nameParts as $keyPart => $keyValue) {
+                $nameParts[$keyPart] = pg_escape_identifier($keyValue);
+            }
+            $fieldsList[$key] = implode(".", $nameParts);
+        }
         $fieldsList = implode(', ', $fieldsList);
         $num = 0;
         $fieldsQuery = [];

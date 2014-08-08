@@ -488,9 +488,15 @@ class Repository implements RepositoryInterface
         $table = $this->getTableName();
         $fields = $this->getFieldsList($table);
         $data = [];
-        foreach($fields as $field) {
-            //TODO Filter fields to get id from Entity
-            $data[$field] = $this->getField($entity, $field);
+        foreach ($fields as $field) {
+            $value = $this->getField($entity, $field);
+            if ($value instanceof EntityInterface) {
+                $value = $value->getId();
+            }
+            if ($value instanceof \DateTime) {
+                $value = $value->format("Y-m-d H:i:s");
+            }
+            $data[$field] = $value;
         }
         return ["fields" => $data];
     }
