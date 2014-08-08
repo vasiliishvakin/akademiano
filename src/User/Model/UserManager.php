@@ -7,6 +7,7 @@ namespace User\Model;
 
 use DeltaDb\EntityInterface;
 use DeltaDb\Repository;
+use PermAuth\Model\Authenticator;
 
 class UserManager extends Repository
 {
