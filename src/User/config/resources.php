@@ -10,4 +10,8 @@ return [
         $userManager->setGroupManager($gm);
         return $userManager;
     },
+    "groupManager" => function($c) {
+        $gm = $c["directoryFactory"]->getManager("groups");
+        return $gm;
+    }
 ];

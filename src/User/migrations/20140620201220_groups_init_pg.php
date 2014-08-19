@@ -22,22 +22,20 @@ class GroupsInitPg extends AbstractMigration
      */
     public function up()
     {
-        throw new \Exception("not use, Luke");
         $sql = <<<SQL
 CREATE TABLE groups
 (
   id serial NOT NULL,
   name character varying(150),
   created timestamp with time zone,
-  CONSTRAINT users_pkey PRIMARY KEY (id)
-)
-WITH (
-  OIDS=FALSE
+  CONSTRAINT groups_pkey PRIMARY KEY (id),
+  CONSTRAINT groups_name_key UNIQUE (name)
 );
-CREATE UNIQUE INDEX name
-  ON groups
-  USING btree
-  (name COLLATE pg_catalog."default");
+
+ALTER TABLE users
+  ADD COLUMN "group" integer;
+ALTER TABLE users
+  ADD FOREIGN KEY ("group") REFERENCES groups (id) ON UPDATE RESTRICT ON DELETE RESTRICT;
 SQL;
         $this->execute($sql);
     }

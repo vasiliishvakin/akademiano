@@ -30,9 +30,6 @@ CREATE TABLE users
   password character varying(150),
   created timestamp with time zone,
   CONSTRAINT users_pkey PRIMARY KEY (id)
-)
-WITH (
-  OIDS=FALSE
 );
 CREATE UNIQUE INDEX email
   ON users
