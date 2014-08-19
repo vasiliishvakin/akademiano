@@ -55,7 +55,8 @@ class AclManager
         if (is_null($user)) {
             $user = $this->getUserManager()->getGuest();
         }
-        return $this->getAclAdapter()->isAllow($user->getGroup()->getName(), $resource, $user->getId(), $owner);
+        $group = $user->getGroup();
+        return $this->getAclAdapter()->isAllow($group ? $group->getName() : 'user', $resource, $user->getId(), $owner);
     }
 
 } 
