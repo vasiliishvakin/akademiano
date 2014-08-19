@@ -183,6 +183,14 @@ class Request
         }
 
         foreach ($inFiles as $fileData) {
+            foreach ($fileData as $key => $value) {
+                if (is_array($value)) {
+                    if (count($value) > 1) {
+                        throw new \LogicException("To many values in file param");
+                    }
+                    $fileData[$key] = reset($value);
+                }
+            }
             if (!$withErrors && $fileData["error"] !== 0) {
                 continue;
             }
