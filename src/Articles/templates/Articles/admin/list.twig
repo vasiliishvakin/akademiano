@@ -41,7 +41,7 @@
                 <div class="photos">
                     {% for image in item.images %}
                         <a class='images' href="/{{ image.uri("origin") }}" title="{{ image.name }} - {{ image.description }}">
-                            <img src="/{{ image.uri("thumb") }}" title="{{ image.name }}" alt="{{ image.description }}"/>
+                            <img src="{{ image.uri("thumb") }}" title="{{ image.name }}" alt="{{ image.description }}"/>
                         </a>
                     {% endfor %}
                 </div>
