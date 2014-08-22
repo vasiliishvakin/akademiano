@@ -22,7 +22,7 @@ trait InnerCache
 
     public function hasInnerCache($id)
     {
-        return !isset($this->innerCache[$id]);
+        return array_key_exists($id, $this->innerCache);
     }
 
 } 
