@@ -20,16 +20,24 @@ class IndexController extends AbstractController
         $itemsPerPage = $this->getConfig(["Articles", "itemsPerPage"], 4);
         $section = $this->getRequest()->getUriPartByNum(2);
         $criteria = [];
+        $categories = $nm->getCategories();
         switch ($section) {
             case "category" :
                 $categoryId = $this->getRequest()->getUriPartByNum(3);
                 if (empty($categoryId)) {
-                    $this->getResponse()->redirect("/news");
+                    $this->getResponse()->redirect("/articles");
                 }
                 $cm = $nm->getCategoryManager();
                 $category = $cm->findById($categoryId);
                 $this->getView()->assign("currentCategory", $category);
                 $criteria = ["category" => $categoryId];
+
+                $viewCats = [];
+                foreach($categories as $categoryItem) {
+                    $active = $id = $category->getId();
+                    $viewCats[] = ["id" => $categoryItem->getId(), "name" => $categoryItem->getName(), "active" => $active];
+                }
+                $categories = $viewCats;
                 break;
             case "archive" :
                 $dateStr = $this->getRequest()->getUriPartByNum(3);
@@ -52,6 +60,7 @@ class IndexController extends AbstractController
         $titleEnd = $pageInfo["page"] == 1 ? "" : " страница " . $pageInfo["page"];
         $this->getView()->assign("pageTitle", "Полезные статьи на gisNote {$titleEnd}" );
         $this->getView()->assign("pageDescription", "Полезные статьи о туризме, походах, природе, отдыхе, окружающем мире, спорте и здоровье" );
+        $this->getView()->assign("categories", $categories);
     }
 
     public function viewAction()
@@ -71,6 +80,7 @@ class IndexController extends AbstractController
         $this->getView()->assign("pageTitle", "{$item->getTitle()}" );
         $this->getView()->assign("pageDescription", "{$item->getDescription()}" );
         $this->getView()->assign("pageImage", $item->getTitleImage() ? $item->getTitleImage()->getUri("medium") : false);
+        $this->getView()->assign("categories", $categories = $manager->getCategories());
     }
 
 } 
