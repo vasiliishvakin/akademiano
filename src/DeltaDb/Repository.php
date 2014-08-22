@@ -187,6 +187,23 @@ class Repository implements RepositoryInterface
         return $meta[$table]['id'];
     }
 
+    public function getExternalFieldsList()
+    {
+        $cacheId = "externalFieldList";
+        if ($fields = $this->getInnerCache($cacheId)) {
+            return $fields;
+        }
+        $meta = $this->getMetaInfo();
+        $fieldsData = isset($meta['externalFields']) ? $meta['externalFields'] : [];
+        if (ArrayUtils::isAssoc($fieldsData)) {
+            $fields = array_keys($fieldsData);
+        } else {
+            $fields = array_values($fieldsData);
+        }
+        $this->setInnerCache($cacheId, $fields);
+        return $fields;
+    }
+
     public function getFieldsList($table)
     {
         $cacheId = "fieldList|{$table}|";
@@ -206,11 +223,17 @@ class Repository implements RepositoryInterface
 
     public function getFieldMeta($table, $field)
     {
-        $meta = $this->getMetaInfo();
-        if (!isset($meta[$table]['fields'][$field])) {
-            return null;
+        $cacheId = "fieldMeta|$field";
+        if ($this->hasInnerCache($cacheId)) {
+            return $this->getInnerCache($cacheId);
         }
-        return $meta[$table]['fields'][$field];
+        $meta = $this->getMetaInfo();
+        $fieldMeta = ArrayUtils::getByPath($meta, [$table, 'fields', $field]);
+        if (!$fieldMeta) {
+            $fieldMeta = ArrayUtils::getByPath($meta, ["externalFields", $field]);
+        }
+        $this->setInnerCache($cacheId, $fieldMeta);
+        return $fieldMeta;
     }
 
     public function getFieldMethod($table, $field, $method)
@@ -229,12 +252,11 @@ class Repository implements RepositoryInterface
 
     public function getFieldFilter($table, $field, $filter)
     {
-        $meta = $this->getMetaInfo();
-        if (!isset($meta[$table]['fields'][$field]['filters'][$filter])) {
+        $fieldMeta = $this->getFieldMeta($table, $field);
+        if (!$fieldMeta) {
             return null;
         }
-        $fieldFilter = $meta[$table]['fields'][$field]['filters'][$filter];
-        return $fieldFilter;
+        return ArrayUtils::getByPath($fieldMeta, ["filters", $filter]);
     }
 
     public function getFieldValidators($table, $field)
@@ -476,6 +498,10 @@ class Repository implements RepositoryInterface
     {
         $table = $this->getTableName($entity);
         $fields = $this->getFieldsList($table);
+        $externalFields = $this->getExternalFieldsList();
+        if (!empty($externalFields)) {
+            $fields = array_values(array_unique(array_merge($fields, $externalFields)));
+        }
         $fields = array_flip($fields);
         $data = array_intersect_key($data, $fields);
         foreach($data as $field=>$value) {
