@@ -6,13 +6,17 @@
 namespace Articles\Controller;
 
 use Acl\Model\Parts\AclController;
+use Attach\Model\FileManager;
+use Attach\Model\Parts\AttachSave;
+use DeltaCore\AdminControllerInterface;
 use DeltaUtils\FileSystem;
 use Articles\Model\Article;
 use Articles\Model\ArticlesManager;
 
-class AdminController extends IndexController
+class AdminController extends IndexController implements  AdminControllerInterface
 {
     use AclController;
+    use AttachSave;
 
     const ITEMS_PER_PAGE = 2;
 
@@ -20,6 +24,15 @@ class AdminController extends IndexController
     {
         return $this->isAllow();
     }
+
+    /**
+     * @return FileManager
+     */
+    public function getFileManager()
+    {
+        return $this->getArticlesManager()->getFileManager();
+    }
+
 
     public function categoryListAction()
     {
@@ -33,7 +46,6 @@ class AdminController extends IndexController
         $category = $cm->findById($categoryId);
         $this->getView()->assign("currentCategory", $category);
 
-
         $criteria = ["category" => $categoryId];
         $countArticles = $nm->count($criteria);
         $pageInfo = $this->getPageInfo($countArticles, self::ITEMS_PER_PAGE);
@@ -44,34 +56,33 @@ class AdminController extends IndexController
         $this->getView()->assign("countItems", $countArticles);
     }
 
-    public function addAction()
-    {
-        $this->getView()->assign("action", "Add");
-        $categories = $this->getArticlesManager()->getCategories();
-        $this->getView()->assign("categories", $categories);
-    }
-
     public function getId()
     {
         return $this->getRequest()->getUriPartByNum(4);
     }
 
-    public function editAction()
+    public function formAction()
     {
         $id = $this->getId();
-        $nm = $this->getArticlesManager();
-        $item = $nm->findById($id);
-        $this->getView()->assign("action", "Edit");
-        $this->getView()->assign("item", $item);
         $categories = $this->getArticlesManager()->getCategories();
-        $itemCategories = array_flip($item->getCategoriesIds());
-        $viewCats = [];
-        foreach($categories as $category) {
-            $id = $category->getId();
-            $active = isset($itemCategories[$id]);
-            $viewCats[] = ["id" => $id, "name" => $category->getName(), "active" => $active];
+        if (!empty($id)) {
+            $nm = $this->getArticlesManager();
+            $item = $nm->findById($id);
+            if (!$item) {
+                throw new \RuntimeException("Bad item id $id");
+            }
+            $this->getView()->assign("item", $item);
+            $categories = $this->getArticlesManager()->getCategories();
+            $itemCategories = array_flip($item->getCategoriesIds());
+            $viewCats = [];
+            foreach($categories as $category) {
+                $id = $category->getId();
+                $active = isset($itemCategories[$id]);
+                $viewCats[] = ["id" => $id, "name" => $category->getName(), "active" => $active];
+            }
+            $categories = $viewCats;
         }
-        $this->getView()->assign("categories", $viewCats);
+        $this->getView()->assign("categories", $categories);
     }
 
     public function rmAction()
@@ -96,29 +107,8 @@ class AdminController extends IndexController
         }
         $nm->load($item, $requestParams);
         $nm->save($item);
-
-
-        $fm = $nm->getFileManager();
-        //rm files
-        $filesRm = $request->getParam("filesRm", []);
-        foreach ($filesRm as $fileId) {
-            $fm->deleteById($fileId);
-        }
-
-        //save files
-        $maxFileSize = $this->getConfig(["Articles", "Attach", "Size"], 400*1024);
-        $files = $request->getFiles("files", FileSystem::FST_IMAGE, $maxFileSize);
-        $filesTitle = $request->getParam("filesTitle", []);
-        $filesDescription = $request->getParam("filesDescription", []);
-        foreach ($files as $file) {
-            $name = $file->getName();
-            $fileFieldName = str_replace(".", "_", $name);
-            $title = isset($filesTitle[$fileFieldName]) ? $filesTitle[$fileFieldName] : null;
-            $description = isset($filesDescription[$fileFieldName]) ? $filesDescription[$fileFieldName] : null;
-            $fm->saveFileForObject($item, $file, $title, $description);
-        }
-
-
+        $maxFileSize = $this->getConfig(["Articles", "Attach", "Size"], 500*1024);
+        $this->processFilesRequest($item, $maxFileSize);
         $this->getResponse()->redirect("/admin/articles");
     }
 

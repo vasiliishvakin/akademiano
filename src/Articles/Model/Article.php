@@ -171,9 +171,9 @@ class Article extends AbstractEntity
     /**
      * @param mixed $categories
      */
-    public function setCategories(array $categories)
+    public function setCategories($categories)
     {
-        $this->categories = $categories;
+        $this->categories = (array) $categories;
     }
 
     /**

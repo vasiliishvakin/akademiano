@@ -38,6 +38,9 @@ class ArticlesManager extends Repository
                 "changed",
             ]
         ],
+        'externalFields' => [
+            "categories"
+        ]
     ];
 
     /**
@@ -213,7 +216,6 @@ class ArticlesManager extends Repository
         }
         return $fields;
     }
-
 
     public function save(EntityInterface $entity)
     {

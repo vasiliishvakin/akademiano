@@ -10,7 +10,7 @@
         <fieldset>
 
             <!-- Form Name -->
-            <legend>{{ action }} Article {% if item.id %} #{{ item.id }} {% endif %}</legend>
+            <legend>{{ item ? "Edit" : "Add" }} Article {{ item.id ? "#" }}{{ item.id }}</legend>
 
             <!-- Text input-->
             <div class="form-group">
