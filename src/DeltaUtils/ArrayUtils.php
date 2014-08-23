@@ -55,7 +55,7 @@ class ArrayUtils {
         return $current;
     }
 
-    public function issetByPath(array $array, array $path)
+    public static function issetByPath(array $array, array $path)
     {
         $current = $array;
         foreach($path as $item) {
