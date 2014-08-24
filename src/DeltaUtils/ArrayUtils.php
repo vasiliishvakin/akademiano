@@ -55,14 +55,19 @@ class ArrayUtils {
         return $current;
     }
 
-    public function issetByPath(array $array, array $path)
+    public static function issetByPath(array $array, $path)
     {
+        if (is_null($path)) {
+            return true;
+        }
+        $path = (array) $path;
+
         $current = $array;
         foreach($path as $item) {
             if (!isset($current[$item])) {
                 return false;
             }
-            $current = $item;
+            $current = $current[$item];
         }
         return true;
     }
