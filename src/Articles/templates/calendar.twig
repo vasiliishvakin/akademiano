@@ -1,0 +1,38 @@
+{% set calendarDate = calendarDate|default("now")|date2Month(calendarDayLinks) %}
+<table class="table table-striped calendar">
+    <caption>
+        {#<a href="">&lt;&lt;</a>#}
+        {{ calendarDate.firtDay|dateIntl("%B") }}
+        {#<a href="">&gt;&gt;</a>#}
+    </caption>
+    <thead>
+    <tr>
+        <th>Пн</th>
+        <th>Вт</th>
+        <th>Ср</th>
+        <th>Чт</th>
+        <th>Пт</th>
+        <th>Сб</th>
+        <th>Вс</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for week in calendarDate.days %}
+        <tr>
+            {% for day in week %}
+                <td class="{{ day.now ? "now" }} {{ day.active ? "active" }}">
+                    {% if day %}
+                        {% if day.uri %}
+                            <a href="{{ day.uri }}">{{ day.number }}</a>
+                        {% else %}
+                            {{ day.number }}
+                        {% endif %}
+                    {% else %}
+                        &nbsp;
+                    {% endif %}
+                </td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
