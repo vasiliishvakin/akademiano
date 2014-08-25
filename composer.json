@@ -1,6 +1,6 @@
 {
-    "name": "deltaphp/deltaskeletonmodule",
-    "description": "DeltaSkeletonModule",
+    "name": "deltaphp/deltamenu",
+    "description": "DeltaMenuModule",
     "license": "GPL-3+",
     "authors": [
         {
