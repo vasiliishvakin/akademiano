@@ -6,9 +6,10 @@
 namespace DeltaDb;
 
 
+use DeltaCore\Prototype\AbstractEntity;
 use DeltaUtils\StringUtils;
 
-class VariableEntity extends AbstractEntity
+class VariableEntity extends AbstractEntity implements EntityInterface
 {
     protected $fields = [];
 

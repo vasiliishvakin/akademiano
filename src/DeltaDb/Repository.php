@@ -385,6 +385,7 @@ class Repository implements RepositoryInterface
         if (is_null($entityClass)) {
             $entityClass = $this->getEntityClass();
         }
+        /** @var EntityInterface $entity */
         $entity = new $entityClass;
         if (!is_null($data)) {
             $this->load($entity, $data);
