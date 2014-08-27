@@ -36,7 +36,7 @@
                     {% endfor %}
                 </ul>
                 <hr class=""/>
-                <p>{{ item.text }}</p>
+                <p>{{ item.text|striptags|raw|cutStr(500) }}...</p>
 
                 <div class="photos">
                     {% for image in item.images %}
