@@ -9,6 +9,7 @@ namespace Articles\Controller;
 use Articles\Model\Parts\GetArticlesManager;
 use DeltaCore\AbstractController;
 use DeltaDb\Adapter\WhereParams\Between;
+use DeltaUtils\Time;
 
 class IndexController extends AbstractController
 {
@@ -21,6 +22,7 @@ class IndexController extends AbstractController
         $section = $this->getRequest()->getUriPartByNum(2);
         $criteria = [];
         $categories = $nm->getCategories();
+        $defaultMetaStart = "Статьи";
         switch ($section) {
             case "category" :
                 $categoryId = $this->getRequest()->getUriPartByNum(3);
@@ -38,6 +40,7 @@ class IndexController extends AbstractController
                     $viewCats[] = ["id" => $categoryItem->getId(), "name" => $categoryItem->getName(), "active" => $active];
                 }
                 $categories = $viewCats;
+                $defaultMetaStart = "Статьи о " .$category->getName();
                 break;
             case "archive" :
                 $dateStr = $this->getRequest()->getUriPartByNum(3);
@@ -48,6 +51,7 @@ class IndexController extends AbstractController
                 } else {
                     $criteria["created"] = new Between($date->format("Y-m-01"), $date->format("Y-m-t"));
                 }
+                $defaultMetaStart = "Статьи за " . Time::toStrIntl($date, "%B %Y");
                 break;
         }
         $orderBy = "id";
@@ -57,9 +61,13 @@ class IndexController extends AbstractController
         $this->getView()->assign("items", $items);
         $this->getView()->assignArray($pageInfo);
         $this->getView()->assign("countItems", $countArticles);
-        $titleEnd = $pageInfo["page"] == 1 ? "" : " страница " . $pageInfo["page"];
-        $this->getView()->assign("pageTitle", "Полезные статьи на gisNote {$titleEnd}" );
-        $this->getView()->assign("pageDescription", "Полезные статьи о туризме, походах, природе, отдыхе, окружающем мире, спорте и здоровье" );
+        $defaultMetaEnd = $pageInfo["page"] == 1 ? "" : " страница " . $pageInfo["page"];
+        $titleStart = $this->getConfig(["Articles", "seo", "list", "title", "start"], $defaultMetaStart);
+        $titleEnd = $this->getConfig(["Articles", "seo", "list", "title", "end"], $defaultMetaEnd);
+        $descriptionStart = $this->getConfig(["Articles", "seo", "list", "description", "start"], $defaultMetaStart);
+        $descriptionEnd = $this->getConfig(["Articles", "seo", "list", "description", "end"], $defaultMetaEnd);
+        $this->getView()->assign("pageTitle", $titleStart . $titleEnd );
+        $this->getView()->assign("pageDescription", $descriptionStart . $descriptionEnd );
         $this->getView()->assign("categories", $categories);
     }
 
