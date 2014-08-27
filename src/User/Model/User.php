@@ -5,7 +5,7 @@
 
 namespace User\Model;
 
-use DeltaDb\AbstractEntity;
+use DeltaCore\Prototype\AbstractEntity;
 use DeltaDb\EntityInterface;
 use DeltaDb\Repository;
 

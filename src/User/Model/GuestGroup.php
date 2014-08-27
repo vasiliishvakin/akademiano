@@ -6,9 +6,10 @@
 namespace User\Model;
 
 
-use DeltaDb\AbstractEntity;
+use DeltaCore\Prototype\AbstractEntity;
+use DeltaDb\EntityInterface;
 
-class GuestGroup extends AbstractEntity
+class GuestGroup extends AbstractEntity implements EntityInterface
 {
     protected $id = 0;
     protected $name = "guest";
