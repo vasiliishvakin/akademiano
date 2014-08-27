@@ -6,9 +6,10 @@
 namespace Attach\Model;
 
 
-use DeltaDb\AbstractEntity;
+use DeltaCore\Prototype\AbstractEntity;
+use DeltaDb\EntityInterface;
 
-class File extends AbstractEntity
+class File extends AbstractEntity implements EntityInterface
 {
     protected $id;
     protected $section;
