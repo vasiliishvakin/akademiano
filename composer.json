@@ -1,6 +1,6 @@
 {
-    "name": "deltaphp/deltamenu",
-    "description": "DeltaMenuModule",
+    "name": "deltaphp/sitemenu",
+    "description": "Site menu module for DeltaPHP",
     "license": "GPL-3+",
     "authors": [
         {
