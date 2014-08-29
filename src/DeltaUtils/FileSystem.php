@@ -158,4 +158,12 @@ class FileSystem
         return $path;
     }
 
+    public static function getPhpConfig($file, $default = [])
+    {
+        if (file_exists($file)) {
+            return include $file;
+        }
+        return $default;
+    }
+
 }

@@ -9,14 +9,14 @@ class ArrayUtils {
     const FIRST_IN_ARRAY = '____first';
     const LAST_IN_ARRAY =  '____last';
 
-    public static function merge_recursive()
+    public static function mergeRecursive()
     {
         $arrays = func_get_args();
         $merged = array_shift($arrays);
         foreach ($arrays as $currentArray) {
             foreach ($currentArray as $key => $value) {
                 if (is_array($value) && isset ($merged[$key]) && is_array($merged[$key])) {
-                    $merged[$key] = self::merge_recursive($merged[$key], $value);
+                    $merged[$key] = self::mergeRecursive($merged[$key], $value);
                 } else {
                     $merged[$key] = $value;
                 }
