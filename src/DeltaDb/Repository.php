@@ -57,7 +57,7 @@ class Repository implements RepositoryInterface
         $currentMeta = $this->getMetaInfo();
         if (isset($currentMeta[$table]) && $merge) {
             $metaAdd =  [$table => $tableData];
-            $this->metaInfo = ArrayUtils::merge_recursive($currentMeta, $metaAdd);
+            $this->metaInfo = ArrayUtils::mergeRecursive($currentMeta, $metaAdd);
         } else {
             $this->metaInfo[$table] = $tableData;
         }
