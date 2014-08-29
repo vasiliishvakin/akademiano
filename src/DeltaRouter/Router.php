@@ -222,4 +222,14 @@ class Router
         $_SERVER['REDIRECT_STATUS'] = 404;
         return "<h1>Not Found</h1>";
     }
+
+    public function isCurrentUri($uri)
+    {
+        $currentUri = $this->getRequest()->getUriNormal();
+        if ($uri === "/" && $currentUri !==  "/") {
+            return false;
+        }
+        return (strpos($currentUri, $uri) !== false);
+    }
+
 }
