@@ -117,18 +117,22 @@ class Request
         return $this->uri;
     }
 
+    public function normalizeUri($uri)
+    {
+        if (($pos = strpos($uri, '?')) !== false) {
+            $uri = substr($uri, 0, $pos);
+        }
+        $uri = preg_replace('~(\/){2,}~', '/', $uri);
+        if (empty($uri)) {
+            $uri = '/';
+        }
+        return $uri;
+    }
+
     public function getUriNormal()
     {
         if (is_null($this->uriNormal)) {
-            $uri = $this->getUri();
-            if (($pos = strpos($uri, '?')) !== false) {
-                $uri = substr($uri, 0, $pos);
-            }
-            $uri = preg_replace('~(\/){2,}~', '/', $uri);
-            if (empty($uri)) {
-                $uri = '/';
-            }
-            $this->uriNormal = $uri;
+            $this->uriNormal = $this->normalizeUri($this->getUri());
         }
         return $this->uriNormal;
     }
