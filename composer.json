@@ -9,6 +9,11 @@
         }
     ],
     "minimum-stability": "dev",
+    "autoload": {
+        "psr-0": {
+            "SiteMenu": "src/"
+        }
+    },
     "require": {
         "deltaphp/deltacore": "dev-master"
     }
