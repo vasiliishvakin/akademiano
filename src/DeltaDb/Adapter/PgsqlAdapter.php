@@ -7,6 +7,7 @@ namespace DeltaDb\Adapter;
 
 
 use DeltaDb\Adapter\WhereParams\Between;
+use DeltaDb\Adapter\WhereParams\ILike;
 use DeltaUtils\StringUtils;
 
 class PgsqlAdapter extends AbstractAdapter
@@ -15,6 +16,7 @@ class PgsqlAdapter extends AbstractAdapter
 
     public function connect($dsn = null, $params = [])
     {
+        var_dump($dsn);
         if (!is_null($dsn)) {
             $this->setDsn($dsn);
         }
@@ -175,6 +177,11 @@ class PgsqlAdapter extends AbstractAdapter
                         $where[] = $this->escapeIdentifier($field) . " between \${$num} and \${$num2}";
                         $num = $num2;
                         break;
+                    case "ILike":
+                        /** @var ILike $value*/
+                        $num++;
+                        $where[] = $this->escapeIdentifier($field) . " ILIKE \${$num}";
+                        break;
                     default :
                         throw new \InvalidArgumentException("where class $class not implement");
                 }
@@ -210,6 +217,10 @@ class PgsqlAdapter extends AbstractAdapter
                         /** @var Between $value */
                         $whereParams[] = $value->getStart();
                         $whereParams[] = $value->getEnd();
+                        break;
+                    case "ILike":
+                        /** @var ILike $value */
+                        $whereParams[] = $value->getQuery();
                         break;
                     default :
                         throw new \InvalidArgumentException("where class $class not implement");

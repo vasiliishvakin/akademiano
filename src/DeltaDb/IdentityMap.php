@@ -15,6 +15,7 @@ class IdentityMap
         return isset($this->items[$id]);
     }
 
+
     public function get($id)
     {
         if (!isset($this->items[$id])) {

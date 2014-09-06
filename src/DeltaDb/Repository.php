@@ -363,7 +363,9 @@ class Repository implements RepositoryInterface
         if (is_null($entityClass)) {
             $entityClass = $this->getEntityClass();
         }
+        /** @var EntityInterface $entity */
         $entity = new $entityClass;
+        $entity->setRepository($this);
         if (!is_null($data)) {
             $this->load($entity, $data);
         }
@@ -400,6 +402,15 @@ class Repository implements RepositoryInterface
         return $this->deleteById($id, $table);
     }
 
+    /**
+     * @param array $criteria
+     * @param null $entityClass
+     * @param null $limit
+     * @param null $offset
+     * @param null $orderBy
+     * @return EntityInterface[]
+     * @throws \Exception
+     */
     public function find(array $criteria = [], $entityClass = null, $limit = null, $offset = null, $orderBy = null)
     {
         if (is_null($entityClass)) {
@@ -440,6 +451,12 @@ class Repository implements RepositoryInterface
         return $items;
     }
 
+    /**
+     * @param $id
+     * @param null $entityClass
+     * @return EntityInterface
+     * @throws \Exception
+     */
     public function findById($id, $entityClass = null)
     {
         $table = $this->getTableName($entityClass);
