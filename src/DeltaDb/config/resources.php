@@ -9,4 +9,22 @@ return [
             return $dbAdapter;
         };
     },
+    "relationsFactory" => function ($c) {
+        $factory = new \DeltaDb\Model\Relations\relationsFactory();
+        $relations = $c->getConfig()->get(["DeltaDb", "relations"]);
+        if ($relations) {
+            $relations = $relations->toArray();
+        }
+        foreach($relations as $name=>$params) {
+            $managerFirst = $params[0];
+            $managerSecond = $params[1];
+            $factory->setManagerParams(
+              $name,
+              function() use ($c, $managerFirst) {return $c[$managerFirst];},
+              function() use ($c, $managerSecond) {return $c[$managerSecond];}
+            );
+        }
+
+        return $factory;
+    }
 ];
