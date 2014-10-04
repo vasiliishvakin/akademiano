@@ -14,6 +14,9 @@ class mnRelationsManager extends Repository
     const FIRST_ENTITY_FIELD = "firstItem";
     const SECOND_ENTITY_FIELD = "secondItem";
 
+    const FIRST_PART = "firstPart";
+    const SECOND_PART = "secondPart";
+
     protected $name;
 
     /** @var  Repository */
@@ -143,7 +146,6 @@ class mnRelationsManager extends Repository
         return $item;
     }
 
-
     public function findRaw(array $criteria = [], $table = null, $limit = null, $offset = null, $orderBy = null)
     {
         $adapter = $this->getAdapter();
@@ -171,7 +173,7 @@ class mnRelationsManager extends Repository
     /**
      * @param mnRelation $entity
      * @param array $data
-     * @return EntityInterface|void
+     * @return mnRelation|void
      */
     public function load(EntityInterface $entity, array $data)
     {
@@ -198,7 +200,7 @@ class mnRelationsManager extends Repository
         $secondField = $this->getSecondFieldName();
         $data["fields"][$firstField] = $this->getField($entity, self::FIRST_ENTITY_FIELD);
         $data["fields"][$secondField] = $this->getField($entity, self::SECOND_ENTITY_FIELD);
-        foreach ($data["fields"] as $field=>$value) {
+        foreach ($data["fields"] as $field => $value) {
             if ($value instanceof EntityInterface) {
                 $data["fields"][$field] = $value->getId();
             }
@@ -206,4 +208,97 @@ class mnRelationsManager extends Repository
         return $data;
     }
 
-} 
+    public function getFieldPartName($part)
+    {
+        switch ($part) {
+            case self::FIRST_PART :
+                $field = $this->getFirstFieldName();
+                break;
+            case self::SECOND_PART :
+                $field = $this->getSecondFieldName();
+                break;
+        }
+        return $field;
+    }
+
+    public function getOtherFieldPartName($part)
+    {
+        switch ($part) {
+            case self::FIRST_PART :
+                $field = $this->getSecondFieldName();
+                break;
+            case self::SECOND_PART :
+                $field = $this->getFirstFieldName();
+                break;
+        }
+        return $field;
+    }
+
+    public function findPartsIds(array $partItems, $part = self::FIRST_PART)
+    {
+        $field = $this->getFieldPartName($part);
+        $criteria = [$field => $partItems];
+        $data = $this->findRaw($criteria);
+        $ids = [];
+        foreach ($data as $row) {
+            $ids[] = $row[$field];
+        }
+        return $ids;
+    }
+
+    public function deleteByPartId($partId, $part = self::FIRST_PART)
+    {
+        $fieldName  = $this->getFieldPartName($part);
+        return $this->deleteBy([$fieldName => $partId]);
+    }
+
+    public function saveForPartId($partId, $relationIds, $part = self::FIRST_PART)
+    {
+        $firstFieldName  = $this->getFieldPartName($part);
+        $secondFieldName = $this->getOtherFieldPartName($part);
+        $relationIds = (array) $relationIds;
+        foreach ($relationIds as $relationId) {
+            $relation = $this->create([$firstFieldName => $partId, $secondFieldName => $relationId]);
+            $this->save($relation);
+        }
+    }
+
+    public function updateForPartId($partId, $relationIds, $part = self::FIRST_PART)
+    {
+        $this->deleteByPartId($partId, $part);
+        $this->saveForPartId($partId, $relationIds, $part);
+    }
+
+    public function getFieldNumName($fieldName)
+    {
+        return ($fieldName === $this->getFirstFieldName()) ? "First" :
+            ($fieldName === $this->getSecondFieldName()) ? "Second" : null;
+    }
+
+    public function getOtherFieldNumName($fieldName)
+    {
+        return ($fieldName === $this->getFirstFieldName()) ? "Second" :
+            ($fieldName === $this->getSecondFieldName()) ? "First" : null;
+    }
+
+    public function getJoinPart($conditionName)
+    {
+        $mainNum = $this->getOtherFieldNumName($conditionName);
+        $method = "get{$mainNum}FieldName";
+        $mainField = $this->$method();
+        $method = "get{$mainNum}Manager";
+        /** @var Repository $mainManager */
+        $mainManager = $this->$method();
+        $mainTable = $mainManager->getTableName();
+        $currentTable = $this->getTableName();
+        return " join {$currentTable}  on {$currentTable}.{$mainField}={$mainTable}.id";
+    }
+
+    public function getWhereFieldFullName($conditionName)
+    {
+        $fieldNum = $this->getFieldNumName($conditionName);
+        $method = "get{$fieldNum}FieldName";
+        $fieldName = $this->$method();
+        return $this->getTableName() . "." . $fieldName;
+    }
+}

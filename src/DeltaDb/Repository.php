@@ -370,14 +370,22 @@ class Repository implements RepositoryInterface
         return $adapter->update($table, $fields, [$idField => $id], $rawFields);
     }
 
-    public function deleteById($id, $table = null)
+    public function deleteRaw(array $criteria = [], $table = null)
     {
         $adapter = $this->getAdapter();
         if (is_null($table)) {
             $table = $this->getTableName();
         }
+        return $adapter->delete($table, $criteria);
+    }
+
+    public function deleteById($id, $table = null)
+    {
+        if (is_null($table)) {
+            $table = $this->getTableName();
+        }
         $idField = $this->getIdField($table);
-        return $adapter->delete($table, [$idField => $id]);
+        return $this->deleteBy([$idField => $id], $table);
     }
 
     public function create(array $data = null, $entityClass = null)
@@ -414,13 +422,15 @@ class Repository implements RepositoryInterface
 
     public function delete(EntityInterface $entity)
     {
-        $table= $this->getTableName();
-        $idName = $this->getIdField($table);
-        $id = $this->getField($entity, $idName);
-        if (empty($id)) {
-            return false ;
+        return $this->deleteById($entity->getId());
+    }
+
+    public function deleteBy(array $criteria = [], $table = null)
+    {
+        if (is_null($table)) {
+            $table = $this->getTableName();
         }
-        return $this->deleteById($id, $table);
+        return $this->deleteRaw($criteria, $table);
     }
 
     public function find(array $criteria = [], $entityClass = null, $limit = null, $offset = null, $orderBy = null)
