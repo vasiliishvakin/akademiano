@@ -1,0 +1,45 @@
+{% extends "layoutAdmin.twig" %}
+
+{% block content %}
+    <br/>
+    <br/>
+    <div class="row">
+        <div class="col-md-12">
+            <form class="form-horizontal" role="form" method="post" action="/admin/deltadb/relations/save/{{ relationName }}" enctype="multipart/form-data">
+                {% if item.id %}
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Id</label>
+                        <div class="col-md-8">
+                            <p class="form-control-static">{{ item.id }}: {{ item.firstItem.name }} - {{ item.secondItem.name }}</p>
+                        </div>
+                    </div>
+                    <input type="hidden" name="id" value="{{ item.id }}"/>
+                {% endif %}
+                <div class="form-group">
+                    <label for="firstItem">first items</label>
+                    <select class="form-control" name="firstItem"  id="firstItem">
+                        <option value="">Выбирите объект</option>
+                        {% for option in firstItems %}
+                            <option value="{{ option.id }}" {% if option.id == item.firstItem.id %} selected {% endif %}>{{ option.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="secondItem">second items</label>
+                    <select class="form-control" name="secondItem"  id="secondItem">
+                        <option value="">Выбирите объект</option>
+                        {% for option in secondItems %}
+                            <option value="{{ option.id }}" {% if option.id == item.secondItem.id %} selected {% endif %}>{{ option.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-8">
+                        <button type="submit" class="btn btn-success">Save item</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

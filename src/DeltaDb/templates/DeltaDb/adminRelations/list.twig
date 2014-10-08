@@ -1,0 +1,47 @@
+{% extends "layoutAdmin.twig" %}
+
+
+{% block content %}
+    <br/>
+    <br/>
+    <div>
+        <a href="/admin/deltadb/relations/add/{{ relationName }}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Add</a>
+    </div>
+    <br/>
+    <table class="table table-striped">
+        <thead>
+        <th>id</th>
+        <th>place</th>
+        <th>track</th>
+        <th>action</th>
+        </thead>
+        <tbody>
+        {% for item in items %}
+            <tr>
+                <td>{{ item.id }}</td>
+                <td>{{ item.firstItem.name }}</td>
+                <td>{{ item.secondItem.name }}</td>
+                <td>
+                    <a href="/admin/deltadb/relations/edit/{{ relationName }}/{{ item.id|idStr }}" class="btn btn-sm btn-warning"><span class="glyphicon glyphicon-edit"></span></a>
+                    <a href="/admin/deltadb/relations/rm/{{ relationName }}/{{ item.id|idStr }}" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-remove"></span></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+    <div>
+        <ul class="pagination">
+            {% if showFirstPage %}
+                <li><a href="/admin/tracks">&laquo;</a></li>
+            {% endif %}
+            {% for page in pages %}
+                <li class="{% if page.active %}active{% endif %}"><a href="/admin/tracks/?p={{ page.id }}">{{ page.id }}</a></li>
+            {% endfor %}
+            {% if showLastPage %}
+                <li><a href="/admin/tracks/?p={{ countPages }}">&raquo;</a></li>
+            {% endif %}
+        </ul>
+    </div>
+{% endblock %}

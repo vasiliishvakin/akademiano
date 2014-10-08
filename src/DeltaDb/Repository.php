@@ -57,7 +57,7 @@ class Repository implements RepositoryInterface
         $currentMeta = $this->getMetaInfo();
         if (isset($currentMeta[$table]) && $merge) {
             $metaAdd =  [$table => $tableData];
-            $this->metaInfo = ArrayUtils::merge_recursive($currentMeta, $metaAdd);
+            $this->metaInfo = ArrayUtils::mergeRecursive($currentMeta, $metaAdd);
         } else {
             $this->metaInfo[$table] = $tableData;
         }
@@ -187,6 +187,23 @@ class Repository implements RepositoryInterface
         return $meta[$table]['id'];
     }
 
+    public function getExternalFieldsList()
+    {
+        $cacheId = "externalFieldList";
+        if ($fields = $this->getInnerCache($cacheId)) {
+            return $fields;
+        }
+        $meta = $this->getMetaInfo();
+        $fieldsData = isset($meta['externalFields']) ? $meta['externalFields'] : [];
+        if (ArrayUtils::isAssoc($fieldsData)) {
+            $fields = array_keys($fieldsData);
+        } else {
+            $fields = array_values($fieldsData);
+        }
+        $this->setInnerCache($cacheId, $fields);
+        return $fields;
+    }
+
     public function getFieldsList($table)
     {
         $cacheId = "fieldList|{$table}|";
@@ -206,11 +223,17 @@ class Repository implements RepositoryInterface
 
     public function getFieldMeta($table, $field)
     {
-        $meta = $this->getMetaInfo();
-        if (!isset($meta[$table]['fields'][$field])) {
-            return null;
+        $cacheId = "fieldMeta|$field";
+        if ($this->hasInnerCache($cacheId)) {
+            return $this->getInnerCache($cacheId);
         }
-        return $meta[$table]['fields'][$field];
+        $meta = $this->getMetaInfo();
+        $fieldMeta = ArrayUtils::getByPath($meta, [$table, 'fields', $field]);
+        if (!$fieldMeta) {
+            $fieldMeta = ArrayUtils::getByPath($meta, ["externalFields", $field]);
+        }
+        $this->setInnerCache($cacheId, $fieldMeta);
+        return $fieldMeta;
     }
 
     public function getFieldMethod($table, $field, $method)
@@ -229,12 +252,11 @@ class Repository implements RepositoryInterface
 
     public function getFieldFilter($table, $field, $filter)
     {
-        $meta = $this->getMetaInfo();
-        if (!isset($meta[$table]['fields'][$field]['filters'][$filter])) {
+        $fieldMeta = $this->getFieldMeta($table, $field);
+        if (!$fieldMeta) {
             return null;
         }
-        $fieldFilter = $meta[$table]['fields'][$field]['filters'][$filter];
-        return $fieldFilter;
+        return ArrayUtils::getByPath($fieldMeta, ["filters", $filter]);
     }
 
     public function getFieldValidators($table, $field)
@@ -348,14 +370,22 @@ class Repository implements RepositoryInterface
         return $adapter->update($table, $fields, [$idField => $id], $rawFields);
     }
 
-    public function deleteById($id, $table = null)
+    public function deleteRaw(array $criteria = [], $table = null)
     {
         $adapter = $this->getAdapter();
         if (is_null($table)) {
             $table = $this->getTableName();
         }
+        return $adapter->delete($table, $criteria);
+    }
+
+    public function deleteById($id, $table = null)
+    {
+        if (is_null($table)) {
+            $table = $this->getTableName();
+        }
         $idField = $this->getIdField($table);
-        return $adapter->delete($table, [$idField => $id]);
+        return $this->deleteBy([$idField => $id], $table);
     }
 
     public function create(array $data = null, $entityClass = null)
@@ -365,7 +395,6 @@ class Repository implements RepositoryInterface
         }
         /** @var EntityInterface $entity */
         $entity = new $entityClass;
-        $entity->setRepository($this);
         if (!is_null($data)) {
             $this->load($entity, $data);
         }
@@ -393,13 +422,15 @@ class Repository implements RepositoryInterface
 
     public function delete(EntityInterface $entity)
     {
-        $table= $this->getTableName();
-        $idName = $this->getIdField($table);
-        $id = $this->getField($entity, $idName);
-        if (empty($id)) {
-            return false ;
+        return $this->deleteById($entity->getId());
+    }
+
+    public function deleteBy(array $criteria = [], $table = null)
+    {
+        if (is_null($table)) {
+            $table = $this->getTableName();
         }
-        return $this->deleteById($id, $table);
+        return $this->deleteRaw($criteria, $table);
     }
 
     /**
@@ -493,6 +524,10 @@ class Repository implements RepositoryInterface
     {
         $table = $this->getTableName($entity);
         $fields = $this->getFieldsList($table);
+        $externalFields = $this->getExternalFieldsList();
+        if (!empty($externalFields)) {
+            $fields = array_values(array_unique(array_merge($fields, $externalFields)));
+        }
         $fields = array_flip($fields);
         $data = array_intersect_key($data, $fields);
         foreach($data as $field=>$value) {
