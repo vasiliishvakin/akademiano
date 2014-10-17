@@ -162,16 +162,26 @@ class ArticlesManager extends Repository
 
     public function load(EntityInterface $entity, array $data)
     {
+        $cm = $this->getCategoryManager();
         if (isset($data["categories"])) {
             $data["categories"] = is_array($data["categories"]) ? $data["categories"] : explode(',', $data["categories"]);
             foreach ($data["categories"] as $key => $category) {
-                $data["categories"][$key] = (integer)$category;
+                if (is_numeric($category)) {
+                    $data["categories"][$key] = (integer)$category;
+                } else {
+                    $query = ['name' => $category];
+                    $category = $cm->findOne($query);
+                    if (!$category) {
+                        $category = $cm->create($query);
+                        $cm->save($category);
+                    }
+                    $data["categories"][$key] = $category->getId();
+                }
             }
         } else {
             $data["categories"] = [];
         }
         if (!empty($data["categories"])) {
-            $cm = $this->getCategoryManager();
             $cm->addReferredIds($data["categories"]);
         }
         parent::load($entity, $data);

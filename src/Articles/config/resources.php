@@ -12,4 +12,9 @@ return [
             $nm->setFileManager($fm);
             return $nm;
     },
+
+    'articleCategoriesManager' => function ($c) {
+        /** @var \DeltaCore\Application $c */
+        return $c["directoryFactory"]->getManager("article_categories");
+    },
 ];
