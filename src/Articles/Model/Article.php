@@ -10,6 +10,7 @@ use DeltaCore\Prototype\MiddleObject;
 use DeltaDb\EntityInterface;
 use DeltaUtils\StringUtils;
 use DictDir\Model\ComboDirectoryManager;
+use DictDir\Model\UniDirectoryItem;
 use DictDir\Model\UniDirectoryManager;
 
 class Article extends MiddleObject implements EntityInterface
@@ -35,7 +36,7 @@ class Article extends MiddleObject implements EntityInterface
     }
 
     /**
-     * @return mixed
+     * @return UniDirectoryManager
      */
     public function getCategoryManager()
     {
