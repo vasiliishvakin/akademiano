@@ -99,6 +99,9 @@ class UserController extends AbstractController
                 $permManager->setToken($user);
             }
         }
+        if ($this->getRequest()->hasParam('r')) {
+            $this->getResponse()->redirect($this->getRequest()->getParam('r'));
+        }
         $this->getResponse()->redirect("/user");
     }
 
