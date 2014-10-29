@@ -135,7 +135,7 @@ class FileManager extends Repository
         return $name;
     }
 
-    public function saveFileIO(UploadFile $file)
+    public function saveFileIO(FileInterface $file)
     {
         $fileExt = $file->getExt();
         $tmpPath = $file->getPath();
