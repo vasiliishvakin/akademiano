@@ -1,0 +1,28 @@
+<script type="text/ng-template" id="editModalContent.html">
+    <ul class="nav nav-tabs" role="tablist" ng-init="tab=1">
+        <li ng-class="{active: tab == 1}"><a href="#" ng-click="tab=1">Статья</a></li>
+        <li ng-class="{active: tab == 2}"><a href="#" ng-click="tab=2">Фотографии</a></li>
+    </ul>
+    <div ng-class="{hide: tab != 1}">
+        <div class="modal-body">
+            <form class="form-horizontal" role="form">
+                {% for key, field in entityConfig.edit %}
+                    {%  if key != 'images' %}
+                        {{ include(field.template, {key: key, field: field}) }}
+                    {% endif %}
+                {% endfor %}
+            </form>
+        </div>
+    </div>
+    <div ng-class="{hide: tab != 2}">
+        <div class="modal-body">
+            <form class="form-horizontal" role="form">
+                {{ include(entityConfig.edit.images.template, {key: 'images', field: entityConfig.edit.images}) }}
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success" ng-click="ok()">Сохранить</button>
+        <button class="btn btn-default" ng-click="cancel()">Отменить</button>
+    </div>
+</script>

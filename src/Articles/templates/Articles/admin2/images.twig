@@ -1,0 +1,93 @@
+<div class="form-group"
+     flow-prevent-drop
+     flow-drag-enter="dropClass='drag-over'"
+     flow-drag-leave="dropClass=''"
+     ng-controller="ImagesCtrl">
+    <div class="col-sm-12">
+        <div flow-init="{target: '{{ field.api }}' + row.id}"
+             flow-files-submitted="$flow.upload()"
+             flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]"
+             flow-name="services.flow">
+            <div class="drop" flow-drop ng-class="dropClass">
+                <span class="btn btn-default" flow-btn>Загрузить фотографии</span>
+                <span class="btn btn-default" flow-btn flow-directory ng-show="$flow.supportDirectory">Загрузить фотографии из папки</span>
+                <b>или</b>
+                перенесите фотографии сюда
+            </div>
+
+            <br/>
+
+            <div class="form-horizontal">
+                <div ng-repeat="file in row.{{ key }}" class="form-group">
+                    <div class="col-sm-3">
+                        <div class="thumbnail">
+                            <img ng-src="{-file.thumb-}" />
+                            <span ng-show="file.removed" class="removed-cover"><span class="glyphicon glyphicon-trash"></span></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-9">
+                        <p>
+                            <input type="text" class="form-control" ng-model="file.name"/>
+                        </p>
+                        <p>
+                            <textarea class="form-control"
+                                      name="{{ key }}"
+                                      id="{{ key }}"
+                                      ng-model="file.description"
+                                      cols="30"
+                                      rows="3"></textarea>
+                        </p>
+                        <p>
+                            <div class="pull-right">
+                                <a class="btn btn-xs btn-danger" ng-click="file.removed = true" ng-show="!file.removed">
+                                    Удалить
+                                </a>
+                                <a class="btn btn-xs btn-success" ng-click="file.removed = false" ng-show="file.removed">
+                                    Восстановить
+                                </a>
+                            </div>
+                        </p>
+                    </div>
+                </div>
+                <div ng-repeat="file in $flow.files" class="form-group">
+                    <div class="col-sm-3">
+                        <div class="thumbnail" ng-show="$flow.files.length">
+                            <img flow-img="file" />
+                        </div>
+                    </div>
+                    <div class="col-sm-9">
+                        <p>
+                            <input type="text" class="form-control" ng-model="file.name"/>
+                        </p>
+                        <p>
+                            <textarea class="form-control"
+                                      name="{{ key }}"
+                                      id="{{ key }}"
+                                      ng-model="file.description"
+                                      cols="30"
+                                      rows="3"></textarea>
+                        </p>
+                        <p>
+                            <div class="progress progress-striped" ng-class="{active: file.isUploading()}">
+                                <div class="progress-bar" role="progressbar"
+                                     aria-valuenow="{-file.progress() * 100-}"
+                                     aria-valuemin="0"
+                                     aria-valuemax="100"
+                                     ng-style="{width: (file.progress() * 100) + '%'}">
+                                    <span class="sr-only">{-file.progress()-}% Complete</span>
+                                </div>
+                            </div>
+                            <div class="pull-right">
+                                <a class="btn btn-xs btn-danger" ng-click="file.cancel()">
+                                    Удалить
+                                </a>
+                            </div>
+                        </p>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+
+        </div>
+    </div>
+</div>

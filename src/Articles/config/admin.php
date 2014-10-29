@@ -8,6 +8,7 @@ return [
         'label' => 'Статьи',
         'entityLabel' => 'Статью',
         'entityManager' => 'ArticlesManager',
+        'editTemplateUrl' => 'Articles/admin2/edit.twig',
         'list' => [
             'created' => [
                 'label' => 'Создано',
@@ -26,7 +27,12 @@ return [
             'categories' => [
                 'label' => 'Категории',
                 'sortable' => true,
-                'listview' => "{- row.categories.join(', ') -}",
+                'listview' => "{- row.categories | dictArr -}",
+                'fields' => [
+                    'name' => [
+                        'method' => 'getName',
+                    ],
+                ],
             ],
 
         ],
@@ -39,6 +45,11 @@ return [
                 'label' => 'Категории',
                 'template' => 'formInput/dictMultiselect.twig',
                 'api' => '/api/categories/:id',
+                'fields' => [
+                    'name' => [
+                        'method' => 'getName',
+                    ],
+                ],
             ],
             "description" => [
                 'label' => 'Описание',
@@ -48,6 +59,26 @@ return [
                 'label' => 'Текст',
                 'template' => 'formInput/ckeditor.twig',
             ],
+            "images" => [
+                'label' => 'Фотографии',
+                'template' => 'Articles/admin2/images.twig',
+                'api' => '/api-files/articles/',
+                'fields' => [
+                    'id' => [
+                        'method' => 'getId',
+                    ],
+                    'thumb' => [
+                        'method' => 'getUri',
+                        'args' => ['height180'],
+                    ],
+                    'name' => [
+                        'method' => 'getName',
+                    ],
+                    'description' => [
+                        'method' => 'getDescription',
+                    ],
+                ],
+            ]
         ]
     ],
     'categories' => [

@@ -11,7 +11,10 @@ use DeltaDb\Adapter\PgsqlAdapter;
 use DeltaDb\EntityInterface;
 use DeltaDb\Repository;
 use DeltaUtils\ArrayUtils;
+use DeltaUtils\FileSystem;
 use DictDir\Model\UniDirectoryManager;
+use HttpWarp\File\FlowFile;
+use HttpWarp\File\UploadFile;
 
 class ArticlesManager extends Repository
 {
@@ -183,6 +186,52 @@ class ArticlesManager extends Repository
         }
         if (!empty($data["categories"])) {
             $cm->addReferredIds($data["categories"]);
+        }
+        if (isset($data['images'])) {
+            $fm = $this->getFileManager();
+            foreach ($data['images'] as $image) {
+                if (isset($image['id'])) {
+                    if (isset($image['removed']) && $image['removed'] === true) {
+                        $fm->deleteById($image['id']);
+                    } else {
+                        /** @var \Attach\Model\File $row */
+                        $row = $fm->findById($image['id']);
+                        if (isset($image['name'])) {
+                            $row->setName($image['name']);
+                        }
+                        if (isset($image['description'])) {
+                            $row->setDescription($image['description']);
+                        }
+                        $fm->save($row);
+                    }
+                }
+            }
+        }
+        if (isset($data['flowImages'])) {
+            $fm = $this->getFileManager();
+            foreach ($data['flowImages'] as $image) {
+                if (isset($image['uniqueIdentifier'])) {
+                    $type = FileSystem::FST_IMAGE;
+//                    $maxFileSize = $this->getConfig(["Articles", "Attach", "Size"], 500*1024);
+                    $path = ROOT_DIR . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . $image['uniqueIdentifier'];
+                    $file = new FlowFile($image['uniqueIdentifier'], $path);
+                    if (!$file->checkType($type)) {
+                        continue;
+                    }
+//                    if ($file->getSize() > $maxSize) {
+//                        continue;
+//                    }
+                    $title = '';
+                    if (isset($image['name'])) {
+                        $title = $image['name'];
+                    }
+                    $description = '';
+                    if (isset($image['description'])) {
+                        $description = $image['description'];
+                    }
+                    $fm->saveFileForObject($entity, $file, $title, $description);
+                }
+            }
         }
         parent::load($entity, $data);
         return $entity;
