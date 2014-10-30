@@ -61,6 +61,9 @@ class MysqlPdoAdapter extends AbstractAdapter
             $pQuery->bindValue($i, $params[$i-1]);
         }
         $result = $pQuery->execute();
+        if (!$result) {
+            return false;
+        }
         return $pQuery;
 
     }
@@ -171,6 +174,7 @@ class MysqlPdoAdapter extends AbstractAdapter
         if ($result === false) {
             return false;
         }
+        return true;
         /*if (is_null($idName)) {
             return (pg_affected_rows($result) >0);
         } else {
