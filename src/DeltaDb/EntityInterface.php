@@ -14,7 +14,6 @@ interface EntityInterface
      * @return array
      */
     public function getFieldsList();
-    public function toArray();
 //    public function setRepository($repository);
 //    public function setValue($value);
 
