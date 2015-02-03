@@ -559,4 +559,31 @@ class Repository implements RepositoryInterface
         $table = $this->getTableName($entityClass);
         return $adapter->count($table, $criteria);
     }
+
+    public function serializeFields($data, $fieldNames)
+    {
+        $fieldNames = (array) $fieldNames;
+        foreach($fieldNames as $fieldName) {
+            if (isset($data["fields"][$fieldName]) && is_array($data["fields"][$fieldName])) {
+                 if (!empty($data["fields"][$fieldName])) {
+                     $data["fields"][$fieldName] = serialize($data["fields"][$fieldName]);
+                 } else {
+                     $data["fields"][$fieldName] = null;
+                 }
+            }
+        }
+        return $data;
+    }
+
+    public function unserializeFields($data, $fieldNames)
+    {
+        $fieldNames = (array) $fieldNames;
+        foreach ($fieldNames as $fieldName) {
+            if (isset($data[$fieldName])) {
+                $value = @unserialize($data[$fieldName]);
+                $data[$fieldName] = $value ?: [];
+            }
+        }
+        return $data;
+    }
 }

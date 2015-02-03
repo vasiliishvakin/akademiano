@@ -58,7 +58,11 @@ class MysqlPdoAdapter extends AbstractAdapter
         $count = count($params);
         $params = array_values($params);
         for($i=1; $i<=$count; $i++) {
-            $pQuery->bindValue($i, $params[$i-1]);
+            $value = $params[$i-1];
+            if (!is_null($value) && !is_scalar($value) ) {
+                throw new \Exception("Invalid param #{$i} " . var_export($value));
+            }
+            $pQuery->bindValue($i, $value);
         }
         $result = $pQuery->execute();
         if (!$result) {
@@ -217,7 +221,10 @@ class MysqlPdoAdapter extends AbstractAdapter
                 }
                 $inParams = implode(', ', $inParams);
                 $where[] = $this->escapeIdentifier($field) . " in ({$inParams})";
-            } else {
+            } elseif(is_null($value)) {
+                $where[] = $this->escapeIdentifier($field) . " is NULL";
+            }
+            else {
                 $num++;
                 $where[] = $this->escapeIdentifier($field) . '=?';
             }
@@ -249,7 +256,10 @@ class MysqlPdoAdapter extends AbstractAdapter
                 foreach ($value as $valueItem) {
                     $whereParams[] = $valueItem;
                 }
-            } else {
+            } elseif(is_null($value)) {
+                continue;
+            }
+            else {
                 $whereParams[] = $value;
             }
         }
@@ -344,4 +354,4 @@ class MysqlPdoAdapter extends AbstractAdapter
         return (integer)$result;
     }
 
-} 
+}
