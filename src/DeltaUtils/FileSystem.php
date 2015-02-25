@@ -138,7 +138,13 @@ class FileSystem
     {
         if ($checkRealPath) {
             $parentDir = realpath($parentDir);
+            if (!$parentDir) {
+                throw new \RuntimeException("Bad path in parent dir: $parentDir");
+            }
             $dir = realpath($dir);
+            if (!$dir) {
+                throw new \RuntimeException("Bad checked path: $dir");
+            }
         }
         if (strlen($parentDir) >  strlen($dir)) {
             return false;
