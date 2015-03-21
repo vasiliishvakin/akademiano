@@ -148,6 +148,7 @@ class Repository implements RepositoryInterface
 
     /**
      * @return array
+     * @todo Merge with default: don't get form $metaInfo
      */
     public function getMetaInfo()
     {
