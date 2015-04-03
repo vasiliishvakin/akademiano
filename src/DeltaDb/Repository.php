@@ -3,6 +3,7 @@
 namespace DeltaDb;
 
 
+use DeltaCore\Prototype\MagicMethodInterface;
 use DeltaDb\Adapter\AdapterInterface;
 use DeltaUtils\ArrayUtils;
 use DeltaUtils\Parts\InnerCache;
@@ -51,6 +52,20 @@ class Repository implements RepositoryInterface
             ]
         ]
     ];
+
+    protected function checkMethodCallable($object, $method)
+    {
+        if (null === $method) {
+            return false;
+        }
+        $class = get_class($object);
+        $id = "chmtcl" . $class . $method;
+        if (!$result = $this->getInnerCache($id)) {
+            $result = ($object instanceof MagicMethodInterface) ?: (method_exists($object, $method) && is_callable([$object, $method]));
+            $this->setInnerCache($id, $result);
+        }
+        return $result;
+    }
 
     public function setTable($table, array $tableData = [], $merge = true)
     {
@@ -264,7 +279,7 @@ class Repository implements RepositoryInterface
     {
         $meta = $this->getMetaInfo();
         if (!isset($meta[$table]['fields'][$field]['validators'])) {
-            return null;
+            return [];
         }
         $validators = $meta[$table]['fields'][$field]['validators'];
         return $validators;
@@ -290,11 +305,11 @@ class Repository implements RepositoryInterface
         $table = $this->getTableName($entity);
         $setMethod = $this->getFieldMethod($table, $field, self::METHOD_SET);
         $inputFilter = $this->getFieldFilter($table, $field, self::FILTER_IN);
-        if (!is_null($inputFilter) && method_exists($entity, $inputFilter)) {
+        if ($this->checkMethodCallable($entity, $inputFilter)) {
             $value = $entity->{$inputFilter}($value);
         }
 
-        if (!is_null($setMethod) && is_callable([$entity, $setMethod])) {
+        if ($this->checkMethodCallable($entity, $setMethod)) {
             return $entity->{$setMethod}($value);
         }
         return false;
@@ -305,11 +320,11 @@ class Repository implements RepositoryInterface
         $table = $this->getTableName($entity);
         $getMethod = $this->getFieldMethod($table, $field, self::METHOD_GET);
         $outputFilter = $this->getFieldFilter($table, $field, self::FILTER_OUT);
-        if (is_null($getMethod) || !is_callable([$entity, $getMethod])) {
+        if (!$this->checkMethodCallable($entity, $getMethod)) {
             return null;
         }
         $value =  $entity->{$getMethod}();
-        if (!is_null($outputFilter) && is_callable([$entity, $outputFilter])) {
+        if ($this->checkMethodCallable($entity, $outputFilter)) {
             $value = $entity->{$outputFilter}($value);
         }
         return $value;

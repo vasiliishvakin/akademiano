@@ -7,9 +7,10 @@ namespace DeltaDb;
 
 
 use DeltaCore\Prototype\AbstractEntity;
+use DeltaCore\Prototype\MagicMethodInterface;
 use DeltaUtils\StringUtils;
 
-class VariableEntity extends AbstractEntity implements EntityInterface
+class VariableEntity extends AbstractEntity implements EntityInterface, MagicMethodInterface
 {
     protected $fields = [];
 
@@ -69,6 +70,11 @@ class VariableEntity extends AbstractEntity implements EntityInterface
 
     function __call($name, $arguments)
     {
+        try {
+            $result = parent::__call($name, $arguments);
+            return $result;
+        }catch (\BadMethodCallException $e) {}
+
         $prefix = lcfirst(substr($name, 0, 3));
         $field = lcfirst(substr($name, 3));
         if ( ($prefix !== "get" && $prefix !== "set") || !$this->isFieldExist($field)) {
@@ -77,7 +83,7 @@ class VariableEntity extends AbstractEntity implements EntityInterface
         switch($prefix) {
             case "set":
                 if (count($arguments)!==1) {
-                    throw new \BadMethodCallException("In set field method you mast set value");
+                    throw new \InvalidArgumentException("In set field method you mast set value");
                 }
                 return $this->setField($field, $arguments[0]);
                 break;
