@@ -28,10 +28,11 @@
                                     <p>{{ error }}</p>
                                 </div>
                             {% endif %}
+                            <input type="hidden" name="r" value="{{ r }}"/>
                             <input class="btn btn-lg btn-success btn-block" type="submit" value="Login">
                             <br/>
                                 <p>
-                                    <a href="/registration">Регистрация</a>
+                                    <a href="/registration?r={{ r }}">Регистрация</a>
                                 </p>
                         </fieldset>
                     </form>

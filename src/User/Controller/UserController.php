@@ -47,6 +47,7 @@ class UserController extends AbstractController
             }
         }
         $request = $this->getRequest();
+        $this->getView()->assign("r", $request->getParam('r'));
         if ($request->isPost()) {
             $email = $request->getParam('email');
             $password = $request->getParam('password');
