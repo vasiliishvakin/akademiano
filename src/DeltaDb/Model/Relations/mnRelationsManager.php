@@ -8,6 +8,8 @@ namespace DeltaDb\Model\Relations;
 
 use DeltaDb\EntityInterface;
 use DeltaDb\Repository;
+use DeltaUtils\Parts\InnerCache;
+use DeltaUtils\StringUtils;
 
 class mnRelationsManager extends Repository
 {
@@ -27,6 +29,9 @@ class mnRelationsManager extends Repository
 
     protected $firstFieldName;
     protected $secondFieldName;
+
+    protected $firstName;
+    protected $secondName;
 
     protected $metaInfo;
 
@@ -78,23 +83,56 @@ class mnRelationsManager extends Repository
         $this->secondManager = $secondManager;
     }
 
+    public function getPartManager($part)
+    {
+        switch($part) {
+            case self::FIRST_PART :
+                return $this->getFirstManager();
+            break;
+            case self::SECOND_PART :
+                return $this->getSecondManager();
+        }
+    }
+
+    public function getOtherPartManager($part)
+    {
+        $part = $this->getOtherPartName($part);
+        return $this->getPartManager($part);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFirstName()
+    {
+        if (is_null($this->firstName)) {
+            $this->firstName = $this->getFirstManager()->getTableName();
+        }
+        return $this->firstName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSecondName()
+    {
+        if (is_null($this->secondName)) {
+            $this->secondName = $this->getSecondManager()->getTableName();
+        }
+        return $this->secondName;
+    }
+
+
+
     /**
      * @return mixed
      */
     public function getFirstFieldName()
     {
         if (is_null($this->firstFieldName)) {
-            $this->firstFieldName = $this->getFirstManager()->getTableName() . "_item";
+            $this->firstFieldName = $this->getFirstName() . "_item";
         }
         return $this->firstFieldName;
-    }
-
-    /**
-     * @param mixed $firstFieldName
-     */
-    public function setFirstFieldName($firstFieldName)
-    {
-        $this->firstFieldName = $firstFieldName;
     }
 
     /**
@@ -103,24 +141,16 @@ class mnRelationsManager extends Repository
     public function getSecondFieldName()
     {
         if (is_null($this->secondFieldName)) {
-            $this->secondFieldName = $this->getSecondManager()->getTableName() . "_item";
+            $this->secondFieldName = $this->getSecondName() . "_item";
         }
         return $this->secondFieldName;
-    }
-
-    /**
-     * @param mixed $secondFieldName
-     */
-    public function setSecondFieldName($secondFieldName)
-    {
-        $this->secondFieldName = $secondFieldName;
     }
 
     public function getMetaInfo()
     {
         if (is_null($this->metaInfo)) {
-            $firstTable = $this->getFirstManager()->getTableName();
-            $secondTable = $this->getSecondManager()->getTableName();
+            $firstTable = $this->getFirstName();
+            $secondTable = $this->getSecondName();
             $table = "{$firstTable}_{$secondTable}_relations";
             $this->metaInfo = [
                 $table => [
@@ -234,14 +264,47 @@ class mnRelationsManager extends Repository
         return $field;
     }
 
+    public function getOtherPartName($part)
+    {
+        switch ($part) {
+            case self::FIRST_PART :
+                return self::SECOND_PART;
+                break;
+            case self::SECOND_PART :
+                return self::FIRST_PART;
+                break;
+        }
+    }
+
+    public function getPartByName($name)
+    {
+        if ($name === $this->getFirstName()) {
+            return self::FIRST_PART;
+        }
+        if ($name === $this->getSecondName()) {
+            return self::SECOND_PART;
+        }
+    }
+
+    /**
+     * @param array $partItems
+     * @param string $part
+     * @deprecated
+     */
     public function findPartsIds(array $partItems, $part = self::FIRST_PART)
+    {
+        throw new \BadMethodCallException();
+    }
+
+    public function findOtherPartIds(array $partItems, $part = self::FIRST_PART)
     {
         $field = $this->getFieldPartName($part);
         $criteria = [$field => $partItems];
         $data = $this->findRaw($criteria);
         $ids = [];
+        $otherField = $this->getOtherFieldPartName($part);
         foreach ($data as $row) {
-            $ids[] = $row[$field];
+            $ids[] = $row[$otherField];
         }
         return $ids;
     }
@@ -300,5 +363,16 @@ class mnRelationsManager extends Repository
         $method = "get{$fieldNum}FieldName";
         $fieldName = $this->$method();
         return $this->getTableName() . "." . $fieldName;
+    }
+
+    public function findOthers($currentId, $currentName)
+    {
+        $currentName = StringUtils::camelCaseToLowDash($currentName);
+        $currentPart = $this->getPartByName($currentName);
+        $otherPart = $this->getOtherPartName($currentPart);
+        $othersIds = $this->findOtherPartIds([$currentId], $currentPart);
+        $otherManager = $this->getPartManager($otherPart);
+        $items = $otherManager->findByIds($othersIds);
+        return $items;
     }
 }

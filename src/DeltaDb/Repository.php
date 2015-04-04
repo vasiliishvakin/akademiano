@@ -3,6 +3,7 @@
 namespace DeltaDb;
 
 
+use DeltaCore\Parts\MagicSetGetManagers;
 use DeltaCore\Prototype\MagicMethodInterface;
 use DeltaDb\Adapter\AdapterInterface;
 use DeltaUtils\ArrayUtils;
@@ -13,6 +14,7 @@ use Psr\Log\InvalidArgumentException;
 class Repository implements RepositoryInterface
 {
     use InnerCache;
+    use MagicSetGetManagers;
 
     const METHOD_SET = 'set';
     const METHOD_GET = 'get';
