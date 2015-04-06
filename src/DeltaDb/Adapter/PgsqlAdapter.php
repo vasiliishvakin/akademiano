@@ -193,6 +193,8 @@ class PgsqlAdapter extends AbstractAdapter
                 }
                 $inParams = implode(', ', $inParams);
                 $where[] = $this->escapeIdentifier($field) . " in ({$inParams})";
+            } elseif (is_null($value)) {
+                $where[] = $this->escapeIdentifier($field) . ' is null';
             } else {
                 $num++;
                 $where[] = $this->escapeIdentifier($field) . '=$' . $num;
@@ -229,6 +231,8 @@ class PgsqlAdapter extends AbstractAdapter
                 foreach ($value as $valueItem) {
                     $whereParams[] = $valueItem;
                 }
+            } elseif (is_null($value)) {
+                continue;
             } else {
                 $whereParams[] = $value;
             }

@@ -85,10 +85,10 @@ class mnRelationsManager extends Repository
 
     public function getPartManager($part)
     {
-        switch($part) {
+        switch ($part) {
             case self::FIRST_PART :
                 return $this->getFirstManager();
-            break;
+                break;
             case self::SECOND_PART :
                 return $this->getSecondManager();
         }
@@ -121,7 +121,6 @@ class mnRelationsManager extends Repository
         }
         return $this->secondName;
     }
-
 
 
     /**
@@ -276,15 +275,29 @@ class mnRelationsManager extends Repository
         }
     }
 
-    public function getPartByName($name)
+    public function filterPartName($part)
     {
-        if ($name === $this->getFirstName()) {
+        if (in_array($part, [self::FIRST_PART, self::SECOND_PART])) {
+            return $part;
+        }
+
+        if ($part === $this->getFirstName()) {
             return self::FIRST_PART;
         }
-        if ($name === $this->getSecondName()) {
+        if ($part === $this->getSecondName()) {
             return self::SECOND_PART;
         }
     }
+
+    /**
+     * @param integer|string|EntityInterface $object
+     * @return integer
+     */
+    public function filetrPartObject2Id($object)
+    {
+        return (integer) ($object instanceof EntityInterface) ? $object->getId() : $object;
+    }
+
 
     /**
      * @param array $partItems
@@ -298,6 +311,7 @@ class mnRelationsManager extends Repository
 
     public function findOtherPartIds(array $partItems, $part = self::FIRST_PART)
     {
+        $part = $this->filterPartName($part);
         $field = $this->getFieldPartName($part);
         $criteria = [$field => $partItems];
         $data = $this->findRaw($criteria);
@@ -311,16 +325,28 @@ class mnRelationsManager extends Repository
 
     public function deleteByPartId($partId, $part = self::FIRST_PART)
     {
-        $fieldName  = $this->getFieldPartName($part);
+        $partId = $this->filetrPartObject2Id($partId);
+        $part = $this->filterPartName($part);
+        $fieldName = $this->getFieldPartName($part);
         return $this->deleteBy([$fieldName => $partId]);
     }
 
+    /**
+     * @param $partId
+     * @param $relationIds
+     * @param string $part
+     */
     public function saveForPartId($partId, $relationIds, $part = self::FIRST_PART)
     {
-        $firstFieldName  = $this->getFieldPartName($part);
+        $part = $this->filterPartName($part);
+        $partId = $this->filetrPartObject2Id($partId);
+        $firstFieldName = $this->getFieldPartName($part);
         $secondFieldName = $this->getOtherFieldPartName($part);
-        $relationIds = (array) $relationIds;
+        if (!is_array($relationIds)) {
+            $relationIds = [$relationIds];
+        }
         foreach ($relationIds as $relationId) {
+            $relationId = $this->filetrPartObject2Id($relationId);
             $relation = $this->create([$firstFieldName => $partId, $secondFieldName => $relationId]);
             $this->save($relation);
         }
@@ -328,6 +354,7 @@ class mnRelationsManager extends Repository
 
     public function updateForPartId($partId, $relationIds, $part = self::FIRST_PART)
     {
+        $part = $this->filterPartName($part);
         $this->deleteByPartId($partId, $part);
         $this->saveForPartId($partId, $relationIds, $part);
     }
@@ -368,7 +395,7 @@ class mnRelationsManager extends Repository
     public function findOthers($currentId, $currentName)
     {
         $currentName = StringUtils::camelCaseToLowDash($currentName);
-        $currentPart = $this->getPartByName($currentName);
+        $currentPart = $this->filterPartName($currentName);
         $otherPart = $this->getOtherPartName($currentPart);
         $othersIds = $this->findOtherPartIds([$currentId], $currentPart);
         $otherManager = $this->getPartManager($otherPart);

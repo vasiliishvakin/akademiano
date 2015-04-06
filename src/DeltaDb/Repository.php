@@ -222,8 +222,11 @@ class Repository implements RepositoryInterface
         return $fields;
     }
 
-    public function getFieldsList($table)
+    public function getFieldsList($table = null)
     {
+        if (null === $table) {
+            $table = $this->getTableName();
+        }
         $cacheId = "fieldList|{$table}|";
         if ($fields = $this->getInnerCache($cacheId)) {
             return $fields;
