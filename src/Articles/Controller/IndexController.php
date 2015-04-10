@@ -45,6 +45,7 @@ class IndexController extends AbstractController
             case "archive" :
                 $dateStr = $this->getRequest()->getUriPartByNum(3);
                 $date = new \DateTime($dateStr);
+                $this->getView()->assign("currentDate", $date);
                 $criteria = [];
                 if (strlen($dateStr) > 7) {
                     $criteria["created"] = $date->format("Y-m-d");
