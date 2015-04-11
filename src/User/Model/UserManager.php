@@ -5,6 +5,7 @@
 
 namespace User\Model;
 
+use Attach\Model\FileManager;
 use DeltaDb\EntityInterface;
 use DeltaDb\Repository;
 use PermAuth\Model\Authenticator;
@@ -41,6 +42,9 @@ class UserManager extends Repository
     /** @var  Repository */
     protected $groupManager;
 
+    /** @var  FileManager */
+    protected $fileManager;
+
     protected $guest;
 
     /**
@@ -75,10 +79,27 @@ class UserManager extends Repository
         $this->groupManager = $groupManager;
     }
 
+    /**
+     * @param \Attach\Model\FileManager $fileManager
+     */
+    public function setFileManager($fileManager)
+    {
+        $this->fileManager = $fileManager;
+    }
+
+    /**
+     * @return \Attach\Model\FileManager
+     */
+    public function getFileManager()
+    {
+        return $this->fileManager;
+    }
+
     public function create(array $data = null, $entityClass = null)
     {
         $item = parent::create($data, $entityClass);
         $item->setGroupManager($this->getGroupManager());
+        $item->setUserManager($this);
         return $item;
     }
 

@@ -51,7 +51,7 @@ class UserController extends AbstractController
         if ($request->isPost()) {
             $email = $request->getParam('email');
             $password = $request->getParam('password');
-            $remember = $request->getParam("remember", false);
+            $remember = (bool)$request->getParam("remember", false);
             try {
                 $user = $userManager->authenticate($email, $password);
             } catch (UserNotFound $e) {

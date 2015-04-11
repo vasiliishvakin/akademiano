@@ -15,6 +15,7 @@ class User extends AbstractEntity implements EntityInterface
     protected $email;
     protected $password;
     protected $group;
+    protected $avatar;
 
     /** @var  Repository */
     protected $groupManager;
@@ -122,4 +123,17 @@ class User extends AbstractEntity implements EntityInterface
         return $this->group;
     }
 
+    public function getAvatar()
+    {
+        if (is_null($this->avatar)) {
+            $fm = $this->getUserManager()->getFileManager();
+            $images = $fm->getFilesForObject($this);
+            if (count($images) === 0) {
+                $this->avatar = false;
+            } else {
+                $this->avatar = end($images);
+            }
+        }
+        return $this->avatar;
+    }
 }
