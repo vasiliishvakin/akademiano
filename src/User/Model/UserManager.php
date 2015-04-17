@@ -24,7 +24,12 @@ class UserManager extends Repository
                 'id',
                 'email',
                 'password',
-                'group'
+                'group',
+                'first_name',
+                'last_name',
+                'confirmed',
+                "created",
+                "changed",
             ]
         ]
     ];
@@ -193,6 +198,17 @@ class UserManager extends Repository
             $this->guest->setGroup(new GuestGroup());
         }
         return $this->guest;
+    }
+
+    public function save(EntityInterface $entity)
+    {
+        /** @var User $entity */
+        $created = $entity->getCreated();
+        if (is_null($created)) {
+            $entity->setCreated(new \DateTime());
+        }
+        $entity->setChanged(new \DateTime());
+        return parent::save($entity);
     }
 
 } 

@@ -8,7 +8,13 @@ namespace User\Model;
 use DeltaCore\Prototype\AbstractEntity;
 use DeltaDb\EntityInterface;
 use DeltaDb\Repository;
+use User\Exception\WrongPassword;
 
+/**
+ * Class User
+ * @package User\Model
+ * @method UserManager getUserManager()
+ */
 class User extends AbstractEntity implements EntityInterface
 {
     protected $id;
@@ -16,6 +22,11 @@ class User extends AbstractEntity implements EntityInterface
     protected $password;
     protected $group;
     protected $avatar;
+    protected $firstName;
+    protected $lastName;
+    protected $confirmed = false;
+    protected $created;
+    protected $changed;
 
     /** @var  Repository */
     protected $groupManager;
@@ -93,6 +104,9 @@ class User extends AbstractEntity implements EntityInterface
 
     public function setNewPassword($password)
     {
+        if (!is_string($password) || strlen($password) < 6) {
+            throw new WrongPassword();
+        }
         $this->setPassword(self::hashPassword($password));
     }
 
@@ -135,5 +149,90 @@ class User extends AbstractEntity implements EntityInterface
             }
         }
         return $this->avatar;
+    }
+
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName($firstName)
+    {
+        $this->firstName = $firstName;
+        return $this;
+    }
+
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName($lastName)
+    {
+        $this->lastName = $lastName;
+        return $this;
+    }
+
+    public function getConfirmed()
+    {
+        return $this->confirmed;
+    }
+
+    public function setConfirmed($confirmed)
+    {
+        if (is_string($confirmed)) {
+            if (!!$confirmed && $confirmed !== 'f' && $confirmed !== 'false') {
+                $this->confirmed = true;
+            }
+        } else {
+            $this->confirmed = (bool)$confirmed;
+        }
+        return $this;
+    }
+
+    /**
+     * @param mixed $created
+     */
+    public function setCreated($created)
+    {
+        if ($created && !$created instanceof \DateTime) {
+            if (is_array($created)) {
+                $created = (new \DateTime($created['date']))->setTimezone(new \DateTimeZone($created['timezone']));
+            } else {
+                $created = new \DateTime($created);
+            }
+        }
+        $this->created = $created;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getChanged()
+    {
+        return $this->changed;
+    }
+
+    /**
+     * @param mixed $changed
+     */
+    public function setChanged($changed)
+    {
+        if ($changed && !$changed instanceof \DateTime) {
+            if (is_array($changed)) {
+                $changed = (new \DateTime($changed['date']))->setTimezone(new \DateTimeZone($changed['timezone']));
+            } else {
+                $changed = new \DateTime($changed);
+            }
+        }
+        $this->changed = $changed;
     }
 }
