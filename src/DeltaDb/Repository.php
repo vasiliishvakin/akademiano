@@ -569,6 +569,9 @@ class Repository implements RepositoryInterface
             if ($value instanceof \DateTime) {
                 $value = $value->format("Y-m-d H:i:s");
             }
+            if (is_bool($value)) {
+                $value = $value ? 't' : 'f';
+            }
             $data[$field] = $value;
         }
         return ["fields" => $data];
