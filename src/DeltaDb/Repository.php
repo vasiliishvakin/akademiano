@@ -627,4 +627,19 @@ class Repository implements RepositoryInterface
         }
         return $criteria;
     }
+
+    public function begin()
+    {
+        return $this->getAdapter()->begin();
+    }
+
+    public function commit()
+    {
+        return $this->getAdapter()->commit();
+    }
+
+    public function rollback()
+    {
+        return $this->getAdapter()->rollBack();
+    }
 }
