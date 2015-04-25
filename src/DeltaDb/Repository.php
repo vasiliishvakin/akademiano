@@ -610,4 +610,36 @@ class Repository implements RepositoryInterface
         }
         return $data;
     }
+
+    public function filterData($data)
+    {
+        $table = $this->getTableName();
+        $fields = $this->getFieldsList($table);
+        $externalFields = $this->getExternalFieldsList();
+        if (!empty($externalFields)) {
+            $fields = array_values(array_unique(array_merge($fields, $externalFields)));
+        }
+        $fields = array_flip($fields);
+        $data = array_intersect_key($data, $fields);
+        $criteria = [];
+        foreach($data as $field=>$value) {
+            $criteria[$field] = $value;
+        }
+        return $criteria;
+    }
+
+    public function begin()
+    {
+        return $this->getAdapter()->begin();
+    }
+
+    public function commit()
+    {
+        return $this->getAdapter()->commit();
+    }
+
+    public function rollback()
+    {
+        return $this->getAdapter()->rollBack();
+    }
 }

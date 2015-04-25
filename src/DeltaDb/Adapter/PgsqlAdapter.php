@@ -96,7 +96,7 @@ class PgsqlAdapter extends AbstractAdapter
 
     public function commit()
     {
-        if ($this->isTransaction()) {
+        if (!$this->isTransaction()) {
             throw new \LogicException('Transaction not started');
         }
         pg_query('COMMIT');
@@ -105,7 +105,7 @@ class PgsqlAdapter extends AbstractAdapter
 
     public function rollBack()
     {
-        if ($this->isTransaction()) {
+        if (!$this->isTransaction()) {
             throw new \LogicException('Transaction not started');
         }
         pg_query('ROLLBACK');
@@ -141,7 +141,7 @@ class PgsqlAdapter extends AbstractAdapter
             $idName = "returning {$idName}";
         }
 
-        $query = "insert into {$table} ({$fieldsList}) values({$fieldsQuery}) {$idName}";
+        $query = "insert into {$table} ({$fieldsList}) values ({$fieldsQuery}) {$idName}";
         $result = $this->queryParams($query, $fields);
         if ($result === false) {
             return false;
@@ -180,6 +180,9 @@ class PgsqlAdapter extends AbstractAdapter
                         /** @var ILike $value*/
                         $num++;
                         $where[] = $this->escapeIdentifier($field) . " ILIKE \${$num}";
+                        break;
+                    case "PgPoint":
+                        $where[] = $this->escapeIdentifier($field) . "={$value}";
                         break;
                     default :
                         throw new \InvalidArgumentException("where class $class not implement");
@@ -222,6 +225,8 @@ class PgsqlAdapter extends AbstractAdapter
                     case "ILike":
                         /** @var ILike $value */
                         $whereParams[] = $value->getQuery();
+                        break;
+                    case "PgPoint":
                         break;
                     default :
                         throw new \InvalidArgumentException("where class $class not implement");
