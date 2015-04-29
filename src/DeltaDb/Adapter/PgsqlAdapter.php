@@ -166,6 +166,10 @@ class PgsqlAdapter extends AbstractAdapter
     {
         $where = [];
         foreach ($criteria as $field => $value) {
+            $isNot = (0 === strpos($field, "!")) ? true : false;
+            if ($isNot) {
+                $field = substr($field, 1);
+            }
             if (is_object($value)) {
                 $class = StringUtils::cutClassName(get_class($value));
                 switch($class) {
@@ -195,12 +199,15 @@ class PgsqlAdapter extends AbstractAdapter
                     $inParams[] = "\${$num}";
                 }
                 $inParams = implode(', ', $inParams);
-                $where[] = $this->escapeIdentifier($field) . " in ({$inParams})";
+                $isNot =  $isNot ? "not" : "";
+                $where[] = $this->escapeIdentifier($field) . " {$isNot} in  ({$inParams})";
             } elseif (is_null($value)) {
-                $where[] = $this->escapeIdentifier($field) . ' is null';
+                $isNot =  $isNot ? "not" : "";
+                $where[] = $this->escapeIdentifier($field) . " is {$isNot} null";
             } else {
                 $num++;
-                $where[] = $this->escapeIdentifier($field) . '=$' . $num;
+                $isNot =  $isNot ? "!" : "";
+                $where[] = $this->escapeIdentifier($field) . "{$isNot}=$" . $num;
             }
         }
         $where = implode(' and ', $where);
