@@ -53,7 +53,7 @@ class AclManager
     public function isAllow($resource, User $user = null, $owner = null)
     {
         if (is_null($user)) {
-            $user = $this->getUserManager()->getGuest();
+            $user = $this->getUserManager()->getCurrentUser();
         }
         $group = $user->getGroup();
         return $this->getAclAdapter()->isAllow($group ? $group->getName() : 'user', $resource, $user->getId(), $owner);
