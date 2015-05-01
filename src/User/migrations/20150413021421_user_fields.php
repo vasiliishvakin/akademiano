@@ -25,8 +25,8 @@ class UserFields extends AbstractMigration
 
         $users = $this->table('users');
 
-        $users->addColumn('first_name', 'string', ['limit' => 150, "default" => ""])
-            ->addColumn('last_name', 'string', ['limit' => 150, "default" => ""])
+        $users->addColumn('first_name', 'string', ['limit' => 150, 'null' => true])
+            ->addColumn('last_name', 'string', ['limit' => 150, 'null' => true])
             ->addColumn('confirmed', 'boolean', ['default' => false, 'null' => false])
             ->addColumn('changed', 'timestamp', ['timezone' => false, "null" => true])
             ->save();

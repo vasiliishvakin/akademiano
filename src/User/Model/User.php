@@ -5,6 +5,7 @@
 
 namespace User\Model;
 
+use Attach\Model\File;
 use DeltaCore\Prototype\AbstractEntity;
 use DeltaDb\EntityInterface;
 use DeltaDb\Repository;
@@ -137,6 +138,9 @@ class User extends AbstractEntity implements EntityInterface
         return $this->group;
     }
 
+    /**
+     * @return File
+     */
     public function getAvatar()
     {
         if (is_null($this->avatar)) {
