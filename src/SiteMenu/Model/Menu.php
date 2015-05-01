@@ -6,10 +6,20 @@
 namespace SiteMenu\Model;
 
 
+use DeltaCore\Parts\MagicSetGetManagers;
+use DeltaCore\Prototype\MagicMethodInterface;
 use DeltaRouter\Router;
 
-class Menu implements \Countable
+/**
+ * Class Menu
+ * @package SiteMenu\Model
+ * @method setAclManager(\Acl\Model\AclManager $manager)
+ * @method \Acl\Model\AclManager getAclManager()
+ */
+class Menu implements \Countable, MagicMethodInterface
 {
+    use MagicSetGetManagers;
+
     protected $name;
     /** @var Item[] */
     protected $items = [];
@@ -91,6 +101,7 @@ class Menu implements \Countable
 
     public function addItem(Item $item)
     {
+        $item->setAclManager($this->getAclManager());
         $this->items[$item->getId()] = $item;
     }
 

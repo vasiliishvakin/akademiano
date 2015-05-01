@@ -7,12 +7,21 @@ namespace SiteMenu\Model;
 
 
 use DeltaCore\ModuleManager;
+use DeltaCore\Parts\MagicSetGetManagers;
+use DeltaCore\Prototype\MagicMethodInterface;
 use DeltaRouter\Router;
-use DeltaUtils\ArrayUtils;
 use DeltaUtils\FileSystem;
 
-class MenuManager implements \ArrayAccess
+/**
+ * Class MenuManager
+ * @package SiteMenu\Model
+ * @method setAclManager(\Acl\Model\AclManager $manager)
+ * @method \Acl\Model\AclManager getAclManager()
+ */
+class MenuManager implements \ArrayAccess, MagicMethodInterface
 {
+    use MagicSetGetManagers;
+
     /** @var  ModuleManager */
     protected $moduleManager;
 
@@ -112,6 +121,7 @@ class MenuManager implements \ArrayAccess
     {
         foreach($menuConfig as $name=>$itemsData) {
             $menu = new Menu($name, $this->getRouter());
+            $menu->setAclManager($this->getAclManager());
             foreach($itemsData as $itemData) {
                 $item = new Item($itemData);
                 $menu->addItem($item);

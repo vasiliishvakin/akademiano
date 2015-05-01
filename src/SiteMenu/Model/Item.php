@@ -4,10 +4,19 @@
  */
 
 namespace SiteMenu\Model;
+use DeltaCore\Parts\MagicSetGetManagers;
+use DeltaCore\Prototype\MagicMethodInterface;
 
-
-class Item
+/**
+ * Class Item
+ * @package SiteMenu\Model
+ * @method setAclManager(\Acl\Model\AclManager $manager)
+ * @method \Acl\Model\AclManager getAclManager()
+ */
+class Item implements MagicMethodInterface
 {
+    use MagicSetGetManagers;
+
     protected $id;
     protected $text;
     protected $title;
@@ -115,6 +124,14 @@ class Item
     public function setActive($active)
     {
         $this->active = $active;
+    }
+
+    public function isAllow($user = null)
+    {
+        if ($aclManager = $this->getAclManager()) {
+            return $aclManager->isAllow($this->getLink(), $user);
+        }
+        return true;
     }
 
 }
