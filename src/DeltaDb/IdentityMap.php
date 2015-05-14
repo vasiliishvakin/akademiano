@@ -6,18 +6,19 @@
 namespace DeltaDb;
 
 
-class IdentityMap 
+class IdentityMap
 {
     protected $items = [];
 
     public function has($id)
     {
-        return isset($this->items[$id]);
+        return isset($this->items[(string)$id]);
     }
 
 
     public function get($id)
     {
+        $id = (string)$id;
         if (!isset($this->items[$id])) {
             return null;
         }
@@ -26,12 +27,12 @@ class IdentityMap
 
     public function set($id, $item)
     {
-        $this->items[$id] = $item;
+        $this->items[(string)$id] = $item;
     }
 
     public function rm($id)
     {
-        unset($this->items[$id]);
+        unset($this->items[(string)$id]);
     }
 
     public function getAll()
@@ -55,6 +56,7 @@ class IdentityMap
 
     public function getDiff(array $ids)
     {
+        $ids = array_map(function($value) {return (string) $value;}, $ids);
         $currIds = array_keys($this->items);
         if (empty($currIds)) {
             return $ids;
@@ -64,8 +66,9 @@ class IdentityMap
 
     public function getIds(array $ids)
     {
+        $ids = array_map(function($value) {return (string) $value;}, $ids);
         $items = [];
-        foreach($ids as $id) {
+        foreach ($ids as $id) {
             $items[] = $this->get($id);
         }
         return $items;

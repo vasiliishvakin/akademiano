@@ -10,6 +10,7 @@ use DeltaUtils\ArrayUtils;
 use DeltaUtils\Parts\InnerCache;
 use DeltaUtils\StringUtils;
 use Psr\Log\InvalidArgumentException;
+use DeltaDb\EntityInterface;
 
 class Repository implements RepositoryInterface
 {
@@ -437,7 +438,30 @@ class Repository implements RepositoryInterface
                 return false;
             }
             $this->setField($entity, $idField, $result);
+            $entityClass = $this->getEntityClass();
+            $this->getIdMap($entityClass)->set($result, $entity);
             return true;
+        }
+    }
+
+    public function loadOrSave($data, $newEntity = null)
+    {
+        $entity = $this->findOne($data);
+        if ($entity) {
+            return $entity;
+        }
+
+        if (empty($newEntity)) {
+            $newEntity = $this->create($data);
+        } elseif (is_callable($newEntity)) {
+            $newEntity = call_user_func($newEntity);
+        }
+        if (!$newEntity instanceof EntityInterface) {
+            throw new \LogicException("please implements EntityInterface entity (second param)");
+        }
+        $result = $this->save($newEntity);
+        if ($result) {
+            return $newEntity;
         }
     }
 
