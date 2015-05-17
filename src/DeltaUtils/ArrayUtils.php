@@ -129,8 +129,31 @@ class ArrayUtils {
         });
     }
 
+    /**
+     * @param array $array
+     * @return bool
+     * @deprecated use getArrayType with 3 value: assoc (1), num (-1), combined (0)
+     */
     public static function isAssoc(array $array) {
         return (bool)count(array_filter(array_keys($array), 'is_string'));
+    }
+
+    public static function getArrayType(array $array)
+    {
+        $keys = array_keys($array);
+        $associative = false;
+        $numeric = false;
+        foreach($keys as $key) {
+            if (is_string($key)) {
+                $associative = true;
+            } else {
+                $numeric = true;
+            }
+            if ($associative && $numeric) {
+                return 0;
+            }
+        }
+        return $associative ? 1 : -1;
     }
 
     public static function implodePairs($glue, $array, $operator = "=")
