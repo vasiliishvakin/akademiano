@@ -234,10 +234,20 @@ class Repository implements RepositoryInterface
         }
         $meta = $this->getMetaInfo();
         $fieldsData = $meta[$table]['fields'];
-        if (ArrayUtils::isAssoc($fieldsData)) {
-            $fields = array_keys($fieldsData);
-        } else {
-            $fields = array_values($fieldsData);
+        $fieldsDataType = ArrayUtils::getArrayType($fieldsData);
+        switch($fieldsDataType) {
+            case 1 :
+                $fields = array_keys($fieldsData);
+                break;
+            case -1:
+                $fields = array_values($fieldsData);
+                break;
+            case 0:
+                $fields = [];
+                foreach($fieldsData as $key=>$value) {
+                    $fields[] =  (is_string($key)) ? $key : $value;
+                }
+                break;
         }
         $this->setInnerCache($cacheId, $fields);
         return $fields;
@@ -311,8 +321,8 @@ class Repository implements RepositoryInterface
         $table = $this->getTableName($entity);
         $setMethod = $this->getFieldMethod($table, $field, self::METHOD_SET);
         $inputFilter = $this->getFieldFilter($table, $field, self::FILTER_IN);
-        if ($this->checkMethodCallable($entity, $inputFilter)) {
-            $value = $entity->{$inputFilter}($value);
+        if ($this->checkMethodCallable($this, $inputFilter)) {
+            $value = $this->{$inputFilter}($value);
         }
 
         if ($this->checkMethodCallable($entity, $setMethod)) {
@@ -330,8 +340,8 @@ class Repository implements RepositoryInterface
             return null;
         }
         $value =  $entity->{$getMethod}();
-        if ($this->checkMethodCallable($entity, $outputFilter)) {
-            $value = $entity->{$outputFilter}($value);
+        if ($this->checkMethodCallable($this, $outputFilter)) {
+            $value = $this->{$outputFilter}($value);
         }
         return $value;
     }

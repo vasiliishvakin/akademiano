@@ -78,7 +78,7 @@ class Json implements \JsonSerializable, \ArrayAccess
      */
     public function offsetExists($offset)
     {
-        return (array_key_exists($offset, $this->getData()));
+        return is_array($this->getData()) && array_key_exists($offset, $this->getData());
     }
 
     /**
