@@ -8,6 +8,7 @@ namespace User\Controller\Parts;
 
 use DeltaCore\Application;
 use User\Model\UserManager;
+use User\Model\UserProvidersManager;
 
 trait UserManagerGetter
 {
@@ -22,6 +23,14 @@ trait UserManagerGetter
     public function getUserManager()
     {
         return $this->getApplication()["userManager"];
+    }
+
+    /**
+     * @return UserProvidersManager
+     */
+    public function getUserProvidersManager()
+    {
+        return $this->getApplication()['userProvidersManager'];
     }
 
 } 

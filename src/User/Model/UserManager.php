@@ -100,6 +100,11 @@ class UserManager extends Repository
         return $this->fileManager;
     }
 
+    /**
+     * @param array $data
+     * @param null $entityClass
+     * @return User
+     */
     public function create(array $data = null, $entityClass = null)
     {
         $item = parent::create($data, $entityClass);
@@ -136,6 +141,10 @@ class UserManager extends Repository
         return $this->findById($data['id']);
     }
 
+    /**
+     * @param $email
+     * @return User|null
+     */
     public function findByEmail($email)
     {
 

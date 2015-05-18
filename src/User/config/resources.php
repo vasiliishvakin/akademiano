@@ -14,5 +14,11 @@ return [
     "groupManager" => function($c) {
         $gm = $c["directoryFactory"]->getManager("groups");
         return $gm;
+    },
+    "userProvidersManager" => function($c) {
+        /** @var \DeltaCore\Application $c */
+        $manager = new \User\Model\UserProvidersManager();
+        $manager->setUserManager($c->lazyGet("userManager"));
+        return $manager;
     }
 ];
