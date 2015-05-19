@@ -56,6 +56,11 @@ class PgPoint implements \JsonSerializable
         return "ST_GeographyFromText('POINT({$this->getLon()} {$this->getLat()})')";
     }
 
+    public function format($format = "%1s %2s")
+    {
+        return sprintf($format, $this->getLon(), $this->getLat());
+    }
+
     function jsonSerialize()
     {
         return [
