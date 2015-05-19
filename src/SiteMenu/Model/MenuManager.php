@@ -10,6 +10,7 @@ use DeltaCore\ModuleManager;
 use DeltaCore\Parts\MagicSetGetManagers;
 use DeltaCore\Prototype\MagicMethodInterface;
 use DeltaRouter\Router;
+use DeltaUtils\ArrayUtils;
 use DeltaUtils\FileSystem;
 
 /**
@@ -98,22 +99,39 @@ class MenuManager implements \ArrayAccess, MagicMethodInterface
         return $menu;
     }
 
+    protected function readMenuRaw($path, $default = [])
+    {
+        $menuData = FileSystem::getPhpConfig($path, null);
+        if (empty($menuData)) {
+            return $default;
+        }
+        $assocMenu = [];
+        foreach($menuData as $key=>$menu) {
+            foreach ($menu as $item) {
+                if (isset($item["link"])) {
+                    $assocMenu[$key][$item["link"]] = $item;
+                }
+            }
+        }
+        return $assocMenu;
+    }
+
     public function readMenu()
     {
         $configDir = $this->getConfigDir();
-        $globalMenu = FileSystem::getPhpConfig($configDir . "global.menu.php");
-        $localMenu = FileSystem::getPhpConfig($configDir . "local.menu.php");
+        $globalMenu = $this->readMenuRaw($configDir . "global.menu.php", []);
+        $localMenu = $this->readMenuRaw($configDir . "local.menu.php", []);
         $moduleManager = $this->getModuleManager();
         $modules = $moduleManager->getModulesList();
         $menuConfig = [];
         foreach($modules as $moduleName) {
             $modulePath = $moduleManager->getModulePath($moduleName);
-            $moduleConfig = FileSystem::getPhpConfig($modulePath . "/config/menu.php", null);
+            $moduleConfig = $this->readMenuRaw($modulePath . "/config/menu.php", null);
             if ($moduleConfig) {
                 $menuConfig = array_merge_recursive($menuConfig, $moduleConfig);
             }
         }
-        $menuConfig = array_merge_recursive($menuConfig, $globalMenu, $localMenu);
+        $menuConfig = ArrayUtils::mergeRecursive($menuConfig, $globalMenu, $localMenu);
         return $menuConfig;
     }
 
@@ -122,7 +140,12 @@ class MenuManager implements \ArrayAccess, MagicMethodInterface
         foreach($menuConfig as $name=>$itemsData) {
             $menu = new Menu($name, $this->getRouter());
             $menu->setAclManager($this->getAclManager());
-            foreach($itemsData as $itemData) {
+            $i=0;
+            foreach($itemsData as $key=>$itemData) {
+                $i++;
+                if (!isset($itemData["order"])) {
+                    $itemData["order"] = $i;
+                }
                 $item = new Item($itemData);
                 $menu->addItem($item);
             }
