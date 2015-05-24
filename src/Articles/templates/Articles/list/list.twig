@@ -1,0 +1,42 @@
+{% extends "layout.twig" %}
+
+{% block content %}
+<div class="container full-height">
+    <div class="row">
+        <div class="col-md-12">
+            <button type="button" class="btn btn-primary btn-lg active" style="width: 300px; margin: 30px">Список
+                статей
+            </button>
+        </div>
+    </div>
+    <p>
+        На нашем сайте представлены различные интересные статьи.
+    </p>
+    <div class="row">
+        {% for item in items %}
+        <div class="col-md-5  {{ cycle(['', 'col-md-offset-1'], loop.index0) }} place-brick">
+            <div class=" panel panel-primary">
+                <div class="panel-body">
+                    <span class="label label-info">{{ item.type.name }}</span> <a href="/articles/id{{ "%09s"|format(item.id) }}">{{ item.title }}</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% if countPages>1 %}
+        <div>
+            <ul class="pagination">
+                {% if showFirstPage %}
+                    <li><a href="/articles-list">&laquo;</a></li>
+                {% endif %}
+                {% for page in pages %}
+                    <li class="{% if page.active %}active{% endif %}"><a href="/articles-list?p={{ page.id }}">{{ page.id }}</a></li>
+                {% endfor %}
+                {% if showLastPage %}
+                    <li><a href="/articles-list?p={{ countPages }}">&raquo;</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

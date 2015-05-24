@@ -17,11 +17,11 @@ class IndexController extends AbstractController
 
     public function listAction()
     {
-        $nm = $this->getArticlesManager();
+        $manager = $this->getArticlesManager();
         $itemsPerPage = $this->getConfig(["Articles", "itemsPerPage"], 4);
         $section = $this->getRequest()->getUriPartByNum(2);
         $criteria = [];
-        $categories = $nm->getCategories();
+        $categories = $manager->getCategories();
         $defaultMetaStart = "Статьи";
         switch ($section) {
             case "category" :
@@ -29,7 +29,7 @@ class IndexController extends AbstractController
                 if (empty($categoryId)) {
                     $this->getResponse()->redirect("/articles");
                 }
-                $cm = $nm->getCategoryManager();
+                $cm = $manager->getCategoryManager();
                 $category = $cm->findById($categoryId);
                 $this->getView()->assign("currentCategory", $category);
                 $criteria = ["category" => $categoryId];
@@ -56,9 +56,9 @@ class IndexController extends AbstractController
                 break;
         }
         $orderBy = "id";
-        $countArticles = $nm->count($criteria);
+        $countArticles = $manager->count($criteria);
         $pageInfo = $this->getPageInfo($countArticles, $itemsPerPage);
-        $items = $nm->find($criteria, null, $pageInfo["perPage"], $pageInfo["offsetForPage"], $orderBy);
+        $items = $manager->find($criteria, null, $pageInfo["perPage"], $pageInfo["offsetForPage"], $orderBy);
         $this->getView()->assign("items", $items);
         $this->getView()->assignArray($pageInfo);
         $this->getView()->assign("countItems", $countArticles);
@@ -70,6 +70,9 @@ class IndexController extends AbstractController
         $this->getView()->assign("pageTitle", $titleStart . $titleEnd );
         $this->getView()->assign("pageDescription", $descriptionStart . $descriptionEnd );
         $this->getView()->assign("categories", $categories);
+
+        $changed = $manager->getLastChangedDate($criteria);
+        $this->getResponse()->setModified($changed, true);
     }
 
     public function viewAction()
@@ -90,6 +93,7 @@ class IndexController extends AbstractController
         $this->getView()->assign("pageDescription", "{$item->getDescription()}" );
         $this->getView()->assign("pageImage", $item->getTitleImage() ? $item->getTitleImage()->getUri("medium") : false);
         $this->getView()->assign("categories", $categories = $manager->getCategories());
+        $this->getResponse()->setModified($item->getChanged(), true);
     }
 
 } 
