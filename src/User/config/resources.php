@@ -20,5 +20,11 @@ return [
         $manager = new \User\Model\UserProvidersManager();
         $manager->setUserManager($c->lazyGet("userManager"));
         return $manager;
-    }
+    },
+    "userPlacesManager" => function($c) {
+        /** @var \DeltaCore\Application $c */
+        $manager = new \User\Model\UserPlacesManager();
+        $manager->setUserManager($c->lazyGet("userManager"));
+        return $manager;
+    },
 ];

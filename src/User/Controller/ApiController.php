@@ -7,7 +7,11 @@ namespace User\Controller;
 
 
 use DeltaCore\AbstractController;
+use DeltaCore\Exception\AccessDeniedException;
+use DeltaRouter\Exception\NotFoundException;
 use User\Controller\Parts\UserManagerGetter;
+use User\Model\UserPlace;
+use User\Model\UserPlacesManager;
 
 class ApiController extends AbstractController {
 
@@ -17,12 +21,17 @@ class ApiController extends AbstractController {
     public function IndexAction()
     {
         $this->autoRenderOff();
-        $result = false;
         try {
             $request = $this->getRequest();
-            if ($request->isPost()) {
-                $result = $this->userData();
+            $action = $request->getUriPartByNum(3);
+            if (!$action) {
+                $action = 'Default';
             }
+            $method = $action . ucfirst($request->getMethod()) . 'Action';
+            if (!method_exists($this, $method)) {
+                throw new \Exception('Unsupported action');
+            }
+            $result = $this->$method();
         } catch (\Exception $e) {
             $this->getResponse()->setCode(400);
             $this->getResponse()->sendHeaders();
@@ -32,7 +41,7 @@ class ApiController extends AbstractController {
         echo json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     }
 
-    public function userData()
+    public function defaultPostAction()
     {
         $user = $this->getUserManager()->getCurrentUser();
         if (!$user->getId()) {
@@ -58,5 +67,71 @@ class ApiController extends AbstractController {
         }
         return $result;
     }
-    
+
+    public function getPlacesGetAction()
+    {
+        $user = $this->getUserManager()->getCurrentUser();
+        if (!$user->getId()) {
+            throw new AccessDeniedException('Not Allowed');
+        }
+        /** @var UserPlacesManager $userPlacesManager */
+        $userPlacesManager = $this->getApplication()['userPlacesManager'];
+        /** @var UserPlace[] $places */
+        $places = $userPlacesManager->find(['user' => $user->getId()]);
+        $result = [];
+        foreach ($places as $place) {
+            $arr = [
+                'id' => $place->getId(),
+            ];
+            $arr += $place->getData()->getData();
+            $result[] = $arr;
+        }
+        return $result;
+    }
+
+    public function addPlacePostAction()
+    {
+        $user = $this->getUserManager()->getCurrentUser();
+        if (!$user->getId()) {
+            throw new AccessDeniedException('Not Allowed');
+        }
+        $data = json_decode(file_get_contents('php://input'), true);
+        /** @var UserPlacesManager $userPlacesManager */
+        $userPlacesManager = $this->getApplication()['userPlacesManager'];
+        /** @var UserPlace $places */
+        $place = $userPlacesManager->create();
+        $place->setUser($user);
+        $place->setData($data);
+        $userPlacesManager->save($place);
+        $result = [
+            'id' => $place->getId(),
+        ];
+        $result += $place->getData()->getData();
+        return $result;
+    }
+
+    public function editPlacePostAction()
+    {
+        $user = $this->getUserManager()->getCurrentUser();
+        if (!$user->getId()) {
+            throw new AccessDeniedException('Not Allowed');
+        }
+        $data = json_decode(file_get_contents('php://input'), true);
+        /** @var UserPlacesManager $userPlacesManager */
+        $userPlacesManager = $this->getApplication()['userPlacesManager'];
+        /** @var UserPlace $places */
+        $place = $userPlacesManager->findOne(['id' => $data['id'], 'user' => $user->getId()]);
+        if (!$place) {
+            throw new NotFoundException('Place is not found');
+        }
+        $place->setUser($user);
+        $place->setData($data);
+        $userPlacesManager->save($place);
+        $result = [
+            'id' => $place->getId(),
+        ];
+        $result += $place->getData()->getData();
+        return $result;
+    }
+
 }
