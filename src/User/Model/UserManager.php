@@ -27,6 +27,7 @@ class UserManager extends Repository
                 'group',
                 'first_name',
                 'last_name',
+                'user_name',
                 'confirmed',
                 "created",
                 "changed",

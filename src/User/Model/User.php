@@ -25,6 +25,7 @@ class User extends AbstractEntity implements EntityInterface
     protected $avatar;
     protected $firstName;
     protected $lastName;
+    protected $userName;
     protected $confirmed = false;
     protected $created;
     protected $changed;
@@ -177,6 +178,17 @@ class User extends AbstractEntity implements EntityInterface
         return $this;
     }
 
+    public function getUserName()
+    {
+        return $this->userName;
+    }
+
+    public function setUserName($userName)
+    {
+        $this->userName = $userName;
+        return $this;
+    }
+
     public function getConfirmed()
     {
         return $this->confirmed;
@@ -238,5 +250,10 @@ class User extends AbstractEntity implements EntityInterface
             }
         }
         $this->changed = $changed;
+    }
+
+    public function getUrl()
+    {
+        return '/user/' . ($this->getUserName() ? $this->getUserName() : $this->getId());
     }
 }
