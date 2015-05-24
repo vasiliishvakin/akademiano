@@ -9,36 +9,33 @@ use DeltaUtils\Time;
 
 class Response
 {
-    protected $config = [];
     protected $body;
     protected $code = 200;
     protected $contentType = 'text/html';
-    protected $charset;
-    protected $language;
+    protected $charset = "utf-8";
+    protected $language = "en";
     protected $modified;
     protected $timeToCache;
     protected $etag;
 
     /**
      * @param array $config
+     * @deprecated
      */
     public function setConfig($config)
     {
-        $this->config = $config;
+        $this->setDefaults($config);
     }
 
-    /**
-     * @return array
-     */
-    public function getConfig($section = null, $default = null)
+    public function setDefaults(array $params)
     {
-        if (is_null($section)) {
-            return $this->config;
+        foreach ($params as $name=>$value) {
+            $method = "set" . ucfirst($name);
+            if (method_exists($this, $method)) {
+                $this->$method($value);
+            }
         }
-        if (isset($this->config[$section])) {
-            return $this->config[$section];
-        }
-        return $default;
+
     }
 
     /**
@@ -86,7 +83,7 @@ class Response
      */
     public function getCharset()
     {
-        return !is_null($this->charset) ? $this->charset : $this->getConfig('charset', "utf-8");
+        return $this->charset;
     }
 
     /**
@@ -106,11 +103,16 @@ class Response
     }
 
     /**
-     * @param mixed $modified
+     * @param $modified
+     * @param bool $onlyBigger
      */
-    public function setModified($modified)
+    public function setModified($modified, $onlyBigger = false)
     {
-        $this->modified = $modified;
+        if($modified instanceof \DateTime) {
+            $modified = $modified->getTimestamp();
+        }
+        $modified = (int) $modified;
+        $this->modified = (!$onlyBigger) ? $modified : ($modified > $this->modified) ? $modified : $this->modified;
     }
 
     /**
@@ -137,7 +139,7 @@ class Response
      */
     public function getLanguage()
     {
-        return !is_null($this->language) ? $this->language : $this->getConfig('language', "en");
+        return $this->language;
     }
 
     /**
@@ -185,7 +187,7 @@ class Response
     public function getEtag()
     {
         if (is_null($this->etag)) {
-            $this->etag = hash('md5', $this->body);
+            $this->etag = 'W/"' . hash('md5', $this->body) . '"';
         }
         return $this->etag;
     }
@@ -208,6 +210,7 @@ class Response
         header("HTTP/1.1 {$this->getHttpCode()}");
         header("Content-Type:{$this->getContentType()}; charset={$this->getCharset()}");
         header("Content-Language: {$this->getLanguage()}");
+        header("X-Response-Date: ". Header::toGmtDate());
 
         $modified = $this->getModified();
         Header::modified($modified);

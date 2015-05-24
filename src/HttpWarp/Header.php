@@ -26,7 +26,6 @@ class Header
     public static  function noCache()
     {
         header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
-        //header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT"); // always modified
         header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
         header("Pragma: no-cache"); // HTTP/1.0
     }
@@ -34,14 +33,17 @@ class Header
     public static function cache($time = 10800)
     {
         $time = Time::toSeconds($time);
-        $ts = gmdate("D, d M Y H:i:s", time() + $time) . " GMT";
-        header("Expires: $ts");
+        header("Expires: " . self::toGmtDate(time() + $time));
         header("Pragma: cache");
         header("Cache-Control: max-age=$time");
+        header("X-Accel-Expires : " . $time);
     }
 
-    public static function toGmtDate($time)
+    public static function toGmtDate($time = null)
     {
+        if(null === $time) {
+            $time = time();
+        }
         return gmdate("D, d M Y H:i:s", $time) . " GMT";
     }
 
@@ -51,4 +53,5 @@ class Header
         $ts = self::toGmtDate($time);
         header("Last-Modified: " . $ts);
     }
+
 }

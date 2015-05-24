@@ -29,20 +29,22 @@ class Request
         if (is_null($this->params)) {
             switch ($this->getMethod()) {
                 case 'GET':
+                case 'HEAD' :
                     $this->params = $_GET;
                     break;
                 case 'POST':
                     $this->params = $_POST;
                     break;
                 case 'PUT':
+                case 'DELETE':
                     parse_str(file_get_contents('php://input'), $this->params);
                     break;
                 default:
                     throw new \Exception('Method ' . $this->getMethod() . 'not supported');
             }
             if ($emptyStringNull) {
-                foreach($this->params as $key=>$value) {
-                    if ($value==="") {
+                foreach ($this->params as $key => $value) {
+                    if ($value === "") {
                         $this->params[$key] = null;
                     }
                 }
@@ -123,6 +125,7 @@ class Request
             $uri = substr($uri, 0, $pos);
         }
         $uri = preg_replace('~(\/){2,}~', '/', $uri);
+        $uri = rtrim($uri, '/');
         if (empty($uri)) {
             $uri = '/';
         }
@@ -219,4 +222,10 @@ class Request
     {
         return $this->isHttps() ? "https" : "http";
     }
+
+    public function isCheckModified()
+    {
+        return isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) ? $_SERVER['HTTP_IF_MODIFIED_SINCE'] : null;
+    }
+    
 }
