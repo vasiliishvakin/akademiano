@@ -8,6 +8,10 @@ namespace DeltaUtils;
 
 class Time
 {
+    /**
+     * @param $timeStr
+     * @return int
+     */
     public static function toSeconds($timeStr)
     {
         if (is_int($timeStr)) {
