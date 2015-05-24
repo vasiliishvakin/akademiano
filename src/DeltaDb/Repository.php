@@ -56,6 +56,31 @@ class Repository implements RepositoryInterface
         ]
     ];
 
+    protected $someChanged = false;
+    protected $lastChanged;
+
+    /**
+     * @return boolean
+     */
+    public function isSomeChanged()
+    {
+        return $this->someChanged;
+    }
+
+    public function setChanged()
+    {
+        $this->lastChanged = null;
+        $this->someChanged = true;
+    }
+
+    /**
+     * @param boolean $isSomeChanged
+     */
+    public function setIsSomeChanged($isSomeChanged)
+    {
+        $this->isSomeChanged = $isSomeChanged;
+    }
+
     protected function checkMethodCallable($object, $method)
     {
         if (null === $method) {
@@ -435,6 +460,7 @@ class Repository implements RepositoryInterface
 
     public function save(EntityInterface $entity)
     {
+        $this->setChanged();
         $data = $this->reserve($entity);
         $fields = isset($data["fields"]) ? $data["fields"] : $data;
         $rawFields = isset($data["rawFields"]) ? $data["rawFields"] : null;
@@ -482,6 +508,7 @@ class Repository implements RepositoryInterface
 
     public function deleteBy(array $criteria = [], $table = null)
     {
+        $this->setChanged();
         if (is_null($table)) {
             $table = $this->getTableName();
         }
@@ -662,6 +689,19 @@ class Repository implements RepositoryInterface
         return $criteria;
     }
 
+    public function filterCriteria($criteria, $table = null)
+    {
+        if (empty($criteria)) {
+            return $criteria;
+        }
+        $fieldsList = array_flip($this->getFieldsList($table));
+        $criteria = array_filter($criteria, function ($key) use ($fieldsList) {
+            return array_key_exists($key, $fieldsList);
+        },
+            ARRAY_FILTER_USE_KEY);
+        return $criteria;
+    }
+
     public function begin()
     {
         return $this->getAdapter()->begin();
@@ -675,5 +715,29 @@ class Repository implements RepositoryInterface
     public function rollback()
     {
         return $this->getAdapter()->rollBack();
+    }
+
+    public function getChangedFieldName()
+    {
+        $fields = $this->getFieldsList();
+        if (in_array("changed", $fields)) {
+            return "changed";
+        }
+        return null;
+    }
+
+    public function getLastChangedDate(array $criteria = [], $table = null)
+    {
+        if (null === $table) {
+            $table = $this->getTableName();
+        }
+        $criteria = $this->filterCriteria($criteria, $table);
+        if (null === $this->lastChanged && $changedField=$this->getChangedFieldName()) {
+            $this->lastChanged = $this->getAdapter()->max($table, $changedField, $criteria);
+            if (null !== $this->lastChanged) {
+                $this->lastChanged = new \DateTime($this->lastChanged);
+            }
+        }
+        return $this->lastChanged;
     }
 }

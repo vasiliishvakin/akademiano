@@ -339,4 +339,34 @@ class PgsqlAdapter extends AbstractAdapter
         return (integer)$result;
     }
 
+    public function max($table, $field, $criteria = [])
+    {
+        $field = pg_escape_identifier($field);
+        $query = "select max({$field}) from \"{$table}\"";
+        if (empty($criteria)) {
+            $result = $this->selectCell($query);
+        } else {
+            $query .= $this->getWhere($criteria);
+            $whereParams = $this->getWhereParams($criteria);
+            array_unshift($whereParams, $query);
+            $result = call_user_func_array([$this, 'selectCell'], $whereParams);
+        }
+        return $result;
+    }
+
+    public function min($table, $field, $criteria = [])
+    {
+        $field = pg_escape_identifier($field);
+        $query = "select min({$field}) from \"{$table}\"";
+        if (empty($criteria)) {
+            $result = $this->selectCell($query);
+        } else {
+            $query .= $this->getWhere($criteria);
+            $whereParams = $this->getWhereParams($criteria);
+            array_unshift($whereParams, $query);
+            $result = call_user_func_array([$this, 'selectCell'], $whereParams);
+        }
+        return $result;
+    }
+
 } 
