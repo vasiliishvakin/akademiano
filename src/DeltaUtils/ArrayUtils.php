@@ -165,4 +165,14 @@ class ArrayUtils {
         return implode($glue, $preparedArray);
     }
 
+    public static function implodeRecursive($glue = "", array $array)
+    {
+        foreach($array as $key=>$value) {
+            if (is_array($value)) {
+                $array[$key] = self::implodeRecursive($glue, $value);
+            }
+        }
+        return implode($glue, $value);
+    }
+
 }

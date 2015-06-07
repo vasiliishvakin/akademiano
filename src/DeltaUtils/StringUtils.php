@@ -118,4 +118,58 @@ class StringUtils
     {
         return (integer) substr($string, 2);
     }
+
+    public static function toString($var, $oneField = false, $implode = false)
+    {
+        if ($oneField === true) {
+            $oneField = "id";
+        }
+
+        if ($implode === true) {
+            $implode = ", ";
+        }
+
+        switch (gettype($var)) {
+            case "boolean":
+            case "integer":
+            case "double":
+            case "string":
+            case "NULL":
+                return (string)$var;
+            case "array" :
+                if (!$oneField) {
+                    return $implode ? ArrayUtils::implodeRecursive($implode, $var) : "";
+                } else {
+                    return self::toString(array_key_exists($oneField, $var)? $var[$oneField] : "", $oneField, $implode);
+                }
+            case "object" :
+                if ($var instanceof \DateTime) {
+                    return $var->format("Y-m-d h:i:s");
+                }
+                if ($oneField) {
+                    if (property_exists($var, $oneField)) {
+                        return self::toString($var->{$oneField}, $oneField, $implode);
+                    }
+                    if (method_exists($var, $oneField)) {
+                        return self::toString($var->{$oneField}(), $oneField, $implode);
+                    }
+                    $method = "get" . ucfirst($oneField);
+                    if (method_exists($var, $method)) {
+                        return self::toString($var->{$method}(), $oneField, $implode);
+                    }
+                    return "";
+                } else {
+                    if (method_exists($var, "__toString")) {
+                        return (string) $var;
+                    }
+                    if (method_exists($var, "toArray")) {
+                        return self::toString($var->toArray());
+                    }
+                    return self::toString(get_object_vars($var), $oneField, $implode);
+                }
+            default:
+                throw new \InvalidArgumentException("work with type " . gettype($var) . " not implemented");
+        }
+
+    }
 } 
