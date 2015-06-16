@@ -1,5 +1,23 @@
-<?php namespace Illuminate\Support;
+<?php
 
+namespace DeltaUtils\Helper;
+
+/**
+ * Class Pluralizer
+ * @package DeltaUtils\Helper
+ * @author  taylorotwell
+ * @author  GrahamCampbell
+ * @author  helmut
+ * @author  lucasmichot
+ * @author  mcordingley
+ * @author  mcraz
+ * @author  egeriis
+ * @author  tomxc
+ * @author  Xlator
+ * @author  abhimanyusharma003
+ * @license MIT
+ * This class get from Laravel Framework
+ */
 class Pluralizer {
 
 	/**
