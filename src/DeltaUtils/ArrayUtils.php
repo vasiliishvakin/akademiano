@@ -174,5 +174,4 @@ class ArrayUtils {
         }
         return implode($glue, $value);
     }
-
 }
