@@ -135,10 +135,10 @@ class Article extends MiddleObject implements EntityInterface
         if (empty($this->categories)) {
             return [];
         }
-        if (!is_object($this->categories[0])) {
+        if (is_array($this->categories)) {
             $refMan = $this->getCategoryManager();
             $categories = $refMan->findByIds($this->categories);
-            $this->categories = (array) $categories;
+            $this->categories = $categories;
         }
         return $this->categories;
     }
@@ -164,11 +164,7 @@ class Article extends MiddleObject implements EntityInterface
 
     public function getTitleImage()
     {
-        $images = $this->getImages();
-        if (empty($images)) {
-            return null;
-        }
-        return reset($images);
+        return $this->getImages()->first();
     }
 
 
