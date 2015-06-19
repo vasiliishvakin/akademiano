@@ -7,6 +7,7 @@ use DeltaCore\Parts\MagicSetGetManagers;
 use DeltaCore\Prototype\MagicMethodInterface;
 use DeltaDb\Adapter\AdapterInterface;
 use DeltaUtils\ArrayUtils;
+use DeltaUtils\Object\Collection;
 use DeltaUtils\Parts\InnerCache;
 use DeltaUtils\StringUtils;
 use Psr\Log\InvalidArgumentException;
@@ -521,7 +522,7 @@ class Repository implements RepositoryInterface
      * @param null $limit
      * @param null $offset
      * @param null $orderBy
-     * @return EntityInterface[]
+     * @return Collection
      * @throws \Exception
      */
     public function find(array $criteria = [], $entityClass = null, $limit = null, $offset = null, $orderBy = null)
@@ -532,7 +533,7 @@ class Repository implements RepositoryInterface
         $table = $this->getTableName($entityClass);
         $idField = $this->getIdField($table);
         $data = $this->findRaw($criteria, $table, $limit, $offset, $orderBy);
-        $items = [];
+        $items = new Collection();
         $idMap = $this->getIdMap($entityClass);
         foreach($data as $row) {
             $idValue = $row[$idField];
@@ -550,10 +551,7 @@ class Repository implements RepositoryInterface
     public function findOne(array $criteria = [], $entityClass = null)
     {
         $items = $this->find($criteria, $entityClass);
-        if (empty($items)) {
-            return null;
-        }
-        return reset($items);
+        return $items->first();
     }
 
     public function findReferredIds()
@@ -599,7 +597,8 @@ class Repository implements RepositoryInterface
             $this->find([$idName=>$needFindIds], $entityClass);
         }
         $items = $idMap->getIds($ids);
-        return $items;
+
+        return new Collection($items);
     }
 
     public function load(EntityInterface $entity, array $data)
