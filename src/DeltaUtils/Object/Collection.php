@@ -14,6 +14,13 @@ use DeltaUtils\Exception\EmptyException;
 
 class Collection extends ArrayObject implements ArrayableInterface
 {
+    function __construct(array $items = null)
+    {
+        if (null !== $items) {
+            $this->setItems($items);
+        }
+    }
+
     public function toArray()
     {
         $array = [];
@@ -26,14 +33,12 @@ class Collection extends ArrayObject implements ArrayableInterface
         return $array;
     }
 
-    public function count()
-    {
-        return count($this);
-    }
-
     public function first()
     {
         $this->rewind();
+        if (!$this->valid()) {
+            return null;
+        }
         return $this->current();
     }
 
@@ -43,6 +48,19 @@ class Collection extends ArrayObject implements ArrayableInterface
             throw new EmptyException();
         }
         return $this->first();
+    }
+
+    public function firstOrFalse()
+    {
+        if ($this->count() <=0) {
+            return false;
+        }
+        return $this->first();
+    }
+
+    public function all()
+    {
+        return $this->items;
     }
 
 }
