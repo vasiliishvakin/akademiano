@@ -6,6 +6,7 @@
 namespace DeltaUtils;
 
 
+use DeltaUtils\Helper\Pluralizer;
 use Symfony\Component\Config\Definition\Exception\Exception;
 
 class StringUtils
@@ -171,5 +172,28 @@ class StringUtils
                 throw new \InvalidArgumentException("work with type " . gettype($var) . " not implemented");
         }
 
+    }
+
+    /**
+     * Get the plural form of the given english word.
+     *
+     * @param  string  $value
+     * @param  int     $count
+     * @return string
+     */
+    public static function pluralEn($value, $count = 2)
+    {
+        return Pluralizer::plural($value, $count);
+    }
+
+    /**
+     * Get the singular form of the given english word.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public static function singularEn($value)
+    {
+        return Pluralizer::singular($value);
     }
 } 
