@@ -6,7 +6,9 @@
 namespace DeltaDb\Model\Type;
 
 
-class PgPoint implements \JsonSerializable
+use DeltaCore\Prototype\ArrayableInterface;
+
+class PgPoint implements \JsonSerializable, ArrayableInterface
 {
     protected $lat;
     protected $lon;
@@ -53,7 +55,7 @@ class PgPoint implements \JsonSerializable
 
     public function __toString()
     {
-        return "ST_GeographyFromText('POINT({$this->getLon()} {$this->getLat()})')";
+        return $this->format();
     }
 
     public function format($format = "%1s %2s")
@@ -62,6 +64,11 @@ class PgPoint implements \JsonSerializable
     }
 
     function jsonSerialize()
+    {
+        return $this->toArray();
+    }
+
+    public function toArray()
     {
         return [
             'lon' => $this->getLon(),
