@@ -160,7 +160,7 @@ class ArrayObject implements \ArrayAccess, \Iterator, \Countable
      */
     public function key()
     {
-        return $this->getItemsKeys($this->position);
+        return $this->getItemsKeys()[$this->position];
     }
 
     /**

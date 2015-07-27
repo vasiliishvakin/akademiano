@@ -58,9 +58,32 @@ class Collection extends ArrayObject implements ArrayableInterface
         return $this->first();
     }
 
-    public function all()
+    public function pluck($field)
     {
-        return $this->items;
+
+    }
+
+    public function lists($field, $keyField=null)
+    {
+        $data =[];
+        $method = 'get' . ucfirst($field);
+        $keyMethod = !is_null($keyField) ? 'get' . ucfirst($keyField) : null;
+        foreach($this as $item) {
+            if (is_callable([$item, $method])) {
+                $value = $item->{$method}();
+            }
+            if (!empty($keyMethod) && is_callable([$item, $keyMethod])) {
+                $key = $item->{$keyMethod}();
+            }
+            if ($value) {
+                if ($keyField) {
+                    $data[$key] = $value;
+                } else {
+                    $data[] = $value;
+                }
+            }
+        }
+        return $data;
     }
 
 }
