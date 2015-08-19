@@ -58,11 +58,6 @@ class Collection extends ArrayObject implements ArrayableInterface
         return $this->first();
     }
 
-    public function pluck($field)
-    {
-
-    }
-
     public function lists($field, $keyField=null)
     {
         $data =[];
@@ -84,6 +79,11 @@ class Collection extends ArrayObject implements ArrayableInterface
             }
         }
         return $data;
+    }
+
+    public function isEmpty()
+    {
+        return (bool)$this->count() <= 0;
     }
 
 }
