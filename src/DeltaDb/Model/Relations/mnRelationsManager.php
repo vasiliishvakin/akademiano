@@ -106,7 +106,7 @@ class mnRelationsManager extends Repository
     public function getFirstName()
     {
         if (is_null($this->firstName)) {
-            $this->firstName = $this->getFirstManager()->getTableName();
+            $this->firstName = $this->getFirstManager()->getTable();
         }
         return $this->firstName;
     }
@@ -117,7 +117,7 @@ class mnRelationsManager extends Repository
     public function getSecondName()
     {
         if (is_null($this->secondName)) {
-            $this->secondName = $this->getSecondManager()->getTableName();
+            $this->secondName = $this->getSecondManager()->getTable();
         }
         return $this->secondName;
     }
@@ -145,25 +145,23 @@ class mnRelationsManager extends Repository
         return $this->secondFieldName;
     }
 
-    public function getMetaInfo()
+    public function getMetaInfo($path = null, $default = null)
     {
-        if (is_null($this->metaInfo)) {
+        if (empty($this->metaInfo)) {
             $firstTable = $this->getFirstName();
             $secondTable = $this->getSecondName();
             $table = "{$firstTable}_{$secondTable}_relations";
             $this->metaInfo = [
-                $table => [
-                    "class"  => "\\DeltaDb\\Model\\Relations\\mnRelation",
-                    "id"     => "id",
-                    "fields" => [
-                        "id",
-                        $this->getFirstFieldName(),
-                        $this->getSecondFieldName()
-                    ]
+                "table" => $table,
+                "class" => "\\DeltaDb\\Model\\Relations\\mnRelation",
+                "fields" => [
+                    "id",
+                    $this->getFirstFieldName(),
+                    $this->getSecondFieldName()
                 ]
             ];
         }
-        return parent::getMetaInfo();
+        return parent::getMetaInfo($path, $default);
     }
 
     public function create(array $data = null, $entityClass = null)
@@ -179,7 +177,7 @@ class mnRelationsManager extends Repository
     {
         $adapter = $this->getAdapter();
         if (is_null($table)) {
-            $table = $this->getTableName();
+            $table = $this->getTable();
         }
         $where = $adapter->getWhere($criteria);
 
@@ -379,8 +377,8 @@ class mnRelationsManager extends Repository
         $method = "get{$mainNum}Manager";
         /** @var Repository $mainManager */
         $mainManager = $this->$method();
-        $mainTable = $mainManager->getTableName();
-        $currentTable = $this->getTableName();
+        $mainTable = $mainManager->getTable();
+        $currentTable = $this->getTable();
         return " join {$currentTable}  on {$currentTable}.{$mainField}={$mainTable}.id";
     }
 
@@ -389,7 +387,7 @@ class mnRelationsManager extends Repository
         $fieldNum = $this->getFieldNumName($conditionName);
         $method = "get{$fieldNum}FieldName";
         $fieldName = $this->$method();
-        return $this->getTableName() . "." . $fieldName;
+        return $this->getTable() . "." . $fieldName;
     }
 
     public function findOthers($currentId, $currentName)

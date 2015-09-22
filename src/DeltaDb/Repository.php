@@ -38,20 +38,19 @@ class Repository implements RepositoryInterface
     protected $dba = DbaStorage::DBA_DEFAULT;
 
     protected $metaInfo = [
-        'tableName' => [
-            'class'  => 'Entity',
-            'id'     => 'id_field',
-            'fields' => [
-                'field_name' => [
-                    'set'        => 'setMethodInEntity',
-                    'get'        => 'getMethodInEntity',
-                    'filters'    => [
-                        'input'  => 'filterFromDbToEntity',
-                        'output' => 'filterFromEntityDb',
-                    ],
-                    'validators' => [
+        'table' => null,
+        'class' => 'Entity',
+        'id' => 'id_field',
+        'fields' => [
+            'field_name' => [
+                'set' => 'setMethodInEntity',
+                'get' => 'getMethodInEntity',
+                'filters' => [
+                    'input' => 'filterFromDbToEntity',
+                    'output' => 'filterFromEntityDb',
+                ],
+                'validators' => [
 
-                    ]
                 ]
             ]
         ]
@@ -96,35 +95,37 @@ class Repository implements RepositoryInterface
         return $result;
     }
 
-    public function setTable($table, array $tableData = [], $merge = true)
+    public function setTable($table)
     {
-        $currentMeta = $this->getMetaInfo();
-        if (isset($currentMeta[$table]) && $merge) {
-            $metaAdd =  [$table => $tableData];
-            $this->metaInfo = ArrayUtils::mergeRecursive($currentMeta, $metaAdd);
-        } else {
-            $this->metaInfo[$table] = $tableData;
-        }
+        $this->metaInfo["table"] = $table;
     }
 
-    public function renameTable($oldName, $newName)
+    public function getTable()
     {
-        $currentMeta = $this->getMetaInfo();
-        if (!isset($currentMeta[$oldName])) {
-            throw new InvalidArgumentException("Table {$oldName} not exist in " . __CLASS__);
+        $table =  $this->getMetaInfo("table");
+        if (empty($table)) {
+            $class = StringUtils::cutClassName($this);
+            $class = lcfirst(substr($class, 0, strpos($class, "Manager")));
+            $table = StringUtils::camelCaseToLowDash($class);
+            $table = explode("_",  $table);
+            $table[count($table) -1] = StringUtils::pluralEn($table[count($table) -1]);
+            $table = implode("_", $table);
+            $this->setTable($table);
         }
-        $tableInfo = $currentMeta[$oldName];
-        unset($this->metaInfo[$oldName]);
-        $this->setTable($newName, $tableInfo, false);
+        return $table;
     }
 
-    public function getEntityClass($table = null)
+    public function getEntityClass()
     {
-        $meta = $this->getMetaInfo();
-        if (is_null($table)) {
-            $table = $this->getTableName();
+        $className = $this->getMetaInfo("class");
+        if (empty($className)) {
+            $namespace = StringUtils::cutNamespace($this);
+            $class = StringUtils::cutClassName($this);
+            $class = StringUtils::singularEn(substr($class, 0, strpos($class, "Manager")));
+            $className = $namespace . "\\" . ucfirst($class);
+            $this->metaInfo["class"] = $className;
         }
-        return $meta[$table]['class'];
+        return $className;
     }
 
     /**
@@ -191,75 +192,32 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @return array
-     * @todo Merge with default: don't get form $metaInfo
+     * @param array|null $path
+     * @param null|mixed $default
+     * @return array|mixed|null
      */
-    public function getMetaInfo()
+    public function getMetaInfo($path = null, $default = null)
     {
-        return $this->metaInfo;
+        return ArrayUtils::getByPath($this->metaInfo, $path, $default);
     }
 
-    public function getTableName($entity = null)
+    public function getIdField()
     {
-        $entityClass = (is_null($entity)) ? null : is_object($entity) ? '\\' .get_class($entity) : $entity;
-        $cacheId = "tableName|{$entityClass}|";
-        if ($tableName = $this->getInnerCache($cacheId)) {
-            return $tableName;
-        }
-        $meta = $this->getMetaInfo();
-        $tables = array_keys($meta);
-        $tableName = null;
-        if (is_null($entityClass)) {
-            $tableName = reset($tables);
-        } else {
-            foreach ($tables as $table) {
-                if ($meta[$table]['class'] === $entityClass) {
-                    $tableName = $table;
-                    break;
-                }
-            }
-        }
-        if (empty ($tableName)) {
-            throw new \Exception("Meta info for entity $entityClass not defined");
-        }
-        $this->setInnerCache($cacheId, $tableName);
-        return $tableName;
-    }
-
-    public function getIdField($table)
-    {
-        $meta = $this->getMetaInfo();
-        return $meta[$table]['id'];
+        return $this->getMetaInfo("id", "id");
     }
 
     public function getExternalFieldsList()
     {
-        $cacheId = "externalFieldList";
-        if ($fields = $this->getInnerCache($cacheId)) {
-            return $fields;
-        }
-        $meta = $this->getMetaInfo();
-        $fieldsData = isset($meta['externalFields']) ? $meta['externalFields'] : [];
-        if (ArrayUtils::isAssoc($fieldsData)) {
-            $fields = array_keys($fieldsData);
-        } else {
-            $fields = array_values($fieldsData);
-        }
-        $this->setInnerCache($cacheId, $fields);
-        return $fields;
+        return $this->getMetaInfo("externalFields", []);
     }
 
-    public function getFieldsList($table = null)
+    public function getFieldsList()
     {
-        if (null === $table) {
-            $table = $this->getTableName();
-        }
-        $cacheId = "fieldList|{$table}|";
+        $cacheId = "fieldList";
         if ($fields = $this->getInnerCache($cacheId)) {
             return $fields;
         }
-        $meta = $this->getMetaInfo();
-        $fieldsData = $meta[$table]['fields'];
+        $fieldsData = $this->getMetaInfo("fields");
         $fieldsDataType = ArrayUtils::getArrayType($fieldsData);
         switch($fieldsDataType) {
             case 1 :
@@ -279,24 +237,23 @@ class Repository implements RepositoryInterface
         return $fields;
     }
 
-    public function getFieldMeta($table, $field)
+    public function getFieldMeta($field)
     {
         $cacheId = "fieldMeta|$field";
         if ($this->hasInnerCache($cacheId)) {
             return $this->getInnerCache($cacheId);
         }
-        $meta = $this->getMetaInfo();
-        $fieldMeta = ArrayUtils::getByPath($meta, [$table, 'fields', $field]);
+        $fieldMeta = $this->getMetaInfo(['fields', $field]);
         if (!$fieldMeta) {
-            $fieldMeta = ArrayUtils::getByPath($meta, ["externalFields", $field]);
+            $fieldMeta = $this->getMetaInfo(["externalFields", $field]);
         }
         $this->setInnerCache($cacheId, $fieldMeta);
         return $fieldMeta;
     }
 
-    public function getFieldMethod($table, $field, $method)
+    public function getFieldMethod($field, $method)
     {
-        $fieldMeta = $this->getFieldMeta($table, $field);
+        $fieldMeta = $this->getFieldMeta($field);
         if ((!is_array($fieldMeta) || empty($fieldMeta)) || (!isset($fieldMeta["set"]) && !isset($fieldMeta["get"]))) {
             $field = StringUtils::lowDashToCamelCase($field);
             return $method . ucfirst($field);
@@ -308,29 +265,23 @@ class Repository implements RepositoryInterface
         return $fieldMethod;
     }
 
-    public function getFieldFilter($table, $field, $filter)
+    public function getFieldFilter($field, $filter)
     {
-        $fieldMeta = $this->getFieldMeta($table, $field);
+        $fieldMeta = $this->getFieldMeta($field);
         if (!$fieldMeta) {
             return null;
         }
         return ArrayUtils::getByPath($fieldMeta, ["filters", $filter]);
     }
 
-    public function getFieldValidators($table, $field)
+    public function getFieldValidators($field)
     {
-        $meta = $this->getMetaInfo();
-        if (!isset($meta[$table]['fields'][$field]['validators'])) {
-            return [];
-        }
-        $validators = $meta[$table]['fields'][$field]['validators'];
-        return $validators;
+        return $this->getMetaInfo(['fields', $field, 'validators'], []);
     }
 
     public function validateField($entity, $field, $value)
     {
-        $table = $this->getTableName($entity);
-        $validators = $this->getFieldValidators($table, $field);
+        $validators = $this->getFieldValidators($field);
         foreach($validators as $validator) {
             if (method_exists($entity, $validator)) {
                 $result = $entity->{$validator}($value);
@@ -344,9 +295,8 @@ class Repository implements RepositoryInterface
 
     public function setField(EntityInterface $entity, $field, $value)
     {
-        $table = $this->getTableName($entity);
-        $setMethod = $this->getFieldMethod($table, $field, self::METHOD_SET);
-        $inputFilter = $this->getFieldFilter($table, $field, self::FILTER_IN);
+        $setMethod = $this->getFieldMethod($field, self::METHOD_SET);
+        $inputFilter = $this->getFieldFilter($field, self::FILTER_IN);
         if ($this->checkMethodCallable($this, $inputFilter)) {
             $value = $this->{$inputFilter}($value);
         }
@@ -359,9 +309,8 @@ class Repository implements RepositoryInterface
 
     public function getField(EntityInterface $entity, $field)
     {
-        $table = $this->getTableName($entity);
-        $getMethod = $this->getFieldMethod($table, $field, self::METHOD_GET);
-        $outputFilter = $this->getFieldFilter($table, $field, self::FILTER_OUT);
+        $getMethod = $this->getFieldMethod($field, self::METHOD_GET);
+        $outputFilter = $this->getFieldFilter($field, self::FILTER_OUT);
         if (!$this->checkMethodCallable($entity, $getMethod)) {
             return null;
         }
@@ -376,7 +325,7 @@ class Repository implements RepositoryInterface
     {
         $adapter = $this->getAdapter();
         if (is_null($table)) {
-            $table = $this->getTableName();
+            $table = $this->getTable();
         }
         $data = $adapter->selectBy($table, $criteria, $limit, $offset, $orderBy);
         return $data;
@@ -385,7 +334,7 @@ class Repository implements RepositoryInterface
     public function saveRaw(array $fields, $table = null, $rawFields = null)
     {
         if (is_null($table)) {
-            $table = $this->getTableName();
+            $table = $this->getTable();
         }
         $idName = $this->getIdField($table);
         if (isset($fields[$idName]) && !empty($fields[$idName])) {
@@ -403,7 +352,7 @@ class Repository implements RepositoryInterface
     {
         $adapter = $this->getAdapter();
         if (is_null($table)) {
-            $table = $this->getTableName();
+            $table = $this->getTable();
         }
         $idField = $this->getIdField($table);
         if (isset($fields[$idField]) || array_key_exists($idField, $fields)) {
@@ -420,7 +369,7 @@ class Repository implements RepositoryInterface
     {
         $adapter = $this->getAdapter();
         if (is_null($table)) {
-            $table = $this->getTableName();
+            $table = $this->getTable();
         }
         $idField = $this->getIdField($table);
         $id = $fields[$idField];
@@ -432,7 +381,7 @@ class Repository implements RepositoryInterface
     {
         $adapter = $this->getAdapter();
         if (is_null($table)) {
-            $table = $this->getTableName();
+            $table = $this->getTable();
         }
         return $adapter->delete($table, $criteria);
     }
@@ -440,22 +389,21 @@ class Repository implements RepositoryInterface
     public function deleteById($id, $table = null)
     {
         if (is_null($table)) {
-            $table = $this->getTableName();
+            $table = $this->getTable();
         }
         $idField = $this->getIdField($table);
         return $this->deleteBy([$idField => $id], $table);
     }
 
-    public function create(array $data = null, $entityClass = null)
+    public function create(array $data = null)
     {
-        if (is_null($entityClass)) {
-            $entityClass = $this->getEntityClass();
-        }
+        $entityClass = $this->getEntityClass();
         /** @var EntityInterface $entity */
         $entity = new $entityClass;
         if (!is_null($data)) {
             $this->load($entity, $data);
         }
+
         return $entity;
     }
 
@@ -465,7 +413,7 @@ class Repository implements RepositoryInterface
         $data = $this->reserve($entity);
         $fields = isset($data["fields"]) ? $data["fields"] : $data;
         $rawFields = isset($data["rawFields"]) ? $data["rawFields"] : null;
-        $table = $this->getTableName($entity);
+        $table = $this->getTable($entity);
         $idField = $this->getIdField($table);
         if (isset($fields[$idField]) && !empty($fields[$idField])) {
             return $this->updateRaw($fields, $table, $rawFields);
@@ -511,7 +459,7 @@ class Repository implements RepositoryInterface
     {
         $this->setChanged();
         if (is_null($table)) {
-            $table = $this->getTableName();
+            $table = $this->getTable();
         }
         return $this->deleteRaw($criteria, $table);
     }
@@ -530,7 +478,7 @@ class Repository implements RepositoryInterface
         if (is_null($entityClass)) {
             $entityClass = $this->getEntityClass();
         }
-        $table = $this->getTableName($entityClass);
+        $table = $this->getTable($entityClass);
         $idField = $this->getIdField($table);
         $data = $this->findRaw($criteria, $table, $limit, $offset, $orderBy);
         $items = new Collection();
@@ -570,7 +518,7 @@ class Repository implements RepositoryInterface
      */
     public function findById($id, $entityClass = null)
     {
-        $table = $this->getTableName($entityClass);
+        $table = $this->getTable($entityClass);
         $idName = $this->getIdField($table);
         $idMap = $this->getIdMap($entityClass);
         if ($idMap->has($id)) {
@@ -589,7 +537,7 @@ class Repository implements RepositoryInterface
 
     public function findByIds(array $ids, $entityClass = null)
     {
-        $table = $this->getTableName($entityClass);
+        $table = $this->getTable($entityClass);
         $idName = $this->getIdField($table);
         $idMap = $this->getIdMap($entityClass);
         $needFindIds = $idMap->getDiff($ids);
@@ -601,25 +549,41 @@ class Repository implements RepositoryInterface
         return new Collection($items);
     }
 
-    public function load(EntityInterface $entity, array $data)
+    public function getLoadFieldsList()
     {
-        $table = $this->getTableName($entity);
-        $fields = $this->getFieldsList($table);
+        $fields = $this->getFieldsList();
         $externalFields = $this->getExternalFieldsList();
         if (!empty($externalFields)) {
             $fields = array_values(array_unique(array_merge($fields, $externalFields)));
         }
         $fields = array_flip($fields);
+        return $fields;
+    }
+
+    public function load(EntityInterface $entity, array $data)
+    {
+        $fields = $this->getLoadFieldsList();
         $data = array_intersect_key($data, $fields);
         foreach($data as $field=>$value) {
             $this->setField($entity, $field, $value);
         }
+        return $entity;
+    }
+
+    public function loadUntrusted(EntityInterface $entity, array $data)
+    {
+        $entity->setUntrusted();
+        return $this->load($entity, $data);
+    }
+
+    public function loadFromElastic(EntityInterface $entity, array $data)
+    {
+        return $this->loadUntrusted($entity, $data);
     }
 
     public function reserve(EntityInterface $entity)
     {
-        $table = $this->getTableName();
-        $fields = $this->getFieldsList($table);
+        $fields = $this->getFieldsList();
         $data = [];
         foreach ($fields as $field) {
             $value = $this->getField($entity, $field);
@@ -640,7 +604,7 @@ class Repository implements RepositoryInterface
     public function count(array $criteria = [], $entityClass = null)
     {
         $adapter = $this->getAdapter();
-        $table = $this->getTableName($entityClass);
+        $table = $this->getTable($entityClass);
         return $adapter->count($table, $criteria);
     }
 
@@ -673,8 +637,7 @@ class Repository implements RepositoryInterface
 
     public function filterData($data)
     {
-        $table = $this->getTableName();
-        $fields = $this->getFieldsList($table);
+        $fields = $this->getFieldsList();
         $externalFields = $this->getExternalFieldsList();
         if (!empty($externalFields)) {
             $fields = array_values(array_unique(array_merge($fields, $externalFields)));
@@ -688,12 +651,12 @@ class Repository implements RepositoryInterface
         return $criteria;
     }
 
-    public function filterCriteria($criteria, $table = null)
+    public function filterCriteria($criteria)
     {
         if (empty($criteria)) {
             return $criteria;
         }
-        $fieldsList = array_flip($this->getFieldsList($table));
+        $fieldsList = array_flip($this->getFieldsList());
         $criteria = array_filter($criteria, function ($key) use ($fieldsList) {
             return array_key_exists($key, $fieldsList);
         },
@@ -725,13 +688,11 @@ class Repository implements RepositoryInterface
         return null;
     }
 
-    public function getLastChangedDate(array $criteria = [], $table = null)
+    public function getLastChangedDate(array $criteria = [])
     {
-        if (null === $table) {
-            $table = $this->getTableName();
-        }
-        $criteria = $this->filterCriteria($criteria, $table);
-        if (null === $this->lastChanged && $changedField=$this->getChangedFieldName()) {
+        $table = $this->getTable();
+        $criteria = $this->filterCriteria($criteria);
+        if (null === $this->lastChanged && $changedField = $this->getChangedFieldName()) {
             $this->lastChanged = $this->getAdapter()->max($table, $changedField, $criteria);
             if (null !== $this->lastChanged) {
                 $this->lastChanged = new \DateTime($this->lastChanged);

@@ -10,6 +10,9 @@ interface EntityInterface
 {
     public function getId();
 
+    public function isUntrusted();
+    public function setUntrusted($untrusted = true);
+
     /**
      * @return array
      */

@@ -12,7 +12,7 @@ interface RepositoryInterface
 {
     public function setAdapter(AdapterInterface $adapter);
 
-    public function create(array $data = null, $entityClass = null);
+    public function create(array $data = null);
 
     public function save(EntityInterface $entity);
 
@@ -27,7 +27,7 @@ interface RepositoryInterface
      */
     public function find(array $criteria = [], $entityClass = null, $limit = null, $offset = null);
 
-    public function findById($id, $entityClass = null);
+    public function findById($id);
 
     public function load(EntityInterface $entity, array $data);
 
