@@ -58,6 +58,11 @@ class Collection extends ArrayObject implements ArrayableInterface
         return $this->first();
     }
 
+    public function last()
+    {
+        return end($this->items);
+    }
+
     public function lists($field, $keyField=null)
     {
         $data =[];
@@ -84,6 +89,22 @@ class Collection extends ArrayObject implements ArrayableInterface
     public function isEmpty()
     {
         return (bool)$this->count() <= 0;
+    }
+
+    public function merge(\Traversable $data)
+    {
+        foreach ($data as $key => $value) {
+            if (is_string($key)) {
+                $this[$key] = $value;
+            } else {
+                $this[] = $value;
+            }
+        }
+    }
+
+    public function usort(Callable $function)
+    {
+        return usort($this->items, $function);
     }
 
 }

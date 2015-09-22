@@ -138,6 +138,10 @@ class ArrayUtils {
         return (bool)count(array_filter(array_keys($array), 'is_string'));
     }
 
+    /**
+     * @param array $array
+     * @return int assoc (1), num (-1), combined (0)
+     */
     public static function getArrayType(array $array)
     {
         $keys = array_keys($array);

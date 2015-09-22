@@ -75,9 +75,21 @@ class StringUtils
 
     public static function cutClassName($class)
     {
+        if (is_object($class)) {
+            $class = get_class($class);
+        }
         $class = explode("\\", $class);
         $class = end($class);
         return $class;
+    }
+
+    public static function cutNamespace($class)
+    {
+        if (is_object($class)) {
+            $class = get_class($class);
+        }
+        $namespace = substr($class, 0, strrpos($class, '\\'));
+        return $namespace;
     }
 
     public static function nl2Array($string)
