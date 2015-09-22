@@ -22,18 +22,17 @@ use User\Exception\WrongUserCredential;
 class UserProvidersManager extends Repository
 {
     protected $metaInfo = [
-        'users_providers' => [
-            'class'  => '\\User\\Model\\UserProvider',
-            'id'     => 'id',
-            'fields' => [
-                'id',
-                'provider',
-                'identifier',
-                'user',
-                "created",
-                "changed",
-                "data",
-            ]
+        "table" => 'users_providers',
+        'class' => '\\User\\Model\\UserProvider',
+        'id' => 'id',
+        'fields' => [
+            'id',
+            'provider',
+            'identifier',
+            'user',
+            "created",
+            "changed",
+            "data",
         ]
     ];
 

@@ -147,10 +147,10 @@ class User extends AbstractEntity implements EntityInterface
         if (is_null($this->avatar)) {
             $fm = $this->getUserManager()->getFileManager();
             $images = $fm->getFilesForObject($this);
-            if (count($images) === 0) {
+            if ($images->isEmpty()) {
                 $this->avatar = false;
             } else {
-                $this->avatar = end($images);
+                $this->avatar = $images->last();
             }
         }
         return $this->avatar;

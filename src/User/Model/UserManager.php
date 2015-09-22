@@ -17,21 +17,17 @@ class UserManager extends Repository
 {
     const SESSION_CURRENT_USER = 'uid';
     protected $metaInfo = [
-        'users' => [
-            'class'  => '\\User\\Model\\User',
-            'id'     => 'id',
-            'fields' => [
-                'id',
-                'email',
-                'password',
-                'group',
-                'first_name',
-                'last_name',
-                'user_name',
-                'confirmed',
-                "created",
-                "changed",
-            ]
+        'fields' => [
+            'id',
+            'email',
+            'password',
+            'group',
+            'first_name',
+            'last_name',
+            'user_name',
+            'confirmed',
+            "created",
+            "changed",
         ]
     ];
 
@@ -126,7 +122,7 @@ class UserManager extends Repository
 
     public function authenticate($email, $password)
     {
-        $table = $this->getTableName("\\User\\Model\\User");
+        $table = $this->getTable("\\User\\Model\\User");
         $adapter = $this->getAdapter();
         $data = $adapter->selectBy($table, ["email" => $email]);
         if (empty($data)) {

@@ -17,16 +17,12 @@ use DeltaDb\Repository;
 class UserPlacesManager extends Repository
 {
     protected $metaInfo = [
-        'users_places' => [
-            'class'  => '\\User\\Model\\UserPlace',
-            'id'     => 'id',
-            'fields' => [
-                'id',
-                'user',
-                "created",
-                "changed",
-                "data",
-            ]
+        'fields' => [
+            'id',
+            'user',
+            "created",
+            "changed",
+            "data",
         ]
     ];
 
