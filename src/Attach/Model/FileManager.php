@@ -24,19 +24,15 @@ class FileManager extends Repository
     protected $rootUri;
 
     protected $metaInfo = [
-        "files" => [
-            "class"  => "\\Attach\\Model\\File",
-            "id"     => "id",
-            "fields" => [
-                "id",
-                "section",
-                "object",
-                "type",
-                "name",
-                "description",
-                "path",
-            ]
-        ],
+        "fields" => [
+            "id",
+            "section",
+            "object",
+            "type",
+            "name",
+            "description",
+            "path",
+        ]
     ];
 
     public function getRelationsConfig()
