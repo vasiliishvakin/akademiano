@@ -29,17 +29,13 @@ class ArticlesManager extends Repository
     protected $fileManager;
 
     protected $metaInfo = [
-        'articles' => [
-            'class'  => '\\Articles\\Model\\Article',
-            'id'     => 'id',
-            'fields' => [
-                "id",
-                "title",
-                "description",
-                "text",
-                "created",
-                "changed",
-            ]
+        'fields' => [
+            "id",
+            "title",
+            "description",
+            "text",
+            "created",
+            "changed",
         ],
         'externalFields' => [
             "categories"
@@ -85,7 +81,7 @@ class ArticlesManager extends Repository
             return [];
         }
         $nc = [];
-        $table = $this->getTableName();
+        $table = $this->getTable();
         $fields = array_flip($this->getFieldsList($table));
         foreach ($criteria as $field => $value) {
             if (isset($fields[$field])) {
@@ -106,7 +102,7 @@ class ArticlesManager extends Repository
         /** @var PgsqlAdapter $adapter */
         $adapter = $this->getAdapter();
         if (is_null($table)) {
-            $table = $this->getTableName();
+            $table = $this->getTable();
         }
         $midCatTable = self::CATEGORIES_MIDDLE_TABLE;
         $whereJoin = "";
@@ -135,7 +131,7 @@ class ArticlesManager extends Repository
             return parent::count($criteria, $entityClass);
         }
         $adapter = $this->getAdapter();
-        $table = $this->getTableName();
+        $table = $this->getTable();
         $midCatTable = self::CATEGORIES_MIDDLE_TABLE;
         $whereJoin = "";
         if (isset($criteria["category"])) {
@@ -284,14 +280,14 @@ class ArticlesManager extends Repository
 
     public function getDates()
     {
-        $table = $this->getTableName();
+        $table = $this->getTable();
         $sql = "select distinct to_char(created, 'YYYY-MM-DD') from {$table}";
         return $this->getAdapter()->selectCol($sql);
     }
 
     public function getMonths()
     {
-        $table = $this->getTableName();
+        $table = $this->getTable();
         $sql = "select distinct to_char(created, 'YYYY-MM') from {$table}";
         $months = $this->getAdapter()->selectCol($sql);
         $months = array_map(function($value) {return new \DateTime($value);}, ArrayUtils::filterNulls($months));
