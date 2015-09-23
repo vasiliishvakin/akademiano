@@ -12,7 +12,7 @@
         "psr-0": { "DeltaRouter": "src/" }
     },
     "require": {
-        "deltaphp/httpwarp": "dev-master"
+        "deltaphp/httpwarp": "~0.1"
     }
 
 }
