@@ -15,7 +15,7 @@
         }
     },
     "require": {
-	"deltaphp/deltadb": "dev-master",
-	"deltaphp/sequence": "dev-master"
+	"deltaphp/deltadb": "~1.0",
+	"deltaphp/sequence": "~1.0"
     }
 }
