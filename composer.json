@@ -15,7 +15,7 @@
         }
     },
     "require": {
-	"deltaphp/deltacore": "dev-master",
-	"orbisnull/orbisconvert": "dev-master"
+	"deltaphp/deltacore": "~1.0",
+	"orbisnull/orbisconvert": "~0.1"
     }
 }
