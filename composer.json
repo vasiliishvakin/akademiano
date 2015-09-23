@@ -15,6 +15,6 @@
         }
     },
     "require": {
-        "deltaphp/deltacore": "dev-master"
+        "deltaphp/deltacore": "~1.0"
     }
 }
