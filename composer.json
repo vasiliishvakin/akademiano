@@ -13,6 +13,6 @@
         "psr-0": { "HttpWarp": "src/" }
     },
     "require": {
-        "deltaphp/deltautils": "dev-master"
+        "deltaphp/deltautils": "~1.0"
     }
 }
