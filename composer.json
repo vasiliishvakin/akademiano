@@ -15,10 +15,10 @@
         }
     },
     "require": {
-        "deltaphp/deltacore": "dev-master",
-        "deltaphp/deltadb": "dev-master",
-        "deltaphp/acl": "dev-master",
-        "deltaphp/attach": "dev-master",
-        "deltaphp/dictdir": "dev-master"
+        "deltaphp/deltacore": "~1.0",
+        "deltaphp/deltadb": "~1.0",
+        "deltaphp/acl": "~1.0",
+        "deltaphp/attach": "~1.0",
+        "deltaphp/dictdir": "~1.0"
     }
 }
