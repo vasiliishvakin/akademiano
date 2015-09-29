@@ -178,4 +178,21 @@ class ArrayUtils {
         }
         return implode($glue, $value);
     }
+
+    public static function isMulti($a){
+        foreach($a as $v) {
+            if(is_array($v)) {
+                return TRUE;
+            }
+        }
+        return FALSE;
+    }
+
+    public static function renameKeys($array, Callable $function)
+    {
+        $keys = array_keys($array);
+        $keys = array_map($function, $keys);
+        $array = array_combine($keys, $array);
+        return $array;
+    }
 }
