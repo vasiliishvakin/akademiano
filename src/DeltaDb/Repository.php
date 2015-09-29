@@ -29,9 +29,9 @@ class Repository implements RepositoryInterface
     protected $adapter;
 
     /**
-     * @var IdentityMap[]
+     * @var IdentityMap
      */
-    protected $idMaps = [];
+    protected $idMap;
 
     protected $referredIds = [];
 
@@ -157,19 +157,21 @@ class Repository implements RepositoryInterface
         return $this->adapter;
     }
 
-    public function setIdMap(IdentityMap $idMap, $entityClass = null)
+    /**
+     * @deprecated
+     * @param IdentityMap $idMap
+     */
+    public function setIdMap(IdentityMap $idMap)
     {
-        $entityClass = $entityClass ?: $this->getEntityClass();
-        $this->idMaps[$entityClass] = $idMap;
+        $this->idMap = $idMap;
     }
 
-    public function getIdMap($entityClass = null)
+    public function getIdMap()
     {
-        $entityClass = $entityClass ? : $this->getEntityClass();
-        if (empty($this->idMaps[$entityClass])) {
-            $this->idMaps[$entityClass] = new IdentityMap();
+        if (empty($this->idMap)) {
+            $this->idMap = new IdentityMap();
         }
-        return $this->idMaps[$entityClass];
+        return $this->idMap;
     }
 
     public function addReferredIds(array $ids)
@@ -570,12 +572,31 @@ class Repository implements RepositoryInterface
         return $entity;
     }
 
-    public function loadUntrusted(EntityInterface $entity, array $data)
+    public function loadUntrusted(EntityInterface &$entity, array $data, $id = null)
     {
+        $data = ArrayUtils::renameKeys($data, function($var) {return StringUtils::camelCaseToLowDash($var);});
+        $id = $id ?: isset($data["id"]) ? $data["id"] : null;
+        if ($id) {
+            if ($this->getIdMap()->has($id)) {
+                $entityHas = $this->getIdMap()->get($id);
+                if ($entityHas->isTrusted()) {
+                    $entity= $entityHas;
+                    return $entity;
+                }
+            }
+        }
         $entity->setUntrusted();
-        return $this->load($entity, $data);
+        $this->load($entity, $data);
+        $this->getIdMap()->set($id, $entity);
+        return $entity;
     }
 
+    /**
+     * @param \DeltaDb\EntityInterface $entity
+     * @param array $data
+     * @return \DeltaDb\EntityInterface|null
+     * @deprecated
+     */
     public function loadFromElastic(EntityInterface $entity, array $data)
     {
         return $this->loadUntrusted($entity, $data);

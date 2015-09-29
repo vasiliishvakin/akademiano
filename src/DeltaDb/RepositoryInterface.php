@@ -31,6 +31,8 @@ interface RepositoryInterface
 
     public function load(EntityInterface $entity, array $data);
 
+    public function loadOrSave($data, $newEntity = null);
+
     public function reserve(EntityInterface $entity);
 
-} 
+}
