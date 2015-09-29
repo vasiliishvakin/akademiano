@@ -11,7 +11,6 @@ use DeltaDb\EntityInterface;
 
 class File extends AbstractEntity implements EntityInterface
 {
-    protected $id;
     protected $section;
     protected $object;
     protected $type;
@@ -34,22 +33,6 @@ class File extends AbstractEntity implements EntityInterface
     public function getDescription()
     {
         return $this->description;
-    }
-
-    /**
-     * @param mixed $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**
@@ -169,8 +152,5 @@ class File extends AbstractEntity implements EntityInterface
         return $this->getRootUri() . "/" .  $fileDir . (($template) ? "/" . $template  : "") .  "/" . $this->getFileName();
     }
 
-
-
-
-
 }
+
