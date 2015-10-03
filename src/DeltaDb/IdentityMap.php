@@ -69,7 +69,10 @@ class IdentityMap
         $ids = array_map(function($value) {return (string) $value;}, $ids);
         $items = [];
         foreach ($ids as $id) {
-            $items[] = $this->get($id);
+            $item = $this->get($id);
+            if ($item) {
+                $items[] = $item;
+            }
         }
         return $items;
     }

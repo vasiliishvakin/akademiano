@@ -58,7 +58,7 @@ class PgPoint implements \JsonSerializable, ArrayableInterface
         return $this->format();
     }
 
-    public function format($format = "%1s %2s")
+    public function format($format = '%1$s %2$s')
     {
         return sprintf($format, $this->getLon(), $this->getLat());
     }
