@@ -22,18 +22,18 @@ class ArrayObject implements \ArrayAccess, \Iterator, \Countable
         $this->count = null;
     }
 
-    protected function getItemsKeys()
+    public function getKeys()
     {
         if (null === $this->itemsKeys) {
-            $this->itemsKeys = array_keys($this->items);
+            $this->itemsKeys = array_keys($this->getItems());
         }
         return $this->itemsKeys;
     }
 
-    protected function getItemsValues()
+    public function getValues()
     {
         if (null === $this->itemsValues) {
-            $this->itemsValues = array_values($this->items);
+            $this->itemsValues = array_values($this->getItems());
         }
         return $this->itemsValues;
     }
@@ -42,6 +42,11 @@ class ArrayObject implements \ArrayAccess, \Iterator, \Countable
     {
         $this->items = $items;
         $this->clearItemsMeta();
+    }
+
+    protected function &getItems()
+    {
+        return $this->items;
     }
 
 
@@ -59,7 +64,7 @@ class ArrayObject implements \ArrayAccess, \Iterator, \Countable
      */
     public function offsetExists($offset)
     {
-        return array_key_exists($offset, $this->items);
+        return array_key_exists($offset, $this->getItems());
     }
 
     /**
@@ -73,7 +78,7 @@ class ArrayObject implements \ArrayAccess, \Iterator, \Countable
      */
     public function offsetGet($offset)
     {
-        return $this->items[$offset];
+        return $this->getItems()[$offset];
     }
 
     /**
@@ -90,10 +95,11 @@ class ArrayObject implements \ArrayAccess, \Iterator, \Countable
      */
     public function offsetSet($offset, $value)
     {
+        $items = &$this->getItems();
         if (null === $offset) {
-            $this->items[] = $value;
+            $items[] = $value;
         } else {
-            $this->items[$offset] = $value;
+            $items[$offset] = $value;
         }
         $this->clearItemsMeta();
     }
@@ -109,7 +115,8 @@ class ArrayObject implements \ArrayAccess, \Iterator, \Countable
      */
     public function offsetUnset($offset)
     {
-        unset($this->items[$offset]);
+        $items = &$this->getItems();
+        unset($items[$offset]);
         $this->clearItemsMeta();
     }
 
@@ -125,7 +132,7 @@ class ArrayObject implements \ArrayAccess, \Iterator, \Countable
     public function count()
     {
         if (null === $this->count) {
-            $this->count = count($this->items);
+            $this->count = count($this->getItems());
         }
         return $this->count;
     }
@@ -138,7 +145,7 @@ class ArrayObject implements \ArrayAccess, \Iterator, \Countable
      */
     public function current()
     {
-        return $this->getItemsValues()[$this->position];
+        return $this->getValues()[$this->position];
     }
 
     /**
@@ -160,7 +167,7 @@ class ArrayObject implements \ArrayAccess, \Iterator, \Countable
      */
     public function key()
     {
-        return $this->getItemsKeys()[$this->position];
+        return $this->getKeys()[$this->position];
     }
 
     /**
@@ -184,6 +191,31 @@ class ArrayObject implements \ArrayAccess, \Iterator, \Countable
     public function rewind()
     {
         $this->position = 0;
+    }
+
+    public function toArray()
+    {
+        return $this->getItems();
+    }
+
+    public function isEmpty()
+    {
+        return (bool)$this->count() <= 0;
+    }
+
+    public function usort(Callable $function)
+    {
+        return usort($this->getItems(), $function);
+    }
+
+    public function uksort(Callable $function)
+    {
+        return uksort($this->getItems(), $function);
+    }
+
+    public function ksort()
+    {
+        return ksort($this->getItems());
     }
 
 }

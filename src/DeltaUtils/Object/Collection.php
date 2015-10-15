@@ -9,7 +9,7 @@
 namespace DeltaUtils\Object;
 
 
-use DeltaCore\Prototype\ArrayableInterface;
+use DeltaUtils\Object\Prototype\ArrayableInterface;
 use DeltaUtils\Exception\EmptyException;
 
 class Collection extends ArrayObject implements ArrayableInterface
@@ -86,6 +86,21 @@ class Collection extends ArrayObject implements ArrayableInterface
         return $data;
     }
 
+    public function filter($field, $needValue)
+    {
+        $data =[];
+        $method = 'get' . ucfirst($field);
+        foreach($this as $item) {
+            if (is_callable([$item, $method])) {
+                $value = $item->{$method}();
+                if ($value === $needValue) {
+                    $data[] = $item;
+                }
+            }
+        }
+        return new Collection($data);
+    }
+
     public function isEmpty()
     {
         return (bool)$this->count() <= 0;
@@ -107,4 +122,44 @@ class Collection extends ArrayObject implements ArrayableInterface
         return usort($this->items, $function);
     }
 
+    protected function minMax($direction, $field, Callable $function = null)
+    {
+        if ($this->isEmpty()) {
+            throw new \LengthException("Empty collection");
+        }
+        $method = "get" . ucfirst($field);
+        $calcItem = null;
+        foreach($this as $item) {
+            if (is_callable([$item, $method])) {
+                $value = $item->{$method}();
+                if (is_callable($function)) {
+                    $value = call_user_func($function, $value);
+                }
+                if (!isset($calcVal)) {
+                    $calcVal = $value;
+                    $calcItem = $item;
+                }
+                if ($direction === "min") {
+                    if ($value < $calcVal) {
+                        $calcItem = $item;
+                    }
+                } elseif ($direction === "max") {
+                    if ($value > $calcVal) {
+                        $calcItem = $item;
+                    }
+                }
+            }
+        }
+        return $calcItem;
+    }
+
+    public function min($field, Callable $valueCalcFunction = null)
+    {
+        return $this->minMax("min", $field, $valueCalcFunction);
+    }
+
+    public function max($field, Callable $valueCalcFunction = null)
+    {
+        return $this->minMax("max", $field, $valueCalcFunction);
+    }
 }
