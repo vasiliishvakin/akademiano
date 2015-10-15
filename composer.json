@@ -8,11 +8,10 @@
             "email": "zen4dev@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
     "autoload": {
         "psr-0": { "HttpWarp": "src/" }
     },
     "require": {
-        "deltaphp/deltautils": "~1.0"
+        "deltaphp/deltautils": "~1.2"
     }
 }

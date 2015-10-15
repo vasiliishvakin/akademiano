@@ -13,7 +13,7 @@ class Request
 {
     protected $method;
     protected $params;
-    protected $uri;
+    protected $url;
     protected $uriNormal;
 
     public function getMethod()
@@ -101,22 +101,31 @@ class Request
     }
 
     /**
-     * @param mixed $uri
+     * @param mixed $url
      */
-    public function setUri($uri)
+    public function setUrl($url)
     {
-        $this->uri = $uri;
+        if (!$url instanceof Url) {
+            $url = new Url($url);
+        }
+        $this->url = $url;
     }
 
     /**
-     * @return mixed
+     * @return Url
      */
-    public function getUri()
+    public function getUrl()
     {
-        if (is_null($this->uri)) {
-            $this->uri = $_SERVER['REQUEST_URI'];
+        if (is_null($this->url)) {
+            $url = new Url();
+            $url->setScheme($this->isHttps() ? "https" : "http");
+            $url->setHost($_SERVER["HTTP_HOST"] ?: $_SERVER["SERVER_NAME"]);
+            $url->setPort($_SERVER["SERVER_PORT"]);
+            $url->setPath($_SERVER["REQUEST_URI"]);
+            $url->setQuery($_SERVER["QUERY_STRING"]);
+            $this->url = $url;
         }
-        return $this->uri;
+        return $this->url;
     }
 
     public function normalizeUri($uri)
@@ -135,7 +144,7 @@ class Request
     public function getUriNormal()
     {
         if (is_null($this->uriNormal)) {
-            $this->uriNormal = $this->normalizeUri($this->getUri());
+            $this->uriNormal = $this->normalizeUri($this->getUrl());
         }
         return $this->uriNormal;
     }
