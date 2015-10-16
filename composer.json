@@ -1,18 +1,27 @@
 {
-    "name": "deltaphp/deltarouter",
-    "description": "Simple router for php applications",
-    "minimum-stability": "dev",
-    "authors": [
-        {
-            "name": "orbisnull",
-            "email": "zen4dev@gmail.com"
-        }
-    ],
-    "autoload": {
-        "psr-0": { "DeltaRouter": "src/" }
-    },
-    "require": {
-        "deltaphp/httpwarp": "~1.0"
+  "name": "deltaphp/deltarouter",
+  "description": "Simple router for php applications",
+  "license": "GPL-3.0+",
+  "minimum-stability": "dev",
+  "authors": [
+    {
+      "name": "orbisnull",
+      "email": "zen4dev@gmail.com"
     }
-
+  ],
+  "autoload": {
+    "psr-0": {
+      "DeltaRouter": "src/"
+    }
+  },
+  "require": {
+    "php": "~5.6",
+    "ext-fileinfo": "*",
+    "deltaphp/httpwarp": "~1.0"
+  },
+  "require-dev": {
+    "ext-ctype": "*",
+    "codeception/codeception": "*",
+    "codeception/mockery-module": "*"
+  }
 }

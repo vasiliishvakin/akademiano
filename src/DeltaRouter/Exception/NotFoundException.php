@@ -16,5 +16,4 @@ class NotFoundException extends HttpUsableException
         parent::__construct($message, $code, $previous);
     }
 
-
-} 
+}

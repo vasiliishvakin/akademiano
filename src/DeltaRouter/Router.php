@@ -88,7 +88,7 @@ class Router
                     case RoutePattern::TYPE_FULL:
                     case RoutePattern::TYPE_FIRST_PREFIX :
                     case RoutePattern::TYPE_PREFIX: {
-                        usort($routes, function ($a, $b) {
+                        usort($routes, function (Route $a, Route $b) {
                             /** @var Route $a */
                             /** @var Route $b */
                             $la = $a->getMaxLength();
@@ -123,22 +123,24 @@ class Router
                 if ($compare === false) {
                     throw new \InvalidArgumentException("Bad regexp");
                 }
+
                 return $compare;
                 break;
             case RoutePattern::TYPE_PARAMS: {
                 if (!$value instanceof Url\Query && !$pattern instanceof Url\Query) {
                     throw new \InvalidArgumentException("Value and pattern mast be type Query for pattern type " . RoutePattern::TYPE_PARAMS);
                 }
-                if ($pattern->count()> $value->count()){
+                if ($pattern->count() > $value->count()) {
                     return false;
                 }
                 $compare = false;
-                foreach($pattern as $name=>$valueParam) {
-                    if (!isset($value[$name]) || (string) $value[$name] !== (string) $valueParam) {
+                foreach ($pattern as $name => $valueParam) {
+                    if (!isset($value[$name]) || (string)$value[$name] !== (string)$valueParam) {
                         return false;
                     }
                     $compare = true;
                 }
+
                 return $compare;
             }
             default:
@@ -179,62 +181,49 @@ class Router
 
     public function run()
     {
-        try {
-            if ($this->getRoutes()->isEmpty()) {
-                throw new \Exception("In this router urls is not defined");
-            }
 
-            if ($this->isRun) {
-                return;
-            } //fix double run
-            $this->isRun = true;
+        if ($this->getRoutes()->isEmpty()) {
+            throw new \RuntimeException("In this router urls is not defined");
+        }
 
-            $methods = [Route::METHOD_ALL, $this->getRequest()->getMethod()];
-            $currentUrl = $this->getRequest()->getUrl();
-            $routes = $this->getPatternsTree();
+        if ($this->isRun) {
+            return;
+        } //fix double run
+        $this->isRun = true;
 
-            $workedMethods = array_intersect_key($routes, array_flip($methods));
+        $methods = [Route::METHOD_ALL, $this->getRequest()->getMethod()];
+        $currentUrl = $this->getRequest()->getUrl();
+        $routes = $this->getPatternsTree();
 
-            $processed = false;
-            foreach ($workedMethods as $method => $types) {
-                foreach ($types as $type => $routes) {
-                    /** @var Route[] $routes */
-                    foreach ($routes as $route) {
-                        if ($this->isMatch($route, $currentUrl)) {
-                            $runResult = $this->exec($route);
-                            $processed = true;
-                            if ($runResult !== self::RUN_NEXT) {
-                                break;
-                            }
+        $workedMethods = array_intersect_key($routes, array_flip($methods));
+
+        $processed = false;
+        foreach ($workedMethods as $method => $types) {
+            foreach ($types as $type => $routes) {
+                /** @var Route[] $routes */
+                foreach ($routes as $route) {
+                    if ($this->isMatch($route, $currentUrl)) {
+                        $runResult = $this->exec($route);
+                        $processed = true;
+                        if ($runResult !== self::RUN_NEXT) {
+                            $this->isRun = false;
+                            return $runResult;
+                            break;
                         }
                     }
                 }
             }
-
-            if (!$processed) {
-                throw new NotFoundException();
-            }
-        } catch (NotFoundException $e) {
-            return $this->exception404();
         }
+        $this->isRun = false;
 
+        if (!$processed) {
+            throw new NotFoundException();
+        }
     }
 
     function __invoke()
     {
         return $this->run();
-    }
-
-    public function exception404()
-    {
-        if (headers_sent()) {
-            throw new \LogicException('Headers already send, url no found');
-        }
-        header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found");
-        header("Status: 404 Not Found");
-        $_SERVER['REDIRECT_STATUS'] = 404;
-
-        echo "<h1>Not Found</h1>";
     }
 
 }
