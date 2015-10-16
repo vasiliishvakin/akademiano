@@ -133,6 +133,4 @@ class Session {
         }
         return true;
     }
-
-
 }

@@ -23,4 +23,5 @@ class Cookie
         return isset($_COOKIE) && isset($_COOKIE[$name]);
     }
 
-} 
+}
+

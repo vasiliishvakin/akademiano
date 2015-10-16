@@ -104,6 +104,4 @@ class FlowFile implements FileInterface
         }
         return $this->ext;
     }
-
-
 }

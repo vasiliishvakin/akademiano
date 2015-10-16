@@ -5,7 +5,6 @@
 
 namespace HttpWarp;
 
-use DeltaUtils\ArrayUtils;
 use DeltaUtils\ErrorHandler;
 use HttpWarp\File\UploadFile;
 

@@ -53,5 +53,4 @@ class Header
         $ts = self::toGmtDate($time);
         header("Last-Modified: " . $ts);
     }
-
 }

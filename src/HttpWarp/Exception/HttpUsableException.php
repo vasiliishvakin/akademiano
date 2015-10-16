@@ -8,4 +8,4 @@ namespace HttpWarp\Exception;
 class HttpUsableException extends \Exception
 {
 
-} 
+}

@@ -22,4 +22,4 @@ interface FileInterface
 
     public function getExt();
 
-} 
+}

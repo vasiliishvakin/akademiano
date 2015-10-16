@@ -132,6 +132,4 @@ class UploadFile implements FileInterface
         }
         return $this->ext;
     }
-
-
 }
