@@ -254,4 +254,16 @@ class Response
         header("Location: $url");
         exit();
     }
+
+    public function error404()
+    {
+        if (headers_sent()) {
+            throw new \LogicException('Headers already send, url no found');
+        }
+        header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found");
+        header("Status: 404 Not Found");
+        $_SERVER['REDIRECT_STATUS'] = 404;
+
+        echo "<h1>Not Found</h1>";
+    }
 }

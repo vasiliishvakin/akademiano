@@ -147,7 +147,7 @@ class Url
     }
 
     /**
-     * @param mixed $query
+     * @param string|Query $query
      */
     public function setQuery($query)
     {
