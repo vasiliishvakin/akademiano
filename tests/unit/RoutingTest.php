@@ -195,4 +195,40 @@ class RoutingTest extends \Codeception\TestCase\Test
         $this->url->setPath("/home/id333");
         $this->assertEquals("ID", $this->router->run());
     }
+
+    public function testRegexp()
+    {
+        $route = [
+            "methods" => [Route::METHOD_GET],
+            "patterns" => [
+                "part" => RoutePattern::PART_PATH,
+                "type" => RoutePattern::TYPE_REGEXP,
+                "value" => "/article/id(?P<ID>\w+)",
+            ],
+            "action" => function () {
+                return "OK";
+            }
+        ];
+        $this->router->setRoutes([$route]);
+        $this->url->setPath("/article/id0ztgs");
+        $this->assertEquals("OK", $this->router->run());
+    }
+
+    public function testSimpleRegexp()
+    {
+        $route = [
+            "methods" => [Route::METHOD_GET],
+            "patterns" => [
+                "part" => RoutePattern::PART_PATH,
+                "type" => RoutePattern::TYPE_REGEXP,
+                "value" => "/test/{:name}/data/{:id}",
+            ],
+            "action" => function () {
+                return "OK";
+            }
+        ];
+        $this->router->setRoutes([$route]);
+        $this->url->setPath("/test/ddd/data/aaaa");
+        $this->assertEquals("OK", $this->router->run());
+    }
 }

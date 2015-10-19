@@ -25,6 +25,7 @@ class Route
 
     use SetParams;
 
+    protected $id;
     /** @var array */
     protected $methods = [self::METHOD_ALL];
     /** @var  Collection|RoutePattern[] */
@@ -41,13 +42,23 @@ class Route
 
     public function getId()
     {
-        $patterns = $this->getPatterns();
-        $ids = [];
-        foreach ($patterns as $pattern) {
-            $ids[] = $pattern->getId();
+        if (empty($this->id)) {
+            $patterns = $this->getPatterns();
+            $ids = [];
+            foreach ($patterns as $pattern) {
+                $ids[] = $pattern->getId();
+            }
+            return implode("#", $this->getMethods()) . "#" . implode("$", $ids);
         }
+        return $this->id;
+    }
 
-        return implode("#", $this->getMethods()) . "#" . implode("$", $ids);
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 
     /**
@@ -133,5 +144,19 @@ class Route
                 throw new \OverflowException("Route with base type {$type} not support length param");
             }
         }
+    }
+
+    public function getUrl(array $params = [])
+    {
+        throw new \BadMethodCallException("Not implemented");
+
+        $url = new Url();
+        foreach($this->getPatterns() as $pattern) {
+            switch($pattern->getPart()) {
+                case RoutePattern::PART_DOMAIN:
+                    $url->setHost($pattern->getValue());
+            }
+        }
+
     }
 }

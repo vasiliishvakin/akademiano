@@ -11,6 +11,7 @@ namespace DeltaRouter;
 
 use DeltaUtils\Object\Prototype\ArrayableInterface;
 use DeltaUtils\Parts\SetParams;
+use DeltaUtils\RegexpUtils;
 use HttpWarp\Url;
 
 class RoutePattern implements ArrayableInterface
@@ -83,7 +84,12 @@ class RoutePattern implements ArrayableInterface
      */
     public function getValue()
     {
-        if (is_array($this->value)){
+        if ($this->getType() === self::TYPE_REGEXP) {
+            //convert simple url to url
+            if (strpos($this->value, "{:")!==false) {
+                $this->value = RegexpUtils::simpleToNormal($this->value);
+            }
+        } elseif (is_array($this->value)){
             switch($this->getPart()) {
                 case self::PART_PATH :
                     $value = new Url\Path();
@@ -118,6 +124,16 @@ class RoutePattern implements ArrayableInterface
             "type" => $this->getType(),
             "value" => $value,
         ];
+    }
+
+    public function calcValue($param)
+    {
+        switch($this->getType()) {
+            case self::TYPE_FULL:
+                return $this->getValue();
+
+        }
+
     }
 
 }

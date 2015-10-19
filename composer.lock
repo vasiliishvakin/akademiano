@@ -4,20 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "88aabce284a94839c2f3d38df5168612",
+    "hash": "67939a7dd61220308a589ea8cbb9d9a9",
+    "content-hash": "e5d0540e68d15f5522bb4f84c49a1dfa",
     "packages": [
         {
             "name": "deltaphp/deltautils",
-            "version": "1.2",
+            "version": "1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/DeltaUtils.git",
-                "reference": "1962a8d2c2f7829a1fe9b73fdf808cb701a87f15"
+                "reference": "4c1486e4c588ed65d831be5ae8ce16978aa9acc7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/DeltaUtils/zipball/1962a8d2c2f7829a1fe9b73fdf808cb701a87f15",
-                "reference": "1962a8d2c2f7829a1fe9b73fdf808cb701a87f15",
+                "url": "https://api.github.com/repos/DeltaPHP/DeltaUtils/zipball/4c1486e4c588ed65d831be5ae8ce16978aa9acc7",
+                "reference": "4c1486e4c588ed65d831be5ae8ce16978aa9acc7",
                 "shasum": ""
             },
             "type": "library",
@@ -37,7 +38,7 @@
                 }
             ],
             "description": "good tools and utils",
-            "time": "2015-10-15 18:20:55"
+            "time": "2015-10-19 08:56:34"
         },
         {
             "name": "deltaphp/httpwarp",
@@ -45,12 +46,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/HttpWarp.git",
-                "reference": "7dd9cd05f4d4bea47d0770c8d833f20234fb0d58"
+                "reference": "5df3e50b46e40100bf3846cd45990a0c023fb518"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/HttpWarp/zipball/7dd9cd05f4d4bea47d0770c8d833f20234fb0d58",
-                "reference": "7dd9cd05f4d4bea47d0770c8d833f20234fb0d58",
+                "url": "https://api.github.com/repos/DeltaPHP/HttpWarp/zipball/5df3e50b46e40100bf3846cd45990a0c023fb518",
+                "reference": "5df3e50b46e40100bf3846cd45990a0c023fb518",
                 "shasum": ""
             },
             "require": {
@@ -73,7 +74,7 @@
                 }
             ],
             "description": "request, response, session and other tools for base web development",
-            "time": "2015-10-16 13:32:50"
+            "time": "2015-10-19 08:50:56"
         }
     ],
     "packages-dev": [
@@ -928,12 +929,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "be067d6105286b74272facefc2697038f8807b77"
+                "reference": "b4900675926860bef091644849305399b986efa2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/be067d6105286b74272facefc2697038f8807b77",
-                "reference": "be067d6105286b74272facefc2697038f8807b77",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/b4900675926860bef091644849305399b986efa2",
+                "reference": "b4900675926860bef091644849305399b986efa2",
                 "shasum": ""
             },
             "require": {
@@ -992,7 +993,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-10-14 13:49:40"
+            "time": "2015-10-17 15:03:30"
         },
         {
             "name": "phpunit/phpunit-mock-objects",

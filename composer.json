@@ -17,7 +17,8 @@
   "require": {
     "php": "~5.6",
     "ext-fileinfo": "*",
-    "deltaphp/httpwarp": "~1.0"
+    "deltaphp/httpwarp": "~1.0",
+    "deltaphp/deltautils": "^1.2.1"
   },
   "require-dev": {
     "ext-ctype": "*",

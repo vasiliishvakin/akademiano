@@ -2,7 +2,10 @@
 namespace DeltaRouter;
 
 use DeltaRouter\Exception\NotFoundException;
+use DeltaUtils\ArrayUtils;
 use DeltaUtils\Object\Collection;
+use DeltaUtils\RegexpUtils;
+use DeltaUtils\StringUtils;
 use HttpWarp\Request;
 use HttpWarp\Url;
 
@@ -63,8 +66,11 @@ class Router
      */
     public function setRoutes(array $routes)
     {
-        foreach ($routes as $route) {
+        foreach ($routes as $name=>$route) {
             if (!$route instanceof Route) {
+                if (!is_numeric($name) && !isset($route["id"])) {
+                    $route["id"] = $name;
+                }
                 $route = new Route($route);
             }
             $this->routes[$route->getId()] = $route;
@@ -104,7 +110,6 @@ class Router
                 }
             }
         }
-
         return $routesTree;
     }
 
@@ -119,7 +124,9 @@ class Router
                 return strpos($value, $pattern) === 0;
                 break;
             case RoutePattern::TYPE_REGEXP:
-                $compare = preg_match($value, $pattern);
+                //prepare pattern
+                $pattern = RegexpUtils::addDelimiters($pattern);
+                $compare = preg_match($pattern, $value, $matches);
                 if ($compare === false) {
                     throw new \InvalidArgumentException("Bad regexp");
                 }
@@ -226,4 +233,13 @@ class Router
         return $this->run();
     }
 
+    public function getUrl($id, array $params = [])
+    {
+        $routes = $this->getRoutes();
+        if (!isset($routes[$id])) {
+            throw new \InvalidArgumentException("Not found router with id $id");
+        }
+        $route = $routes[$id];
+        return $route->getUrl($params);
+    }
 }
