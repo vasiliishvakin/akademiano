@@ -2,10 +2,8 @@
 namespace DeltaRouter;
 
 use DeltaRouter\Exception\NotFoundException;
-use DeltaUtils\ArrayUtils;
 use DeltaUtils\Object\Collection;
 use DeltaUtils\RegexpUtils;
-use DeltaUtils\StringUtils;
 use HttpWarp\Request;
 use HttpWarp\Url;
 
@@ -161,12 +159,12 @@ class Router
         foreach ($route->getPatterns() as $pattern) {
             switch ($pattern->getPart()) {
                 case RoutePattern::PART_DOMAIN:
-                    $match = $this->isMatchByType($url->getHost(), $pattern->getValue(), $pattern->getType());
+                    $match = $this->isMatchByType($url->getDomain(), $pattern->getValue(), $pattern->getType());
                     break;
                 case RoutePattern::PART_PATH:
                     $match = $this->isMatchByType($url->getPath(), $pattern->getValue(), $pattern->getType());
                     break;
-                case RoutePattern::PART_PARAM:
+                case RoutePattern::PART_QUERY:
                     $urlValue = $url->getQuery();
                     $match = $this->isMatchByType($urlValue, $pattern->getValue(), $pattern->getType());
                     break;

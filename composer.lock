@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "67939a7dd61220308a589ea8cbb9d9a9",
-    "content-hash": "e5d0540e68d15f5522bb4f84c49a1dfa",
+    "hash": "d1957701db8926cee20be495b0ec4dbc",
+    "content-hash": "e86c06919f76d8d170ca2627d316c919",
     "packages": [
         {
             "name": "deltaphp/deltautils",
-            "version": "1.2.1",
+            "version": "1.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/DeltaUtils.git",
-                "reference": "4c1486e4c588ed65d831be5ae8ce16978aa9acc7"
+                "reference": "1928f532af4c46563a4b1ea4fbf609f9dc276d9f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/DeltaUtils/zipball/4c1486e4c588ed65d831be5ae8ce16978aa9acc7",
-                "reference": "4c1486e4c588ed65d831be5ae8ce16978aa9acc7",
+                "url": "https://api.github.com/repos/DeltaPHP/DeltaUtils/zipball/1928f532af4c46563a4b1ea4fbf609f9dc276d9f",
+                "reference": "1928f532af4c46563a4b1ea4fbf609f9dc276d9f",
                 "shasum": ""
             },
             "type": "library",
@@ -38,7 +38,7 @@
                 }
             ],
             "description": "good tools and utils",
-            "time": "2015-10-19 08:56:34"
+            "time": "2015-10-19 16:01:36"
         },
         {
             "name": "deltaphp/httpwarp",
@@ -46,16 +46,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/HttpWarp.git",
-                "reference": "5df3e50b46e40100bf3846cd45990a0c023fb518"
+                "reference": "4b44457092db62e389b05c6ffc36e48e8b4ae34d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/HttpWarp/zipball/5df3e50b46e40100bf3846cd45990a0c023fb518",
-                "reference": "5df3e50b46e40100bf3846cd45990a0c023fb518",
+                "url": "https://api.github.com/repos/DeltaPHP/HttpWarp/zipball/4b44457092db62e389b05c6ffc36e48e8b4ae34d",
+                "reference": "4b44457092db62e389b05c6ffc36e48e8b4ae34d",
                 "shasum": ""
             },
             "require": {
-                "deltaphp/deltautils": "~1.2"
+                "deltaphp/deltautils": "^1.2.2"
             },
             "type": "library",
             "autoload": {
@@ -74,7 +74,7 @@
                 }
             ],
             "description": "request, response, session and other tools for base web development",
-            "time": "2015-10-19 08:50:56"
+            "time": "2015-10-19 15:57:04"
         }
     ],
     "packages-dev": [

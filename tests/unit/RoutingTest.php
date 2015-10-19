@@ -57,7 +57,7 @@ class RoutingTest extends \Codeception\TestCase\Test
         ];
         $this->router->setRoutes([$route]);
 
-        $this->url->setHost("test.test");
+        $this->url->setDomain("test.test");
         $this->assertEquals("OK", $this->router->run());
     }
 
@@ -79,7 +79,7 @@ class RoutingTest extends \Codeception\TestCase\Test
         ];
         $this->router->setRoutes([$route]);
 
-        $this->url->setHost("superhostt");
+        $this->url->setDomain("superhostt");
         $this->assertEquals("OK", $this->router->run());
     }
 
@@ -119,7 +119,7 @@ class RoutingTest extends \Codeception\TestCase\Test
         $route = [
             "methods" => [Route::METHOD_GET],
             "patterns" => [
-                "part" => RoutePattern::PART_PARAM,
+                "part" => RoutePattern::PART_QUERY,
                 "type" => RoutePattern::TYPE_PARAMS,
                 "value" => ["id" => 4],
             ],
@@ -155,7 +155,7 @@ class RoutingTest extends \Codeception\TestCase\Test
         ];
         $this->router->setRoutes([$route]);
 
-        $this->url->setHost("test.test");
+        $this->url->setDomain("test.test");
         $this->url->setPath("/home/");
         $this->url->setQuery("id=4&test=www");
         $this->assertEquals("OK", $this->router->run());

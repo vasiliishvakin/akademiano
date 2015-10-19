@@ -146,17 +146,38 @@ class Route
         }
     }
 
+    public function fillPart()
+    {
+
+    }
+
     public function getUrl(array $params = [])
     {
-        throw new \BadMethodCallException("Not implemented");
-
         $url = new Url();
         foreach($this->getPatterns() as $pattern) {
             switch($pattern->getPart()) {
                 case RoutePattern::PART_DOMAIN:
-                    $url->setHost($pattern->getValue());
+                    $paramName = RoutePattern::PART_DOMAIN_NAME;
+                    $method = "setDomain";
+                    break;
+                case RoutePattern::PART_PATH:
+                    $paramName = RoutePattern::PART_PATH_NAME;
+                    $method = "setPath";
+                    break;
+                case RoutePattern::PART_QUERY:
+                    $paramName = RoutePattern::PART_QUERY_NAME;
+                    $method = "setQuery";
+                    break;
+                default:
+                    throw new \InvalidArgumentException("Not implemented for part" . $pattern->getPart());
             }
+            $param = $this->getPatterns()->count()>1 ?  (isset($params[$paramName]) ? $params[$paramName] : "null") : $params;
+            if (empty($param)) {
+                $param = null;
+            }
+            $value = $pattern->calcValue($param);
+            $url->{$method}($value);
         }
-
+        return $url;
     }
 }
