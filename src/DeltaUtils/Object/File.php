@@ -43,6 +43,7 @@ class File
         if (is_null($this->name)) {
 
         }
+
         return $this->name;
     }
 
@@ -55,6 +56,7 @@ class File
                 $this->type = FS::FST_FILE;
             }
         }
+
         return $this->type;
     }
 
@@ -63,9 +65,10 @@ class File
         if (is_null($this->mime)) {
             $this->mime = FS::getFileType($this->path);
         }
+
         return $this->mime;
     }
-    
+
     public function isDir()
     {
         return $this->getType() === FS::FST_DIR;
@@ -84,6 +87,7 @@ class File
         if (is_null($this->fileInfo)) {
             $this->fileInfo = new SplFileInfo($this->getPath());
         }
+
         return $this->fileInfo;
     }
 
@@ -96,7 +100,7 @@ class File
         if (is_null($this->fileOpen)) {
             $this->fileOpen = $this->getInfo()->openFile($openMode);
         }
+
         return $this->fileOpen;
     }
-
 }

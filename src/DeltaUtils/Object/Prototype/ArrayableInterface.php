@@ -8,7 +8,7 @@
 
 namespace DeltaUtils\Object\Prototype;
 
-interface ArrayableInterface 
+interface ArrayableInterface
 {
     public function toArray();
 }

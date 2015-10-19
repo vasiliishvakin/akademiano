@@ -28,6 +28,7 @@ class Time
             case 'm' :
                 $time = $time * 60;
         }
+
         return $time;
     }
 
@@ -50,10 +51,11 @@ class Time
             $currentLocale = System::setLocale("LC_TIME", $locale);
         }
         $timeStamp = $date->getTimestamp();
-        $string =  strftime($format, $timeStamp);
+        $string = strftime($format, $timeStamp);
         if ($locale) {
             System::setLocale("LC_TIME", $currentLocale);
         }
+
         return $string;
     }
 
@@ -62,10 +64,11 @@ class Time
         if (!$date instanceof \DateTime) {
             $date = new \DateTime($date);
         }
+
         return $date;
     }
 
-    public static function calendarMonth($date = null,  array $linkDates = null, $activeDay = null)
+    public static function calendarMonth($date = null, array $linkDates = null, $activeDay = null)
     {
         $date = self::str2DateTime($date);
         $activeDay = $activeDay ? self::str2DateTime($activeDay) : null;
@@ -101,7 +104,7 @@ class Time
             }
 
             $week[] = $day;
-            if (round($j / 7) - $j / 7 == 0){
+            if (round($j / 7) - $j / 7 == 0) {
                 $month[] = $week;
                 $week = [];
             }
@@ -119,7 +122,7 @@ class Time
             "firstDay" => $firstDayObj,
             "lastDay" => $lastDayObj,
         ];
+
         return $data;
     }
-
 }

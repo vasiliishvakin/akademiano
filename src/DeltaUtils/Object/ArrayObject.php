@@ -27,6 +27,7 @@ class ArrayObject implements \ArrayAccess, \Iterator, \Countable
         if (null === $this->itemsKeys) {
             $this->itemsKeys = array_keys($this->getItems());
         }
+
         return $this->itemsKeys;
     }
 
@@ -35,6 +36,7 @@ class ArrayObject implements \ArrayAccess, \Iterator, \Countable
         if (null === $this->itemsValues) {
             $this->itemsValues = array_values($this->getItems());
         }
+
         return $this->itemsValues;
     }
 
@@ -134,6 +136,7 @@ class ArrayObject implements \ArrayAccess, \Iterator, \Countable
         if (null === $this->count) {
             $this->count = count($this->getItems());
         }
+
         return $this->count;
     }
 

@@ -9,7 +9,7 @@
 namespace DeltaUtils\Object\Prototype;
 
 
-interface StringableIterface 
+interface StringableInterface
 {
     public function __toString();
 }

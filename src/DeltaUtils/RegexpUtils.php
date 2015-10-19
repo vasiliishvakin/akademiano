@@ -8,6 +8,7 @@
 
 namespace DeltaUtils;
 
+use DeltaUtils\ArrayUtils;
 
 class RegexpUtils
 {
@@ -31,12 +32,19 @@ class RegexpUtils
                 }
             }
         }
+
         return $delimiter . $string . $delimiter;
     }
 
-    public static function simpleToNormal($string)
+    public static function simpleToNormal($string, $mask = "\\w+")
     {
-        return preg_replace("~{:(\w+)}~", "(?P<$1>\\w+)", $string);
+        return preg_replace("~{:(\w+)}~", "(?P<$1>{$mask})", $string);
     }
 
+    public static function replaceNamedParams($regexp, $params)
+    {
+        return preg_replace_callback('~\(\?P<(\w+)>.+\)~U', function ($match) use (&$params) {
+            return ArrayUtils::extract($params, $match[1], $match[0]);
+        }, $regexp);
+    }
 }

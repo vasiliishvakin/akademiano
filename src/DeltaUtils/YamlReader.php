@@ -6,11 +6,11 @@
 namespace DeltaUtils;
 
 
-class YamlReader 
+class YamlReader
 {
     public static function parseFile($file)
     {
         return yaml_parse_file($file);
     }
 
-} 
+}

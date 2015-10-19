@@ -31,7 +31,13 @@ class ArrayUtils
         return $merged;
     }
 
-    public static function setByPath(array $array, array $path = null, $value)
+    /**
+     * @param array $array
+     * @param array|null $path
+     * @param $value
+     * @return array
+     */
+    public static function set(array $array, array $path = null, $value)
     {
         if (is_null($path)) {
             return $value;
@@ -48,13 +54,24 @@ class ArrayUtils
         return $array;
     }
 
-    public static function getByPath(array $array, $path = null, $default = null)
+    /**
+     * @param array $array
+     * @param array|null $path
+     * @param $value
+     * @return array
+     * @deprecated
+     */
+    public static function setByPath(array $array, array $path = null, $value)
+    {
+        return self::set($array, $path, $value);
+    }
+
+    public static function get($array, $path, $default)
     {
         if (is_null($path)) {
             return $array;
         }
         $path = (array)$path;
-
         $current = $array;
         foreach ($path as $item) {
             if (!isset($current[$item])) {
@@ -64,6 +81,18 @@ class ArrayUtils
         }
 
         return $current;
+    }
+
+    /**
+     * @param array $array
+     * @param null $path
+     * @param null $default
+     * @return mixed
+     * @deprecated
+     */
+    public static function getByPath(array $array, $path = null, $default = null)
+    {
+        return self::get($array, $path, $default);
     }
 
     public static function issetByPath(array $array, $path)
@@ -215,5 +244,38 @@ class ArrayUtils
         $array = array_combine($keys, $array);
 
         return $array;
+    }
+
+    public static function remove($array, $path)
+    {
+        if (is_null($path)) {
+            return $array;
+        }
+        $path = (array)$path;
+        $key = array_shift($path);
+        if (count($path) <= 0) {
+            if (isset($array[$key])) {
+                unset($array[$key]);
+            }
+            return $array;
+        }
+        if (!isset($array[$key]) || is_null($array[$key])) {
+            return null;
+        }
+        if (is_array($array[$key])) {
+            if (count($array[$key]) <= 0) {
+                unset($array[$key]);
+            } else {
+                $array[$key] = self::remove($array[$key], $path);
+            }
+        }
+        return $array;
+    }
+
+    public static function extract(&$array, $path, $default = null)
+    {
+        $value =  self::get($array, $path, $default);
+        $array = self::remove($array, $path);
+        return $value;
     }
 }

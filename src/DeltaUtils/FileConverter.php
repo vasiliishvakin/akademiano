@@ -26,6 +26,7 @@ class FileConverter
         if (!$this->tmpDir) {
             $this->tmpDir = sys_get_temp_dir();
         }
+
         return $this->tmpDir;
     }
 
@@ -97,6 +98,7 @@ class FileConverter
                 throw new Exception("Error in creating file $outputFile");
             }
         }
+
         return $result;
     }
 
@@ -118,7 +120,8 @@ class FileConverter
         if (empty($outputFile)) {
             $execCmd = str_replace($pInput, escapeshellarg($inputFile), $command);
         } else {
-            $execCmd = str_replace([$pInput, $pOutput], [escapeshellarg($inputFile), escapeshellarg($outputFile)], $command);
+            $execCmd = str_replace([$pInput, $pOutput], [escapeshellarg($inputFile), escapeshellarg($outputFile)],
+                $command);
         }
         $outputData = [];
         exec($execCmd, $outputData, $result);

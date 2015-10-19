@@ -14,10 +14,10 @@ use DeltaUtils\Exception\EmptyException;
 
 class Collection extends ArrayObject implements ArrayableInterface
 {
-    function __construct(array $items = null)
+    function __construct($data = null)
     {
-        if (null !== $items) {
-            $this->setItems($items);
+        if (null !== $data) {
+            $this->setItems((array) $data);
         }
     }
 
@@ -106,7 +106,7 @@ class Collection extends ArrayObject implements ArrayableInterface
         return (bool)$this->count() <= 0;
     }
 
-    public function merge(\Traversable $data)
+    public function merge($data)
     {
         foreach ($data as $key => $value) {
             if (is_string($key)) {

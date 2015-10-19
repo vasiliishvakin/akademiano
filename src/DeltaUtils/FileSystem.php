@@ -21,6 +21,7 @@ class FileSystem
     {
         $finfo = new \finfo(FILEINFO_MIME_TYPE);
         $info = $finfo->file($path);
+
         return $info;
     }
 
@@ -51,15 +52,17 @@ class FileSystem
 
     public static function getFileTypeConst($path)
     {
-            if (is_dir($path)) {
-                return self::FST_DIR;
-            } else if (self::isWebImage($path)) {
+        if (is_dir($path)) {
+            return self::FST_DIR;
+        } else {
+            if (self::isWebImage($path)) {
                 return self::FST_IMAGE;
             } elseif (is_file($path)) {
                 return self::FST_FILE;
             } else {
                 return self::FST_ALL;
             }
+        }
     }
 
     public static function checkType($path, $type)
@@ -82,12 +85,17 @@ class FileSystem
         }
     }
 
-    public static function getItems($path, $resultType=self::LIST_SCALAR, $itemType = self::FST_ALL, $level = false, $showHidden = false)
-    {
+    public static function getItems(
+        $path,
+        $resultType = self::LIST_SCALAR,
+        $itemType = self::FST_ALL,
+        $level = false,
+        $showHidden = false
+    ) {
         if (!$path) {
             return null;
         }
-        if ($level!==false && $level<=0) {
+        if ($level !== false && $level <= 0) {
             return null;
         }
         //если это папка и рекурсивно или левел не 0 - идем в рекурсию
@@ -105,7 +113,7 @@ class FileSystem
                 if (!$showHidden && self::isHidden($item)) {
                     continue;
                 }
-                if (($level === false || $level>0) && is_dir($itemPath)) {
+                if (($level === false || $level > 0) && is_dir($itemPath)) {
                     $itemsInFolder = self::getItems($itemPath, $resultType, $itemType, $level, $showHidden);
                     $items[$item] = $itemsInFolder;
                 }
@@ -121,15 +129,16 @@ class FileSystem
             }
             closedir($handle);
         }
+
         return $items;
     }
 
-    public static function getDirs($path, $resultType=self::LIST_SCALAR, $level = 1, $showHidden = false)
+    public static function getDirs($path, $resultType = self::LIST_SCALAR, $level = 1, $showHidden = false)
     {
         return self::getItems($path, $resultType, self::FST_DIR, $level, $showHidden);
     }
 
-    public static function getFiles($path, $resultType=self::LIST_SCALAR, $level = 1, $showHidden = false)
+    public static function getFiles($path, $resultType = self::LIST_SCALAR, $level = 1, $showHidden = false)
     {
         return self::getItems($path, $resultType, self::FST_FILE, $level, $showHidden);
     }
@@ -146,21 +155,23 @@ class FileSystem
                 throw new \RuntimeException("Bad checked path: $dir");
             }
         }
-        if (strlen($parentDir) >  strlen($dir)) {
+        if (strlen($parentDir) > strlen($dir)) {
             return false;
         }
         $partDir = substr($dir, 0, strlen($parentDir));
         if ((!$parentDir || !$dir || !$partDir) || ($parentDir !== $partDir)) {
             return false;
         }
+
         return $dir;
     }
 
     public static function getDirName($path, $level = 1)
     {
-        for($i = 1; $i<=$level; $i++) {
+        for ($i = 1; $i <= $level; $i++) {
             $path = dirname($path);
         }
+
         return $path;
     }
 
@@ -169,6 +180,7 @@ class FileSystem
         if (file_exists($file)) {
             return include $file;
         }
+
         return $default;
     }
 
