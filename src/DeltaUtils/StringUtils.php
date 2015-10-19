@@ -7,11 +7,11 @@ namespace DeltaUtils;
 
 
 use DeltaUtils\Helper\Pluralizer;
-use Symfony\Component\Config\Definition\Exception\Exception;
 
 class StringUtils
 {
-    public static function cropBySpace($str, $size){
+    public static function cropBySpace($str, $size)
+    {
         return mb_substr($str, 0, mb_strrpos(mb_substr($str, 0, $size), ' '));
     }
 
@@ -24,17 +24,19 @@ class StringUtils
                 $paragraphs .= '<p>' . $line . '</p>';
             }
         }
+
         return $paragraphs;
     }
 
-    public static function urlToTag($text, $maxLen = 0) {
+    public static function urlToTag($text, $maxLen = 0)
+    {
         $pattern = '((http|ftp)(s)?+(://)?(([-\w]+\.)+([^\s]+)+[^,.\s]))';
         $newText = preg_replace_callback($pattern,
-            function ($matches) use($maxLen) {
+            function ($matches) use ($maxLen) {
                 $url = $matches[0];
                 $urlArr = parse_url($url);
-                $path = (isset($urlArr["path"])) ?  $urlArr["path"] : "";
-                $title =  $urlArr["host"] . $path;
+                $path = (isset($urlArr["path"])) ? $urlArr["path"] : "";
+                $title = $urlArr["host"] . $path;
                 if ($maxLen === 0) {
                     return "<a href='{$url}'>{$title}</a>";
                 }
@@ -46,13 +48,16 @@ class StringUtils
                 if (mb_strlen($title) > $maxLen) {
                     $title = mb_substr($title, 0, $maxLen) . "...";
                 }
+
                 return "<a title='$maxTitle' href='{$url}'>{$title}</a>";
             },
             $text);
+
         return (!is_null($newText)) ? $newText : $text;
     }
 
-    public static function cutStr ($text, $length = 160) {
+    public static function cutStr($text, $length = 160)
+    {
         $text = strip_tags($text);
         $buf = 10;
         if (mb_strlen($text) <= $length + $buf) {
@@ -63,13 +68,14 @@ class StringUtils
         $startPos = $length - $buf;
         foreach ($chars as $char) {
             $pos = mb_strpos($preStr, $char, $startPos);
-            if ($pos!== false) {
+            if ($pos !== false) {
                 break;
             }
         }
         if (!$pos) {
             $pos = $length + $buf;
         }
+
         return trim(mb_substr($text, 0, $pos + 1));
     }
 
@@ -80,6 +86,7 @@ class StringUtils
         }
         $class = explode("\\", $class);
         $class = end($class);
+
         return $class;
     }
 
@@ -89,6 +96,7 @@ class StringUtils
             $class = get_class($class);
         }
         $namespace = substr($class, 0, strrpos($class, '\\'));
+
         return $namespace;
     }
 
@@ -99,9 +107,9 @@ class StringUtils
 
     public static function lowDashToCamelCase($string)
     {
-        if(strpos($string, "_")) {
+        if (strpos($string, "_")) {
             $stringParts = explode("_", $string);
-            foreach($stringParts as $key=>$part) {
+            foreach ($stringParts as $key => $part) {
                 if ($key === 0) {
                     continue;
                 }
@@ -109,6 +117,7 @@ class StringUtils
             }
             $string = implode("", $stringParts);
         }
+
         return $string;
     }
 
@@ -119,17 +128,18 @@ class StringUtils
         foreach ($ret as &$match) {
             $match = $match == strtoupper($match) ? strtolower($match) : lcfirst($match);
         }
+
         return implode('_', $ret);
     }
 
     public static function toIdStr9($id)
     {
-        return sprintf("id%09s", (integer) $id);
+        return sprintf("id%09s", (integer)$id);
     }
 
     public static function idFromStr($string)
     {
-        return (integer) substr($string, 2);
+        return (integer)substr($string, 2);
     }
 
     public static function toString($var, $oneField = false, $implode = false)
@@ -153,7 +163,8 @@ class StringUtils
                 if (!$oneField) {
                     return $implode ? ArrayUtils::implodeRecursive($implode, $var) : "";
                 } else {
-                    return self::toString(array_key_exists($oneField, $var)? $var[$oneField] : "", $oneField, $implode);
+                    return self::toString(array_key_exists($oneField, $var) ? $var[$oneField] : "", $oneField,
+                        $implode);
                 }
             case "object" :
                 if ($var instanceof \DateTime) {
@@ -170,14 +181,16 @@ class StringUtils
                     if (method_exists($var, $method)) {
                         return self::toString($var->{$method}(), $oneField, $implode);
                     }
+
                     return "";
                 } else {
                     if (method_exists($var, "__toString")) {
-                        return (string) $var;
+                        return (string)$var;
                     }
                     if (method_exists($var, "toArray")) {
                         return self::toString($var->toArray());
                     }
+
                     return self::toString(get_object_vars($var), $oneField, $implode);
                 }
             default:
@@ -189,8 +202,8 @@ class StringUtils
     /**
      * Get the plural form of the given english word.
      *
-     * @param  string  $value
-     * @param  int     $count
+     * @param  string $value
+     * @param  int $count
      * @return string
      */
     public static function pluralEn($value, $count = 2)
@@ -201,11 +214,11 @@ class StringUtils
     /**
      * Get the singular form of the given english word.
      *
-     * @param  string  $value
+     * @param  string $value
      * @return string
      */
     public static function singularEn($value)
     {
         return Pluralizer::singular($value);
     }
-} 
+}
