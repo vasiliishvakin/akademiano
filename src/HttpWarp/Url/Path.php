@@ -4,9 +4,9 @@ namespace HttpWarp\Url;
 
 use DeltaUtils\Object\ArrayObject;
 use DeltaUtils\Object\Prototype\ArrayableInterface;
-use DeltaUtils\Object\Prototype\StringableIterface;
+use DeltaUtils\Object\Prototype\StringableInterface;
 
-class Path extends ArrayObject implements ArrayableInterface, StringableIterface
+class Path extends ArrayObject implements ArrayableInterface, StringableInterface
 {
     protected $rawStr;
     protected $normalStr;
@@ -99,7 +99,7 @@ class Path extends ArrayObject implements ArrayableInterface, StringableIterface
                 return rawurlencode($val);
             }, $this->toArray());
 
-            $this->composedString = "/" . implode("/", $parts);
+            $this->composedString = "/". implode("/", $parts);
         }
         return $this->composedString;
     }

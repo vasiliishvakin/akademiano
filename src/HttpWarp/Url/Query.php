@@ -4,18 +4,22 @@ namespace HttpWarp\Url;
 
 use DeltaUtils\Object\ArrayObject;
 use DeltaUtils\Object\Prototype\ArrayableInterface;
-use DeltaUtils\Object\Prototype\StringableIterface;
+use DeltaUtils\Object\Prototype\StringableInterface;
 
-class Query extends ArrayObject implements ArrayableInterface, StringableIterface
+class Query extends ArrayObject implements ArrayableInterface, StringableInterface
 {
     protected $rawStr;
     protected $normalStr;
     protected $composedString;
 
-    public function __construct($string = null)
+    public function __construct($data = null)
     {
-        if (!is_null($string)) {
-            $this->setRawStr($string);
+        if (!is_null($data)) {
+            if (is_array($data)) {
+                $this->setItems($data);
+            } elseif (is_string($data)) {
+                $this->setRawStr($data);
+            }
         }
     }
 
@@ -100,13 +104,7 @@ class Query extends ArrayObject implements ArrayableInterface, StringableIterfac
                 $this->setItems($newParts);
             }
         }
-
         return $this->items;
-    }
-
-    protected function sort()
-    {
-        return $this->ksort();
     }
 
     protected function clearItemsMeta()
@@ -115,11 +113,10 @@ class Query extends ArrayObject implements ArrayableInterface, StringableIterfac
         $this->composedString = null;
     }
 
-
     function __toString()
     {
         if (is_null($this->composedString)) {
-            $this->sort();
+            $this->ksort();
             $str = [];
             foreach ($this as $name => $part) {
                 $str[] = urlencode($name) . "=" . urlencode($part);

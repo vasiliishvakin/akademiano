@@ -20,7 +20,7 @@ class Url
     protected $defaultPorts = [80, 443];
     protected $rawUrl;
     protected $scheme;
-    protected $host;
+    protected $domain;
     protected $port;
     protected $user;
     protected $password;
@@ -41,6 +41,10 @@ class Url
      */
     public function getScheme()
     {
+        if (is_null($this->scheme)) {
+            $this->scheme = isset($this->port) && ($this->port == 443) ? "https" : "http";
+        }
+
         return $this->scheme;
     }
 
@@ -55,17 +59,21 @@ class Url
     /**
      * @return string
      */
-    public function getHost()
+    public function getDomain()
     {
-        return $this->host;
+        if (is_null($this->domain)) {
+            $this->domain = isset($_SERVER["HTTP_HOST"]) ? $_SERVER["HTTP_HOST"] : $_SERVER["SERVER_NAME"];
+        }
+
+        return $this->domain;
     }
 
     /**
-     * @param mixed $host
+     * @param mixed $domain
      */
-    public function setHost($host)
+    public function setDomain($domain)
     {
-        $this->host = $host;
+        $this->domain = $domain;
     }
 
     /**
@@ -73,6 +81,10 @@ class Url
      */
     public function getPort()
     {
+        if (is_null($this->port)) {
+            $this->port = isset($this->scheme) && $this->scheme === "https" ? 443 : 80;
+        }
+
         return $this->port;
     }
 
@@ -124,6 +136,7 @@ class Url
         if (!$this->path instanceof Path) {
             $this->path = new Path($this->path);
         }
+
         return $this->path;
     }
 
@@ -143,6 +156,7 @@ class Url
         if (!$this->query instanceof Query) {
             $this->query = new Query($this->query);
         }
+
         return $this->query;
     }
 
@@ -189,12 +203,13 @@ class Url
 
     public function load(array $components)
     {
-        foreach ($components as $name=>$value) {
+        foreach ($components as $name => $value) {
             $method = "set" . ucfirst($value);
             if (method_exists($this, $method)) {
                 $this->{$method}($value);
             }
         }
+
         return $this;
     }
 
@@ -203,6 +218,7 @@ class Url
         if (empty($url)) {
             throw new \InvalidArgumentException("url empty");
         }
+
         return parse_url(url);
     }
 
@@ -211,32 +227,17 @@ class Url
      */
     public function getUrl()
     {
-        $components = $this->components;
-        if (!isset($components["scheme"])){
-            $components["scheme"] = isset($components["port"]) && $components["port"] == 443 ? "https" : "http";
+        $port = in_array($this->getPort(), $this->defaultPorts) ? "" : ":" . $this->getPort();
+        $path = (string)$this->getPath();
+        $query = (string)$this->getQuery();
+        $query = !empty($query) ? "?" . $query : "";
+        $fragment = $this->getFragment();
+        $fragment = !empty($fragment) ? "#" . $fragment : "";
+        if ($path === "/" && (empty($query) && empty($fragment))) {
+            $path = "";
         }
-        if (!isset($components["host"])) {
-            $components["host"] = $_SERVER["HTTP_HOST"];
-        }
-        if (!isset($components["port"])) {
-            $components["port"] = isset($components["scheme"]) && $components["scheme"] == "https" ? "443" : "80";
-        }
-        /**
-         * @var $scheme
-         * @var $host
-         * @var $port
-         * @var $user
-         * @var $password
-         * @var $path
-         * @var $query
-         * @var $fragment
-         */
-        extract($components);
-        $port = in_array($port, $this->defaultPorts) ? "" : ":" . $port;
-        $path = $path ?: "/";
-        $query = $query ? "?" . $query : "";
-        $fragment =  $fragment ? "#" . $fragment : "";
-        $url = $scheme. "://" . $host . $port . $path . $query . $fragment;
+        $url = $this->getScheme() . "://" . $this->getDomain() . $port . $path . $query . $fragment;
+
         return $url;
     }
 

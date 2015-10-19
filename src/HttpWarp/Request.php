@@ -118,7 +118,7 @@ class Request
         if (is_null($this->url)) {
             $url = new Url();
             $url->setScheme($this->isHttps() ? "https" : "http");
-            $url->setHost($_SERVER["HTTP_HOST"] ?: $_SERVER["SERVER_NAME"]);
+            $url->setDomain($_SERVER["HTTP_HOST"] ?: $_SERVER["SERVER_NAME"]);
             $url->setPort($_SERVER["SERVER_PORT"]);
             $url->setPath($_SERVER["REQUEST_URI"]);
             $url->setQuery($_SERVER["QUERY_STRING"]);
