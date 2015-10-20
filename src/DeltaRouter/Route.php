@@ -30,7 +30,10 @@ class Route
     protected $methods = [self::METHOD_ALL];
     /** @var  Collection|RoutePattern[] */
     protected $patterns;
+    /** @var  Callable */
     protected $action;
+
+    protected $args=[];
 
     function __construct($params = null)
     {
@@ -48,8 +51,10 @@ class Route
             foreach ($patterns as $pattern) {
                 $ids[] = $pattern->getId();
             }
+
             return implode("#", $this->getMethods()) . "#" . implode("$", $ids);
         }
+
         return $this->id;
     }
 
@@ -119,6 +124,22 @@ class Route
         $this->action = $action;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getArgs()
+    {
+        return $this->args;
+    }
+
+    /**
+     * @param mixed $args
+     */
+    public function setArgs($args)
+    {
+        $this->args = (array)$args;
+    }
+
     public function getType()
     {
         $patternsIds = $this->getPatterns()->lists("type");
@@ -138,6 +159,7 @@ class Route
                 if (!$item instanceof RoutePattern) {
                     throw new \RuntimeException("Error in get route pattern max length");
                 }
+
                 return strlen($item->getValue());
             }
             default: {
@@ -154,8 +176,8 @@ class Route
     public function getUrl(array $params = [])
     {
         $url = new Url();
-        foreach($this->getPatterns() as $pattern) {
-            switch($pattern->getPart()) {
+        foreach ($this->getPatterns() as $pattern) {
+            switch ($pattern->getPart()) {
                 case RoutePattern::PART_DOMAIN:
                     $paramName = RoutePattern::PART_DOMAIN_NAME;
                     $method = "setDomain";
@@ -171,13 +193,14 @@ class Route
                 default:
                     throw new \InvalidArgumentException("Not implemented for part" . $pattern->getPart());
             }
-            $param = $this->getPatterns()->count()>1 ?  (isset($params[$paramName]) ? $params[$paramName] : "null") : $params;
+            $param = $this->getPatterns()->count() > 1 ? (isset($params[$paramName]) ? $params[$paramName] : "null") : $params;
             if (empty($param)) {
                 $param = null;
             }
             $value = $pattern->calcValue($param);
             $url->{$method}($value);
         }
+
         return $url;
     }
 }

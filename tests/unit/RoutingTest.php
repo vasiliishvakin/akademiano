@@ -231,4 +231,23 @@ class RoutingTest extends \Codeception\TestCase\Test
         $this->url->setPath("/test/ddd/data/aaaa");
         $this->assertEquals("OK", $this->router->run());
     }
+
+    public function testArgsAction()
+    {
+        $route = [
+            "methods" => [Route::METHOD_GET],
+            "patterns" => [
+                "part" => RoutePattern::PART_PATH,
+                "type" => RoutePattern::TYPE_REGEXP,
+                "value" => "/test/{:name}/data/{:id}",
+            ],
+            "action" => function ($arg, $params) {
+                return $arg . $params["name"] . $params ["id"];
+            },
+            "args" => ["arg1"=>"test"],
+        ];
+        $this->router->setRoutes([$route]);
+        $this->url->setPath("/test/isname/data/isid");
+        $this->assertEquals("testisnameisid", $this->router->run());
+    }
 }

@@ -64,7 +64,7 @@ class Router
      */
     public function setRoutes(array $routes)
     {
-        foreach ($routes as $name=>$route) {
+        foreach ($routes as $name => $route) {
             if (!$route instanceof Route) {
                 if (!is_numeric($name) && !isset($route["id"])) {
                     $route["id"] = $name;
@@ -108,10 +108,11 @@ class Router
                 }
             }
         }
+
         return $routesTree;
     }
 
-    public function isMatchByType($value, $pattern, $type = self::TYPE_FULL)
+    public function isMatchByType($value, $pattern, $type = self::TYPE_FULL, array &$matches = [])
     {
         switch ($type) {
             case RoutePattern::TYPE_FULL :
@@ -153,20 +154,21 @@ class Router
         }
     }
 
-    public function isMatch(Route $route, Url $url)
+    public function isMatch(Route $route, Url $url, array &$matches = [])
     {
         $match = false;
         foreach ($route->getPatterns() as $pattern) {
             switch ($pattern->getPart()) {
                 case RoutePattern::PART_DOMAIN:
-                    $match = $this->isMatchByType($url->getDomain(), $pattern->getValue(), $pattern->getType());
+                    $match = $this->isMatchByType($url->getDomain(), $pattern->getValue(), $pattern->getType(),
+                        $matches);
                     break;
                 case RoutePattern::PART_PATH:
-                    $match = $this->isMatchByType($url->getPath(), $pattern->getValue(), $pattern->getType());
+                    $match = $this->isMatchByType($url->getPath(), $pattern->getValue(), $pattern->getType(), $matches);
                     break;
                 case RoutePattern::PART_QUERY:
                     $urlValue = $url->getQuery();
-                    $match = $this->isMatchByType($urlValue, $pattern->getValue(), $pattern->getType());
+                    $match = $this->isMatchByType($urlValue, $pattern->getValue(), $pattern->getType(), $matches);
                     break;
                 default:
                     throw new \InvalidArgumentException("This type compare by part not realised");
@@ -175,13 +177,21 @@ class Router
                 return false;
             }
         }
-
         return $match;
     }
 
-    public function exec(Route $route)
+    public function exec(Route $route, $params = [])
     {
-        return call_user_func($route->getAction());
+        $args = (array)$route->getArgs();
+        if (!empty($params)) {
+            $args[] = $params;
+        }
+        if (!empty($args)) {
+            return call_user_func_array($route->getAction(), $args);
+        } else {
+            return call_user_func($route->getAction());
+        }
+
     }
 
     public function run()
@@ -207,11 +217,13 @@ class Router
             foreach ($types as $type => $routes) {
                 /** @var Route[] $routes */
                 foreach ($routes as $route) {
-                    if ($this->isMatch($route, $currentUrl)) {
-                        $runResult = $this->exec($route);
+                    $matches = [];
+                    if ($this->isMatch($route, $currentUrl, $matches)) {
+                        $runResult = $this->exec($route, $matches);
                         $processed = true;
                         if ($runResult !== self::RUN_NEXT) {
                             $this->isRun = false;
+
                             return $runResult;
                             break;
                         }
@@ -238,6 +250,7 @@ class Router
             throw new \InvalidArgumentException("Not found router with id $id");
         }
         $route = $routes[$id];
+
         return $route->getUrl($params);
     }
 }
