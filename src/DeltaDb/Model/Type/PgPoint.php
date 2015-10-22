@@ -63,6 +63,11 @@ class PgPoint implements \JsonSerializable, ArrayableInterface
         return sprintf($format, $this->getLon(), $this->getLat());
     }
 
+    public function pgFormat()
+    {
+        return $this->format("ST_GeographyFromText('POINT (%1\$s %2\$s)')");
+    }
+
     function jsonSerialize()
     {
         return $this->toArray();

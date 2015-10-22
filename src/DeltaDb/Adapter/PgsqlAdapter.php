@@ -186,7 +186,7 @@ class PgsqlAdapter extends AbstractAdapter
                         $where[] = $this->escapeIdentifier($field) . " ILIKE \${$num}";
                         break;
                     case "PgPoint":
-                        $where[] = $this->escapeIdentifier($field) . "={$value}";
+                        $where[] = $this->escapeIdentifier($field) . "=" . $value->pgFormat();
                         break;
                     default :
                         throw new \InvalidArgumentException("where class $class not implement");

@@ -6,6 +6,7 @@ namespace DeltaDb;
 use DeltaCore\Parts\MagicSetGetManagers;
 use DeltaCore\Prototype\MagicMethodInterface;
 use DeltaDb\Adapter\AdapterInterface;
+use DeltaDb\Model\Type\PgPoint;
 use DeltaUtils\ArrayUtils;
 use DeltaUtils\Object\Collection;
 use DeltaUtils\Parts\InnerCache;
@@ -620,7 +621,8 @@ class Repository implements RepositoryInterface
     {
         $table = $this->getTableName();
         $fields = $this->getFieldsList($table);
-        $data = [];
+        $fieldsData = [];
+        $rawFields = [];
         foreach ($fields as $field) {
             $value = $this->getField($entity, $field);
             if ($value instanceof EntityInterface) {
@@ -629,12 +631,19 @@ class Repository implements RepositoryInterface
             if ($value instanceof \DateTime) {
                 $value = $value->format("Y-m-d H:i:s");
             }
+            if ($value instanceof PgPoint) {
+                $value = $value->pgFormat();
+                $rawFields[] = "$field";
+            }
             if (is_bool($value)) {
                 $value = $value ? 't' : 'f';
             }
-            $data[$field] = $value;
+            $fieldsData[$field] = $value;
         }
-        return ["fields" => $data];
+        return [
+            "fields" => $fieldsData,
+            "rawFields" => $rawFields
+        ];
     }
 
     public function count(array $criteria = [], $entityClass = null)
