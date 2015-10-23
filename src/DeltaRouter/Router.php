@@ -15,7 +15,7 @@ class Router
     const RUN_NEXT = "____run_next";
 
     /** @var array Collection|Router[] */
-    protected $routes = [];
+    protected $routes;
     protected $isRun = false;
 
     /**
@@ -75,9 +75,8 @@ class Router
      */
     public function setRoutes(array $routes)
     {
-        $this->routes = [];
         foreach ($routes as $name => $route) {
-            $this->setRoute($route);
+            $this->setRoute($route, $name);
         }
     }
 
