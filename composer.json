@@ -15,8 +15,8 @@
         }
     },
     "require": {
-        "deltaphp/deltacore": "dev-master",
-        "deltaphp/deltaskeletonmodule": "dev-master",
-        "twig/twig": "1.*"
+        "deltaphp/deltacore": "^2.0",
+        "deltaphp/deltaskeletonmodule": "^1.0",
+        "twig/twig": "~1.0"
     }
 }

@@ -7,8 +7,13 @@ return [
             'templates',
         ],
         'options' => [
-            'cache' => 'data/cache',
-            'auto_reload' => true,
+            //'cache' => 'data/cache',
+            //'auto_reload' => true,
+            'cache' => false,
+            "debug" => true,
+        ],
+        "extensions" => [
+            "Twig_Extension_Debug",
         ],
     ],
     "modules" => [
