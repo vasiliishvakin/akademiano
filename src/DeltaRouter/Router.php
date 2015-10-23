@@ -59,19 +59,25 @@ class Router
         return $this->routes;
     }
 
+    public function setRoute($route, $name = null)
+    {
+        if (!$route instanceof Route) {
+            if (!is_null($name) && !is_numeric($name) && !isset($route["id"])) {
+                $route["id"] = $name;
+            }
+            $route = new Route($route);
+        }
+        $this->routes[$route->getId()] = $route;
+    }
+
     /**
      * @param array $routes
      */
     public function setRoutes(array $routes)
     {
+        $this->routes = [];
         foreach ($routes as $name => $route) {
-            if (!$route instanceof Route) {
-                if (!is_numeric($name) && !isset($route["id"])) {
-                    $route["id"] = $name;
-                }
-                $route = new Route($route);
-            }
-            $this->routes[$route->getId()] = $route;
+            $this->setRoute($route);
         }
     }
 
@@ -177,6 +183,7 @@ class Router
                 return false;
             }
         }
+
         return $match;
     }
 
@@ -219,6 +226,9 @@ class Router
                 foreach ($routes as $route) {
                     $matches = [];
                     if ($this->isMatch($route, $currentUrl, $matches)) {
+                        $matches = array_filter($matches, function ($key) {
+                            return !is_integer($key);
+                        }, ARRAY_FILTER_USE_KEY);
                         $runResult = $this->exec($route, $matches);
                         $processed = true;
                         if ($runResult !== self::RUN_NEXT) {
