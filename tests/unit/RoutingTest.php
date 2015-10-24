@@ -250,4 +250,12 @@ class RoutingTest extends \Codeception\TestCase\Test
         $this->url->setPath("/test/isname/data/isid");
         $this->assertEquals("testisnameisid", $this->router->run());
     }
+
+    public function testShortRoute()
+    {
+        $route = ["/test", function(){return "OK";}];
+        $this->router->setRoutes([$route]);
+        $this->url->setPath("/test");
+        $this->assertEquals("OK", $this->router->run());
+    }
 }

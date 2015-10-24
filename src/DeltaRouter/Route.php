@@ -33,7 +33,7 @@ class Route
     /** @var  Callable */
     protected $action;
 
-    protected $args=[];
+    protected $args = [];
 
     function __construct($params = null)
     {
@@ -168,11 +168,6 @@ class Route
         }
     }
 
-    public function fillPart()
-    {
-
-    }
-
     public function getUrl(array $params = [])
     {
         $url = new Url();
@@ -202,5 +197,28 @@ class Route
         }
 
         return $url;
+    }
+
+    public static function isShort($route)
+    {
+        if (is_array($route) && (!isset($route["patterns"]) || !isset($route["action"]))) {
+            return (count($route) === 2 && ArrayUtils::getArrayType($route) === -1 && mb_strpos($route[0], "/") === 0);
+        }
+
+        return false;
+    }
+
+    public static function shortNormalize(array $route)
+    {
+        $routeNew = [
+            "patterns" => [
+                [
+                    "value" => $route[0],
+                ],
+            ],
+            "action" => $route[1],
+        ];
+
+        return $routeNew;
     }
 }

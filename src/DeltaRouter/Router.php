@@ -62,6 +62,9 @@ class Router
     public function setRoute($route, $name = null)
     {
         if (!$route instanceof Route) {
+            if (Route::isShort($route)) {
+                $route = Route::shortNormalize($route);
+            }
             if (!is_null($name) && !is_numeric($name) && !isset($route["id"])) {
                 $route["id"] = $name;
             }
