@@ -75,22 +75,6 @@ class Request
         return isset($this->getParams()[$name]);
     }
 
-    /**
-     * @deprecated
-     */
-    public function hasVar($name)
-    {
-        return $this->hasParam($name);
-    }
-
-    /**
-     * @deprecated
-     */
-    public function getVar($name, $default = null)
-    {
-        return $this->getParam($name, $default);
-    }
-
     public function getDecodeJson($key, $default = null)
     {
         ErrorHandler::start();
@@ -125,48 +109,6 @@ class Request
             $this->url = $url;
         }
         return $this->url;
-    }
-
-    public function normalizeUri($uri)
-    {
-        if (($pos = strpos($uri, '?')) !== false) {
-            $uri = substr($uri, 0, $pos);
-        }
-        $uri = preg_replace('~(\/){2,}~', '/', $uri);
-        $uri = rtrim($uri, '/');
-        if (empty($uri)) {
-            $uri = '/';
-        }
-        return $uri;
-    }
-
-    public function getUriNormal()
-    {
-        if (is_null($this->uriNormal)) {
-            $this->uriNormal = $this->normalizeUri($this->getUrl());
-        }
-        return $this->uriNormal;
-    }
-
-    public function getUriPartByNum($num = 0, $default = null)
-    {
-        $uri = trim($this->getUriNormal(), '/');
-        if ($num === 0) {
-            return $uri;
-        }
-        $uri = explode('/', $uri);
-        $num = ($num < 0) ? $num = count($uri) + $num : $num = $num - 1;
-        if ($num > count($uri) - 1) {
-            return $default;
-        }
-        return $uri[$num];
-    }
-
-    public function getUriPartsCount()
-    {
-        $uri = trim($this->getUriNormal(), '/');
-        $uri = explode('/', $uri);
-        return count($uri);
     }
 
 
