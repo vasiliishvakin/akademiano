@@ -11,5 +11,10 @@
     "minimum-stability": "dev",
     "autoload": {
         "psr-0": { "DeltaUtils": "src/" }
+    },
+    "require": {
+        "php": "~5.6",
+        "ext-pcre": "*",
+        "ext-mbstring": "*"
     }
 }
