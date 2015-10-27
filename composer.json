@@ -1,0 +1,17 @@
+{
+  "name": "deltaphp/deltatwigext",
+  "license": "LGPL-3.0",
+  "authors": [
+    {
+      "name": "orbisnull",
+      "email": "zen4dev@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": { "DeltaTwigExt\\": "src/" }
+  },
+  "require": {
+    "twig/twig": "~1.0",
+    "kriswallsmith/assetic": "^1.3.1"
+  }
+}
