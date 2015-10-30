@@ -1,20 +1,19 @@
 {
     "name": "deltaphp/sitemenu",
     "description": "Site menu module for DeltaPHP",
-    "license": "GPL-3+",
+    "license": "LGPL-3.0",
     "authors": [
         {
             "name": "orbisnull",
             "email": "zen4dev@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
     "autoload": {
         "psr-0": {
             "SiteMenu": "src/"
         }
     },
     "require": {
-        "deltaphp/deltacore": "~1.0"
+        "deltaphp/deltacore": "~2.0"
     }
 }
