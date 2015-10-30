@@ -221,4 +221,9 @@ class StringUtils
     {
         return Pluralizer::singular($value);
     }
+
+    public static function isText($value)
+    {
+        return is_string($value) && $value!=='' && !is_numeric($value);
+    }
 }

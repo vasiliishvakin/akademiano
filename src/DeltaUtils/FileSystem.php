@@ -145,6 +145,11 @@ class FileSystem
 
     public static function inDir($parentDir, $dir, $checkRealPath = true)
     {
+        return (boolean) self::getSubDir($parentDir, $dir, $checkRealPath);
+    }
+
+    public static function getSubDir($parentDir, $dir, $checkRealPath = true)
+    {
         if ($checkRealPath) {
             $parentDir = realpath($parentDir);
             if (!$parentDir) {
@@ -155,15 +160,18 @@ class FileSystem
                 throw new \RuntimeException("Bad checked path: $dir");
             }
         }
-        if (strlen($parentDir) > strlen($dir)) {
+        $parentLen = mb_strlen($parentDir);
+        $dirLen = mb_strlen($dir);
+        if ($parentLen > $dirLen) {
             return false;
         }
-        $partDir = substr($dir, 0, strlen($parentDir));
+        $partDir = mb_substr($dir, 0, $parentLen);
         if ((!$parentDir || !$dir || !$partDir) || ($parentDir !== $partDir)) {
             return false;
         }
+        $subDir = trim(mb_substr($dir, $parentLen), "/");
 
-        return $dir;
+        return $subDir;
     }
 
     public static function getDirName($path, $level = 1)
