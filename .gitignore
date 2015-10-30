@@ -2,3 +2,7 @@ vendor
 local.config.php
 data
 public/data
+phinx.yml
+migrations
+public/assets/vendor
+/migrations

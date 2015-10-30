@@ -10,9 +10,12 @@
         <link rel="canonical" href="{{ canonicalRef }}"/>
     {% endif %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="static/lib/bootstrap3/css/bootstrap.min.css">
+
+    {{ asset_css(["bootstrap/dist/css/bootstrap.css"], default, true) }}
+
     <!--[if lt IE 9]>
-    <script src="static/lib/js/html5shiv.js"></script>
+    {{ asset_js(["static/lib/js/html5shiv.js"], default, true) }}
+    <!--<script src="static/lib/js/html5shiv.js"></script>-->
     <script src="static/lib/js/respond.min.js"></script>
     <![endif]-->
     <script type='text/javascript' src="static/lib/jquery/jquery-1.11.0.min.js"></script>

@@ -1,22 +1,83 @@
 {
-    "name": "deltaphp/DeltaSkeletonApplication",
-    "description": "Skeleton application on delta framework",
-    "minimum-stability": "dev",
-    "authors": [
-        {
-            "name": "Vasiliy Shvakin",
-            "email": "zen4dev@gmail.com"
-        }
-    ],
-    "autoload": {
-        "psr-0": {
-            "Model": "./",
-            "Controller": "./"
-        }
-    },
-    "require": {
-        "deltaphp/deltacore": "^2.0",
-        "deltaphp/deltaskeletonmodule": "^1.0",
-        "twig/twig": "~1.0"
+  "name": "deltaphp/DeltaSkeletonApplication",
+  "description": "Skeleton application on delta framework",
+  "license": "GPL-3.0",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "authors": [
+    {
+      "name": "Vasiliy Shvakin",
+      "email": "zen4dev@gmail.com"
     }
+  ],
+  "autoload": {
+    "psr-0": {
+      "Model": "./",
+      "Controller": "./",
+      "Maintenance": "./"
+    }
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "git@github.com:DeltaPHP/phinx.git"
+    }
+  ],
+  "require": {
+    "deltaphp/deltacore": "^2.0",
+    "deltaphp/deltaskeletonmodule": "^1.0",
+    "twig/twig": "~1.0",
+    "deltaphp/pages": "^1.0",
+    "robmorgan/phinx": "dev-deltaphp",
+    "fxp/composer-asset-plugin": "~1.0",
+    "kriswallsmith/assetic": "^1.3.1",
+    "bower-asset/bootstrap": "^3.3.5",
+    "bower-asset/jquery": "^2.1.4",
+    "deltaphp/deltatwigext": "dev-master"
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "Maintenance\\Composer::postInstallCmd"
+    ],
+    "post-update-cmd": [
+      "Maintenance\\Composer::postInstallCmd"
+    ]
+  },
+  "extra": {
+    "asset-installer-paths": {
+      "npm-asset-library": "public/assets/vendor",
+      "bower-asset-library": "public/assets/vendor"
+    },
+    "asset-ignore-files": {
+      "bower-asset/bootstrap": [
+        "/.*",
+        "_config.yml",
+        "CNAME",
+        "composer.json",
+        "CONTRIBUTING.md",
+        "docs",
+        "js/tests",
+        "test-infra",
+        "fonts",
+        "grunt",
+        "js",
+        "less",
+        "Gruntfile.js",
+        "package.json",
+        "package.js"
+      ],
+      "bower-asset/jquery": [
+        "**/.*",
+        "build",
+        "dist/cdn",
+        "speed",
+        "test",
+        "*.md",
+        "AUTHORS.txt",
+        "Gruntfile.js",
+        "package.json",
+        "src"
+      ]
+    }
+  }
 }
