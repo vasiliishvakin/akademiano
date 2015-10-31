@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c34cafbfb097264ec2026eb6d9d98cda",
-    "content-hash": "e5c92cac79f74ab69e8732bd18666203",
+    "hash": "14a5a126dc61a21dac5e5fe837ba76b1",
+    "content-hash": "a4336bdfef25c6388236bb981272807e",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -57,6 +57,65 @@
             ]
         },
         {
+            "name": "bower-asset/ckeditor",
+            "version": "4.5.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ckeditor/ckeditor-releases.git",
+                "reference": "a84a972a367bc6c59bafb3e5fd503ec317d47daa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ckeditor/ckeditor-releases/zipball/a84a972a367bc6c59bafb3e5fd503ec317d47daa",
+                "reference": "a84a972a367bc6c59bafb3e5fd503ec317d47daa",
+                "shasum": ""
+            },
+            "type": "bower-asset-library",
+            "license": [
+                "For licensing, see LICENSE.md or http://ckeditor.com/license."
+            ],
+            "description": "JavaScript WYSIWYG web text editor.",
+            "keywords": [
+                "ckeditor",
+                "editor",
+                "fckeditor",
+                "html",
+                "javascript",
+                "richtext",
+                "text",
+                "wysiwyg"
+            ]
+        },
+        {
+            "name": "bower-asset/html5shiv",
+            "version": "3.7.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/aFarkas/html5shiv.git",
+                "reference": "ed28c56c071bddfe7d635ad88995674957a016be"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/aFarkas/html5shiv/zipball/ed28c56c071bddfe7d635ad88995674957a016be",
+                "reference": "ed28c56c071bddfe7d635ad88995674957a016be",
+                "shasum": ""
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": [
+                    "dist/html5shiv.js"
+                ],
+                "bower-asset-ignore": [
+                    "**/.*",
+                    "composer.json",
+                    "test",
+                    "build",
+                    "src",
+                    "build.xml"
+                ]
+            }
+        },
+        {
             "name": "bower-asset/jquery",
             "version": "2.1.4",
             "source": {
@@ -101,17 +160,41 @@
             ]
         },
         {
+            "name": "bower-asset/respond",
+            "version": "1.4.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/scottjehl/Respond.git",
+                "reference": "20b7f4a192bb910c8c7e067b961de38519d334e4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/scottjehl/Respond/zipball/20b7f4a192bb910c8c7e067b961de38519d334e4",
+                "reference": "20b7f4a192bb910c8c7e067b961de38519d334e4",
+                "shasum": ""
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": "dest/respond.src.js",
+                "bower-asset-ignore": [
+                    "**/.*",
+                    "test"
+                ]
+            },
+            "description": "Fast and lightweight polyfill for min/max-width CSS3 Media Queries (for IE 6-8, and more)"
+        },
+        {
             "name": "deltaphp/deltacore",
             "version": "2.0.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/DeltaCore.git",
-                "reference": "4ff3482cbdff59188442f4548f850ef6dda24c4d"
+                "reference": "86f6df52589c894ac08752f9a14338ab83c4b484"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/DeltaCore/zipball/4ff3482cbdff59188442f4548f850ef6dda24c4d",
-                "reference": "4ff3482cbdff59188442f4548f850ef6dda24c4d",
+                "url": "https://api.github.com/repos/DeltaPHP/DeltaCore/zipball/86f6df52589c894ac08752f9a14338ab83c4b484",
+                "reference": "86f6df52589c894ac08752f9a14338ab83c4b484",
                 "shasum": ""
             },
             "require": {
@@ -138,20 +221,20 @@
                 }
             ],
             "description": "Delta PHP framework - fast, light, easy (core)",
-            "time": "2015-10-27 08:22:31"
+            "time": "2015-10-31 09:10:01"
         },
         {
             "name": "deltaphp/deltadb",
-            "version": "1.2.0",
+            "version": "1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/DeltaDb.git",
-                "reference": "7d8f1fa411f8181814096d20b12fecbf6c3eb398"
+                "reference": "5fadc48008ab97a0e71628346bacc912a527e102"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/DeltaDb/zipball/7d8f1fa411f8181814096d20b12fecbf6c3eb398",
-                "reference": "7d8f1fa411f8181814096d20b12fecbf6c3eb398",
+                "url": "https://api.github.com/repos/DeltaPHP/DeltaDb/zipball/5fadc48008ab97a0e71628346bacc912a527e102",
+                "reference": "5fadc48008ab97a0e71628346bacc912a527e102",
                 "shasum": ""
             },
             "require": {
@@ -165,7 +248,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "GPL-3.0+"
+                "MIT"
             ],
             "authors": [
                 {
@@ -174,7 +257,7 @@
                 }
             ],
             "description": "DB models for delta framework",
-            "time": "2015-10-23 10:35:53"
+            "time": "2015-10-31 10:40:46"
         },
         {
             "name": "deltaphp/deltarouter",
@@ -182,12 +265,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/DeltaRouter.git",
-                "reference": "e556f4375e90f0fcf6ac9d3ea5c6e51ebec545f5"
+                "reference": "23d585d46d4b128656fd0c19667beba1e0d054e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/DeltaRouter/zipball/e556f4375e90f0fcf6ac9d3ea5c6e51ebec545f5",
-                "reference": "e556f4375e90f0fcf6ac9d3ea5c6e51ebec545f5",
+                "url": "https://api.github.com/repos/DeltaPHP/DeltaRouter/zipball/23d585d46d4b128656fd0c19667beba1e0d054e3",
+                "reference": "23d585d46d4b128656fd0c19667beba1e0d054e3",
                 "shasum": ""
             },
             "require": {
@@ -218,7 +301,7 @@
                 }
             ],
             "description": "Simple router for php applications",
-            "time": "2015-10-24 07:34:57"
+            "time": "2015-10-31 09:04:30"
         },
         {
             "name": "deltaphp/deltaskeletonmodule",
@@ -262,12 +345,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/DeltaTwigExt.git",
-                "reference": "3d5930787f58dbb482967b9329c5c88dcb0befba"
+                "reference": "0cd710ce3576557f46ad3c6d76854ebba4c69981"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/DeltaTwigExt/zipball/3d5930787f58dbb482967b9329c5c88dcb0befba",
-                "reference": "3d5930787f58dbb482967b9329c5c88dcb0befba",
+                "url": "https://api.github.com/repos/DeltaPHP/DeltaTwigExt/zipball/0cd710ce3576557f46ad3c6d76854ebba4c69981",
+                "reference": "0cd710ce3576557f46ad3c6d76854ebba4c69981",
                 "shasum": ""
             },
             "require": {
@@ -282,7 +365,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "LGPL-3.0"
+                "MIT"
             ],
             "authors": [
                 {
@@ -290,20 +373,20 @@
                     "email": "zen4dev@gmail.com"
                 }
             ],
-            "time": "2015-10-30 04:55:58"
+            "time": "2015-10-31 12:06:34"
         },
         {
             "name": "deltaphp/deltautils",
-            "version": "1.2.3",
+            "version": "1.2.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/DeltaUtils.git",
-                "reference": "6854e4803c4674465a2de2159c5847662359c5dd"
+                "reference": "222b9d7bcc288079204474f23eca5a88b4654fe8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/DeltaUtils/zipball/6854e4803c4674465a2de2159c5847662359c5dd",
-                "reference": "6854e4803c4674465a2de2159c5847662359c5dd",
+                "url": "https://api.github.com/repos/DeltaPHP/DeltaUtils/zipball/222b9d7bcc288079204474f23eca5a88b4654fe8",
+                "reference": "222b9d7bcc288079204474f23eca5a88b4654fe8",
                 "shasum": ""
             },
             "require": {
@@ -319,7 +402,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "GPL-3.0+"
+                "MIT"
             ],
             "authors": [
                 {
@@ -328,7 +411,7 @@
                 }
             ],
             "description": "good tools and utils",
-            "time": "2015-10-24 09:40:34"
+            "time": "2015-10-31 10:37:50"
         },
         {
             "name": "deltaphp/dtpl",
@@ -405,22 +488,65 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/Pages.git",
-                "reference": "e0541ce09f817aa6290d0d1162d66cd912e4436f"
+                "reference": "374e929a26f13a1329cc0dbc7d80efdc19929259"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/Pages/zipball/e0541ce09f817aa6290d0d1162d66cd912e4436f",
-                "reference": "e0541ce09f817aa6290d0d1162d66cd912e4436f",
+                "url": "https://api.github.com/repos/DeltaPHP/Pages/zipball/374e929a26f13a1329cc0dbc7d80efdc19929259",
+                "reference": "374e929a26f13a1329cc0dbc7d80efdc19929259",
                 "shasum": ""
             },
             "require": {
+                "bower-asset/ckeditor": "^4.5.4",
                 "deltaphp/deltacore": "^2.0",
                 "deltaphp/deltadb": "^1.2.0"
             },
             "type": "library",
+            "extra": {
+                "asset-installer-paths": {
+                    "npm-asset-library": "public/assets/vendor",
+                    "bower-asset-library": "public/assets/vendor"
+                }
+            },
             "autoload": {
                 "psr-0": {
                     "Pages": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "orbisnull",
+                    "email": "zen4dev@gmail.com"
+                }
+            ],
+            "description": "DeltaPagesModule",
+            "time": "2015-10-31 11:50:00"
+        },
+        {
+            "name": "deltaphp/sitemenu",
+            "version": "2.0.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DeltaPHP/SiteMenu.git",
+                "reference": "0498dc343c0374ce3840122a547b3a7890acba71"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DeltaPHP/SiteMenu/zipball/0498dc343c0374ce3840122a547b3a7890acba71",
+                "reference": "0498dc343c0374ce3840122a547b3a7890acba71",
+                "shasum": ""
+            },
+            "require": {
+                "deltaphp/deltacore": "~2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "SiteMenu": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -433,64 +559,8 @@
                     "email": "zen4dev@gmail.com"
                 }
             ],
-            "description": "DeltaPagesModule",
-            "time": "2015-10-24 09:58:20"
-        },
-        {
-            "name": "fxp/composer-asset-plugin",
-            "version": "v1.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/francoispluchino/composer-asset-plugin.git",
-                "reference": "8e22c18bbe6a5b7831a9b8488e02b85398048c04"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/francoispluchino/composer-asset-plugin/zipball/8e22c18bbe6a5b7831a9b8488e02b85398048c04",
-                "reference": "8e22c18bbe6a5b7831a9b8488e02b85398048c04",
-                "shasum": ""
-            },
-            "require": {
-                "composer-plugin-api": "^1.0",
-                "php": ">=5.3.3"
-            },
-            "require-dev": {
-                "composer/composer": "~1.0@dev"
-            },
-            "type": "composer-plugin",
-            "extra": {
-                "class": "Fxp\\Composer\\AssetPlugin\\FxpAssetPlugin",
-                "branch-alias": {
-                    "dev-master": "1.1-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Fxp\\Composer\\AssetPlugin\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "François Pluchino",
-                    "email": "francois.pluchino@gmail.com"
-                }
-            ],
-            "description": "NPM/Bower Dependency Manager for Composer",
-            "homepage": "https://github.com/francoispluchino/composer-asset-plugin",
-            "keywords": [
-                "asset",
-                "bower",
-                "composer",
-                "dependency manager",
-                "nodejs",
-                "npm",
-                "package"
-            ],
-            "time": "2015-10-17 09:47:56"
+            "description": "Site menu module for DeltaPHP",
+            "time": "2015-10-30 06:31:20"
         },
         {
             "name": "kriswallsmith/assetic",

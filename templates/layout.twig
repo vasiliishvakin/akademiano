@@ -14,9 +14,7 @@
     {{ asset_css(["bootstrap/dist/css/bootstrap.css"], default, true) }}
 
     <!--[if lt IE 9]>
-    {{ asset_js(["static/lib/js/html5shiv.js"], default, true) }}
-    <!--<script src="static/lib/js/html5shiv.js"></script>-->
-    <script src="static/lib/js/respond.min.js"></script>
+    {{ asset_js(["html5shiv/dist/html5shiv.min.js", "respond/dest/respond.min.js"], default, true) }}
     <![endif]-->
     <script type='text/javascript' src="static/lib/jquery/jquery-1.11.0.min.js"></script>
     <script type='text/javascript' src="static/lib/bootstrap3/js/bootstrap.min.js"></script>
@@ -26,30 +24,33 @@
 </head>
 <body>
 
-<div id="content">
-    {% block container %}
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    {% block content %}
+{% block body %}
+    <div id="content">
+        {% block container %}
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        {% block content %}
 
-                    {% endblock content %}
+                        {% endblock content %}
+                    </div>
                 </div>
             </div>
-        </div>
-    {% endblock container %}
-</div>
+        {% endblock container %}
+    </div>
 
-<hr>
-<div class="footer">
-    <p style="text-align: center">
-        © <a href="http://deltaphp.org">DeltaPHP</a> 2014
-    </p>
-</div>
+    <hr>
+    <div class="footer">
+        <p style="text-align: center">
+            © <a href="http://deltaphp.org">DeltaPHP</a> 2014
+        </p>
+    </div>
 
-{% block counter %}
+    {% block counter %}
 
-{% endblock counter %}
+    {% endblock counter %}
+
+{% endblock body %}
 
 </body>
 </html>
