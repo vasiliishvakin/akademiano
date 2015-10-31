@@ -215,11 +215,17 @@ class Router
         } //fix double run
         $this->isRun = true;
 
-        $methods = [Route::METHOD_ALL, $this->getRequest()->getMethod()];
+        $currentMethod = $this->getRequest()->getMethod();
         $currentUrl = $this->getRequest()->getUrl();
         $routes = $this->getPatternsTree();
 
-        $workedMethods = array_intersect_key($routes, array_flip($methods));
+        $workedMethods = [];
+        if (isset($routes[$currentMethod]) && count($routes[$currentMethod]) > 0) {
+            $workedMethods[$currentMethod] = $routes[$currentMethod];
+        }
+        if (isset($routes[Route::METHOD_ALL]) && count(isset($routes[Route::METHOD_ALL])) > 0) {
+            $workedMethods[Route::METHOD_ALL] = $routes[Route::METHOD_ALL];
+        }
 
         $processed = false;
         foreach ($workedMethods as $method => $types) {
