@@ -43,6 +43,8 @@ class RegexpUtils
 
     public static function replaceNamedParams($regexp, $params)
     {
+        $regexp = ltrim($regexp,"^");
+        $regexp = rtrim($regexp, "$");
         return preg_replace_callback('~\(\?P<(\w+)>.+\)~U', function ($match) use (&$params) {
             return ArrayUtils::extract($params, $match[1], $match[0]);
         }, $regexp);
