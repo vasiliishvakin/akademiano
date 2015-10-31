@@ -1,14 +1,13 @@
 {
     "name": "deltaphp/deltautils",
     "description": "good tools and utils",
-    "license": "GPL-3.0+",
+    "license": "MIT",
     "authors": [
         {
             "name": "Vasiliy Shvakin",
             "email": "zen4dev@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
     "autoload": {
         "psr-0": { "DeltaUtils": "src/" }
     },
