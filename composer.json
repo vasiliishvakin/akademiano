@@ -1,22 +1,23 @@
 {
-    "name": "deltaphp/acl",
-    "description": "Acl for user manager module",
-    "license": "GPL-3.0+",
-    "authors": [
-        {
-            "name": "orbisnull",
-            "email": "zen4dev@gmail.com"
-        }
-    ],
-    "minimum-stability": "dev",
-    "autoload": {
-        "psr-0": {
-            "Acl": "src/"
-        }
-    },
-    "require": {
-	"deltaphp/deltacore": "~1.0",
-	"deltaphp/deltadb": "~1.0",
-	"deltaphp/user": "~1.0"
+  "name": "deltaphp/acl",
+  "description": "Acl for user manager module",
+  "license": "MIT",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "authors": [
+    {
+      "name": "orbisnull",
+      "email": "zen4dev@gmail.com"
     }
+  ],
+  "autoload": {
+    "psr-0": {
+      "Acl": "src/"
+    }
+  },
+  "require": {
+    "deltaphp/deltacore": "^2.0",
+    "deltaphp/deltadb": "^1.2.0",
+    "deltaphp/user": "^2.0"
+  }
 }
