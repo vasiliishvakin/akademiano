@@ -1,22 +1,24 @@
 {
-    "name": "deltaphp/user",
-    "description": "User manager module",
-    "license": "GPL-3.0+",
-    "authors": [
-        {
-            "name": "orbisnull",
-            "email": "zen4dev@gmail.com"
-        }
-    ],
-    "minimum-stability": "dev",
-    "autoload": {
-        "psr-0": {
-            "User": "src/"
-        }
-    },
-    "require": {
-        "deltaphp/deltacore": "~1.0",
-        "deltaphp/deltadb": "~1.0",
-        "deltaphp/perm-auth": "~1.0"
+  "name": "deltaphp/user",
+  "description": "User manager module",
+  "license": "MIT",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "authors": [
+    {
+      "name": "orbisnull",
+      "email": "zen4dev@gmail.com"
     }
+  ],
+  "minimum-stability": "dev",
+  "autoload": {
+    "psr-0": {
+      "User": "src/"
+    }
+  },
+  "require": {
+    "deltaphp/deltacore": "^2.0",
+    "deltaphp/deltadb": "^1.2.0",
+    "deltaphp/perm-auth": "^2.0"
+  }
 }
