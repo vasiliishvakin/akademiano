@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "14a5a126dc61a21dac5e5fe837ba76b1",
-    "content-hash": "a4336bdfef25c6388236bb981272807e",
+    "hash": "34977e9fa1974a621fa14a4afc2858cd",
+    "content-hash": "139c1c37396dcdb71e6b2df87f400f76",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -184,17 +184,55 @@
             "description": "Fast and lightweight polyfill for min/max-width CSS3 Media Queries (for IE 6-8, and more)"
         },
         {
+            "name": "deltaphp/acl",
+            "version": "2.0.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DeltaPHP/acl.git",
+                "reference": "ebf2f9b2f63df30f2ec59b700286d96cb3fb0e1e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DeltaPHP/acl/zipball/ebf2f9b2f63df30f2ec59b700286d96cb3fb0e1e",
+                "reference": "ebf2f9b2f63df30f2ec59b700286d96cb3fb0e1e",
+                "shasum": ""
+            },
+            "require": {
+                "deltaphp/deltacore": "^2.0",
+                "deltaphp/deltadb": "^1.2.0",
+                "deltaphp/user": "^2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Acl": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "orbisnull",
+                    "email": "zen4dev@gmail.com"
+                }
+            ],
+            "description": "Acl for user manager module",
+            "time": "2015-10-31 19:36:42"
+        },
+        {
             "name": "deltaphp/deltacore",
             "version": "2.0.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/DeltaCore.git",
-                "reference": "86f6df52589c894ac08752f9a14338ab83c4b484"
+                "reference": "d6c8e959bdf326f77c541407b5d2caf299d1e811"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/DeltaCore/zipball/86f6df52589c894ac08752f9a14338ab83c4b484",
-                "reference": "86f6df52589c894ac08752f9a14338ab83c4b484",
+                "url": "https://api.github.com/repos/DeltaPHP/DeltaCore/zipball/d6c8e959bdf326f77c541407b5d2caf299d1e811",
+                "reference": "d6c8e959bdf326f77c541407b5d2caf299d1e811",
                 "shasum": ""
             },
             "require": {
@@ -212,7 +250,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "GPL-3.0"
+                "MIT"
             ],
             "authors": [
                 {
@@ -221,7 +259,7 @@
                 }
             ],
             "description": "Delta PHP framework - fast, light, easy (core)",
-            "time": "2015-10-31 09:10:01"
+            "time": "2015-10-31 13:00:43"
         },
         {
             "name": "deltaphp/deltadb",
@@ -527,6 +565,43 @@
             "time": "2015-10-31 11:50:00"
         },
         {
+            "name": "deltaphp/perm-auth",
+            "version": "2.0.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DeltaPHP/PermAuth.git",
+                "reference": "6f48ee4a3c22e7deb1a8ac10e6b97d7c7ea0f78c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DeltaPHP/PermAuth/zipball/6f48ee4a3c22e7deb1a8ac10e6b97d7c7ea0f78c",
+                "reference": "6f48ee4a3c22e7deb1a8ac10e6b97d7c7ea0f78c",
+                "shasum": ""
+            },
+            "require": {
+                "deltaphp/deltacore": "^2.0",
+                "deltaphp/deltadb": "^1.2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "PermAuth": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "orbisnull",
+                    "email": "zen4dev@gmail.com"
+                }
+            ],
+            "description": "Module for user permanent authentication",
+            "time": "2015-10-31 19:11:29"
+        },
+        {
             "name": "deltaphp/sitemenu",
             "version": "2.0.x-dev",
             "source": {
@@ -561,6 +636,44 @@
             ],
             "description": "Site menu module for DeltaPHP",
             "time": "2015-10-30 06:31:20"
+        },
+        {
+            "name": "deltaphp/user",
+            "version": "2.0.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DeltaPHP/user.git",
+                "reference": "323b1774e780421f862d78a239bdb6530bdcc840"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DeltaPHP/user/zipball/323b1774e780421f862d78a239bdb6530bdcc840",
+                "reference": "323b1774e780421f862d78a239bdb6530bdcc840",
+                "shasum": ""
+            },
+            "require": {
+                "deltaphp/deltacore": "^2.0",
+                "deltaphp/deltadb": "^1.2.0",
+                "deltaphp/perm-auth": "^2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "User": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "orbisnull",
+                    "email": "zen4dev@gmail.com"
+                }
+            ],
+            "description": "User manager module",
+            "time": "2015-10-31 19:18:29"
         },
         {
             "name": "kriswallsmith/assetic",

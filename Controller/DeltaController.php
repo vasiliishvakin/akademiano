@@ -9,7 +9,7 @@ use DeltaCore\AbstractController;
 
 class DeltaController extends AbstractController
 {
-    public function IndexAction()
+    public function indexAction()
     {
         $this->getView()->assign('canonicalRef', '/deltaphp');
     }

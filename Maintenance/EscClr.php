@@ -45,7 +45,7 @@ class EscClr
     public static function fg($color, $string)
     {
         if (!isset(self::$foreground[$color])) {
-            throw new Exception('Foreground color is not defined');
+            throw new \Exception('Foreground color is not defined');
         }
 
         return "\033[" . self::$foreground[$color] . "m" . $string . "\033[0m";
@@ -57,7 +57,7 @@ class EscClr
     public static function bg($color, $string)
     {
         if (!isset(self::$background[$color])) {
-            throw new Exception('Background color is not defined');
+            throw new \Exception('Background color is not defined');
         }
 
         return "\033[" . self::$background[$color] . 'm' . $string . "\033[0m";

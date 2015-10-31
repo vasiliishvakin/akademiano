@@ -1,5 +1,5 @@
 {
-  "name": "deltaphp/DeltaSkeletonApplication",
+  "name": "deltaphp/delta-skeleton-application",
   "description": "Skeleton application on delta framework",
   "license": "MIT",
   "minimum-stability": "dev",
@@ -31,7 +31,8 @@
     "robmorgan/phinx": "dev-deltaphp",
     "kriswallsmith/assetic": "^1.3.1",
     "deltaphp/deltatwigext": "dev-master",
-    "deltaphp/sitemenu": "~2.0",
+    "deltaphp/sitemenu": "^2.0",
+    "deltaphp/acl" : "^2.0",
 
     "bower-asset/bootstrap": "^3.3.5",
     "bower-asset/jquery": "^2.1.4",
