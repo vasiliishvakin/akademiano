@@ -50,10 +50,19 @@ return [
             locale_set_default('ru');
         }
     ],
+    "Acl" => [
+        "adapter" => "\\Acl\\Model\\Adapter\\RegisteredAdapter",
+        "Acl\\Model\\Adapter\\RegisteredAdapter" => [
+            "file" => ROOT_DIR . "/config/acl.conf",
+        ]
+    ],
     "modules" => [
         "DeltaSkeletonModule",
         "DeltaDb",
-        "Pages"
+        "Pages",
+        "Acl",
+        "User",
+        "DictDir"
     ],
 
 ];

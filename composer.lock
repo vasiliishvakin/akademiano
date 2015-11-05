@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "34977e9fa1974a621fa14a4afc2858cd",
-    "content-hash": "139c1c37396dcdb71e6b2df87f400f76",
+    "hash": "b481e27e48888cc3c44206578e9ffed8",
+    "content-hash": "0ff1584b0b5cd732e5cfd0740be55e2d",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -222,17 +222,54 @@
             "time": "2015-10-31 19:36:42"
         },
         {
+            "name": "deltaphp/attach",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DeltaPHP/attach.git",
+                "reference": "27b21c054759a268becd22f96095d55878d7bdc7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DeltaPHP/attach/zipball/27b21c054759a268becd22f96095d55878d7bdc7",
+                "reference": "27b21c054759a268becd22f96095d55878d7bdc7",
+                "shasum": ""
+            },
+            "require": {
+                "deltaphp/deltadb": "~1.0",
+                "deltaphp/sequence": "~1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Attach": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "orbisnull",
+                    "email": "zen4dev@gmail.com"
+                }
+            ],
+            "description": "Attach files to othe objects",
+            "time": "2015-09-29 05:43:45"
+        },
+        {
             "name": "deltaphp/deltacore",
             "version": "2.0.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/DeltaCore.git",
-                "reference": "d6c8e959bdf326f77c541407b5d2caf299d1e811"
+                "reference": "d6d5e52023e76cf8aef6adac3a5d265be9226de0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/DeltaCore/zipball/d6c8e959bdf326f77c541407b5d2caf299d1e811",
-                "reference": "d6c8e959bdf326f77c541407b5d2caf299d1e811",
+                "url": "https://api.github.com/repos/DeltaPHP/DeltaCore/zipball/d6d5e52023e76cf8aef6adac3a5d265be9226de0",
+                "reference": "d6d5e52023e76cf8aef6adac3a5d265be9226de0",
                 "shasum": ""
             },
             "require": {
@@ -259,7 +296,7 @@
                 }
             ],
             "description": "Delta PHP framework - fast, light, easy (core)",
-            "time": "2015-10-31 13:00:43"
+            "time": "2015-11-05 14:44:33"
         },
         {
             "name": "deltaphp/deltadb",
@@ -379,7 +416,7 @@
         },
         {
             "name": "deltaphp/deltatwigext",
-            "version": "dev-master",
+            "version": "0.1.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/DeltaTwigExt.git",
@@ -450,6 +487,43 @@
             ],
             "description": "good tools and utils",
             "time": "2015-10-31 10:37:50"
+        },
+        {
+            "name": "deltaphp/dictdir",
+            "version": "2.0.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DeltaPHP/DictDir.git",
+                "reference": "3e87ec56b3fcef33276754ff9e4466cd8820e43b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DeltaPHP/DictDir/zipball/3e87ec56b3fcef33276754ff9e4466cd8820e43b",
+                "reference": "3e87ec56b3fcef33276754ff9e4466cd8820e43b",
+                "shasum": ""
+            },
+            "require": {
+                "deltaphp/deltacore": "^2.0",
+                "deltaphp/deltadb": "^1.2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "DictDir": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "orbisnull",
+                    "email": "zen4dev@gmail.com"
+                }
+            ],
+            "description": "module for work with simple dict-type data",
+            "time": "2015-11-05 14:48:36"
         },
         {
             "name": "deltaphp/dtpl",
@@ -602,6 +676,42 @@
             "time": "2015-10-31 19:11:29"
         },
         {
+            "name": "deltaphp/sequence",
+            "version": "1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DeltaPHP/sequence.git",
+                "reference": "795b25edf0a60e5f4bd2062f8b886e4bfbda77d3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DeltaPHP/sequence/zipball/795b25edf0a60e5f4bd2062f8b886e4bfbda77d3",
+                "reference": "795b25edf0a60e5f4bd2062f8b886e4bfbda77d3",
+                "shasum": ""
+            },
+            "require": {
+                "deltaphp/deltadb": "~1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Sequence": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "orbisnull",
+                    "email": "zen4dev@gmail.com"
+                }
+            ],
+            "description": "Sequence module",
+            "time": "2015-09-23 07:30:19"
+        },
+        {
             "name": "deltaphp/sitemenu",
             "version": "2.0.x-dev",
             "source": {
@@ -643,15 +753,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/user.git",
-                "reference": "323b1774e780421f862d78a239bdb6530bdcc840"
+                "reference": "b49863db608d45d1757ad014dad131db24fd9d5c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/user/zipball/323b1774e780421f862d78a239bdb6530bdcc840",
-                "reference": "323b1774e780421f862d78a239bdb6530bdcc840",
+                "url": "https://api.github.com/repos/DeltaPHP/user/zipball/b49863db608d45d1757ad014dad131db24fd9d5c",
+                "reference": "b49863db608d45d1757ad014dad131db24fd9d5c",
                 "shasum": ""
             },
             "require": {
+                "deltaphp/attach": "^1.0",
                 "deltaphp/deltacore": "^2.0",
                 "deltaphp/deltadb": "^1.2.0",
                 "deltaphp/perm-auth": "^2.0"
@@ -673,7 +784,7 @@
                 }
             ],
             "description": "User manager module",
-            "time": "2015-10-31 19:18:29"
+            "time": "2015-11-05 14:52:45"
         },
         {
             "name": "kriswallsmith/assetic",
@@ -1111,16 +1222,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v1.23.0",
+            "version": "v1.23.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "5868cd822fd6cf626d5f805439575f9c323cee2a"
+                "reference": "d9b6333ae8dd2c8e3fd256e127548def0bc614c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/5868cd822fd6cf626d5f805439575f9c323cee2a",
-                "reference": "5868cd822fd6cf626d5f805439575f9c323cee2a",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/d9b6333ae8dd2c8e3fd256e127548def0bc614c6",
+                "reference": "d9b6333ae8dd2c8e3fd256e127548def0bc614c6",
                 "shasum": ""
             },
             "require": {
@@ -1168,15 +1279,14 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2015-10-29 23:29:01"
+            "time": "2015-11-05 12:49:06"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "robmorgan/phinx": 20,
-        "deltaphp/deltatwigext": 20
+        "robmorgan/phinx": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
