@@ -121,5 +121,4 @@ class UserProvider extends AbstractEntity implements EntityInterface {
         return $this;
     }
 
-
 }

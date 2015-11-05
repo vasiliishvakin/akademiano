@@ -119,12 +119,11 @@ class UserController extends AbstractController
         $this->getResponse()->redirect("/");
     }
 
-    public function userAction()
+    public function userAction($params)
     {
-        $request = $this->getRequest();
-        $userId = $request->getUriPartByNum(2);
         /** @var UserManager $userManager */
         $userManager = $this->getApplication()['userManager'];
+        $userId = isset($params["id"]) ? $params["id"] : null;
         $user = ($userId) ? $userManager->findById($userId) : $userManager->getCurrentUser();
         if (!$user) {
             throw new NotFoundException('user not defined');
