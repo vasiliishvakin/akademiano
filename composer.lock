@@ -189,12 +189,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/acl.git",
-                "reference": "ebf2f9b2f63df30f2ec59b700286d96cb3fb0e1e"
+                "reference": "2af5a2135833908afa577edaabbb89318e211880"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/acl/zipball/ebf2f9b2f63df30f2ec59b700286d96cb3fb0e1e",
-                "reference": "ebf2f9b2f63df30f2ec59b700286d96cb3fb0e1e",
+                "url": "https://api.github.com/repos/DeltaPHP/acl/zipball/2af5a2135833908afa577edaabbb89318e211880",
+                "reference": "2af5a2135833908afa577edaabbb89318e211880",
                 "shasum": ""
             },
             "require": {
@@ -219,7 +219,7 @@
                 }
             ],
             "description": "Acl for user manager module",
-            "time": "2015-10-31 19:36:42"
+            "time": "2015-11-05 16:00:33"
         },
         {
             "name": "deltaphp/attach",
@@ -564,12 +564,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/HttpWarp.git",
-                "reference": "11d4f2c3a3669b27c40797d8c860ce483dc5598a"
+                "reference": "044587f06201630e6070222849bd427195f3b06a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/HttpWarp/zipball/11d4f2c3a3669b27c40797d8c860ce483dc5598a",
-                "reference": "11d4f2c3a3669b27c40797d8c860ce483dc5598a",
+                "url": "https://api.github.com/repos/DeltaPHP/HttpWarp/zipball/044587f06201630e6070222849bd427195f3b06a",
+                "reference": "044587f06201630e6070222849bd427195f3b06a",
                 "shasum": ""
             },
             "require": {
@@ -592,7 +592,7 @@
                 }
             ],
             "description": "request, response, session and other tools for base web development",
-            "time": "2015-10-24 09:45:21"
+            "time": "2015-11-06 18:29:45"
         },
         {
             "name": "deltaphp/pages",
