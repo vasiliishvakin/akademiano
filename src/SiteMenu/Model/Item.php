@@ -219,7 +219,7 @@ class Item implements MagicMethodInterface
     public function isAllow($user = null)
     {
         if ($aclManager = $this->getAclManager()) {
-            return $aclManager->isAllow($this->getUrl(), $user);
+            return $aclManager->isAllow((string) $this->getUrl()->getPath(), $user);
         }
         return true;
     }
