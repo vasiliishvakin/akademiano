@@ -21,7 +21,7 @@ class ApiController extends AbstractController {
         $this->autoRenderOff();
         try {
             $request = $this->getRequest();
-            $action = !empty($params["action"]) ? $params["action"] : "default";
+            $action = isset($params["action"]) ? $params["action"] : "default";
             $method = $action . ucfirst(strtolower($request->getMethod())) . 'Action';
             if (!method_exists($this, $method)) {
                 throw new \Exception('Unsupported action');

@@ -8,14 +8,14 @@ return [
         "methods" => [\DeltaRouter\Route::METHOD_GET],
         "patterns" => [
             "type" => \DeltaRouter\RoutePattern::TYPE_REGEXP,
-            "value" => "^/user/?(?P<id>\w*)$",
+            "value" => "^/user/?(?P<id>\w+)?$",
         ],
         "action" => ["user", "user"],
     ],
     "user_api" => [
         "patterns" => [
             "type" => \DeltaRouter\RoutePattern::TYPE_REGEXP,
-            "value" => "^/api/user/?(?P<action>\w*)$",
+            "value" => "^/api/user/?(?P<action>\w+)?$",
         ],
         "action" => ["api", "index"],
     ],
