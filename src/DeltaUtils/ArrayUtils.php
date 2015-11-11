@@ -66,7 +66,7 @@ class ArrayUtils
         return self::set($array, $path, $value);
     }
 
-    public static function get($array, $path, $default)
+    public static function get($array, $path, $default = null)
     {
         if (is_null($path)) {
             return $array;
