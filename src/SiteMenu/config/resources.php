@@ -8,6 +8,7 @@ return [
         $manager->setModuleManager($c["moduleManager"]);
         $manager->setRouter($c["router"]);
         $manager->setAclManager($c["aclManager"]);
+        $manager->setRouter($c["router"]);
         return $manager;
     },
 ];

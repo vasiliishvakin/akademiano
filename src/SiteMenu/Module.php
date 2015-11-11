@@ -9,4 +9,4 @@ namespace SiteMenu;
 class Module
 {
 
-} 
+}

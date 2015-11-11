@@ -124,15 +124,16 @@ class Menu implements \Countable, MagicMethodInterface
         if (is_null($this->activeItem)) {
             $items = $this->items;
             usort($items, function ($a, $b) {
-                $lA = strlen($a->getLink());
-                $lB = strlen($b->getLink());
+                $lA = strlen((string)$a->getUrl());
+                $lB = strlen((string)$b->getUrl());
                 if ($lA == $lB) {
                     return 0;
                 }
                 return ($lA > $lB) ? -1 : 1;
             });
             foreach ($items as $item) {
-                if ($this->getRouter()->isCurrentUri($item->getLink())) {
+                if ((null !== $item->getRoute() && $this->getRouter()->getCurrentRoute()->getId() === $item->getId())
+                || ($this->getRouter()->getCurrentUrl()->getId() === $item->getId())) {
                     $item->setActive(true);
                     $this->activeItem = $item;
                     break;
@@ -162,6 +163,4 @@ class Menu implements \Countable, MagicMethodInterface
         });
         $this->isSortedItems = true;
     }
-
-
-} 
+}

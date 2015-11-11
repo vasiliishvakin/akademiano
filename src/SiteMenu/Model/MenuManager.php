@@ -72,8 +72,9 @@ class MenuManager implements \ArrayAccess, MagicMethodInterface
     public function getConfigDir()
     {
         if (is_null($this->configDir)) {
-            $this->configDir =   ROOT_DIR . "/config/";
+            $this->configDir = ROOT_DIR . "/config/";
         }
+
         return $this->configDir;
     }
 
@@ -96,6 +97,7 @@ class MenuManager implements \ArrayAccess, MagicMethodInterface
             $this->loadMenu($menuData);
         }
         $menu = isset($this->menuStore[$menuName]) ? $this->menuStore[$menuName] : null;
+
         return $menu;
     }
 
@@ -106,13 +108,15 @@ class MenuManager implements \ArrayAccess, MagicMethodInterface
             return $default;
         }
         $assocMenu = [];
-        foreach($menuData as $key=>$menu) {
+        foreach ($menuData as $key => $menu) {
             foreach ($menu as $item) {
-                if (isset($item["link"])) {
-                    $assocMenu[$key][$item["link"]] = $item;
+                if (isset($item["route"]) || isset($item["link"])) {
+                    $itemId = isset($item["route"]) ? "__r__" . $item["route"] : "__l__" . $item["link"];
+                    $assocMenu[$key][$itemId] = $item;
                 }
             }
         }
+
         return $assocMenu;
     }
 
@@ -124,7 +128,7 @@ class MenuManager implements \ArrayAccess, MagicMethodInterface
         $moduleManager = $this->getModuleManager();
         $modules = $moduleManager->getModulesList();
         $menuConfig = [];
-        foreach($modules as $moduleName) {
+        foreach ($modules as $moduleName) {
             $modulePath = $moduleManager->getModulePath($moduleName);
             $moduleConfig = $this->readMenuRaw($modulePath . "/config/menu.php", null);
             if ($moduleConfig) {
@@ -132,21 +136,30 @@ class MenuManager implements \ArrayAccess, MagicMethodInterface
             }
         }
         $menuConfig = ArrayUtils::mergeRecursive($menuConfig, $globalMenu, $localMenu);
+
         return $menuConfig;
+    }
+
+    public function createItem(array $itemData, $router = null)
+    {
+        if (is_null($router)) {
+            $router = $this->getRouter();
+        }
+        return new Item($itemData, $router);
     }
 
     public function loadMenu($menuConfig)
     {
-        foreach($menuConfig as $name=>$itemsData) {
+        foreach ($menuConfig as $name => $itemsData) {
             $menu = new Menu($name, $this->getRouter());
             $menu->setAclManager($this->getAclManager());
-            $i=0;
-            foreach($itemsData as $key=>$itemData) {
+            $i = 0;
+            foreach ($itemsData as $key => $itemData) {
                 $i++;
                 if (!isset($itemData["order"])) {
                     $itemData["order"] = $i;
                 }
-                $item = new Item($itemData);
+                $item = $this->createItem($itemData);
                 $menu->addItem($item);
             }
             $this->menuStore[$name] = $menu;
@@ -214,6 +227,4 @@ class MenuManager implements \ArrayAccess, MagicMethodInterface
     {
         return;
     }
-
-
 }

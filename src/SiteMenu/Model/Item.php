@@ -6,6 +6,9 @@
 namespace SiteMenu\Model;
 use DeltaCore\Parts\MagicSetGetManagers;
 use DeltaCore\Prototype\MagicMethodInterface;
+use DeltaRouter\Route;
+use DeltaRouter\Router;
+use HttpWarp\Url;
 
 /**
  * Class Item
@@ -20,12 +23,21 @@ class Item implements MagicMethodInterface
     protected $id;
     protected $text;
     protected $title;
-    protected $link;
+    /** @var  Router */
+    protected $router;
+    /** @var  Route */
+    protected $route;
+    protected $routeParams = [];
+    /** @var  Url */
+    protected $url;
     protected $order = 0;
     protected $active = false;
 
-    function __construct($data = null)
+    function __construct($data = null, Router $router = null)
     {
+        if ($router) {
+            $this->setRouter($router);
+        }
         if ($data) {
             foreach($data as $name=>$value) {
                 $method = "set" . ucfirst($name);
@@ -40,25 +52,103 @@ class Item implements MagicMethodInterface
     public function getId()
     {
         if (is_null($this->id)) {
-            $this->id = hash("md5", $this->getLink());
+            $this->id = ($this->getRoute() instanceof Route) ? $this->getRoute()->getId() : $this->getUrl()->getId();
         }
         return $this->id;
+    }
+
+
+    /**
+     * @return Router
+     */
+    public function getRouter()
+    {
+        return $this->router;
+    }
+
+    /**
+     * @param Router $router
+     */
+    public function setRouter($router)
+    {
+        $this->router = $router;
+    }
+
+    /**
+     * @return Route
+     */
+    public function getRoute()
+    {
+        if (!$this->route instanceof Route && !is_null($this->route)) {
+            $this->route = $this->getRouter()->getRoute($this->route);
+        }
+        return $this->route;
+    }
+
+    /**
+     * @param Route|string $route
+     */
+    public function setRoute($route)
+    {
+        $this->route = $route;
     }
 
     /**
      * @return mixed
      */
-    public function getLink()
+    public function getRouteParams()
     {
-        return $this->link;
+        return $this->routeParams;
     }
 
     /**
-     * @param mixed $link
+     * @param mixed $routeParams
+     */
+    public function setRouteParams(array $routeParams)
+    {
+        $this->routeParams = $routeParams;
+    }
+
+    /**
+     * @return Url
+     */
+    public function getUrl()
+    {
+        if (is_null($this->url)){
+            if (is_null($this->getRoute())) {
+                throw new \LogicException("Not set url or route for menu item");
+            }
+            $this->url = $this->getRoute()->getUrl($this->getRouteParams());
+        } elseif (is_string($this->url)){
+            $this->url = new Url($this->url);
+        }
+        return $this->url;
+    }
+
+    /**
+     * @param Url|string $url
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
+    }
+
+    /**
+     * @param $link
+     * @deprecated
      */
     public function setLink($link)
     {
-        $this->link = $link;
+        $this->setUrl($link);
+    }
+
+    /**
+     * @return string
+     * @deprecated
+     */
+    public function getLink()
+    {
+        return (string) $this->getUrl();
     }
 
     /**
@@ -129,9 +219,8 @@ class Item implements MagicMethodInterface
     public function isAllow($user = null)
     {
         if ($aclManager = $this->getAclManager()) {
-            return $aclManager->isAllow($this->getLink(), $user);
+            return $aclManager->isAllow($this->getUrl(), $user);
         }
         return true;
     }
-
 }
