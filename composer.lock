@@ -189,12 +189,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/acl.git",
-                "reference": "2af5a2135833908afa577edaabbb89318e211880"
+                "reference": "534835adcef4dd2c18441c0544fdd74aef1ed5c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/acl/zipball/2af5a2135833908afa577edaabbb89318e211880",
-                "reference": "2af5a2135833908afa577edaabbb89318e211880",
+                "url": "https://api.github.com/repos/DeltaPHP/acl/zipball/534835adcef4dd2c18441c0544fdd74aef1ed5c4",
+                "reference": "534835adcef4dd2c18441c0544fdd74aef1ed5c4",
                 "shasum": ""
             },
             "require": {
@@ -219,7 +219,7 @@
                 }
             ],
             "description": "Acl for user manager module",
-            "time": "2015-11-05 16:00:33"
+            "time": "2015-11-11 13:36:05"
         },
         {
             "name": "deltaphp/attach",
@@ -264,12 +264,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/DeltaCore.git",
-                "reference": "d6d5e52023e76cf8aef6adac3a5d265be9226de0"
+                "reference": "16d82cbc56858c4fc7963562a017ad3092d534b6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/DeltaCore/zipball/d6d5e52023e76cf8aef6adac3a5d265be9226de0",
-                "reference": "d6d5e52023e76cf8aef6adac3a5d265be9226de0",
+                "url": "https://api.github.com/repos/DeltaPHP/DeltaCore/zipball/16d82cbc56858c4fc7963562a017ad3092d534b6",
+                "reference": "16d82cbc56858c4fc7963562a017ad3092d534b6",
                 "shasum": ""
             },
             "require": {
@@ -296,7 +296,7 @@
                 }
             ],
             "description": "Delta PHP framework - fast, light, easy (core)",
-            "time": "2015-11-05 14:44:33"
+            "time": "2015-11-11 11:39:19"
         },
         {
             "name": "deltaphp/deltadb",
@@ -340,12 +340,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/DeltaRouter.git",
-                "reference": "23d585d46d4b128656fd0c19667beba1e0d054e3"
+                "reference": "e35c27c4f54258f0d0c0e0b8d46a29c23931c93b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/DeltaRouter/zipball/23d585d46d4b128656fd0c19667beba1e0d054e3",
-                "reference": "23d585d46d4b128656fd0c19667beba1e0d054e3",
+                "url": "https://api.github.com/repos/DeltaPHP/DeltaRouter/zipball/e35c27c4f54258f0d0c0e0b8d46a29c23931c93b",
+                "reference": "e35c27c4f54258f0d0c0e0b8d46a29c23931c93b",
                 "shasum": ""
             },
             "require": {
@@ -376,7 +376,7 @@
                 }
             ],
             "description": "Simple router for php applications",
-            "time": "2015-10-31 09:04:30"
+            "time": "2015-11-11 11:35:06"
         },
         {
             "name": "deltaphp/deltaskeletonmodule",
@@ -452,16 +452,16 @@
         },
         {
             "name": "deltaphp/deltautils",
-            "version": "1.2.5",
+            "version": "1.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/DeltaUtils.git",
-                "reference": "222b9d7bcc288079204474f23eca5a88b4654fe8"
+                "reference": "67cd41ea7be5d336f2e6d4eab9d21700ac7876df"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/DeltaUtils/zipball/222b9d7bcc288079204474f23eca5a88b4654fe8",
-                "reference": "222b9d7bcc288079204474f23eca5a88b4654fe8",
+                "url": "https://api.github.com/repos/DeltaPHP/DeltaUtils/zipball/67cd41ea7be5d336f2e6d4eab9d21700ac7876df",
+                "reference": "67cd41ea7be5d336f2e6d4eab9d21700ac7876df",
                 "shasum": ""
             },
             "require": {
@@ -486,7 +486,7 @@
                 }
             ],
             "description": "good tools and utils",
-            "time": "2015-10-31 10:37:50"
+            "time": "2015-11-11 11:31:09"
         },
         {
             "name": "deltaphp/dictdir",
@@ -494,12 +494,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/DictDir.git",
-                "reference": "3e87ec56b3fcef33276754ff9e4466cd8820e43b"
+                "reference": "d26b8701d7e2d0eaf784fc61960e69895cb48f56"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/DictDir/zipball/3e87ec56b3fcef33276754ff9e4466cd8820e43b",
-                "reference": "3e87ec56b3fcef33276754ff9e4466cd8820e43b",
+                "url": "https://api.github.com/repos/DeltaPHP/DictDir/zipball/d26b8701d7e2d0eaf784fc61960e69895cb48f56",
+                "reference": "d26b8701d7e2d0eaf784fc61960e69895cb48f56",
                 "shasum": ""
             },
             "require": {
@@ -523,7 +523,7 @@
                 }
             ],
             "description": "module for work with simple dict-type data",
-            "time": "2015-11-05 14:48:36"
+            "time": "2015-11-11 12:47:47"
         },
         {
             "name": "deltaphp/dtpl",
@@ -564,12 +564,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/HttpWarp.git",
-                "reference": "044587f06201630e6070222849bd427195f3b06a"
+                "reference": "8b795aac8504016d5244c234e0fbc3558a7faa2f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/HttpWarp/zipball/044587f06201630e6070222849bd427195f3b06a",
-                "reference": "044587f06201630e6070222849bd427195f3b06a",
+                "url": "https://api.github.com/repos/DeltaPHP/HttpWarp/zipball/8b795aac8504016d5244c234e0fbc3558a7faa2f",
+                "reference": "8b795aac8504016d5244c234e0fbc3558a7faa2f",
                 "shasum": ""
             },
             "require": {
@@ -592,7 +592,7 @@
                 }
             ],
             "description": "request, response, session and other tools for base web development",
-            "time": "2015-11-06 18:29:45"
+            "time": "2015-11-11 11:42:57"
         },
         {
             "name": "deltaphp/pages",
@@ -644,12 +644,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/PermAuth.git",
-                "reference": "6f48ee4a3c22e7deb1a8ac10e6b97d7c7ea0f78c"
+                "reference": "d8a58891cfbc57222cc5374517cc2a1adbee5771"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/PermAuth/zipball/6f48ee4a3c22e7deb1a8ac10e6b97d7c7ea0f78c",
-                "reference": "6f48ee4a3c22e7deb1a8ac10e6b97d7c7ea0f78c",
+                "url": "https://api.github.com/repos/DeltaPHP/PermAuth/zipball/d8a58891cfbc57222cc5374517cc2a1adbee5771",
+                "reference": "d8a58891cfbc57222cc5374517cc2a1adbee5771",
                 "shasum": ""
             },
             "require": {
@@ -673,7 +673,7 @@
                 }
             ],
             "description": "Module for user permanent authentication",
-            "time": "2015-10-31 19:11:29"
+            "time": "2015-11-11 11:40:44"
         },
         {
             "name": "deltaphp/sequence",
@@ -717,12 +717,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/SiteMenu.git",
-                "reference": "0498dc343c0374ce3840122a547b3a7890acba71"
+                "reference": "c8c5513ab0845413a41d5e517868776e231282a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/SiteMenu/zipball/0498dc343c0374ce3840122a547b3a7890acba71",
-                "reference": "0498dc343c0374ce3840122a547b3a7890acba71",
+                "url": "https://api.github.com/repos/DeltaPHP/SiteMenu/zipball/c8c5513ab0845413a41d5e517868776e231282a0",
+                "reference": "c8c5513ab0845413a41d5e517868776e231282a0",
                 "shasum": ""
             },
             "require": {
@@ -745,7 +745,7 @@
                 }
             ],
             "description": "Site menu module for DeltaPHP",
-            "time": "2015-10-30 06:31:20"
+            "time": "2015-11-11 11:52:58"
         },
         {
             "name": "deltaphp/user",
@@ -753,12 +753,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/user.git",
-                "reference": "b49863db608d45d1757ad014dad131db24fd9d5c"
+                "reference": "cf9951ef2218ed1e38d6ba46b23f43988f49cfb4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/user/zipball/b49863db608d45d1757ad014dad131db24fd9d5c",
-                "reference": "b49863db608d45d1757ad014dad131db24fd9d5c",
+                "url": "https://api.github.com/repos/DeltaPHP/user/zipball/cf9951ef2218ed1e38d6ba46b23f43988f49cfb4",
+                "reference": "cf9951ef2218ed1e38d6ba46b23f43988f49cfb4",
                 "shasum": ""
             },
             "require": {
@@ -784,7 +784,7 @@
                 }
             ],
             "description": "User manager module",
-            "time": "2015-11-05 14:52:45"
+            "time": "2015-11-11 13:34:44"
         },
         {
             "name": "kriswallsmith/assetic",

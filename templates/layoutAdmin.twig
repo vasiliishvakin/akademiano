@@ -24,6 +24,13 @@
                     {% endfor %}
                 {% endblock navigation %}
             </ul>
+            <ul  class="nav navbar-nav">
+                <li>
+                    {% if is_user_auth() %}
+                        {{ current_user().email }}
+                    {% endif %}
+                </li>
+            </ul>
         </div><!--/.nav-collapse -->
     </div>
 </nav>

@@ -19,9 +19,9 @@ return [
         ],
         "extensions" => [
             "Twig_Extension_Debug",
-//            "Assetic\\Extension\\Twig\\AsseticExtension",
             "DeltaTwigExt\\AssetExtension",
-            "DeltaTwigExt\\UrlExtension"
+            "DeltaTwigExt\\UrlExtension",
+            "User\\Twig\\UserExtension"
         ],
         "filters" => [
             "cropBySpace" => [["\\DeltaUtils\\StringUtils", "cropBySpace"], ['pre_escape' => 'html']],
@@ -39,6 +39,13 @@ return [
                 \DeltaCore\Config::DYN_CONF => function ($c) {
                     $router = $c["router"];
                     return [$router, "getUrl"];
+                }
+            ]
+        ],
+        "userExtension" => [
+            "userManager" => [
+                \DeltaCore\Config::DYN_CONF => function ($c) {
+                    return $c["userManager"];
                 }
             ]
         ]
@@ -62,7 +69,8 @@ return [
         "Pages",
         "Acl",
         "User",
-        "DictDir"
+        "DictDir",
+        "SiteMenu"
     ],
 
 ];
