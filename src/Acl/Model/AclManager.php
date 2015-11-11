@@ -52,6 +52,7 @@ class AclManager
 
     public function isAllow($resource, User $user = null, $owner = null)
     {
+        $resource = (string) $resource;
         if (is_null($user)) {
             $user = $this->getUserManager()->getCurrentUser();
         }
