@@ -36,6 +36,11 @@ class Url
         }
     }
 
+    public function getId()
+    {
+        return $this->getUrl();
+    }
+
     /**
      * @return mixed
      */
@@ -204,7 +209,7 @@ class Url
     public function load(array $components)
     {
         foreach ($components as $name => $value) {
-            $method = "set" . ucfirst($value);
+            $method = "set" . ucfirst($name);
             if (method_exists($this, $method)) {
                 $this->{$method}($value);
             }
@@ -219,7 +224,7 @@ class Url
             throw new \InvalidArgumentException("url empty");
         }
 
-        return parse_url(url);
+        return parse_url($url);
     }
 
     /**
