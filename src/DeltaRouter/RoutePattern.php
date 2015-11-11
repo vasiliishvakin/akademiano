@@ -160,10 +160,11 @@ class RoutePattern implements ArrayableInterface
         $value = $this->getValue();
         if (is_null($params)) {
             if ($this->getType() === self::TYPE_REGEXP) {
-                throw new \InvalidArgumentException("Regexp type cold not be calculated without params");
-            }
+                //throw new \InvalidArgumentException("Regexp type cold not be calculated without params");
+            } else {
 
-            return $value;
+                return $value;
+            }
         }
         switch ($this->getType()) {
             case self::TYPE_FULL:

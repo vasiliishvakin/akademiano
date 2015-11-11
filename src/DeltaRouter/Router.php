@@ -17,6 +17,8 @@ class Router
     /** @var array Collection|Router[] */
     protected $routes;
     protected $isRun = false;
+    /** @var  Route */
+    protected $currentRoute;
 
     /**
      * @var Request
@@ -71,6 +73,11 @@ class Router
             $route = new Route($route);
         }
         $this->routes[$route->getId()] = $route;
+    }
+
+    public function getRoute($name)
+    {
+        return $this->getRoutes()[$name];
     }
 
     /**
@@ -203,6 +210,27 @@ class Router
 
     }
 
+    public function getCurrentUrl()
+    {
+        return $this->getRequest()->getUrl();
+    }
+
+    /**
+     * @return Route
+     */
+    public function getCurrentRoute()
+    {
+        return $this->currentRoute;
+    }
+
+    /**
+     * @param Route $currentRoute
+     */
+    public function setCurrentRoute($currentRoute)
+    {
+        $this->currentRoute = $currentRoute;
+    }
+
     public function run()
     {
 
@@ -216,7 +244,7 @@ class Router
         $this->isRun = true;
 
         $currentMethod = $this->getRequest()->getMethod();
-        $currentUrl = $this->getRequest()->getUrl();
+        $currentUrl = $this->getCurrentUrl();
         $routes = $this->getPatternsTree();
 
         $workedMethods = [];
@@ -234,6 +262,7 @@ class Router
                 foreach ($routes as $route) {
                     $matches = [];
                     if ($this->isMatch($route, $currentUrl, $matches)) {
+                        $this->currentRoute = $route;
                         $matches = array_filter($matches, function ($key) {
                             return !is_integer($key);
                         }, ARRAY_FILTER_USE_KEY);
