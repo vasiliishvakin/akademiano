@@ -1,7 +1,7 @@
 {
-    "name": "deltainc/articles",
+    "name": "deltaphp/articles",
     "description": "Articles module",
-    "license": "proprietary",
+    "license": "MIT",
     "authors": [
         {
             "name": "orbisnull",
