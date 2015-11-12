@@ -15,10 +15,9 @@
         }
     },
     "require": {
-        "deltaphp/deltacore": "~1.0",
-        "deltaphp/deltadb": "~1.0",
-        "deltaphp/acl": "~1.0",
+        "deltaphp/deltacore": "~2.0",
+        "deltaphp/deltadb": "~1.2.0",
         "deltaphp/attach": "~1.0",
-        "deltaphp/dictdir": "~1.0"
+        "deltaphp/dictdir": "~2.0"
     }
 }
