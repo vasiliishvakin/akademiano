@@ -5,6 +5,7 @@
 
 namespace Acl\Model\Parts;
 
+
 trait AclController
 {
     public function isAllow($resource = null, User $user= null)
@@ -13,9 +14,9 @@ trait AclController
         /** @var AclManager $aclManager */
         $aclManager = $app['aclManager'];
         if (!$resource) {
-            /** @var Request $request */
+            /** @var \HttpWarp\Request $request */
             $request = $app['request'];
-            $resource = $request->getUriNormal();
+            $resource = (string) $request->getUrl()->getPath();
         }
         if (!$user) {
             $user = $this->getCurrentUser();

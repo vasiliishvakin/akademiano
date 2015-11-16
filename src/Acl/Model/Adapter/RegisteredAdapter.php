@@ -57,7 +57,7 @@ class RegisteredAdapter extends XAclAdapter implements AdapterInterface
 
                 $controlled = false;
                 for ($i = 0; $i < $patchCount; $i++) {
-                    if ($resource[$i] === $patch[$i] || ($patch[$i] = "*")) {
+                    if ($resource[$i] === $patch[$i] || ($patch[$i] === "*")) {
                         $controlled = true;
                     } else {
                         $controlled = false;
