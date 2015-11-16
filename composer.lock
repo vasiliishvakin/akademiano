@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b481e27e48888cc3c44206578e9ffed8",
-    "content-hash": "0ff1584b0b5cd732e5cfd0740be55e2d",
+    "hash": "6db07988e6550558b2f6f34828843577",
+    "content-hash": "718acea5782fc98920e3bee6243e396d",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -58,16 +58,16 @@
         },
         {
             "name": "bower-asset/ckeditor",
-            "version": "4.5.4",
+            "version": "4.5.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ckeditor/ckeditor-releases.git",
-                "reference": "a84a972a367bc6c59bafb3e5fd503ec317d47daa"
+                "reference": "4b0678ff6f9e643f8361727f3a1325e4928b3d51"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ckeditor/ckeditor-releases/zipball/a84a972a367bc6c59bafb3e5fd503ec317d47daa",
-                "reference": "a84a972a367bc6c59bafb3e5fd503ec317d47daa",
+                "url": "https://api.github.com/repos/ckeditor/ckeditor-releases/zipball/4b0678ff6f9e643f8361727f3a1325e4928b3d51",
+                "reference": "4b0678ff6f9e643f8361727f3a1325e4928b3d51",
                 "shasum": ""
             },
             "type": "bower-asset-library",
@@ -189,12 +189,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/acl.git",
-                "reference": "534835adcef4dd2c18441c0544fdd74aef1ed5c4"
+                "reference": "c3c5ebed225e67e381786aeaaf835588db012310"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/acl/zipball/534835adcef4dd2c18441c0544fdd74aef1ed5c4",
-                "reference": "534835adcef4dd2c18441c0544fdd74aef1ed5c4",
+                "url": "https://api.github.com/repos/DeltaPHP/acl/zipball/c3c5ebed225e67e381786aeaaf835588db012310",
+                "reference": "c3c5ebed225e67e381786aeaaf835588db012310",
                 "shasum": ""
             },
             "require": {
@@ -219,7 +219,46 @@
                 }
             ],
             "description": "Acl for user manager module",
-            "time": "2015-11-11 13:36:05"
+            "time": "2015-11-16 05:59:15"
+        },
+        {
+            "name": "deltaphp/articles",
+            "version": "2.0.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DeltaPHP/articles.git",
+                "reference": "ba24a99fc1939ac019714e2b5821670f441e06b2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DeltaPHP/articles/zipball/ba24a99fc1939ac019714e2b5821670f441e06b2",
+                "reference": "ba24a99fc1939ac019714e2b5821670f441e06b2",
+                "shasum": ""
+            },
+            "require": {
+                "deltaphp/attach": "~1.0",
+                "deltaphp/deltacore": "~2.0",
+                "deltaphp/deltadb": "~1.2.0",
+                "deltaphp/dictdir": "~2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Articles": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "orbisnull",
+                    "email": "zen4dev@gmail.com"
+                }
+            ],
+            "description": "Articles module",
+            "time": "2015-11-12 08:14:43"
         },
         {
             "name": "deltaphp/attach",
@@ -264,12 +303,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/DeltaCore.git",
-                "reference": "16d82cbc56858c4fc7963562a017ad3092d534b6"
+                "reference": "6e836c5694933ee81d9057669198c30f76e2bd43"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/DeltaCore/zipball/16d82cbc56858c4fc7963562a017ad3092d534b6",
-                "reference": "16d82cbc56858c4fc7963562a017ad3092d534b6",
+                "url": "https://api.github.com/repos/DeltaPHP/DeltaCore/zipball/6e836c5694933ee81d9057669198c30f76e2bd43",
+                "reference": "6e836c5694933ee81d9057669198c30f76e2bd43",
                 "shasum": ""
             },
             "require": {
@@ -296,7 +335,7 @@
                 }
             ],
             "description": "Delta PHP framework - fast, light, easy (core)",
-            "time": "2015-11-11 11:39:19"
+            "time": "2015-11-16 05:57:05"
         },
         {
             "name": "deltaphp/deltadb",
@@ -494,12 +533,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/DictDir.git",
-                "reference": "d26b8701d7e2d0eaf784fc61960e69895cb48f56"
+                "reference": "3ec009aca7d5b58df6041a5d8e9626993990b2cf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/DictDir/zipball/d26b8701d7e2d0eaf784fc61960e69895cb48f56",
-                "reference": "d26b8701d7e2d0eaf784fc61960e69895cb48f56",
+                "url": "https://api.github.com/repos/DeltaPHP/DictDir/zipball/3ec009aca7d5b58df6041a5d8e9626993990b2cf",
+                "reference": "3ec009aca7d5b58df6041a5d8e9626993990b2cf",
                 "shasum": ""
             },
             "require": {
@@ -523,7 +562,7 @@
                 }
             ],
             "description": "module for work with simple dict-type data",
-            "time": "2015-11-11 12:47:47"
+            "time": "2015-11-16 06:02:47"
         },
         {
             "name": "deltaphp/dtpl",
@@ -593,6 +632,43 @@
             ],
             "description": "request, response, session and other tools for base web development",
             "time": "2015-11-11 11:42:57"
+        },
+        {
+            "name": "deltaphp/image-processor",
+            "version": "2.0.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DeltaPHP/image-processor.git",
+                "reference": "46834e1d0d5fa281729ec1a0e04b47889fd0bba4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DeltaPHP/image-processor/zipball/46834e1d0d5fa281729ec1a0e04b47889fd0bba4",
+                "reference": "46834e1d0d5fa281729ec1a0e04b47889fd0bba4",
+                "shasum": ""
+            },
+            "require": {
+                "deltaphp/deltacore": "~2.0",
+                "orbisnull/orbisconvert": "~0.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "ImageProcessor": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "orbisnull",
+                    "email": "zen4dev@gmail.com"
+                }
+            ],
+            "description": "Resize and othe operations on images by request",
+            "time": "2015-11-16 06:17:39"
         },
         {
             "name": "deltaphp/pages",
@@ -717,12 +793,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/SiteMenu.git",
-                "reference": "c8c5513ab0845413a41d5e517868776e231282a0"
+                "reference": "ea87cc46ec9076931c86e053f68383ba305b2041"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/SiteMenu/zipball/c8c5513ab0845413a41d5e517868776e231282a0",
-                "reference": "c8c5513ab0845413a41d5e517868776e231282a0",
+                "url": "https://api.github.com/repos/DeltaPHP/SiteMenu/zipball/ea87cc46ec9076931c86e053f68383ba305b2041",
+                "reference": "ea87cc46ec9076931c86e053f68383ba305b2041",
                 "shasum": ""
             },
             "require": {
@@ -745,7 +821,7 @@
                 }
             ],
             "description": "Site menu module for DeltaPHP",
-            "time": "2015-11-11 11:52:58"
+            "time": "2015-11-11 13:36:54"
         },
         {
             "name": "deltaphp/user",
@@ -863,6 +939,39 @@
                 "minification"
             ],
             "time": "2015-10-15 01:33:42"
+        },
+        {
+            "name": "orbisnull/orbisconvert",
+            "version": "0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/orbisnull/orbisconvert.git",
+                "reference": "8f28ed76f8734f3ab2434c4cbdc0bca5b1b2e4b0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/orbisnull/orbisconvert/zipball/8f28ed76f8734f3ab2434c4cbdc0bca5b1b2e4b0",
+                "reference": "8f28ed76f8734f3ab2434c4cbdc0bca5b1b2e4b0",
+                "shasum": ""
+            },
+            "require": {
+                "deltaphp/deltautils": "~1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "OrbisConvert": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "orbisnull",
+                    "email": "zen4dev@gmail.com"
+                }
+            ],
+            "description": "transformers for objects",
+            "time": "2015-09-23 10:34:12"
         },
         {
             "name": "pimple/pimple",

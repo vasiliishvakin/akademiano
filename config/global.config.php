@@ -70,7 +70,11 @@ return [
         "Acl",
         "User",
         "DictDir",
-        "SiteMenu"
+        "SiteMenu",
+        "Articles",
+        "Attach",
+        "Sequence",
+        "ImageProcessor"
     ],
 
 ];

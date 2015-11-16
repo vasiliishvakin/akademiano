@@ -38,7 +38,9 @@
     "bower-asset/bootstrap": "^3.3.5",
     "bower-asset/jquery": "^2.1.4",
     "bower-asset/html5shiv": "^3.7.3",
-    "bower-asset/respond": "^1.4.2"
+    "bower-asset/respond": "^1.4.2",
+    "deltaphp/articles": "~2.0",
+    "deltaphp/image-processor": "~2.0"
   },
   "scripts": {
     "post-install-cmd": [
