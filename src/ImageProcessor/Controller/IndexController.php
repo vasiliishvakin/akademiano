@@ -22,12 +22,11 @@ class IndexController extends AbstractController
         return $app["imageProcessor"];
     }
 
-    public function IndexAction()
+    public function IndexAction(array $params = [])
     {
-        $uri = $this->getRequest()->getUriNormal();
-        $template = $this->getRequest()->getUriPartByNum(-2);
-        $fileDir = FileSystem::getDirName($uri, 2);
-        $fileName = basename($uri);
+        $template = $params["template"];
+        $fileDir = $params["directory"];
+        $fileName = $params["file"];
         $filePath = $fileDir . "/" .$fileName;
 
         $imagesDir = $this->getConfig(["ImageProcessor", "directory"], "data/images");
@@ -38,9 +37,9 @@ class IndexController extends AbstractController
             throw new \Exception("file not in images dir");
         }
         $pubDir = ROOT_DIR . "/public";
-        $pubPath = ROOT_DIR . "/public/" . $fileDir;
+        $pubPath = ROOT_DIR . "/public" . $fileDir;
 
-        $realPubPath = FileSystem::inDir($pubDir,  $pubPath, false);
+        $realPubPath = FileSystem::getSubDir($pubDir,  $pubPath, false);
         if (!$realPubPath) {
             throw new \Exception("Path not allow $pubPath in $pubDir");
         }
@@ -53,5 +52,4 @@ class IndexController extends AbstractController
         Header::mime($pubPath);
         echo file_get_contents($pubPath);
     }
-
-} 
+}
