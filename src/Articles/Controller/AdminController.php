@@ -9,6 +9,7 @@ use Acl\Model\Parts\AclController;
 use Attach\Model\FileManager;
 use Attach\Model\Parts\AttachSave;
 use DeltaCore\AdminControllerInterface;
+use DeltaUtils\ArrayUtils;
 use DeltaUtils\FileSystem;
 use Articles\Model\Article;
 use Articles\Model\ArticlesManager;
@@ -34,36 +35,9 @@ class AdminController extends IndexController implements  AdminControllerInterfa
     }
 
 
-    public function categoryListAction()
+    public function formAction(array $params = [])
     {
-        $this->setViewTemplate("list");
-        $categoryId = $this->getRequest()->getUriPartByNum(4);
-        if (empty($categoryId)) {
-            $this->getResponse()->redirect("/admin/articles");
-        }
-        $nm = $this->getArticlesManager();
-        $cm = $nm->getCategoryManager();
-        $category = $cm->findById($categoryId);
-        $this->getView()->assign("currentCategory", $category);
-
-        $criteria = ["category" => $categoryId];
-        $countArticles = $nm->count($criteria);
-        $pageInfo = $this->getPageInfo($countArticles, self::ITEMS_PER_PAGE);
-        $orderBy = "id";
-        $articles = $nm->find($criteria, null, $pageInfo["perPage"], $pageInfo["offsetForPage"], $orderBy);
-        $this->getView()->assign("items", $articles);
-        $this->getView()->assignArray($pageInfo);
-        $this->getView()->assign("countItems", $countArticles);
-    }
-
-    public function getId()
-    {
-        return $this->getRequest()->getUriPartByNum(4);
-    }
-
-    public function formAction()
-    {
-        $id = $this->getId();
+        $id = ArrayUtils::get($params, "id");
         $categories = $this->getArticlesManager()->getCategories();
         if (!empty($id)) {
             $nm = $this->getArticlesManager();
@@ -85,10 +59,13 @@ class AdminController extends IndexController implements  AdminControllerInterfa
         $this->getView()->assign("categories", $categories);
     }
 
-    public function rmAction()
+    public function rmAction(array $params = [])
     {
         $this->autoRenderOff();
-        $id = $this->getId();
+        $id = ArrayUtils::get($params, "id");
+        if (empty($id)) {
+            throw new \RuntimeException("Bad item id $id");
+        }
         $this->getArticlesManager()->deleteById($id);
         $this->getResponse()->redirect("/admin/articles");
     }
@@ -111,5 +88,4 @@ class AdminController extends IndexController implements  AdminControllerInterfa
         $this->processFilesRequest($item, $maxFileSize);
         $this->getResponse()->redirect("/admin/articles");
     }
-
-} 
+}

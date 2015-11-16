@@ -9,23 +9,24 @@ namespace Articles\Controller;
 use Articles\Model\Parts\GetArticlesManager;
 use DeltaCore\AbstractController;
 use DeltaDb\Adapter\WhereParams\Between;
+use DeltaUtils\ArrayUtils;
 use DeltaUtils\Time;
 
 class IndexController extends AbstractController
 {
     use GetArticlesManager;
 
-    public function listAction()
+    public function listAction(array $params = [])
     {
         $manager = $this->getArticlesManager();
         $itemsPerPage = $this->getConfig(["Articles", "itemsPerPage"], 4);
-        $section = $this->getRequest()->getUriPartByNum(2);
+        $section = ArrayUtils::get($params, ["section"]);
         $criteria = [];
         $categories = $manager->getCategories();
         $defaultMetaStart = "Статьи";
         switch ($section) {
             case "category" :
-                $categoryId = $this->getRequest()->getUriPartByNum(3);
+                $categoryId = ArrayUtils::get($params, ["id"]);
                 if (empty($categoryId)) {
                     $this->getResponse()->redirect("/articles");
                 }
@@ -42,7 +43,7 @@ class IndexController extends AbstractController
                 $categories = $viewCats;
                 $defaultMetaStart = "Статьи о " .$category->getName();
                 break;
-            case "archive" :
+            /*case "archive" :
                 $dateStr = $this->getRequest()->getUriPartByNum(3);
                 $date = new \DateTime($dateStr);
                 $this->getView()->assign("currentDate", $date);
@@ -53,7 +54,7 @@ class IndexController extends AbstractController
                     $criteria["created"] = new Between($date->format("Y-m-01"), $date->format("Y-m-t"));
                 }
                 $defaultMetaStart = "Статьи за " . Time::toStrIntl($date, "%B %Y");
-                break;
+                break;*/
         }
         $orderBy = "id";
         $countArticles = $manager->count($criteria);

@@ -1,16 +1,67 @@
 <?php
 
 return [
-    ["/articles", ["index", "list"]],
-    ["/articles/id", ["index", "view"]],
-    ["/api/article/dates", ["api", "dates"]],
-    ["/articles-list", ["list", "list"]],
+    "articles_list" => [
+        "methods" => [\DeltaRouter\Route::METHOD_GET],
+        "patterns" => [
+            "type" => \DeltaRouter\RoutePattern::TYPE_REGEXP,
+            "value" => "^/articles/?(?P<section>\w+)?/?(?P<id>\d+)?",
+        ],
+        "action" => ["index", "list"]
+    ],
+    "articles_view" => [
+        "methods" => [\DeltaRouter\Route::METHOD_GET],
+        "patterns" => [
+            "type" => \DeltaRouter\RoutePattern::TYPE_REGEXP,
+            "value" => "^/articles/id(?P<id>\w+)",
+        ],
+        "action" => ["index", "view"]
+    ],
 
-    ["/admin/articles", ["admin", "list"]],
-    ["/admin/articles/add", ["admin", "form"]],
-    ["/admin/articles/edit", ["admin", "form"]],
-    ["/admin/articles/save", ["admin", "save"]],
-    ["/admin/articles/rm", ["admin", "rm"]],
-    ["/admin/articles/category", ["admin", "categoryList"]],
+    ["/api/article/dates", ["api", "dates"]],
+
+    "articles_admin_add" => [
+        "methods" => [\DeltaRouter\Route::METHOD_GET],
+        "patterns" => [
+            "type" => \DeltaRouter\RoutePattern::TYPE_FULL,
+            "value" => "/admin/articles/add",
+        ],
+        "action" => ["admin", "form"]
+    ],
+
+    "articles_admin_edit" => [
+        "methods" => [\DeltaRouter\Route::METHOD_GET],
+        "patterns" => [
+            "type" => \DeltaRouter\RoutePattern::TYPE_REGEXP,
+            "value" => "/admin/articles/edit/(?P<id>\d+)",
+        ],
+        "action" => ["admin", "form"]
+    ],
+    "articles_admin_save" => [
+        "methods" => [\DeltaRouter\Route::METHOD_POST],
+        "patterns" => [
+            "type" => \DeltaRouter\RoutePattern::TYPE_FULL,
+            "value" => "/admin/articles/save",
+        ],
+        "action" => ["admin", "save"]
+    ],
+
+    "articles_admin_rm" => [
+        "methods" => [\DeltaRouter\Route::METHOD_GET],
+        "patterns" => [
+            "type" => \DeltaRouter\RoutePattern::TYPE_REGEXP,
+            "value" => "/admin/articles/rm/(?P<id>\d+)",
+        ],
+        "action" => ["admin", "rm"]
+    ],
+
+    "articles_admin_list" => [
+        "methods" => [\DeltaRouter\Route::METHOD_GET],
+        "patterns" => [
+            "type" => \DeltaRouter\RoutePattern::TYPE_REGEXP,
+            "value" => "^/admin/articles(/(?P<section>\w+)/(?P<id>\d+))?",
+        ],
+        "action" => ["admin", "list"]
+    ],
 
 ];
