@@ -15,7 +15,7 @@
         }
     },
     "require": {
-	"deltaphp/deltacore": "~1.0",
+	"deltaphp/deltacore": "~2.0",
 	"orbisnull/orbisconvert": "~0.1"
     }
 }
