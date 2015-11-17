@@ -37,12 +37,12 @@ class FileManager extends Repository
 
     public function getRelationsConfig()
     {
-        return $this->getConfig()->get(["Attach","relationMatrix"]);
+        return $this->getConfig()->get(["Attach","relationMatrix"], []);
     }
 
     public function getSectionsConfig()
     {
-        return $this->getConfig()->get(["Attach","sectionMatrix"]);
+        return $this->getConfig()->get(["Attach","sectionMatrix"], []);
     }
 
     public function getSequenceName()
@@ -76,13 +76,34 @@ class FileManager extends Repository
         $this->rootUri = $rootUri;
     }
 
+    public function getSectionHash($entityClass)
+    {
+        if (is_object($entityClass)) {
+            $entityClass = get_class($entityClass);
+        }
+        $hash = hexdec(hash("crc32", $entityClass));
+        if ($hash <= 1000) {
+            $hash = $hash+1000;
+        } elseif ($hash>100000) {
+            $hash = ceil($hash / 9999);
+        }
+        return $hash;
+    }
+
     public function getSection($entityClass)
     {
         $typesConfig = $this->getSectionsConfig();
         if (is_object($entityClass)) {
             $entityClass = get_class($entityClass);
         }
-        return $typesConfig->get($entityClass);
+        $section = null;
+        if ($typesConfig instanceof Config) {
+            $section = $typesConfig->get($entityClass);
+        }
+        if (null === $section) {
+            $section = $this->getSectionHash($entityClass);
+        }
+        return $section;
     }
 
     public function getNextSequence()
