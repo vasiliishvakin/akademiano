@@ -1,9 +1,15 @@
 {% extends "layoutAdmin.twig" %}
 
 {% block head %}
-    <script src="static/js/photoUploader.js"></script>
-    {% include "ckeditor.twig" %}
+    {{ parent() }}
+    {{ asset_js(["ckeditor/ckeditor.js"], default, true) }}
+    <script>
+        $(document).ready(function () {
+            CKEDITOR.replace( '.ckeditor' );
+        });
+    </script>
 {% endblock head %}
+
 
 {% block content %}
     <form class="form-horizontal" method="POST" enctype="multipart/form-data" action="/admin/articles/save">

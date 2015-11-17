@@ -17,7 +17,14 @@
     "require": {
         "deltaphp/deltacore": "~2.0",
         "deltaphp/deltadb": "~1.2.0",
-        "deltaphp/attach": "~1.0",
-        "deltaphp/dictdir": "~2.0"
+        "deltaphp/attach": "~2.0",
+        "deltaphp/dictdir": "~2.0",
+        "bower-asset/ckeditor": "^4.5.4"
+    },
+    "extra": {
+        "asset-installer-paths": {
+            "npm-asset-library": "public/assets/vendor",
+            "bower-asset-library": "public/assets/vendor"
+        }
     }
 }

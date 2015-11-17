@@ -7,7 +7,7 @@ return [
         /** @var \DictDir\Model\DirectoryFactory $dm */
         $dm = $c["directoryFactory"];
         $dm->addTable("article_categories");
-        $gm = $dm->getManager("groups");
+        $gm = $dm->getManager("article_categories");
         return $gm;
     },
     "ArticlesManager" => function ($c) {
