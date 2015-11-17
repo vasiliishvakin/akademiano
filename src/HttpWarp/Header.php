@@ -19,7 +19,7 @@ class Header
 
     public static function accel($uri, $file)
     {
-        self::mimeHeader($file);
+        self::mime($file);
         header("X-Accel-Redirect: $uri");
     }
 
