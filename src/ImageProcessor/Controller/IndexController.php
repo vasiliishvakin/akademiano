@@ -19,6 +19,7 @@ class IndexController extends AbstractController
     public function getImageProcessor()
     {
         $app = $this->getApplication();
+
         return $app["imageProcessor"];
     }
 
@@ -27,7 +28,7 @@ class IndexController extends AbstractController
         $template = $params["template"];
         $fileDir = $params["directory"];
         $fileName = $params["file"];
-        $filePath = $fileDir . "/" .$fileName;
+        $filePath = $fileDir . "/" . $fileName;
 
         $imagesDir = $this->getConfig(["ImageProcessor", "directory"], "data/images");
         $imagesDir = ROOT_DIR . "/" . $imagesDir;
@@ -39,17 +40,19 @@ class IndexController extends AbstractController
         $pubDir = ROOT_DIR . "/public";
         $pubPath = ROOT_DIR . "/public" . $fileDir;
 
-        $realPubPath = FileSystem::getSubDir($pubDir,  $pubPath, false);
+        $realPubPath = FileSystem::getSubDir($pubDir, $pubPath, false);
         if (!$realPubPath) {
             throw new \Exception("Path not allow $pubPath in $pubDir");
         }
-        $pubPath = $realPubPath . "/" . $template . "/" . $fileName;
+        $pubPath = "/" . $realPubPath . "/" . $template . "/" . $fileName;
+
+        $outFullPath = ROOT_DIR . "/public/" . $pubPath;
 
         $imp = $this->getImageProcessor();
-        $imp->process($realPath, $pubPath, $template);
+        $outFile = $imp->process($realPath, $outFullPath, $template);
 
         //TODO use accel
-        Header::mime($pubPath);
-        echo file_get_contents($pubPath);
+        Header::accel($pubPath, $outFile);
+//        echo file_get_contents($pubPath);
     }
 }
