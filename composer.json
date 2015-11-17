@@ -20,6 +20,6 @@
     "deltaphp/deltacore": "^2.0",
     "deltaphp/deltadb": "^1.2.0",
     "deltaphp/perm-auth": "^2.0",
-    "deltaphp/attach": "^1.0"
+    "deltaphp/attach": "^2.0"
   }
 }
