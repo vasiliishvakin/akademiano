@@ -99,7 +99,9 @@ class Query extends ArrayObject implements ArrayableInterface, StringableInterfa
                 $newParts = [];
                 foreach ($parts as $part) {
                     $part = explode("=", $part);
-                    $newParts[$part[0]] = $part[1];
+                    if (isset($part[0])) {
+                        $newParts[$part[0]] = isset($part[1]) ? $part[1] : "";
+                    }
                 }
                 $this->setItems($newParts);
             }
