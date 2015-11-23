@@ -1,5 +1,5 @@
 {
-    "name": "deltaphp/image-processor",
+    "name": "deltaphp/image",
     "description": "Resize and othe operations on images by request",
     "license": "GPL-3.0+",
     "authors": [
