@@ -3,7 +3,7 @@
  * User: Vasiliy Shvakin (orbisnull) zen4dev@gmail.com
  */
 
-namespace ImageProcessor\Controller;
+namespace Image\Controller;
 
 use DeltaCore\AbstractController;
 use DeltaUtils\FileSystem;
