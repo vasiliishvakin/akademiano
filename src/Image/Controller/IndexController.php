@@ -3,7 +3,7 @@
  * User: Vasiliy Shvakin (orbisnull) zen4dev@gmail.com
  */
 
-namespace ImageProcessor\Controller;
+namespace Image\Controller;
 
 use DeltaCore\AbstractController;
 use DeltaUtils\FileSystem;
@@ -19,16 +19,16 @@ class IndexController extends AbstractController
     public function getImageProcessor()
     {
         $app = $this->getApplication();
+
         return $app["imageProcessor"];
     }
 
-    public function IndexAction()
+    public function IndexAction(array $params = [])
     {
-        $uri = $this->getRequest()->getUriNormal();
-        $template = $this->getRequest()->getUriPartByNum(-2);
-        $fileDir = FileSystem::getDirName($uri, 2);
-        $fileName = basename($uri);
-        $filePath = $fileDir . "/" .$fileName;
+        $template = $params["template"];
+        $fileDir = $params["directory"];
+        $fileName = $params["file"];
+        $filePath = $fileDir . "/" . $fileName;
 
         $imagesDir = $this->getConfig(["ImageProcessor", "directory"], "data/images");
         $imagesDir = ROOT_DIR . "/" . $imagesDir;
@@ -38,20 +38,21 @@ class IndexController extends AbstractController
             throw new \Exception("file not in images dir");
         }
         $pubDir = ROOT_DIR . "/public";
-        $pubPath = ROOT_DIR . "/public/" . $fileDir;
+        $pubPath = ROOT_DIR . "/public" . $fileDir;
 
-        $realPubPath = FileSystem::inDir($pubDir,  $pubPath, false);
+        $realPubPath = FileSystem::getSubDir($pubDir, $pubPath, false);
         if (!$realPubPath) {
             throw new \Exception("Path not allow $pubPath in $pubDir");
         }
-        $pubPath = $realPubPath . "/" . $template . "/" . $fileName;
+        $pubPath = "/" . $realPubPath . "/" . $template . "/" . $fileName;
+
+        $outFullPath = ROOT_DIR . "/public/" . $pubPath;
 
         $imp = $this->getImageProcessor();
-        $imp->process($realPath, $pubPath, $template);
+        $outFile = $imp->process($realPath, $outFullPath, $template);
 
         //TODO use accel
-        Header::mime($pubPath);
-        echo file_get_contents($pubPath);
+        Header::accel($pubPath, $outFile);
+//        echo file_get_contents($pubPath);
     }
-
-} 
+}

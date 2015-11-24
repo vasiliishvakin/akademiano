@@ -1,21 +1,22 @@
 {
-    "name": "deltaphp/image",
-    "description": "Resize and othe operations on images by request",
-    "license": "GPL-3.0+",
-    "authors": [
-        {
-            "name": "orbisnull",
-            "email": "zen4dev@gmail.com"
-        }
-    ],
-    "minimum-stability": "dev",
-    "autoload": {
-        "psr-0": {
-            "ImageProcessor": "src/"
-        }
-    },
-    "require": {
-	"deltaphp/deltacore": "~1.0",
-	"orbisnull/orbisconvert": "~0.1"
+  "name": "deltaphp/image",
+  "description": "Resize and othe operations on images by request",
+  "license": "MIT",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "authors": [
+    {
+      "name": "orbisnull",
+      "email": "zen4dev@gmail.com"
     }
+  ],
+  "autoload": {
+    "psr-0": {
+      "Image": "src/"
+    }
+  },
+  "require": {
+    "deltaphp/deltacore": "~2.0",
+    "ext-imagick": "*"
+  }
 }
