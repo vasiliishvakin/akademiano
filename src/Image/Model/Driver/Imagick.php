@@ -64,7 +64,8 @@ class Imagick extends AbstractDriver
         $x = ($this->getWidth() - $width) / 2;
         $y = ($this->getHeight() - $height) / 2;
 
-        return $this->getImage()->cropImage($width, $height, $x, $y);
+        $this->getImage()->cropImage($width, $height, $x, $y);
+        $this->getImage()->setImagePage($width, $height, 0, 0);
     }
 
     public function resizeAndCrop($width, $height)
@@ -85,6 +86,7 @@ class Imagick extends AbstractDriver
 
     public function show()
     {
+        $this->getImage()->setImageFormat('jpg');
         header('Content-Type: image/' . $this->getImage()->getImageFormat());
         echo $this->getImage()->getimageblob();
     }
@@ -93,23 +95,23 @@ class Imagick extends AbstractDriver
         $text = "Copyright",
         $font = "Courier",
         $size = 20,
-        $color = "grey70",
-        $maskColor = "grey30",
+        $color = "black",
+        $maskColor = "white",
         $position = \Imagick::GRAVITY_SOUTHEAST
-    ) {
-        // Create a new drawing palette
+    )
+    {
         $draw = new \ImagickDraw();
 
-        $draw->setFont('Arial');
-        $draw->setFontSize(20);
-        $draw->setFillColor('black');
+        $draw->setFont($font);
+        $draw->setFontSize($size);
+        $draw->setFillColor($color);
 
-        $draw->setGravity(\Imagick::GRAVITY_SOUTHEAST);
+        $draw->setGravity($position);
 
         $this->getImage()->annotateImage($draw, 10, 12, 0, $text);
 
-        $draw->setFillColor('white');
-        $this->$this->getImage()->annotateImage($draw, 11, 11, 0, $text);
+        $draw->setFillColor($maskColor);
+        return $this->getImage()->annotateImage($draw, 11, 11, 0, $text);
     }
 
     public function addWatermarkTextMask(
@@ -119,7 +121,8 @@ class Imagick extends AbstractDriver
         $color = "grey70",
         $maskColor = "grey30",
         $position = \Imagick::GRAVITY_SOUTHEAST
-    ) {
+    )
+    {
         $watermark = new \Imagick();
         $mask = new \Imagick();
         $draw = new \ImagickDraw();
@@ -151,31 +154,35 @@ class Imagick extends AbstractDriver
         return $this->getImage()->compositeImage($watermark, \Imagick::COMPOSITE_DISSOLVE, 0, 0);
     }
 
-    public function addWatermarkTextMosaic()
+    public function addWatermarkTextMosaic(
+        $text = "Copyright",
+        $font = "Courier",
+        $size = 20,
+        $color = "grey70",
+        $maskColor = "grey30",
+        $position = \Imagick::GRAVITY_SOUTHEAST
+    )
     {
-        $image = new Imagick('image.png');
-        $watermark = new Imagick();
+        $watermark = new \Imagick();
 
-        $text = 'Copyright';
+        $draw = new \ImagickDraw();
+        $watermark->newImage(140, 80, new \ImagickPixel('none'));
 
-        $draw = new ImagickDraw();
-        $watermark->newImage(140, 80, new ImagickPixel('none'));
-
-        $draw->setFont('Arial');
+        $draw->setFont($font);
         $draw->setFillColor('grey');
-        $draw->setFillOpacity(.5);
+        $draw->setFillOpacity(.4);
 
-        $draw->setGravity(Imagick::GRAVITY_NORTHWEST);
+        $draw->setGravity(\Imagick::GRAVITY_NORTHWEST);
 
         $watermark->annotateImage($draw, 10, 10, 0, $text);
 
-        $draw->setGravity(Imagick::GRAVITY_SOUTHEAST);
+        $draw->setGravity(\Imagick::GRAVITY_SOUTHEAST);
 
         $watermark->annotateImage($draw, 5, 15, 0, $text);
 
-        for ($w = 0; $w < $image->getImageWidth(); $w += 140) {
-            for ($h = 0; $h < $image->getImageHeight(); $h += 80) {
-                $image->compositeImage($watermark, Imagick::COMPOSITE_OVER, $w, $h);
+        for ($w = 0; $w < $this->getImage()->getImageWidth(); $w += 140) {
+            for ($h = 0; $h < $this->getImage()->getImageHeight(); $h += 80) {
+                $this->getImage()->compositeImage($watermark, \Imagick::COMPOSITE_OVER, $w, $h);
             }
         }
     }
