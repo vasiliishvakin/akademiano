@@ -12,6 +12,32 @@ namespace Image\Model\Driver;
 abstract class AbstractDriver
 {
 
+    protected $file;
+
+    public function __construct($file = null)
+    {
+        if (null !== $file) {
+            $this->setFile($file);
+        }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * @param mixed $file
+     */
+    public function setFile($file)
+    {
+        $this->file = $file;
+    }
+
+
     abstract public function resize($width = null, $height = null);
 
     abstract public function crop($width = null, $height = null);

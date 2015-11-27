@@ -10,13 +10,14 @@ namespace Image\Model;
 
 
 use DeltaCore\Parts\Configurable;
+use Image\Model\Driver\AbstractDriver;
 use Image\Model\Driver\Imagick;
 
 /**
  * Class Image
  * @package Image\Model
  * @method read($file);
- * @method write();
+ * @method write($file);
  * @method resize($width = null, $height = null);
  * @method crop($width = null, $height = null);
  * @method getWidth();
@@ -27,6 +28,8 @@ use Image\Model\Driver\Imagick;
  * @method addWatermarkText($text = "Copyright", $font = "Courier", $size = 20, $color = "grey70", $position = \Imagick::GRAVITY_SOUTHEAST)
  * @method addWatermarkTextMask($text = "Copyright", $font = "Courier", $size = 20, $color = "grey70", $position = \Imagick::GRAVITY_SOUTHEAST)
  * @method addWatermarkTextMosaic($text = "Copyright", $font = "Courier", $size = 20, $color = "grey70", $position = \Imagick::GRAVITY_SOUTHEAST)
+ * @method clear()
+ * @method optimize($quality = 60, $compression = null)
  */
 class Image
 {
@@ -35,6 +38,31 @@ class Image
     protected $image;
 
     protected $driver;
+
+    protected $file;
+
+    public function __construct($file = null)
+    {
+        if (null !== $file) {
+            $this->setFile($file);
+        }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * @param mixed $file
+     */
+    public function setFile($file)
+    {
+        $this->file = $file;
+    }
 
     /**
      * @return string
@@ -64,8 +92,10 @@ class Image
         if (is_null($this->image)) {
             $driver = $this->getDriver();
             $driver = __NAMESPACE__ . "\\Driver\\" . $driver;
+            /** @var AbstractDriver image */
             $this->image = new $driver();
             $this->image->setConfig($this->getConfig(lcfirst($driver), []));
+            $this->image->setFile($this->getFile());
         }
 
         return $this->image;

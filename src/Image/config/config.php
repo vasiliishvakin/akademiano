@@ -1,18 +1,24 @@
 <?php
 
 return [
-    "ImageProcessor" => [
+    "Image" => [
         "templates" => [
             "thumb"    => [
-                "action"  => "resize",
-                "options" => [100, 150],
+                "resizeAndCrop" => [150, 150],
+                "addWatermark" => new \Image\Model\Watermark(["text"=>"deltaphp/image"]),
+                "clear",
+                "optimize"
             ],
             "medium"    => [
-                "action"  => "resize",
-                "options" => [300, 300],
+                "resizeAndCrop" => [300, 300],
+                "addWatermark" => new \Image\Model\Watermark(["text"=>"deltaphp/image"]),
+                "clear",
+                "optimize"
             ],
             "origin" => [
-                "action"  => "origin",
+                "addWatermark" => new \Image\Model\Watermark(["text"=>"deltaphp/image"]),
+                "clear",
+                "optimize" => [95],
             ]
         ]
     ]

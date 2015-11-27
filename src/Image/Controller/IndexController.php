@@ -30,7 +30,7 @@ class IndexController extends AbstractController
         $fileName = $params["file"];
         $filePath = $fileDir . "/" . $fileName;
 
-        $imagesDir = $this->getConfig(["ImageProcessor", "directory"], "data/images");
+        $imagesDir = $this->getConfig(["Image", "directory"], "data/images");
         $imagesDir = ROOT_DIR . "/" . $imagesDir;
         $realPath = ROOT_DIR . $filePath;
         $path = FileSystem::inDir($imagesDir, $realPath);
@@ -51,8 +51,6 @@ class IndexController extends AbstractController
         $imp = $this->getImageProcessor();
         $outFile = $imp->process($realPath, $outFullPath, $template);
 
-        //TODO use accel
         Header::accel($pubPath, $outFile);
-//        echo file_get_contents($pubPath);
     }
 }

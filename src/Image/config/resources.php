@@ -4,8 +4,8 @@
  */
 return [
     "imageProcessor" => function ($c) {
-            $config = $c->getConfig();
-            $imp = new \ImageProcessor\Model\Processor();
+            $config = $c->getConfig("Image", []);
+            $imp = new \Image\Model\Processor();
             $imp->setConfig($config);
             return $imp;
         },

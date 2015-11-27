@@ -11,6 +11,7 @@ namespace Image\Model\Driver;
 
 use DeltaCore\Parts\Configurable;
 use HttpWarp\Header;
+use Image\Model\Watermark;
 
 class Imagick extends AbstractDriver
 {
@@ -21,14 +22,18 @@ class Imagick extends AbstractDriver
      */
     protected $image;
 
+
     public function read($file)
     {
-        $this->image = new \Imagick();
-        $this->image->readImage($file);
+        $this->setFile($file);
     }
 
     protected function getImage()
     {
+        if (null === $this->image) {
+            $this->image = new \Imagick();
+            $this->image->readImage($this->getFile());
+        }
         return $this->image;
     }
 
@@ -86,104 +91,116 @@ class Imagick extends AbstractDriver
 
     public function show()
     {
-        $this->getImage()->setImageFormat('jpg');
         header('Content-Type: image/' . $this->getImage()->getImageFormat());
         echo $this->getImage()->getimageblob();
     }
 
-    public function addWatermarkText(
-        $text = "Copyright",
-        $font = "Courier",
-        $size = 20,
-        $color = "black",
-        $maskColor = "white",
-        $position = \Imagick::GRAVITY_SOUTHEAST
-    )
+    public function addWatermark(Watermark $watermark)
+    {
+        switch($watermark->getMode()) {
+            case Watermark::MODE_TEXT:
+                return $this->addWatermarkText($watermark);
+            case Watermark::MODE_TEXT_MASK:
+                return $this->addWatermarkTextMask($watermark);
+            case Watermark::MODE_TEXT_MOSAIC:
+                return $this->addWatermarkTextMosaic($watermark);
+
+        }
+
+    }
+
+    public function addWatermarkText(Watermark $watermark)
     {
         $draw = new \ImagickDraw();
 
-        $draw->setFont($font);
-        $draw->setFontSize($size);
-        $draw->setFillColor($color);
+        $draw->setFont($watermark->getFont());
+        $draw->setFontSize($watermark->getSize());
+        $draw->setFillColor($watermark->getColor());
 
-        $draw->setGravity($position);
+        $draw->setGravity($watermark->getPosition());
 
-        $this->getImage()->annotateImage($draw, 10, 12, 0, $text);
+        $this->getImage()->annotateImage($draw, 10, 12, 0, $watermark->getText());
 
-        $draw->setFillColor($maskColor);
-        return $this->getImage()->annotateImage($draw, 11, 11, 0, $text);
+        $draw->setFillColor($watermark->getMaskColor());
+        return $this->getImage()->annotateImage($draw, 11, 11, 0, $watermark->getText());
     }
 
-    public function addWatermarkTextMask(
-        $text = "Copyright",
-        $font = "Courier",
-        $size = 20,
-        $color = "grey70",
-        $maskColor = "grey30",
-        $position = \Imagick::GRAVITY_SOUTHEAST
-    )
+    public function addWatermarkTextMask(Watermark $watermark)
     {
-        $watermark = new \Imagick();
+        $watermarkImage = new \Imagick();
         $mask = new \Imagick();
         $draw = new \ImagickDraw();
 
         $width = $this->getWidth();
         $height = $this->getHeight();
 
-        $watermark->newImage($width, $height, new \ImagickPixel($maskColor));
+        $watermarkImage->newImage($width, $height, new \ImagickPixel($watermark->getMaskColor()));
         $mask->newImage($width, $height, new \ImagickPixel('black'));
 
-        $draw->setFont($font);
-        $draw->setFontSize($size);
-        $draw->setFillColor($color);
+        $draw->setFont($watermark->getFont());
+        $draw->setFontSize($watermark->getSize());
+        $draw->setFillColor($watermark->getColor());
 
-        $draw->setGravity($position);
+        $draw->setGravity($watermark->getPosition());
 
-        $watermark->annotateImage($draw, 10, 12, 0, $text);
+        $watermarkImage->annotateImage($draw, 10, 12, 0, $watermark->getText());
 
         $draw->setFillColor('white');
-        $mask->annotateImage($draw, 11, 13, 0, $text);
-        $mask->annotateImage($draw, 10, 12, 0, $text);
+        $mask->annotateImage($draw, 11, 13, 0, $watermark->getText());
+        $mask->annotateImage($draw, 10, 12, 0, $watermark->getText());
         $draw->setFillColor('black');
-        $mask->annotateImage($draw, 9, 11, 0, $text);
+        $mask->annotateImage($draw, 9, 11, 0, $watermark->getText());
 
         $mask->setImageMatte(false);
 
-        $watermark->compositeImage($mask, \Imagick::COMPOSITE_COPYOPACITY, 0, 0);
+        $watermarkImage->compositeImage($mask, \Imagick::COMPOSITE_COPYOPACITY, 0, 0);
 
-        return $this->getImage()->compositeImage($watermark, \Imagick::COMPOSITE_DISSOLVE, 0, 0);
+        return $this->getImage()->compositeImage($watermarkImage, \Imagick::COMPOSITE_DISSOLVE, 0, 0);
     }
 
-    public function addWatermarkTextMosaic(
-        $text = "Copyright",
-        $font = "Courier",
-        $size = 20,
-        $color = "grey70",
-        $maskColor = "grey30",
-        $position = \Imagick::GRAVITY_SOUTHEAST
-    )
+    public function addWatermarkTextMosaic(Watermark $watermark)
     {
-        $watermark = new \Imagick();
+        $watermarkImage = new \Imagick();
 
         $draw = new \ImagickDraw();
-        $watermark->newImage(140, 80, new \ImagickPixel('none'));
+        $watermarkImage->newImage(140, 80, new \ImagickPixel('none'));
 
-        $draw->setFont($font);
-        $draw->setFillColor('grey');
-        $draw->setFillOpacity(.4);
+        $draw->setFont($watermark->getFont());
+        $draw->setFontSize($watermark->getSize());
+        $draw->setFillColor($watermark->getColor());
+        $draw->setFillOpacity($watermark->getOpacity());
 
         $draw->setGravity(\Imagick::GRAVITY_NORTHWEST);
 
-        $watermark->annotateImage($draw, 10, 10, 0, $text);
+        $watermarkImage->annotateImage($draw, 10, 10, 0, $watermark->getText());
 
         $draw->setGravity(\Imagick::GRAVITY_SOUTHEAST);
 
-        $watermark->annotateImage($draw, 5, 15, 0, $text);
+        $watermarkImage->annotateImage($draw, 5, 15, 0, $watermark->getText());
 
         for ($w = 0; $w < $this->getImage()->getImageWidth(); $w += 140) {
             for ($h = 0; $h < $this->getImage()->getImageHeight(); $h += 80) {
-                $this->getImage()->compositeImage($watermark, \Imagick::COMPOSITE_OVER, $w, $h);
+                $this->getImage()->compositeImage($watermarkImage, \Imagick::COMPOSITE_OVER, $w, $h);
             }
         }
+    }
+
+    public function clear()
+    {
+        return $this->getImage()->stripImage();
+    }
+
+    public function optimize($quality = 80, $compression = null)
+    {
+        if (null === $compression) {
+            $compression = \Imagick::COMPRESSION_UNDEFINED;
+        }
+        $this->getImage()->setImageCompression($compression);
+        $this->getImage()->setImageCompressionQuality($quality);
+    }
+
+    public function write($file)
+    {
+        $this->getImage()->writeImage($file);
     }
 }
