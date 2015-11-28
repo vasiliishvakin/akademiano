@@ -41,7 +41,7 @@
     "bower-asset/respond": "^1.4.2",
 
     "deltaphp/articles": "~2.0",
-    "deltaphp/image-processor": "~2.0"
+    "deltaphp/image": "~1.0"
   },
   "scripts": {
     "post-install-cmd": [

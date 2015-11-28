@@ -38,6 +38,7 @@ return [
             "routeGenerator" => [
                 \DeltaCore\Config::DYN_CONF => function ($c) {
                     $router = $c["router"];
+
                     return [$router, "getUrl"];
                 }
             ]
@@ -63,6 +64,9 @@ return [
             "file" => ROOT_DIR . "/config/acl.conf",
         ]
     ],
+    "Image" => [
+        "watermark" => new \Image\Model\Watermark(["text" => "Skeleton"]),
+    ],
     "modules" => [
         "DeltaSkeletonModule",
         "DeltaDb",
@@ -74,7 +78,6 @@ return [
         "Articles",
         "Attach",
         "Sequence",
-        "ImageProcessor"
+        "Image"
     ],
-
 ];

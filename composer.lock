@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2ed0ea16118dbd71b2af9191e381cff8",
-    "content-hash": "718acea5782fc98920e3bee6243e396d",
+    "hash": "197e8b686c34d5a07e414ebb52559383",
+    "content-hash": "af83fd4afe03a5bd82cfdf67ca366a73",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -310,12 +310,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/DeltaCore.git",
-                "reference": "6e836c5694933ee81d9057669198c30f76e2bd43"
+                "reference": "53016c7bf15049217541e68625cc3f240ae90ce5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/DeltaCore/zipball/6e836c5694933ee81d9057669198c30f76e2bd43",
-                "reference": "6e836c5694933ee81d9057669198c30f76e2bd43",
+                "url": "https://api.github.com/repos/DeltaPHP/DeltaCore/zipball/53016c7bf15049217541e68625cc3f240ae90ce5",
+                "reference": "53016c7bf15049217541e68625cc3f240ae90ce5",
                 "shasum": ""
             },
             "require": {
@@ -342,7 +342,7 @@
                 }
             ],
             "description": "Delta PHP framework - fast, light, easy (core)",
-            "time": "2015-11-16 05:57:05"
+            "time": "2015-11-28 07:36:42"
         },
         {
             "name": "deltaphp/deltadb",
@@ -610,12 +610,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/HttpWarp.git",
-                "reference": "e2d7ff0f249280b358b917818734b8ca6e4919cc"
+                "reference": "af133e6d817e9a773de8a67b3e49aca5cf96b8c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/HttpWarp/zipball/e2d7ff0f249280b358b917818734b8ca6e4919cc",
-                "reference": "e2d7ff0f249280b358b917818734b8ca6e4919cc",
+                "url": "https://api.github.com/repos/DeltaPHP/HttpWarp/zipball/af133e6d817e9a773de8a67b3e49aca5cf96b8c4",
+                "reference": "af133e6d817e9a773de8a67b3e49aca5cf96b8c4",
                 "shasum": ""
             },
             "require": {
@@ -638,35 +638,35 @@
                 }
             ],
             "description": "request, response, session and other tools for base web development",
-            "time": "2015-11-17 18:07:36"
+            "time": "2015-11-19 23:32:28"
         },
         {
-            "name": "deltaphp/image-processor",
-            "version": "2.0.x-dev",
+            "name": "deltaphp/image",
+            "version": "1.0.x-dev",
             "source": {
                 "type": "git",
-                "url": "https://github.com/DeltaPHP/image-processor.git",
-                "reference": "99438f2601bb8450af614f6fe467b4e8ae7ffe2d"
+                "url": "https://github.com/DeltaPHP/image.git",
+                "reference": "8d5ec15e81b7f0bd9a73de9040894546efeb7ab3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/image-processor/zipball/99438f2601bb8450af614f6fe467b4e8ae7ffe2d",
-                "reference": "99438f2601bb8450af614f6fe467b4e8ae7ffe2d",
+                "url": "https://api.github.com/repos/DeltaPHP/image/zipball/8d5ec15e81b7f0bd9a73de9040894546efeb7ab3",
+                "reference": "8d5ec15e81b7f0bd9a73de9040894546efeb7ab3",
                 "shasum": ""
             },
             "require": {
                 "deltaphp/deltacore": "~2.0",
-                "orbisnull/orbisconvert": "~0.1"
+                "ext-imagick": "*"
             },
             "type": "library",
             "autoload": {
                 "psr-0": {
-                    "ImageProcessor": "src/"
+                    "Image": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "GPL-3.0+"
+                "MIT"
             ],
             "authors": [
                 {
@@ -675,7 +675,7 @@
                 }
             ],
             "description": "Resize and othe operations on images by request",
-            "time": "2015-11-17 18:30:10"
+            "time": "2015-11-28 08:01:47"
         },
         {
             "name": "deltaphp/pages",
@@ -947,39 +947,6 @@
             "time": "2015-11-12 13:51:40"
         },
         {
-            "name": "orbisnull/orbisconvert",
-            "version": "0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/orbisnull/orbisconvert.git",
-                "reference": "8f28ed76f8734f3ab2434c4cbdc0bca5b1b2e4b0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/orbisnull/orbisconvert/zipball/8f28ed76f8734f3ab2434c4cbdc0bca5b1b2e4b0",
-                "reference": "8f28ed76f8734f3ab2434c4cbdc0bca5b1b2e4b0",
-                "shasum": ""
-            },
-            "require": {
-                "deltaphp/deltautils": "~1.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "OrbisConvert": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "authors": [
-                {
-                    "name": "orbisnull",
-                    "email": "zen4dev@gmail.com"
-                }
-            ],
-            "description": "transformers for objects",
-            "time": "2015-09-23 10:34:12"
-        },
-        {
             "name": "pimple/pimple",
             "version": "v3.0.2",
             "source": {
@@ -1096,16 +1063,16 @@
         },
         {
             "name": "symfony/config",
-            "version": "v2.7.6",
+            "version": "v2.7.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/config.git",
-                "reference": "831f88908b51b9ce945f5e6f402931d1ac544423"
+                "reference": "61973327bfb054f6f470de7be033a28b76c1dc20"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/config/zipball/831f88908b51b9ce945f5e6f402931d1ac544423",
-                "reference": "831f88908b51b9ce945f5e6f402931d1ac544423",
+                "url": "https://api.github.com/repos/symfony/config/zipball/61973327bfb054f6f470de7be033a28b76c1dc20",
+                "reference": "61973327bfb054f6f470de7be033a28b76c1dc20",
                 "shasum": ""
             },
             "require": {
@@ -1121,7 +1088,10 @@
             "autoload": {
                 "psr-4": {
                     "Symfony\\Component\\Config\\": ""
-                }
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -1139,20 +1109,20 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "https://symfony.com",
-            "time": "2015-10-11 09:39:48"
+            "time": "2015-11-02 20:20:53"
         },
         {
             "name": "symfony/console",
-            "version": "v2.7.6",
+            "version": "v2.7.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "5efd632294c8320ea52492db22292ff853a43766"
+                "reference": "16bb1cb86df43c90931df65f529e7ebd79636750"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/5efd632294c8320ea52492db22292ff853a43766",
-                "reference": "5efd632294c8320ea52492db22292ff853a43766",
+                "url": "https://api.github.com/repos/symfony/console/zipball/16bb1cb86df43c90931df65f529e7ebd79636750",
+                "reference": "16bb1cb86df43c90931df65f529e7ebd79636750",
                 "shasum": ""
             },
             "require": {
@@ -1177,7 +1147,10 @@
             "autoload": {
                 "psr-4": {
                     "Symfony\\Component\\Console\\": ""
-                }
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -1195,20 +1168,20 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2015-10-20 14:38:46"
+            "time": "2015-11-18 09:54:26"
         },
         {
             "name": "symfony/filesystem",
-            "version": "v2.7.6",
+            "version": "v2.7.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "56fd6df73be859323ff97418d97edc1d756df6df"
+                "reference": "8e173509d7fdbbba3cf34d6d072f2073c0210c1d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/56fd6df73be859323ff97418d97edc1d756df6df",
-                "reference": "56fd6df73be859323ff97418d97edc1d756df6df",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/8e173509d7fdbbba3cf34d6d072f2073c0210c1d",
+                "reference": "8e173509d7fdbbba3cf34d6d072f2073c0210c1d",
                 "shasum": ""
             },
             "require": {
@@ -1223,7 +1196,10 @@
             "autoload": {
                 "psr-4": {
                     "Symfony\\Component\\Filesystem\\": ""
-                }
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -1241,20 +1217,20 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "https://symfony.com",
-            "time": "2015-10-18 20:23:18"
+            "time": "2015-11-18 13:41:01"
         },
         {
             "name": "symfony/process",
-            "version": "v2.7.6",
+            "version": "v2.7.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "4a959dd4e19c2c5d7512689413921e0a74386ec7"
+                "reference": "f6290983c8725d0afa29bdc3e5295879de3e58f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/4a959dd4e19c2c5d7512689413921e0a74386ec7",
-                "reference": "4a959dd4e19c2c5d7512689413921e0a74386ec7",
+                "url": "https://api.github.com/repos/symfony/process/zipball/f6290983c8725d0afa29bdc3e5295879de3e58f5",
+                "reference": "f6290983c8725d0afa29bdc3e5295879de3e58f5",
                 "shasum": ""
             },
             "require": {
@@ -1269,7 +1245,10 @@
             "autoload": {
                 "psr-4": {
                     "Symfony\\Component\\Process\\": ""
-                }
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -1287,20 +1266,20 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2015-10-23 14:47:27"
+            "time": "2015-11-19 16:11:24"
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.7.6",
+            "version": "v2.7.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "eca9019c88fbe250164affd107bc8057771f3f4d"
+                "reference": "4cfcd7a9fceba662b3c036b7d9a91f6197af046c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/eca9019c88fbe250164affd107bc8057771f3f4d",
-                "reference": "eca9019c88fbe250164affd107bc8057771f3f4d",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/4cfcd7a9fceba662b3c036b7d9a91f6197af046c",
+                "reference": "4cfcd7a9fceba662b3c036b7d9a91f6197af046c",
                 "shasum": ""
             },
             "require": {
@@ -1315,7 +1294,10 @@
             "autoload": {
                 "psr-4": {
                     "Symfony\\Component\\Yaml\\": ""
-                }
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -1333,7 +1315,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2015-10-11 09:39:48"
+            "time": "2015-11-18 13:41:01"
         },
         {
             "name": "twig/twig",
