@@ -41,9 +41,13 @@ class Processor
             if (is_array($value)) {
                 call_user_func_array([$image, $key], $value);
             } else {
+                if (is_callable($value)) {
+                    $value = call_user_func($value, $this->getConfig());
+                }
                 call_user_func([$image, $key], $value);
             }
         }
         $image->write($output);
+        return $output;
     }
 }

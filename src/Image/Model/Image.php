@@ -17,7 +17,6 @@ use Image\Model\Driver\Imagick;
  * Class Image
  * @package Image\Model
  * @method read($file);
- * @method write($file);
  * @method resize($width = null, $height = null);
  * @method crop($width = null, $height = null);
  * @method getWidth();
@@ -109,5 +108,18 @@ class Image
         }
 
         return call_user_func_array([$image, $name], $arguments);
+    }
+
+    public function write($file)
+    {
+        $dir = dirname($file);
+        if (!file_exists($dir)) {
+            if (!mkdir($dir, 0750, true)) {
+                throw new \RuntimeException("Image write directory not exist and we couldn't create it.");
+            }
+        } elseif (!is_writable($dir)) {
+            throw new \RuntimeException("Image write directory not writable.");
+        }
+        $this->getImage()->write($file);
     }
 }

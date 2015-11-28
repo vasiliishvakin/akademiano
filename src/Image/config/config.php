@@ -2,21 +2,31 @@
 
 return [
     "Image" => [
+        "watermark" => new \Image\Model\Watermark(["text" => "deltaphp/image"]),
         "templates" => [
-            "thumb"    => [
+            "thumb" => [
                 "resizeAndCrop" => [150, 150],
-                "addWatermark" => new \Image\Model\Watermark(["text"=>"deltaphp/image"]),
+                "addWatermark" => function ($c) {
+                    $watermark = clone  $c->getOrThrow("watermark");
+                    $watermark->setSize(10);
+
+                    return $watermark;
+                },
                 "clear",
                 "optimize"
             ],
-            "medium"    => [
+            "medium" => [
                 "resizeAndCrop" => [300, 300],
-                "addWatermark" => new \Image\Model\Watermark(["text"=>"deltaphp/image"]),
+                "addWatermark" => function ($c) {
+                    return $c->getOrThrow("watermark");
+                },
                 "clear",
                 "optimize"
             ],
             "origin" => [
-                "addWatermark" => new \Image\Model\Watermark(["text"=>"deltaphp/image"]),
+                "addWatermark" => function ($c) {
+                    return $c->getOrThrow("watermark");
+                },
                 "clear",
                 "optimize" => [95],
             ]
