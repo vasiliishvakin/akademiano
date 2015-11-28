@@ -23,7 +23,7 @@ class IndexController extends AbstractController
         return $app["imageProcessor"];
     }
 
-    public function IndexAction(array $params = [])
+    public function indexAction(array $params = [])
     {
         $template = $params["template"];
         $fileDir = $params["directory"];

@@ -9,4 +9,4 @@ namespace Image;
 class Module
 {
 
-} 
+}

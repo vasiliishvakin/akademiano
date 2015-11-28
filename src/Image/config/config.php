@@ -6,7 +6,7 @@ return [
         "templates" => [
             "thumb" => [
                 "resizeAndCrop" => [150, 150],
-                "addWatermark" => function ($c) {
+                "addWatermark" => function (\DeltaCore\Config $c) {
                     $watermark = clone  $c->getOrThrow("watermark");
                     $watermark->setSize(10);
 
@@ -17,14 +17,14 @@ return [
             ],
             "medium" => [
                 "resizeAndCrop" => [300, 300],
-                "addWatermark" => function ($c) {
+                "addWatermark" => function (\DeltaCore\Config $c) {
                     return $c->getOrThrow("watermark");
                 },
                 "clear",
                 "optimize"
             ],
             "origin" => [
-                "addWatermark" => function ($c) {
+                "addWatermark" => function (\DeltaCore\Config $c) {
                     return $c->getOrThrow("watermark");
                 },
                 "clear",

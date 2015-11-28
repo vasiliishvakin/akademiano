@@ -178,8 +178,11 @@ class Imagick extends AbstractDriver
 
         $watermarkImage->annotateImage($draw, 5, 15, 0, $watermark->getText());
 
-        for ($w = 0; $w < $this->getImage()->getImageWidth(); $w += 140) {
-            for ($h = 0; $h < $this->getImage()->getImageHeight(); $h += 80) {
+        $width =  $this->getImage()->getImageWidth();
+        $height = $this->getImage()->getImageHeight();
+
+        for ($w = 0; $w < $width; $w += 140) {
+            for ($h = 0; $h < $height; $h += 80) {
                 $this->getImage()->compositeImage($watermarkImage, \Imagick::COMPOSITE_OVER, $w, $h);
             }
         }
