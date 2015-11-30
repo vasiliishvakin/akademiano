@@ -19,6 +19,7 @@ abstract class AbstractView implements InterfaceView
     protected $templateExtension = self::TPL_EXT;
     protected $arrayTemplates;
     protected $templateDirs = [];
+    protected $realTemplateDirs;
 
     public static function mergeRecursive()
     {
@@ -161,28 +162,45 @@ abstract class AbstractView implements InterfaceView
      */
     public function getTemplateDirs()
     {
-        $config = $this->getConfig();
-        $dirs = isset($config['templateDirs']) ? $config['templateDirs'] : 'public/templates';
-        if (is_object($dirs) && method_exists($dirs, 'toArray')) {
-            $dirs = $dirs->toArray();
-        }
-        $dirs = array_merge($dirs, $this->templateDirs);
-        $realDirs = [];
-        foreach ($dirs as $dir) {
-            if(strpos($dir, '/') === 0) {
-                $realDirs[] = $dir;
-                continue;
+        if (null === $this->realTemplateDirs) {
+            $config = $this->getConfig();
+            if (!isset($config["themesDir"])) {
+                if (file_exists(ROOT_DIR . "/themes")) {
+                    $config["themesDir"] = "themes";
+                }
             }
-            $rootDir = $this->getRootDir();
-            $dir = realpath($rootDir . '/' . $dir);
-            if ($dir && is_dir($dir)) {
-                $realDirs[] = $dir;
+            if (isset($config["theme"])) {
+                if (!isset($config["theme"]) && file_exists(ROOT_DIR . "/" . $config["themes"] . "/" . "default")) {
+                    $config["theme"] = "default";
+                }
+                $dirs = [$config["themesDir"] . "/" . $config["theme"]];
+            } else {
+                $dirs = isset($config['templateDirs']) ? $config['templateDirs'] : 'templates';
             }
+
+            if (is_object($dirs) && method_exists($dirs, 'toArray')) {
+                $dirs = $dirs->toArray();
+            }
+            $dirs = array_merge($dirs, $this->templateDirs);
+            $realDirs = [];
+            foreach ($dirs as $dir) {
+                if (strpos($dir, '/') === 0) {
+                    $realDirs[] = $dir;
+                    continue;
+                }
+                $rootDir = $this->getRootDir();
+                $dir = realpath($rootDir . '/' . $dir);
+                if ($dir && is_dir($dir)) {
+                    $realDirs[] = $dir;
+                }
+            }
+            $this->realTemplateDirs = $realDirs;
         }
-        return $realDirs;
+        return $this->realTemplateDirs;
     }
 
-    public function filterContent($content) {
+    public function filterContent($content)
+    {
         return $content;
     }
 
