@@ -18,16 +18,19 @@ use Assetic\AssetWriter;
 use Assetic\Filter\CssEmbedFilter;
 use Assetic\Filter\FilterCollection;
 use Assetic\Util\FilesystemUtils;
+use DeltaCore\Parts\Configurable;
 use DeltaUtils\FileSystem;
 use DeltaUtils\StringUtils;
 use HttpWarp\Environment;
 
 class AssetExtension extends \Twig_Extension
 {
+    use Configurable;
+
     protected $rootDir;
     protected $publicDir;
     /** @var  Array */
-    protected $patches;
+    protected $paths;
 
     /** @var  AssetManager */
     protected $assetManager;
@@ -88,7 +91,7 @@ class AssetExtension extends \Twig_Extension
     public function getPublicDir()
     {
         if (is_null($this->publicDir)) {
-            $this->publicDir = $this->getRootDir() . DIRECTORY_SEPARATOR . "/public";
+            $this->publicDir = $this->getRootDir() . DIRECTORY_SEPARATOR . "public";
         }
 
         return $this->publicDir;
@@ -167,17 +170,17 @@ class AssetExtension extends \Twig_Extension
     /**
      * @return Array
      */
-    public function getPatches()
+    public function getPaths()
     {
-        if (is_null($this->patches)) {
-            $this->patches = [
+        if (is_null($this->paths)) {
+            $this->paths = [
                 $this->getRootDir() . "/public/assets/vendor",
                 $this->getRootDir() . "/public",
                 $this->getRootDir() . "/vendor/",
             ];
         }
 
-        return $this->patches;
+        return $this->paths;
     }
 
     /**
@@ -201,22 +204,22 @@ class AssetExtension extends \Twig_Extension
     }
 
     /**
-     * @param Array $patches
+     * @param Array $paths
      */
-    public function setPatches(array $patches)
+    public function setPaths(array $paths)
     {
-        $this->patches = $patches;
+        $this->paths = $paths;
     }
 
     public function setPath($path, $name = null)
     {
-        if (is_null($this->patches)) {
-            $this->getPatches();
+        if (is_null($this->paths)) {
+            $this->getPaths();
         }
         if (is_null($name)) {
-            $this->patches[$name] = $path;
+            $this->paths[$name] = $path;
         } else {
-            $this->patches[] = $path;
+            $this->paths[] = $path;
         }
     }
 
@@ -242,7 +245,7 @@ class AssetExtension extends \Twig_Extension
 
     public function findFile($file)
     {
-        foreach ($this->getPatches() as $path) {
+        foreach ($this->getPaths() as $path) {
             if (strpos($path, "/") !== 0) {
                 $path = $this->getRootDir() . DIRECTORY_SEPARATOR . $path;
             }
@@ -299,11 +302,11 @@ class AssetExtension extends \Twig_Extension
             $path = dirname($path) . DIRECTORY_SEPARATOR . $prefix . basename($path);
         }
 
-        if (!is_dir($dir = dirname($path)) && false === @mkdir($dir, 0777, true)) {
+        if (!is_dir($dir = dirname($path)) && false === @mkdir($dir, 0750, true)) {
             throw new \RuntimeException('Unable to create directory ' . $dir);
         }
 
-        if (false === @file_put_contents($path, $asset->dump())) {
+        if (false === @file_put_contents($path, $asset->dump(), LOCK_EX)) {
             throw new \RuntimeException('Unable to write file ' . $path);
         }
 
