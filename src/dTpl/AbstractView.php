@@ -162,6 +162,7 @@ abstract class AbstractView implements InterfaceView
      */
     public function getTemplateDirs()
     {
+        $dirs = [];
         if (null === $this->realTemplateDirs) {
             $config = $this->getConfig();
             if (!isset($config["themesDir"])) {
@@ -173,9 +174,15 @@ abstract class AbstractView implements InterfaceView
                 if (!isset($config["theme"]) && file_exists(ROOT_DIR . "/" . $config["themes"] . "/" . "default")) {
                     $config["theme"] = "default";
                 }
-                $dirs = [$config["themesDir"] . "/" . $config["theme"]];
+                $dirs[] = $config["themesDir"] . "/" . $config["theme"];
             } else {
-                $dirs = isset($config['templateDirs']) ? $config['templateDirs'] : 'templates';
+                $dirs[] = isset($config['templateDirs']) ? $config['templateDirs'] : 'templates';
+            }
+
+            if (isset($config["themesDir"]) && $config["theme"] !== "default") {
+                if (file_exists(ROOT_DIR . "/" . $config["themesDir"] . "/default")) {
+                    $dirs[] = $config["themesDir"] . "/default";
+                }
             }
 
             if (is_object($dirs) && method_exists($dirs, 'toArray')) {
