@@ -49,19 +49,23 @@ class AssetExtension extends \Twig_Extension
     {
         return [
             new \Twig_SimpleFunction(
-                'asset_css',
-                [$this, 'assetCss'],
+                "asset_css",
+                [$this, "assetCss"],
                 [
-                    'is_safe' => ['html'],
+                    "is_safe" => ["html"],
                 ]
             ),
             new \Twig_SimpleFunction(
-                'asset_js',
-                [$this, 'assetJs'],
+                "asset_js",
+                [$this, "assetJs"],
                 [
-                    'is_safe' => ['html'],
+                    "is_safe" => ["html"],
                 ]
             ),
+            new \Twig_SimpleFunction(
+                "asset_img",
+                [$this, "assetImg"]
+            )
         ];
     }
 
@@ -344,24 +348,34 @@ class AssetExtension extends \Twig_Extension
              $ac = $this->loadAssets($files, $filters, $debug);*/
             //фильтры
         }
+
         return $webPatches;
     }
 
     public function assetCss($files, $filters = null, $debug = false)
     {
         $webPatches = $this->processAssets($files, $filters, $debug);
-        $webPatches = array_map(function($path){
+        $webPatches = array_map(function ($path) {
             return '<link rel="stylesheet" href="' . $path . '"/>';
         }, $webPatches);
+
         return implode("\n", $webPatches);
     }
 
     public function assetJs($files, $filters = null, $debug = false)
     {
         $webPatches = $this->processAssets($files, $filters, $debug);
-        $webPatches = array_map(function($path){
+        $webPatches = array_map(function ($path) {
             return '<script type=\'text/javascript\' src="' . $path . '"></script>';
         }, $webPatches);
+
         return implode("\n", $webPatches);
+    }
+
+    public function assetImg($file, $filters = null)
+    {
+        $webPatches = $this->processAssets($file, $filters, true);
+
+        return reset($webPatches);
     }
 }
