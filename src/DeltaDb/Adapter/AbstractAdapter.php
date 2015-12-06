@@ -6,6 +6,8 @@
 namespace DeltaDb\Adapter;
 
 
+use DeltaUtils\ArrayUtils;
+
 abstract class AbstractAdapter implements AdapterInterface
 {
     protected $connection;
@@ -77,13 +79,20 @@ abstract class AbstractAdapter implements AdapterInterface
         $orderStr = "";
         if (!is_null($orderBy)) {
             if (is_array($orderBy)) {
-                $orderField = $orderBy[0];
-                $orderDirect = $orderBy[1];
-                $orderStr = " order by {$orderField} {$orderDirect}";
+                if (ArrayUtils::getArrayType($orderBy) === -1) {
+                    $orderField = $orderBy[0];
+                    $orderDirect = $orderBy[1];
+                    $orderStr = " order by {$orderField} {$orderDirect}";
+                } else {
+                    foreach ($orderBy as $key => $value) {
+                        $orderStr = " order by {$key} {$value}";
+                    }
+                }
             } else {
                 $orderStr = " order by {$orderBy}";
             }
         }
+
         return $orderStr;
     }
 
