@@ -19,7 +19,8 @@
         "deltaphp/deltadb": "~1.2.0",
         "deltaphp/attach": "~2.0",
         "deltaphp/dictdir": "~2.0",
-        "bower-asset/ckeditor": "^4.5.4"
+        "bower-asset/ckeditor": "^4.5.4",
+        "bower-asset/colorbox": "^1.6.3"
     },
     "extra": {
         "asset-installer-paths": {

@@ -19,7 +19,7 @@ class IndexController extends AbstractController
     public function listAction(array $params = [])
     {
         $manager = $this->getArticlesManager();
-        $itemsPerPage = $this->getConfig(["Articles", "itemsPerPage"], 4);
+        $itemsPerPage = $this->getConfig(["Articles", "itemsPerPage"], 10);
         $section = ArrayUtils::get($params, ["section"]);
         $criteria = [];
         $categories = $manager->getCategories();
@@ -56,7 +56,7 @@ class IndexController extends AbstractController
                 $defaultMetaStart = "Статьи за " . Time::toStrIntl($date, "%B %Y");
                 break;*/
         }
-        $orderBy = "id";
+        $orderBy = ["id" => "desc"];
         $countArticles = $manager->count($criteria);
         $pageInfo = $this->getPageInfo($countArticles, $itemsPerPage);
         $items = $manager->find($criteria, null, $pageInfo["perPage"], $pageInfo["offsetForPage"], $orderBy);
@@ -76,12 +76,12 @@ class IndexController extends AbstractController
         $this->getResponse()->setModified($changed, true);
     }
 
-    public function viewAction()
+    public function viewAction(array $params = [])
     {
-        $id = $this->getRequest()->getUriPartByNum(2);
-        if(!$id) {
+        if(!isset($params["id"])) {
             $this->getResponse()->redirect("/articles");
         }
+        $id = $params["id"];
         $id = substr($id, 2);
         $id = (integer) $id;
         $manager = $this->getArticlesManager();

@@ -1,14 +1,6 @@
 <?php
 
 return [
-    "articles_list" => [
-        "methods" => [\DeltaRouter\Route::METHOD_GET],
-        "patterns" => [
-            "type" => \DeltaRouter\RoutePattern::TYPE_REGEXP,
-            "value" => "^/articles/?(?P<section>\w+)?/?(?P<id>\d+)?",
-        ],
-        "action" => ["index", "list"]
-    ],
     "articles_view" => [
         "methods" => [\DeltaRouter\Route::METHOD_GET],
         "patterns" => [
@@ -16,6 +8,15 @@ return [
             "value" => "^/articles/id(?P<id>\w+)",
         ],
         "action" => ["index", "view"]
+    ],
+
+    "articles_list" => [
+        "methods" => [\DeltaRouter\Route::METHOD_GET],
+        "patterns" => [
+            "type" => \DeltaRouter\RoutePattern::TYPE_REGEXP,
+            "value" => "^/articles/?(?P<section>\w+)?/?(?P<id>\d+)?$",
+        ],
+        "action" => ["index", "list"]
     ],
 
     ["/api/article/dates", ["api", "dates"]],
