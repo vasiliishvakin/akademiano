@@ -25,6 +25,9 @@ use HttpWarp\Environment;
 
 class AssetExtension extends \Twig_Extension
 {
+    const ASSET_CSS = 1;
+    const ASSET_JS = 2;
+
     use Configurable;
 
     protected $rootDir;
@@ -39,6 +42,8 @@ class AssetExtension extends \Twig_Extension
     protected $webOutput;
     /** @var  Environment */
     protected $environment;
+
+    protected $onceAssets = [self::ASSET_CSS=>[], self::ASSET_JS => []];
 
     public function getName()
     {
@@ -56,8 +61,22 @@ class AssetExtension extends \Twig_Extension
                 ]
             ),
             new \Twig_SimpleFunction(
+                "asset_css_once",
+                [$this, "assetCss"],
+                [
+                    "is_safe" => ["html"],
+                ]
+            ),
+            new \Twig_SimpleFunction(
                 "asset_js",
-                [$this, "assetJs"],
+                [$this, "assetJsOnce"],
+                [
+                    "is_safe" => ["html"],
+                ]
+            ),
+            new \Twig_SimpleFunction(
+                "asset_js_once",
+                [$this, "assetJsOnce"],
                 [
                     "is_safe" => ["html"],
                 ]
@@ -352,8 +371,28 @@ class AssetExtension extends \Twig_Extension
         return $webPatches;
     }
 
+    public function getOnceAssets($type)
+    {
+        return $this->onceAssets[$type];
+    }
+
+    public function addOnceAssets($type, $assets)
+    {
+        $assets = (array) $assets;
+        $assetsNew = array_merge(array_flip($this->getOnceAssets($type)), array_flip($assets));
+        $assetsNew = array_keys($assetsNew);
+        $this->onceAssets[$type] = $assetsNew;
+    }
+
+    public function filterOnceAssets($type, $assets)
+    {
+        $assets = (array) $assets;
+        return array_diff($assets, $this->getOnceAssets($type));
+    }
+
     public function assetCss($files, $filters = null, $debug = false)
     {
+        $this->addOnceAssets(self::ASSET_CSS, $files);
         $webPatches = $this->processAssets($files, $filters, $debug);
         $webPatches = array_map(function ($path) {
             return '<link rel="stylesheet" href="' . $path . '"/>';
@@ -364,12 +403,41 @@ class AssetExtension extends \Twig_Extension
 
     public function assetJs($files, $filters = null, $debug = false)
     {
+        $this->addOnceAssets(self::ASSET_JS, $files);
         $webPatches = $this->processAssets($files, $filters, $debug);
         $webPatches = array_map(function ($path) {
             return '<script type=\'text/javascript\' src="' . $path . '"></script>';
         }, $webPatches);
 
         return implode("\n", $webPatches);
+    }
+
+    public function assetCssOnce($files, $filters = null, $debug = false)
+    {
+        $files = $this->filterOnceAssets(self::ASSET_CSS, $files);
+        if (!empty($files)) {
+            $this->addOnceAssets(self::ASSET_CSS, $files);
+            $webPatches = $this->processAssets($files, $filters, $debug);
+            $webPatches = array_map(function ($path) {
+                return '<link rel="stylesheet" href="' . $path . '"/>';
+            }, $webPatches);
+
+            return implode("\n", $webPatches);
+        }
+    }
+
+    public function assetJsOnce($files, $filters = null, $debug = false)
+    {
+        $files = $this->filterOnceAssets(self::ASSET_JS, $files);
+        if (!empty($files)) {
+            $this->addOnceAssets(self::ASSET_JS, $files);
+            $webPatches = $this->processAssets($files, $filters, $debug);
+            $webPatches = array_map(function ($path) {
+                return '<script type=\'text/javascript\' src="' . $path . '"></script>';
+            }, $webPatches);
+
+            return implode("\n", $webPatches);
+        }
     }
 
     public function assetImg($file, $filters = null)

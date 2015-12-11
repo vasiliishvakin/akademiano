@@ -31,6 +31,13 @@ class UrlExtension extends \Twig_Extension
 //                    'is_safe' => ['html'],
                 ]
             ),
+            new \Twig_SimpleFunction(
+                'url',
+                [$this, 'routeUrl'],
+                [
+//                    'is_safe' => ['html'],
+                ]
+            ),
         ];
     }
 
