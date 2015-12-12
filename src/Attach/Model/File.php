@@ -144,6 +144,11 @@ class File extends AbstractEntity implements EntityInterface
 
     public function getUri($template = null)
     {
+        return $this->getUrl($template);
+    }
+
+    public function getUrl($template = null)
+    {
         $fileDir = $this->getFileDirectory();
         if (strpos($fileDir, "public/") === 0) {
             $fileDir = substr($fileDir, 7);
@@ -151,6 +156,4 @@ class File extends AbstractEntity implements EntityInterface
 
         return $this->getRootUri() . "/" .  $fileDir . (($template) ? "/" . $template  : "") .  "/" . $this->getFileName();
     }
-
 }
-
