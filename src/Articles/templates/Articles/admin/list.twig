@@ -1,27 +1,7 @@
 {% extends "layoutAdmin.twig" %}
 {% block head %}
-    <link rel="stylesheet" href="static/lib/colorbox/colorbox.css"/>
-    <script type='text/javascript' src="static/lib/colorbox/jquery.colorbox-min.js"></script>
-    <script type='text/javascript' src="static/lib/colorbox/jquery.colorbox-ru.js"></script>
-
-    <script>
-        $(document).ready(function () {
-            $(".images").colorbox({
-                rel: 'images',
-                slideshow: true,
-                slideshowSpeed: 7000,
-                slideshowAuto: false,
-//            transition:"none",
-                speed: 400,
-                maxWidth: "100%", maxHeight: "100%",
-                "isFitWidth": true,
-
-                current: "{current} из {total}",
-                slideshowStart: "начать слайдшоу",
-                slideshowStop: "остановить слайдшоу"
-            });
-        });
-    </script>
+    {{ parent() }}
+   {%  include "colorbox.twig" %}
 {% endblock head %}
 
 {% block content %}
@@ -40,7 +20,7 @@
 
                 <div class="photos">
                     {% for image in item.images %}
-                        <a class='images' href="{{ image.uri("origin") }}" title="{{ image.name }} - {{ image.description }}">
+                        <a class='images photo-thumb' href="{{ image.uri("origin") }}" title="{{ image.name }} - {{ image.description }}">
                             <img src="{{ image.uri("thumb") }}" title="{{ image.name }}" alt="{{ image.description }}"/>
                         </a>
                     {% endfor %}

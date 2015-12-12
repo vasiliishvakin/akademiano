@@ -1,27 +1,13 @@
 {% extends "layout.twig" %}
 
 {% block head %}
+    {{ parent() }}
     {% include "colorbox.twig" %}
     <script type="text/javascript" src="http://vk.com/js/api/openapi.js?111"></script>
-    <link rel="stylesheet" href="static/lib/jquery-ui/themes/ui-lightness/jquery-ui.min.css">
-    <script type='text/javascript' src="static/lib/jquery-ui/ui/minified/jquery-ui.min.js"></script>
+
     <script type="text/javascript" src="static/js/calendar.js"></script>
-    <link rel="stylesheet" href="static/css/place.css">
-    <script>
-        $("document").ready(function () {
-            VK.init({apiId: 4306345, onlyWidgets: true});
-            VK.Widgets.Comments("vk_comments", {limit: 15, width: "520", attach: "photo,video,link"});
-        });
-    </script>
+    {#<link rel="stylesheet" href="static/css/place.css">#}
 {% endblock head %}
-
-{% block navbar %}
-    <li><a class="nav" href="/">Главная</a></li>
-    <li><a href="/places">Каталог</a></li>
-    <li class="active"><a href="/articles">Статьи</a></li>
-    <li><a href="/photos">Фото</a></li>
-{% endblock navbar %}
-
 
 {% block aside %}
     {% if item.description %}

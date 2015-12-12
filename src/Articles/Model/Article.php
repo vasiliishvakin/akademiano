@@ -76,7 +76,7 @@ class Article extends MiddleObject implements EntityInterface
      */
     public function setId($id)
     {
-        $this->id = (integer) $id;
+        $this->id = (integer)$id;
     }
 
     /**
@@ -124,7 +124,7 @@ class Article extends MiddleObject implements EntityInterface
      */
     public function setCategories($categories)
     {
-        $this->categories = (array) $categories;
+        $this->categories = (array)$categories;
     }
 
     /**
@@ -147,7 +147,7 @@ class Article extends MiddleObject implements EntityInterface
     {
         $categories = $this->getCategories();
         $ids = [];
-        foreach($categories as $category) {
+        foreach ($categories as $category) {
             $ids[] = $category->getId();
         }
         return $ids;
@@ -162,16 +162,13 @@ class Article extends MiddleObject implements EntityInterface
         return $this->images;
     }
 
+    public function getOtherImages()
+    {
+        return $this->getImages()->slice(1);
+    }
+
     public function getTitleImage()
     {
         return $this->getImages()->first();
     }
-
-
-
-
-
-
-
-
-} 
+}
