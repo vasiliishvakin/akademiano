@@ -162,4 +162,10 @@ class Collection extends ArrayObject implements ArrayableInterface
     {
         return $this->minMax("max", $field, $valueCalcFunction);
     }
+
+    public function slice($offset = 1, $length = null)
+    {
+        $slice = array_slice($this->getItems(), $offset, $length, true);
+        return new Collection($slice);
+    }
 }
