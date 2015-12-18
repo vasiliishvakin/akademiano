@@ -1,8 +1,9 @@
 {
   "name": "deltaphp/deltarouter",
   "description": "Simple router for php applications",
-  "license": "GPL-3.0+",
+  "license": "MIT",
   "minimum-stability": "dev",
+  "prefer-stable": true,
   "authors": [
     {
       "name": "orbisnull",
