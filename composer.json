@@ -1,14 +1,15 @@
 {
     "name": "deltaphp/dtpl",
     "description": "small base template engine",
-    "license": "GPL-3.0+",
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "authors": [
         {
             "name": "orbisnull",
             "email": "zen4dev@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
     "autoload": {
         "psr-0": {
             "dTpl": "src/"
