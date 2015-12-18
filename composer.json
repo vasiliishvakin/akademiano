@@ -1,7 +1,9 @@
 {
     "name": "deltaphp/httpwarp",
     "description": "request, response, session and other tools for base web development",
-    "license": "GPL-3.0+",
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "authors": [
         {
             "name": "Vasiliy Shvakin",
