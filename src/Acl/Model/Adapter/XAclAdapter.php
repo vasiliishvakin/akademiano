@@ -7,23 +7,52 @@ namespace Acl\Model\Adapter;
 
 
 use DeltaUtils\ArrayUtils;
+use DeltaUtils\StringUtils;
 
 class XAclAdapter extends AbstractAdapter
 {
     const ROOT_RESOURCE_PATH = "__root__";
     protected $aclFile;
 
+    public function mergeFiles($files)
+    {
+        $fileName = "";
+        foreach ($files as $file) {
+            if (is_readable($file)) {
+                $fileName .= $file . filemtime($file);
+            }
+        }
+        $fileName = "acl_" . md5($fileName);
+        $filePath = DATA_DIR . "/acl/" . $fileName;
+        if (!file_exists(DATA_DIR . "/acl/")) {
+            mkdir(DATA_DIR . "/acl/", 0750, true);
+        }
+        if (!file_exists($filePath)) {
+            $acl = "";
+            foreach($files as $file) {
+                if (is_readable($file)) {
+                    $fileData = file_get_contents($file);
+                    $acl .= "\n" . $fileData;
+                }
+            }
+            file_put_contents($filePath, $acl . "\n");
+        }
+        return $filePath;
+    }
+
     /**
      * @return mixed
      */
     public function getAclFile()
     {
-        if (is_null($this->aclFile)) {
-            $file = $this->getConfig()->get(["Acl", __CLASS__, "file"], ROOT_DIR . "/config/acl.conf");
-            if (!is_readable($file)) {
-                throw new \RuntimeException("Acl config file $file not readable");
+        if (null === $this->aclFile) {
+            $files = $this->getConfig()->get(["Acl", StringUtils::cutClassName(__CLASS__), "file"], [
+                ROOT_DIR . "/App/config/acl.conf",
+                ROOT_DIR . "/config/acl.conf",
+            ])->toArray();
+            if (is_array($files)) {
+                $this->aclFile = $this->mergeFiles($files);
             }
-            $this->aclFile = $file;
         }
         return $this->aclFile;
     }
@@ -31,7 +60,7 @@ class XAclAdapter extends AbstractAdapter
     /**
      * @param mixed $aclFile
      */
-    public function setAclFile($aclFile)
+    public function setAclFile(array $aclFile)
     {
         $this->aclFile = $aclFile;
     }
@@ -43,6 +72,7 @@ class XAclAdapter extends AbstractAdapter
         if ($resource === "") {
             $resource = self::ROOT_RESOURCE_PATH;
         }
+
         return $resource;
     }
 
@@ -51,19 +81,20 @@ class XAclAdapter extends AbstractAdapter
         $resource = $this->prepareResource($resource);
         $params = [
             "-c" => $this->getAclFile(),
-            "-g"    => $group,
+            "-g" => $group,
             "-r" => $resource,
-            "-u"  => $user,
+            "-u" => $user,
             "-o" => $owner,
         ];
         $params = ArrayUtils::filterNulls($params);
         $params = ArrayUtils::implodePairs(" ", $params, " ");
         $output = [];
         exec("x-acl " . $params, $output, $code);
-        if ($code !==0 ) {
+        if ($code !== 0) {
             throw new \RuntimeException("Error in acl check. Code: $code. Msg: " . implode(" ", $output));
         }
         $output = reset($output);
+
         return $output === "Access allow";
     }
 
