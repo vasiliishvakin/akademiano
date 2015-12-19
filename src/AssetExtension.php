@@ -43,7 +43,7 @@ class AssetExtension extends \Twig_Extension
     /** @var  Environment */
     protected $environment;
 
-    protected $onceAssets = [self::ASSET_CSS=>[], self::ASSET_JS => []];
+    protected $onceAssets = [self::ASSET_CSS => [], self::ASSET_JS => []];
 
     public function getName()
     {
@@ -153,12 +153,15 @@ class AssetExtension extends \Twig_Extension
      */
     public function getWebPublic()
     {
-        if (is_null($this->webPublic)) {
+        if (null === $this->webPublic) {
             $env = $this->getEnvironment();
-            $port = ($env->getPort() !== 80 && $env->getPort() !== 443) ? ":" . $env->getPort() : "";
-            $this->webPublic = $env->getScheme() . "://" . $env->getServerName() . $port;
+            if ($env->isSrvEnv()) {
+                $this->webPublic = "";
+            } else {
+                $port = ($env->getPort() !== 80 || $env->getPort() !== 443) ? ":" . $env->getPort() : "";
+                $this->webPublic = $env->getScheme() . "://" . $env->getServerName() . $port;
+            }
         }
-
         return $this->webPublic;
     }
 
@@ -378,7 +381,7 @@ class AssetExtension extends \Twig_Extension
 
     public function addOnceAssets($type, $assets)
     {
-        $assets = (array) $assets;
+        $assets = (array)$assets;
         $assetsNew = array_merge(array_flip($this->getOnceAssets($type)), array_flip($assets));
         $assetsNew = array_keys($assetsNew);
         $this->onceAssets[$type] = $assetsNew;
@@ -386,7 +389,7 @@ class AssetExtension extends \Twig_Extension
 
     public function filterOnceAssets($type, $assets)
     {
-        $assets = (array) $assets;
+        $assets = (array)$assets;
         return array_diff($assets, $this->getOnceAssets($type));
     }
 
