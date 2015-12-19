@@ -159,7 +159,7 @@ class RoutePattern implements ArrayableInterface
     {
         $value = $this->getValue();
         if (is_null($params)) {
-            if (!$this->getType() === self::TYPE_REGEXP) {
+            if ($this->getType() !== self::TYPE_REGEXP) {
                 return $value;
             }
         }
