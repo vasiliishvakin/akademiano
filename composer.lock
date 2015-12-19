@@ -600,12 +600,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/DictDir.git",
-                "reference": "97a4cd9af4cca6effcc4c64830b8bb083ea3169c"
+                "reference": "445cb141883fe12abacb2a3e362af90373c23fb8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/DictDir/zipball/97a4cd9af4cca6effcc4c64830b8bb083ea3169c",
-                "reference": "97a4cd9af4cca6effcc4c64830b8bb083ea3169c",
+                "url": "https://api.github.com/repos/DeltaPHP/DictDir/zipball/445cb141883fe12abacb2a3e362af90373c23fb8",
+                "reference": "445cb141883fe12abacb2a3e362af90373c23fb8",
                 "shasum": ""
             },
             "require": {
@@ -629,7 +629,7 @@
                 }
             ],
             "description": "module for work with simple dict-type data",
-            "time": "2015-12-19 15:44:09"
+            "time": "2015-12-19 16:26:58"
         },
         {
             "name": "deltaphp/dtpl",
@@ -670,12 +670,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/HttpWarp.git",
-                "reference": "1c6e4d5f8e739c70c1ecd7c644cca22b8e162102"
+                "reference": "64c0fcaec130b3055652fa73e2773a4dbbfc78a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/HttpWarp/zipball/1c6e4d5f8e739c70c1ecd7c644cca22b8e162102",
-                "reference": "1c6e4d5f8e739c70c1ecd7c644cca22b8e162102",
+                "url": "https://api.github.com/repos/DeltaPHP/HttpWarp/zipball/64c0fcaec130b3055652fa73e2773a4dbbfc78a4",
+                "reference": "64c0fcaec130b3055652fa73e2773a4dbbfc78a4",
                 "shasum": ""
             },
             "require": {
@@ -698,7 +698,7 @@
                 }
             ],
             "description": "request, response, session and other tools for base web development",
-            "time": "2015-12-19 15:47:26"
+            "time": "2015-12-19 16:58:05"
         },
         {
             "name": "deltaphp/image",
@@ -743,12 +743,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/Pages.git",
-                "reference": "e05b1b064c20f7b9d59faef9da7984dd11104e22"
+                "reference": "bfbee3efb4637fe8d31f2087db286268ec7c9965"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/Pages/zipball/e05b1b064c20f7b9d59faef9da7984dd11104e22",
-                "reference": "e05b1b064c20f7b9d59faef9da7984dd11104e22",
+                "url": "https://api.github.com/repos/DeltaPHP/Pages/zipball/bfbee3efb4637fe8d31f2087db286268ec7c9965",
+                "reference": "bfbee3efb4637fe8d31f2087db286268ec7c9965",
                 "shasum": ""
             },
             "require": {
@@ -779,7 +779,7 @@
                 }
             ],
             "description": "DeltaPagesModule",
-            "time": "2015-12-19 15:43:42"
+            "time": "2015-12-19 16:26:25"
         },
         {
             "name": "deltaphp/perm-auth",
@@ -896,12 +896,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/user.git",
-                "reference": "d70fffa348de5647f9835a1dcecde0a489e94ad0"
+                "reference": "02be889a566ff3449ea1f28b5cb2d7ea8a7d1178"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/user/zipball/d70fffa348de5647f9835a1dcecde0a489e94ad0",
-                "reference": "d70fffa348de5647f9835a1dcecde0a489e94ad0",
+                "url": "https://api.github.com/repos/DeltaPHP/user/zipball/02be889a566ff3449ea1f28b5cb2d7ea8a7d1178",
+                "reference": "02be889a566ff3449ea1f28b5cb2d7ea8a7d1178",
                 "shasum": ""
             },
             "require": {
@@ -927,7 +927,7 @@
                 }
             ],
             "description": "User manager module",
-            "time": "2015-12-19 15:43:11"
+            "time": "2015-12-19 16:27:29"
         },
         {
             "name": "kriswallsmith/assetic",
