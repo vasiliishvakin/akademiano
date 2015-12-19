@@ -6,6 +6,7 @@
 namespace SiteMenu\Model;
 
 
+use DeltaCore\ConfigLoader;
 use DeltaCore\ModuleManager;
 use DeltaCore\Parts\MagicSetGetManagers;
 use DeltaCore\Prototype\MagicMethodInterface;
@@ -26,10 +27,13 @@ class MenuManager implements \ArrayAccess, MagicMethodInterface
     /** @var  ModuleManager */
     protected $moduleManager;
 
+    /** @var  ConfigLoader */
+    protected $configLoader;
+
     /** @var array Menu[] */
     protected $menuStore;
 
-    protected $configDir;
+    protected $configDirs;
 
     /** @var  Router */
     protected $router;
@@ -51,6 +55,22 @@ class MenuManager implements \ArrayAccess, MagicMethodInterface
     }
 
     /**
+     * @return ConfigLoader
+     */
+    public function getConfigLoader()
+    {
+        return $this->configLoader;
+    }
+
+    /**
+     * @param ConfigLoader $configLoader
+     */
+    public function setConfigLoader($configLoader)
+    {
+        $this->configLoader = $configLoader;
+    }
+
+    /**
      * @return Router
      */
     public function getRouter()
@@ -69,21 +89,21 @@ class MenuManager implements \ArrayAccess, MagicMethodInterface
     /**
      * @return mixed
      */
-    public function getConfigDir()
+    public function getConfigDir($level)
     {
-        if (is_null($this->configDir)) {
-            $this->configDir = ROOT_DIR . "/config/";
+        if (is_null($this->configDirs) || !isset($this->configDirs[$level])) {
+            return $this->getConfigLoader()->getConfigDir($level);
+        } else {
+            return $this->configDirs[$level];
         }
-
-        return $this->configDir;
     }
 
     /**
-     * @param mixed $configDir
+     * @param mixed $configDirs
      */
-    public function setConfigDir($configDir)
+    public function setConfigDirs($configDirs)
     {
-        $this->configDir = $configDir;
+        $this->configDirs = $configDirs;
     }
 
     /**
@@ -122,9 +142,15 @@ class MenuManager implements \ArrayAccess, MagicMethodInterface
 
     public function readMenu()
     {
-        $configDir = $this->getConfigDir();
-        $globalMenu = $this->readMenuRaw($configDir . "global.menu.php", []);
-        $localMenu = $this->readMenuRaw($configDir . "local.menu.php", []);
+        $configDir = $this->getConfigDir(ConfigLoader::LEVEL_APP);
+        $globalMenuApp = $this->readMenuRaw($configDir . "/global.menu.php", []);
+        $localMenuApp = $this->readMenuRaw($configDir . "/local.menu.php", []);
+
+        $configDir = $this->getConfigDir(ConfigLoader::LEVEL_PROJECT);
+        $globalMenuProject = $this->readMenuRaw($configDir . "/global.menu.php", []);
+        $localMenuProject = $this->readMenuRaw($configDir . "/local.menu.php", []);
+
+
         $moduleManager = $this->getModuleManager();
         $modules = $moduleManager->getModulesList();
         $menuConfig = [];
@@ -135,7 +161,7 @@ class MenuManager implements \ArrayAccess, MagicMethodInterface
                 $menuConfig = array_merge_recursive($menuConfig, $moduleConfig);
             }
         }
-        $menuConfig = ArrayUtils::mergeRecursive($menuConfig, $globalMenu, $localMenu);
+        $menuConfig = ArrayUtils::mergeRecursive($menuConfig, $globalMenuApp, $localMenuApp, $globalMenuProject, $localMenuProject);
 
         return $menuConfig;
     }
@@ -145,6 +171,7 @@ class MenuManager implements \ArrayAccess, MagicMethodInterface
         if (is_null($router)) {
             $router = $this->getRouter();
         }
+
         return new Item($itemData, $router);
     }
 
