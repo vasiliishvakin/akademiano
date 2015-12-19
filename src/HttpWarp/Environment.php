@@ -114,8 +114,4 @@ class Environment
         }
         return $this->isEqualServerEnv;
     }
-
-
-
-
 }
