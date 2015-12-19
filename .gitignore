@@ -4,5 +4,5 @@ data
 public/data
 phinx.yml
 migrations
-public/assets/vendor
+public/assets
 /migrations

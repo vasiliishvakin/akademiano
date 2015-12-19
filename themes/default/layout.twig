@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang={{ html.lang|default("ru") }}>
+<head>
+    {% block head %}
+        <title>{{ pageTitle | default('DeltaPHP Demo Site') }}</title>
+        <meta name="description"
+              content="{{ pageDescription | default('Simple and fast PHP 5.4+ MVC framework with a modular organization') }}"/>
+        <meta charset="utf-8">
+        <base href="/">
+        {% if canonicalRef %}
+            <link rel="canonical" href="{{ canonicalRef }}"/>
+        {% endif %}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        {{ asset_css([
+        "bootstrap/dist/css/bootstrap.css",
+        "bootstrap/dist/css/bootstrap-theme.css",
+        ], default, true) }}
+
+{#
+        <!--[if lt IE 9]>
+        {{ asset_js(["html5shiv/dist/html5shiv.min.js", "respond/dest/respond.min.js"], default, true) }}
+        <![endif]-->#}
+        {{ asset_js([
+        "jquery/dist/jquery.min.js",
+        "bootstrap/dist/js/bootstrap.min.js"
+        ], default, true) }}
+    {% endblock head %}
+</head>
+<body>
+
+{% block body %}
+    <div id="content">
+        {% block container %}
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        {% block content %}
+
+                        {% endblock content %}
+                    </div>
+                </div>
+            </div>
+        {% endblock container %}
+    </div>
+
+    <hr>
+    <div class="footer">
+        <p style="text-align: center">
+            © <a href="http://deltaphp.org">DeltaPHP</a> 2014
+        </p>
+    </div>
+
+    {% block counter %}
+
+    {% endblock counter %}
+
+{% endblock body %}
+
+</body>
+</html>

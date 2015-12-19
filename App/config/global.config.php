@@ -3,17 +3,13 @@
 return [
     "database" => [
         "default" => [
-            "name" => "deltaskeleton",
+            "name" => "deltaapp",
         ]
     ],
     'view' => [
         'adapter' => 'twig',
-        'templateDirs' => [
-            'templates',
-        ],
+        "theme" => "apraksin",
         'options' => [
-            //'cache' => 'data/cache',
-            //'auto_reload' => true,
             'cache' => false,
             "debug" => true,
         ],
@@ -33,6 +29,8 @@ return [
             "cutStr" => [["\\DeltaUtils\\StringUtils", "cutStr"], ['pre_escape' => 'html', 'is_safe' => array('html')]],
             "nl2Array" => [["\\DeltaUtils\\StringUtils", "nl2Array"], []],
             "idStr" => [["\\DeltaUtils\\StringUtils", "toIdStr9"], []],
+            "dateIntl" => [["\\DeltaUtils\\Time", "toStrIntl"], []],
+            "date2Month" => [["\\DeltaUtils\\Time", "calendarMonth"], ['is_safe' => array('html')]],
         ],
         "urlExtension" => [
             "routeGenerator" => [
@@ -60,12 +58,12 @@ return [
     ],
     "Acl" => [
         "adapter" => "\\Acl\\Model\\Adapter\\RegisteredAdapter",
-        "Acl\\Model\\Adapter\\RegisteredAdapter" => [
-            "file" => ROOT_DIR . "/config/acl.conf",
-        ]
+//        "Acl\\Model\\Adapter\\RegisteredAdapter" => [
+//            "file" => ROOT_DIR . "/config/acl.conf",
+//        ]
     ],
     "Image" => [
-        "watermark" => new \Image\Model\Watermark(["text" => "Skeleton"]),
+        "watermark" => new \Image\Model\Watermark(["text" => "DeltaApp"]),
     ],
     "modules" => [
         "DeltaSkeletonModule",

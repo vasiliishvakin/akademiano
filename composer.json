@@ -3,7 +3,7 @@
   "description": "Skeleton application on delta framework",
   "license": "MIT",
   "minimum-stability": "dev",
-  "prefer-stable": true,
+  "prefer-stable": false,
   "authors": [
     {
       "name": "Vasiliy Shvakin",
@@ -14,6 +14,7 @@
     "psr-0": {
       "Model": "./",
       "Controller": "./",
+      "App\\Controller": "./",
       "Maintenance": "./"
     }
   },
@@ -39,6 +40,7 @@
     "bower-asset/jquery": "^2.1.4",
     "bower-asset/html5shiv": "^3.7.3",
     "bower-asset/respond": "^1.4.2",
+    "bower-asset/syntaxhighlighter": "^3.0.83",
 
     "deltaphp/articles": "~2.0",
     "deltaphp/image": "~1.0"

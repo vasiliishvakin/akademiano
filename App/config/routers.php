@@ -1,12 +1,12 @@
 <?php
 
 return [
-    "deltaphp" => [
+    "root" => [
         "patterns" => [
             "type" => \DeltaRouter\RoutePattern::TYPE_FULL,
             "value" => "/",
         ],
-        "action" => ["delta", "index"],
+        "action" => ["index", "index"],
     ],
 
     "admin" => [

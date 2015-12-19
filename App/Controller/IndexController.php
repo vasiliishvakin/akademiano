@@ -3,15 +3,15 @@
  * User: Vasiliy Shvakin (orbisnull) zen4dev@gmail.com
  */
 
-namespace Controller;
+namespace App\Controller;
 
 use DeltaCore\AbstractController;
 
-class DeltaController extends AbstractController
+class IndexController extends AbstractController
 {
     public function indexAction()
     {
-        $this->getView()->assign('canonicalRef', '/deltaphp');
+        $this->getView()->assign('canonicalRef', '/');
     }
 
 } 
