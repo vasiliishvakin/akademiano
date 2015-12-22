@@ -4,6 +4,7 @@
  */
 
 namespace SiteMenu\Model;
+
 use DeltaCore\Parts\MagicSetGetManagers;
 use DeltaCore\Prototype\MagicMethodInterface;
 use DeltaRouter\Route;
@@ -27,6 +28,8 @@ class Item implements MagicMethodInterface
     protected $router;
     /** @var  Route */
     protected $route;
+    /** @var Route[]|[] */
+    protected $subRoutes = [];
     protected $routeParams = [];
     /** @var  Url */
     protected $url;
@@ -39,7 +42,7 @@ class Item implements MagicMethodInterface
             $this->setRouter($router);
         }
         if ($data) {
-            foreach($data as $name=>$value) {
+            foreach ($data as $name => $value) {
                 $method = "set" . ucfirst($name);
                 if (method_exists($this, $method)) {
                     $this->{$method}($value);
@@ -54,6 +57,7 @@ class Item implements MagicMethodInterface
         if (is_null($this->id)) {
             $this->id = ($this->getRoute() instanceof Route) ? $this->getRoute()->getId() : $this->getUrl()->getId();
         }
+
         return $this->id;
     }
 
@@ -82,6 +86,7 @@ class Item implements MagicMethodInterface
         if (!$this->route instanceof Route && !is_null($this->route)) {
             $this->route = $this->getRouter()->getRoute($this->route);
         }
+
         return $this->route;
     }
 
@@ -91,6 +96,33 @@ class Item implements MagicMethodInterface
     public function setRoute($route)
     {
         $this->route = $route;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSubRoutes()
+    {
+        return $this->subRoutes;
+    }
+
+    public function addSubRoute($route)
+    {
+        if (!$route instanceof Route) {
+            $route = $this->getRouter()->getRoute($route);
+        }
+        $this->subRoutes[$route->getId()] = $route;
+    }
+
+    /**
+     * @param mixed $subRoutes
+     */
+    public function setSubRoutes(array $subRoutes)
+    {
+        $this->subRoutes = [];
+        foreach ($subRoutes as $route) {
+            $this->addSubRoute($route);
+        }
     }
 
     /**
@@ -114,14 +146,15 @@ class Item implements MagicMethodInterface
      */
     public function getUrl()
     {
-        if (is_null($this->url)){
+        if (is_null($this->url)) {
             if (is_null($this->getRoute())) {
                 throw new \LogicException("Not set url or route for menu item");
             }
             $this->url = $this->getRoute()->getUrl($this->getRouteParams());
-        } elseif (is_string($this->url)){
+        } elseif (is_string($this->url)) {
             $this->url = new Url($this->url);
         }
+
         return $this->url;
     }
 
@@ -148,7 +181,7 @@ class Item implements MagicMethodInterface
      */
     public function getLink()
     {
-        return (string) $this->getUrl();
+        return (string)$this->getUrl();
     }
 
     /**
@@ -197,7 +230,7 @@ class Item implements MagicMethodInterface
      */
     public function setOrder($order)
     {
-        $this->order = (integer) $order;
+        $this->order = (integer)$order;
     }
 
     /**
@@ -211,7 +244,7 @@ class Item implements MagicMethodInterface
     /**
      * @param boolean $active
      */
-    public function setActive($active)
+    public function setActive($active = true)
     {
         $this->active = $active;
     }
@@ -219,8 +252,27 @@ class Item implements MagicMethodInterface
     public function isAllow($user = null)
     {
         if ($aclManager = $this->getAclManager()) {
-            return $aclManager->isAllow((string) $this->getUrl()->getPath(), $user);
+            return $aclManager->isAllow((string)$this->getUrl()->getPath(), $user);
         }
+
         return true;
+    }
+
+    public function isEquivRoute(Route $route)
+    {
+        if (null !== $this->getRoute() && $this->getRoute()->getId() === $route->getId()) {
+            return true;
+        } else {
+            foreach ($this->getSubRoutes() as $subRoute) {
+                if ($route->getId() === $subRoute->getId()) {
+                    return true;
+                }
+            }
+        }
+    }
+
+    public function isEquivUrl(Url $url)
+    {
+        return $url->getId() === $this->getUrl()->getId();
     }
 }
