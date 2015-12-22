@@ -1,7 +1,7 @@
 {
     "name": "deltaphp/sitemenu",
     "description": "Site menu module for DeltaPHP",
-    "license": "LGPL-3.0",
+    "license": "MIT",
     "authors": [
         {
             "name": "orbisnull",

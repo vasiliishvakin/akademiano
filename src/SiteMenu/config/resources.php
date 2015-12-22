@@ -3,7 +3,7 @@
  * User: Vasiliy Shvakin (orbisnull) zen4dev@gmail.com
  */
 return [
-    "menuManager" => function ($c) {
+    "menuManager" => function (\Pimple\Container $c) {
         $manager = new \SiteMenu\Model\MenuManager();
         $manager->setModuleManager($c["moduleManager"]);
         $manager->setConfigLoader($c->getConfigLoader());

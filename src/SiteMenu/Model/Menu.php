@@ -132,12 +132,6 @@ class Menu implements \Countable, MagicMethodInterface
                 return ($lA > $lB) ? -1 : 1;
             });
             foreach ($items as $item) {
-//                if (($item->isEquiv($this->getRouter()->getCurrentRoute()))
-//                || ($this->getRouter()->getCurrentUrl()->getId() === $item->getId())) {
-//                    $item->setActive(true);
-//                    $this->activeItem = $item;
-//                    break;
-//                }
                 if ($item->isEquivRoute($this->getRouter()->getCurrentRoute()) || $item->isEquivUrl($this->getRouter()->getCurrentUrl())){
                     $item->setActive();
                     $this->activeItem = $item;
