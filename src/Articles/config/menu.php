@@ -2,7 +2,7 @@
 
 return [
     "main" => [
-        ["text" => "Статьи", "link" => "/articles"],
+        ["text" => "Статьи", "route" => "articles_list", "subRoutes" => ["articles_view"]],
     ],
     "admin" => [
         ["text" => "Статьи", "link" => "/admin/articles"],
