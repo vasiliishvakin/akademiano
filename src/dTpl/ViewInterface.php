@@ -2,7 +2,7 @@
 
 namespace dTpl;
 
-interface InterfaceView
+interface ViewInterface
 {
     const DEFAULT_TEMPLATE = 'default';
 

@@ -6,7 +6,7 @@
 namespace dTpl;
 
 
-class View extends AbstractView implements InterfaceView
+class View extends AbstractView implements ViewInterface
 {
     public function getFilePath($file)
     {
@@ -81,6 +81,4 @@ class View extends AbstractView implements InterfaceView
         $path = $this->getFilePath($templateFile);
         return file_exists($path);
     }
-
-
-} 
+}

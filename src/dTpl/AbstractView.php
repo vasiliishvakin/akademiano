@@ -6,7 +6,7 @@
 namespace dTpl;
 
 
-abstract class AbstractView implements InterfaceView
+abstract class AbstractView implements ViewInterface
 {
     const TPL_EXT = 'tpl';
 
@@ -170,20 +170,22 @@ abstract class AbstractView implements InterfaceView
                     $config["themesDir"] = "themes";
                 }
             }
-            if (isset($config["theme"])) {
-                if (!isset($config["theme"]) && file_exists(ROOT_DIR . "/" . $config["themes"] . "/" . "default")) {
-                    $config["theme"] = "default";
+            if (isset($config["themesDir"])) {
+                if (!isset($config["theme"])) {
+                    if (file_exists(ROOT_DIR . "/" . $config["themesDir"] . "/" . "default")) {
+                        $config["theme"] = "default";
+                    }
                 }
-                $dirs[] = $config["themesDir"] . "/" . $config["theme"];
-            } else {
-                $dirs[] = isset($config['templateDirs']) ? $config['templateDirs'] : 'templates';
             }
-
-            if (isset($config["themesDir"]) && $config["theme"] !== "default") {
+            if (isset($config["themesDir"]) && isset($config["theme"])) {
+                if ($config["theme"]!=="default") {
+                    $dirs[] = $config["themesDir"] . "/" . $config["theme"];
+                }
                 if (file_exists(ROOT_DIR . "/" . $config["themesDir"] . "/default")) {
                     $dirs[] = $config["themesDir"] . "/default";
                 }
             }
+
 
             if (is_object($dirs) && method_exists($dirs, 'toArray')) {
                 $dirs = $dirs->toArray();
@@ -213,4 +215,4 @@ abstract class AbstractView implements InterfaceView
 
     abstract public function render($params = [], $templateName = null);
 
-} 
+}
