@@ -8,7 +8,6 @@ return [
     ],
     'view' => [
         'adapter' => 'twig',
-        "theme" => "apraksin",
         'options' => [
             'cache' => false,
             "debug" => true,
@@ -58,9 +57,6 @@ return [
     ],
     "Acl" => [
         "adapter" => "\\Acl\\Model\\Adapter\\RegisteredAdapter",
-//        "Acl\\Model\\Adapter\\RegisteredAdapter" => [
-//            "file" => ROOT_DIR . "/config/acl.conf",
-//        ]
     ],
     "Image" => [
         "watermark" => new \Image\Model\Watermark(["text" => "DeltaApp"]),
