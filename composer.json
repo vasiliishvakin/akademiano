@@ -1,0 +1,21 @@
+{
+    "name": "deltaphp/uuid",
+    "description": "uuid module",
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "authors": [
+        {
+            "name": "orbisnull",
+            "email": "zen4dev@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "UUID": "src/"
+        }
+    },
+    "require": {
+	"deltaphp/deltadb": "~1.0"
+    }
+}

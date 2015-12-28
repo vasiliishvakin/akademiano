@@ -1,0 +1,59 @@
+<?php
+
+use Phinx\Migration\AbstractMigration;
+use DeltaCore\Application;
+
+class UuidComplexShortPg extends AbstractMigration
+{
+
+    public function up()
+    {
+        define('ROOT_DIR', realpath(__DIR__ . '/..')); // надо исключить realpath из кода и вынести в конфиг
+        define('PUBLIC_DIR', ROOT_DIR . '/public');
+        define('VENDOR_DIR', ROOT_DIR . '/vendor');
+        define('DATA_DIR', ROOT_DIR . '/data');
+
+        $loader = include ROOT_DIR . "/vendor/autoload.php";
+
+        $app = new Application();
+        $app->setLoader($loader);
+
+        $app->init();
+
+        $epoch = $app->getConfig()->get(["UUID", "complexShort", "epoch"], 1451317149374);
+        $shard = $app->getConfig(["UUID", "complexShort", "shard"], 1);
+
+        $sql = "create sequence uuid_complex_short_part;";
+
+        $this->execute($sql);
+
+        $sql = <<<sql
+CREATE OR REPLACE FUNCTION uuid_short_complex(OUT result bigint) AS $$
+DECLARE
+    our_epoch bigint := $epoch;
+    seq_id bigint;
+    now_millis bigint;
+    shard_id int := $shard;
+BEGIN
+    SELECT nextval('uuid_complex_short_part') % 1024 INTO seq_id;
+
+SELECT FLOOR(EXTRACT(EPOCH FROM clock_timestamp()) * 1000) INTO now_millis;
+    result := (now_millis - our_epoch) << 23;
+    result := result | (shard_id << 10);
+    result := result | (seq_id);
+END;
+$$ LANGUAGE PLPGSQL;
+sql;
+        $this->execute($sql);
+
+    }
+
+    public function down()
+    {
+        $sql = "DROP FUNCTION IF EXISTS uuid_short_complex(OUT result bigint);";
+        $this->execute($sql);
+
+        $sql = "DROP SEQUENCE IF EXISTS uuid_complex_short_part;";
+        $this->execute($sql);
+    }
+}
