@@ -4,11 +4,13 @@
  */
 return [
     'fileManager' => function ($c) {
-            $fm = new \Attach\Model\FileManager();
-            $config = $c->getConfig();
-            $fm->setConfig($config);
-            $sm = $c["sequenceManager"];
-            $fm->setSequenceManager($sm);
-            return $fm;
-        },
+        $fm = new \Attach\Model\FileManager();
+        $config = $c->getConfig();
+        $fm->setConfig($config);
+        $sm = $c["sequenceManager"];
+        $fm->setSequenceManager($sm);
+        $uuidFactory = $c["uuidFactory"];
+        $fm->setUuidFactory($uuidFactory);
+        return $fm;
+    },
 ];

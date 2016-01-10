@@ -11,10 +11,14 @@ use DeltaCore\Parts\Configurable;
 use DeltaDb\EntityInterface;
 use DeltaDb\Repository;
 use DeltaUtils\FileSystem;
+use Hashids\Hashids;
 use HttpWarp\File\FileInterface;
 use HttpWarp\File\UploadFile;
 use Sequence\Model\Parts\Sequence;
 use Sequence\Model\SequenceManagerInterface;
+use UUID\Model\Parts\UuidTrait;
+use UUID\Model\UuidComplexShort;
+use UUID\Model\UuidFactory;
 
 class FileManager extends Repository
 {
@@ -22,6 +26,11 @@ class FileManager extends Repository
     use Sequence;
 
     protected $rootUri;
+    /** @var  Hashids */
+    protected $hashids;
+
+    /** @var  UuidFactory */
+    protected $uuidFactory;
 
     protected $metaInfo = [
         "fields" => [
@@ -32,23 +41,24 @@ class FileManager extends Repository
             "name",
             "description",
             "path",
+            "uuid"
         ]
     ];
 
     public function getRelationsConfig()
     {
-        return $this->getConfig()->get(["Attach","relationMatrix"], []);
+        return $this->getConfig()->get(["Attach", "relationMatrix"], []);
     }
 
     public function getSectionsConfig()
     {
-        return $this->getConfig()->get(["Attach","sectionMatrix"], []);
+        return $this->getConfig()->get(["Attach", "sectionMatrix"], []);
     }
 
     public function getSequenceName()
     {
         $config = $this->getConfig();
-        $sequence = $config->get(["Attach", "sequence"]);
+        $sequence = $config->get(["Attach", "sequence"], "default");
         return $sequence;
     }
 
@@ -60,7 +70,8 @@ class FileManager extends Repository
         if (is_null($this->rootUri)) {
             $this->rootUri = "http://";
             if ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-                || $_SERVER['SERVER_PORT'] == 443) {
+                || $_SERVER['SERVER_PORT'] == 443
+            ) {
                 $this->rootUri = "https://";
             }
             $this->rootUri .= $_SERVER["SERVER_NAME"];
@@ -83,8 +94,8 @@ class FileManager extends Repository
         }
         $hash = hexdec(hash("crc32", $entityClass));
         if ($hash <= 1000) {
-            $hash = $hash+1000;
-        } elseif ($hash>100000) {
+            $hash = $hash + 1000;
+        } elseif ($hash > 100000) {
             $hash = ceil($hash / 9999);
         }
         return $hash;
@@ -106,6 +117,51 @@ class FileManager extends Repository
         return $section;
     }
 
+    /**
+     * @return UuidFactory
+     */
+    public function getUuidFactory()
+    {
+        return $this->uuidFactory;
+    }
+
+    /**
+     * @param UuidFactory $uuidFactory
+     */
+    public function setUuidFactory($uuidFactory)
+    {
+        $this->uuidFactory = $uuidFactory;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLastChanged()
+    {
+        return $this->lastChanged;
+    }
+
+    /**
+     * @param mixed $lastChanged
+     */
+    public function setLastChanged($lastChanged)
+    {
+        $this->lastChanged = $lastChanged;
+    }
+
+    public function createUuid()
+    {
+        $sm = $this->getSequenceManager();
+        $adapter = $sm->getAdapter("PgSequenceUuidComplexShort");
+        $uuid = $adapter->getNext();
+        $uf = $this->getUuidFactory();
+        $uuid =  $uf->create($uuid);
+        return $uuid;
+    }
+
+    /**
+     * @deprecated
+     */
     public function getNextSequence()
     {
         $sequence = $this->getSequenceName();
@@ -136,27 +192,49 @@ class FileManager extends Repository
         return $path;
     }
 
-    //TODO realise with brain use
-    public function getNewFilePath($ext = null, $currentPath = null)
+    /**
+     * @return Hashids
+     */
+    public function getHahids()
     {
-        $sequence = $this->getNextSequence();
-        $name = str_pad($sequence, 9, "0", STR_PAD_LEFT);
-        $dir2 = substr($name, 0, 3);
-        $dir1 = substr($name, 3, 3);
+        if (null === $this->hashids) {
+            $salt = $this->getConfig(["Attach", "hashids", "salt"], __FILE__);
+            $this->hashids = new Hashids($salt, 4, "qwertyuiopasdfghjklzxcvbnm123456789");
+        }
+        return $this->hashids;
+    }
+
+    public function hash($value)
+    {
+        return $this->getHahids()->encode($value);
+    }
+
+    public function getNewFilePath($ext = null, $currentPath = null, UuidComplexShort $uuid)
+    {
+        $firstDirsLevelCount = $this->getConfig(["Attach", "firstDirsLevelCount"], 16);
+        $secondDirsLevelCount = $this->getConfig(["Attach", "secondDirsLevelCount"], 16);
+
+        $dir1 = ($uuid->getId() + $uuid->getDate()->format("B")) % $firstDirsLevelCount;
+        $dir1 = $this->hash($dir1);
+        $dir2 = $uuid->getId() % $secondDirsLevelCount;
+        $dir2 = $this->hash($dir2);
         $subdirs = $dir1 . "/" . $dir2;
         $savedPath = $this->getSavePath($ext, $currentPath);
         if ($ext) {
-            $ext = ".{$ext}";
+            $ext = "." . $ext;
         }
-        $name = "{$savedPath}/{$subdirs}/{$name}{$ext}";
+        $name = "{$savedPath}/{$subdirs}/{$uuid->toHex()}{$ext}";
         return $name;
     }
 
-    public function saveFileIO(FileInterface $file)
+    public function saveFileIO(FileInterface $file, UuidComplexShort $uuid = null)
     {
         $fileExt = $file->getExt();
         $tmpPath = $file->getPath();
-        $newFile = $this->getNewFilePath($fileExt, $tmpPath);
+        if (null === $uuid) {
+            $uuid = $this->createUuid();
+        }
+        $newFile = $this->getNewFilePath($fileExt, $tmpPath, $uuid);
         $fullNewPath = ROOT_DIR . "/" . $newFile;
         $dir = dirname($fullNewPath);
         if (!file_exists($dir)) {
@@ -168,20 +246,21 @@ class FileManager extends Repository
         return $newFile;
     }
 
-    public function create(array $data = null, $entityClass = null)
+    public function create(array $data = null)
     {
         /** @var File $entity */
-        $entity = parent::create($data, $entityClass);
+        $entity = parent::create($data);
         $entity->setRootUri($this->getRootUri());
+        $entity->setUuidFactory($this->getUuidFactory());
         return $entity;
     }
-
 
     public function saveFileForObject(EntityInterface $object, FileInterface $file, $name = null, $description = null)
     {
         $section = $this->getSection($object);
         $objId = $object->getId();
-        $path = $this->saveFileIO($file);
+        $uuid = $this->createUuid();
+        $path = $this->saveFileIO($file, $uuid);
         if (!$path) {
             throw new \RuntimeException("file not saved");
         }
@@ -190,6 +269,8 @@ class FileManager extends Repository
             "object" => $objId,
             "path" => $path,
             "type" => $file->getType(),
+            "uuidFactory" => $this->getUuidFactory(),
+            "uuid" => $uuid,
         ];
         if (!is_null($name)) {
             $fileInfo["name"] = $name;
@@ -212,5 +293,4 @@ class FileManager extends Repository
         $items = $this->find($criteria);
         return $items;
     }
-
-} 
+}

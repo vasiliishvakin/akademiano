@@ -8,9 +8,15 @@ namespace Attach\Model;
 
 use DeltaCore\Prototype\AbstractEntity;
 use DeltaDb\EntityInterface;
+use UUID\Model\Parts\UuidhasInterface;
+use UUID\Model\Parts\UuidTrait;
+use UUID\Model\Parts\UuidFactoryTrait;
 
-class File extends AbstractEntity implements EntityInterface
+class File extends AbstractEntity implements EntityInterface, UuidhasInterface
 {
+    use UuidFactoryTrait;
+    use UuidTrait;
+
     protected $section;
     protected $object;
     protected $type;
@@ -142,6 +148,7 @@ class File extends AbstractEntity implements EntityInterface
     }
 
 
+    /** @deprecated */
     public function getUri($template = null)
     {
         return $this->getUrl($template);
@@ -153,7 +160,17 @@ class File extends AbstractEntity implements EntityInterface
         if (strpos($fileDir, "public/") === 0) {
             $fileDir = substr($fileDir, 7);
         }
+        if (null !== $template) {
+            $dirs = explode("/", $fileDir);
 
-        return $this->getRootUri() . "/" .  $fileDir . (($template) ? "/" . $template  : "") .  "/" . $this->getFileName();
+            if (count($dirs) === 2) {
+                $fileDir = $template . "/" . $fileDir;
+            } else {
+                array_splice($dirs, -2, 0, $template);
+                $fileDir = implode("/", $dirs);
+            }
+        }
+
+        return $this->getRootUri() . "/" . $fileDir . "/" . $this->getFileName();
     }
 }

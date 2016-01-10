@@ -77,4 +77,4 @@ trait AttachSave
         }
         $fm->saveFileForObject($item, $file, $title, $description);
     }
-} 
+}
