@@ -226,4 +226,9 @@ class StringUtils
     {
         return is_string($value) && $value!=='' && !is_numeric($value);
     }
+
+    public static function isFullClass($value)
+    {
+        return false !== strpos($value, "\\");
+    }
 }
