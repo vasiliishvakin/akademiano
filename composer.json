@@ -18,7 +18,7 @@
   },
   "require": {
     "deltaphp/deltacore": "^2.0",
-    "deltaphp/deltadb": "^1.2.0",
+    "deltaphp/deltadb": "~1.3",
     "deltaphp/perm-auth": "^2.0",
     "deltaphp/attach": "^2.0"
   }
