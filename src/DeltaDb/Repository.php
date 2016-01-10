@@ -10,8 +10,6 @@ use DeltaUtils\ArrayUtils;
 use DeltaUtils\Object\Collection;
 use DeltaUtils\Parts\InnerCache;
 use DeltaUtils\StringUtils;
-use Psr\Log\InvalidArgumentException;
-use DeltaDb\EntityInterface;
 
 class Repository implements RepositoryInterface
 {
@@ -608,13 +606,13 @@ class Repository implements RepositoryInterface
         $data = [];
         foreach ($fields as $field) {
             $value = $this->getField($entity, $field);
-            if ($value instanceof EntityInterface) {
+            if ($value instanceof \DeltaDb\EntityInterface) {
                 $value = $value->getId();
-            }
-            if ($value instanceof \DateTime) {
+            } elseif ($value instanceof \DateTime) {
                 $value = $value->format("Y-m-d H:i:s");
-            }
-            if (is_bool($value)) {
+            } elseif ($value instanceof \DeltaUtils\Object\Prototype\StringableInterface) {
+                $value = (string) $value;
+            } elseif (is_bool($value)) {
                 $value = $value ? 't' : 'f';
             }
             $data[$field] = $value;
