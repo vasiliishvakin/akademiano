@@ -16,7 +16,7 @@
     },
     "require": {
         "deltaphp/deltacore": "~2.0",
-        "deltaphp/deltadb": "~1.2.0",
+        "deltaphp/deltadb": "~1.3",
         "deltaphp/attach": "~2.0",
         "deltaphp/dictdir": "~2.0",
         "bower-asset/ckeditor": "^4.5.4",
