@@ -61,6 +61,9 @@ return [
     "Image" => [
         "watermark" => new \Image\Model\Watermark(["text" => "DeltaApp"]),
     ],
+    "Sequence" => [
+        "adapter" => "PgSequenceUuidComplexShort",
+    ],
     "modules" => [
         "DeltaSkeletonModule",
         "DeltaDb",
@@ -72,6 +75,7 @@ return [
         "Articles",
         "Attach",
         "Sequence",
-        "Image"
+        "Image",
+        "UUID",
     ],
 ];
