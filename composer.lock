@@ -319,12 +319,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/attach.git",
-                "reference": "ab43d97added6dfca55cf9da9a85874e221d3050"
+                "reference": "252914283bfb2c5ed03ab6b5e9295ccc516fa341"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/attach/zipball/ab43d97added6dfca55cf9da9a85874e221d3050",
-                "reference": "ab43d97added6dfca55cf9da9a85874e221d3050",
+                "url": "https://api.github.com/repos/DeltaPHP/attach/zipball/252914283bfb2c5ed03ab6b5e9295ccc516fa341",
+                "reference": "252914283bfb2c5ed03ab6b5e9295ccc516fa341",
                 "shasum": ""
             },
             "require": {
@@ -348,7 +348,7 @@
                 }
             ],
             "description": "Attach files to othe objects",
-            "time": "2016-01-10 17:12:24"
+            "time": "2016-01-12 10:54:32"
         },
         {
             "name": "deltaphp/deltacore",
@@ -1524,12 +1524,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "dba78c81cd04ca8d6ecdf7b2d52b9414042dbeea"
+                "reference": "24d9266d0f1c2b4426ad8f931be30718cace4180"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/dba78c81cd04ca8d6ecdf7b2d52b9414042dbeea",
-                "reference": "dba78c81cd04ca8d6ecdf7b2d52b9414042dbeea",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/24d9266d0f1c2b4426ad8f931be30718cace4180",
+                "reference": "24d9266d0f1c2b4426ad8f931be30718cace4180",
                 "shasum": ""
             },
             "require": {
@@ -1577,7 +1577,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2016-01-07 21:43:28"
+            "time": "2016-01-11 14:50:45"
         }
     ],
     "packages-dev": [],
