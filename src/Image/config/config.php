@@ -41,8 +41,10 @@ return [
             ],
             "origin" => [
                 "addWatermark" => function (\DeltaCore\Config $c) {
-                    $text = $c->getOrThrow("watermark")->getText();
-                    return new \Image\Model\Watermark(["text" => $text, "mode" => \Image\Model\Watermark::MODE_TEXT_MOSAIC]);
+                    /** @var \Image\Model\Watermark $watermark */
+                    $watermark = clone $c->getOrThrow("watermark");
+                    $watermark->setMode(\Image\Model\Watermark::MODE_TEXT_MOSAIC);
+                    return $watermark;
                 },
                 "clear",
                 "optimize" => [95],

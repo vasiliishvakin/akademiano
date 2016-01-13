@@ -97,13 +97,17 @@ class Imagick extends AbstractDriver
 
     public function addWatermark(Watermark $watermark)
     {
-        switch($watermark->getMode()) {
+        switch ($watermark->getMode()) {
             case Watermark::MODE_TEXT:
                 return $this->addWatermarkText($watermark);
             case Watermark::MODE_TEXT_MASK:
                 return $this->addWatermarkTextMask($watermark);
             case Watermark::MODE_TEXT_MOSAIC:
                 return $this->addWatermarkTextMosaic($watermark);
+            case Watermark::MODE_IMAGE:
+                return $this->addWatermarkImage($watermark);
+            case Watermark::MODE_IMAGE_MOSAIC:
+                return $this->addWatermarkImageMosaic($watermark);
 
         }
 
@@ -163,29 +167,56 @@ class Imagick extends AbstractDriver
         $watermarkImage = new \Imagick();
 
         $draw = new \ImagickDraw();
-        $watermarkImage->newImage(140, 80, new \ImagickPixel('none'));
+        $watermarkImage->newImage($watermark->getWidth(), $watermark->getHeight(), new \ImagickPixel('none'));
 
         $draw->setFont($watermark->getFont());
         $draw->setFontSize($watermark->getSize());
         $draw->setFillColor($watermark->getColor());
         $draw->setFillOpacity($watermark->getOpacity());
 
-        $draw->setGravity(\Imagick::GRAVITY_NORTHWEST);
+        $draw->setGravity(\Imagick::GRAVITY_CENTER);
+        $watermarkImage->annotateImage($draw, 0, 0, 0, $watermark->getText());
 
-        $watermarkImage->annotateImage($draw, 10, 10, 0, $watermark->getText());
+//        $draw->setGravity(\Imagick::GRAVITY_SOUTHEAST);
+//        $watermarkImage->annotateImage($draw, 5, 15, 0, $watermark->getText());
 
-        $draw->setGravity(\Imagick::GRAVITY_SOUTHEAST);
+        $width = $this->getWidth();
+        $height = $this->getHeight();
 
-        $watermarkImage->annotateImage($draw, 5, 15, 0, $watermark->getText());
-
-        $width =  $this->getImage()->getImageWidth();
-        $height = $this->getImage()->getImageHeight();
-
-        for ($w = 0; $w < $width; $w += 140) {
-            for ($h = 0; $h < $height; $h += 80) {
+        for ($w = 0; $w + $watermark->getWidth() < $width; $w += $watermark->getWidth()) {
+            for ($h = 0; $h + $watermark->getHeight() < $height; $h += $watermark->getHeight()) {
                 $this->getImage()->compositeImage($watermarkImage, \Imagick::COMPOSITE_OVER, $w, $h);
             }
         }
+    }
+
+    public function addWatermarkImage(Watermark $watermark)
+    {
+        $watermarkImage = new \Imagick();
+        $watermarkImage->readImage($watermark->getFile());
+        $x = $watermark->getX($this->getWidth(), $this->getHeight(), $watermarkImage);
+        $y = $watermark->getX($this->getHeight(), $this->getWidth(), $watermarkImage);
+        $this->getImage()->compositeImage($watermarkImage, \Imagick::COMPOSITE_OVER, $x, $y);
+
+    }
+
+    public function addWatermarkImageMosaic(Watermark $watermark)
+    {
+        $watermarkImage = new \Imagick();
+        $watermarkImage->readImage($watermark->getFile());
+
+        $width = $this->getWidth();
+        $height = $this->getHeight();
+
+        $watermarkWidth = $watermarkImage->getImageWidth();
+        $watermarkHeight = $watermarkImage->getImageHeight();
+
+        for ($w = 0; $w + $watermarkWidth < $width; $w += $watermarkWidth) {
+            for ($h = 0; $h + $watermarkHeight < $height; $h += $watermarkHeight) {
+                $this->getImage()->compositeImage($watermarkImage, \Imagick::COMPOSITE_OVER, $w, $h);
+            }
+        }
+
     }
 
     public function clear()
