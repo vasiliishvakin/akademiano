@@ -20,6 +20,7 @@ class File extends AbstractEntity implements EntityInterface, UuidhasInterface
     protected $section;
     protected $object;
     protected $type;
+    protected $subType;
     protected $name;
     protected $description;
     protected $path;
@@ -119,6 +120,27 @@ class File extends AbstractEntity implements EntityInterface, UuidhasInterface
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSubType()
+    {
+        return $this->subType;
+    }
+
+    /**
+     * @param mixed $subType
+     */
+    public function setSubType($subType)
+    {
+        $this->subType = $subType;
+    }
+
+    public function getMimeType()
+    {
+        return $this->getType() . "/" . $this->getSubType();
     }
 
     public function getFileName()

@@ -11,6 +11,7 @@ use DeltaCore\Parts\Configurable;
 use DeltaDb\EntityInterface;
 use DeltaDb\Repository;
 use DeltaUtils\FileSystem;
+use DeltaUtils\StringUtils;
 use Hashids\Hashids;
 use HttpWarp\File\FileInterface;
 use HttpWarp\File\UploadFile;
@@ -38,6 +39,7 @@ class FileManager extends Repository
             "section",
             "object",
             "type",
+            "sub_type",
             "name",
             "description",
             "path",
@@ -155,7 +157,7 @@ class FileManager extends Repository
         $adapter = $sm->getAdapter("PgSequenceUuidComplexShort");
         $uuid = $adapter->getNext();
         $uf = $this->getUuidFactory();
-        $uuid =  $uf->create($uuid);
+        $uuid = $uf->create($uuid);
         return $uuid;
     }
 
@@ -269,7 +271,7 @@ class FileManager extends Repository
             "object" => $objId,
             "path" => $path,
             "type" => $file->getType(),
-            "uuidFactory" => $this->getUuidFactory(),
+            "sub_type" => $file->getSubType(),
             "uuid" => $uuid,
         ];
         if (!is_null($name)) {
@@ -282,15 +284,59 @@ class FileManager extends Repository
         $this->save($file);
     }
 
-    public function getFilesForObject(EntityInterface $object)
+    public function getFilesForObject(EntityInterface $object, $criteria = [])
     {
         $section = $this->getSection($object);
         $id = $object->getId();
-        $criteria = [
-            "section" => $section,
-            "object" => $id,
-        ];
+        $criteria ["section"] = $section;
+        $criteria ["object"] = $id;
         $items = $this->find($criteria);
         return $items;
+    }
+
+    /**
+     * @param integer|string|array|EntityInterface|EntityInterface[] $objectsIds
+     * @param null|string $entityClass
+     * @param array $criteria
+     */
+    public function deleteFilesForObjects($objectsIds, $entityClass = null, $criteria = [])
+    {
+        $objectsIds = (array) $objectsIds;
+        $ids = [];
+        foreach($objectsIds as $object) {
+            if ($object instanceof EntityInterface) {
+                $ids[get_class($object)][] = $object->getId();
+            } else {
+                if (null === $entityClass) {
+                    throw new \LogicException("Need set entityClass forwork with array of ids");
+                }
+                $ids[$entityClass][] = $object;
+            }
+        }
+        if (empty($ids)) {
+            return;
+        }
+        foreach($ids as $class => $idsForClass) {
+            if (empty($idsForClass)) {
+                continue;
+            }
+            $section = $this->getSection($class);
+            $criteria ["section"] = $section;
+            $criteria ["object"] = $idsForClass;
+            $this->deleteRaw($criteria);
+        }
+    }
+
+    public function deleteRaw(array $criteria = [], $table = null)
+    {
+        $items = $this->findRaw($criteria, $table);
+        $deletedRows = parent::deleteRaw($criteria, $table);
+        foreach ($items as $item) {
+            if (isset($item["path"])) {
+                $path = ROOT_DIR . DIRECTORY_SEPARATOR . $item["path"];
+                unlink($path);
+            }
+        }
+        return $deletedRows;
     }
 }
