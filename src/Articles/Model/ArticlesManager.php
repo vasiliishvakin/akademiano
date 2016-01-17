@@ -6,27 +6,27 @@
 namespace Articles\Model;
 
 
-use Attach\Model\FileManager;
+use DeltaCore\Parts\MagicSetGetManagers;
 use DeltaDb\Adapter\PgsqlAdapter;
 use DeltaDb\EntityInterface;
 use DeltaDb\Repository;
 use DeltaUtils\ArrayUtils;
 use DeltaUtils\FileSystem;
-use DictDir\Model\UniDirectoryManager;
 use HttpWarp\File\FlowFile;
-use HttpWarp\File\UploadFile;
 
+/**
+ * Class ArticlesManager
+ * @package Articles
+ * @method  setCategoryManager(\DictDir\Model\UniDirectoryManager $categoryManager)
+ * @method  \DictDir\Model\UniDirectoryManager getCategoryManager()
+ * @method  setFileManager(\Attach\Model\FileManager $fileManager)
+ * @method \Attach\Model\FileManager getFileManager()
+ */
 class ArticlesManager extends Repository
 {
     const CATEGORIES_MIDDLE_TABLE = "article_categories_matrix";
 
-    /**
-     * @var UniDirectoryManager
-     */
-    protected $categoryManager;
-
-    /** @var  FileManager */
-    protected $fileManager;
+    use MagicSetGetManagers;
 
     protected $metaInfo = [
         'fields' => [
@@ -42,38 +42,6 @@ class ArticlesManager extends Repository
         ]
     ];
 
-    /**
-     * @param \DictDir\Model\UniDirectoryManager $categoryManager
-     */
-    public function setCategoryManager($categoryManager)
-    {
-        $this->categoryManager = $categoryManager;
-    }
-
-    /**
-     * @return \DictDir\Model\UniDirectoryManager
-     */
-    public function getCategoryManager()
-    {
-        return $this->categoryManager;
-    }
-
-    /**
-     * @param \Attach\Model\FileManager $fileManager
-     */
-    public function setFileManager($fileManager)
-    {
-        $this->fileManager = $fileManager;
-    }
-
-    /**
-     * @return \Attach\Model\FileManager
-     */
-    public function getFileManager()
-    {
-        return $this->fileManager;
-    }
-
     //TODO add referenced table criteria
     public function prepareCriteria(array $criteria = [])
     {
@@ -87,7 +55,7 @@ class ArticlesManager extends Repository
             if (isset($fields[$field])) {
                 $nc["mt.{$field}"] = $value;
             } else {
-                switch($field) {
+                switch ($field) {
                     case "category" :
                         $nc["mct.category"] = $value;
                         break;
@@ -268,6 +236,7 @@ class ArticlesManager extends Repository
     public function deleteById($id, $table = null)
     {
         $this->clearCategories($id);
+        $this->getFileManager()->deleteFilesForObjects($id, $this->getEntityClass());
         return parent::deleteById($id, $table);
     }
 
@@ -275,6 +244,7 @@ class ArticlesManager extends Repository
     {
         $id = $entity->getId();
         $this->clearCategories($id);
+        $this->getFileManager()->deleteFilesForObjects($entity);
         return parent::delete($entity);
     }
 
@@ -290,7 +260,9 @@ class ArticlesManager extends Repository
         $table = $this->getTable();
         $sql = "select distinct to_char(created, 'YYYY-MM') from {$table}";
         $months = $this->getAdapter()->selectCol($sql);
-        $months = array_map(function($value) {return new \DateTime($value);}, ArrayUtils::filterNulls($months));
+        $months = array_map(function ($value) {
+            return new \DateTime($value);
+        }, ArrayUtils::filterNulls($months));
         return $months;
     }
 

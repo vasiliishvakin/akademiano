@@ -5,59 +5,29 @@
 
 namespace Articles\Model;
 
-use Attach\Model\FileManager;
+use Attach\Model\Parts\GetImagesTrait;
+use DeltaCore\Parts\MagicSetGetManagers;
 use DeltaCore\Prototype\MiddleObject;
 use DeltaDb\EntityInterface;
 use DeltaUtils\StringUtils;
-use DictDir\Model\ComboDirectoryManager;
-use DictDir\Model\UniDirectoryItem;
-use DictDir\Model\UniDirectoryManager;
+
+/**
+ * Class Article
+ * @package Articles
+ * @method  setCategoryManager(\DictDir\Model\UniDirectoryManager $categoryManager)
+ * @method  \DictDir\Model\UniDirectoryManager getCategoryManager()
+ * @method  setFileManager(\Attach\Model\FileManager $fileManager)
+ * @method \Attach\Model\FileManager getFileManager()
+ */
 
 class Article extends MiddleObject implements EntityInterface
 {
+    use MagicSetGetManagers;
+    use GetImagesTrait;
+
     protected $categories = [];
     protected $title;
     protected $text;
-    protected $images;
-
-    /** @var  UniDirectoryManager|ComboDirectoryManager */
-    protected $categoryManager;
-
-    /** @var  FileManager */
-    protected $fileManager;
-
-
-    /**
-     * @param mixed $categoryManager
-     */
-    public function setCategoryManager($categoryManager)
-    {
-        $this->categoryManager = $categoryManager;
-    }
-
-    /**
-     * @return UniDirectoryManager
-     */
-    public function getCategoryManager()
-    {
-        return $this->categoryManager;
-    }
-
-    /**
-     * @param \Attach\Model\FileManager $fileManager
-     */
-    public function setFileManager($fileManager)
-    {
-        $this->fileManager = $fileManager;
-    }
-
-    /**
-     * @return \Attach\Model\FileManager
-     */
-    public function getFileManager()
-    {
-        return $this->fileManager;
-    }
 
     /**
      * @return mixed
@@ -69,22 +39,6 @@ class Article extends MiddleObject implements EntityInterface
             $this->description = StringUtils::cutStr($text, 160);
         }
         return $this->description;
-    }
-
-    /**
-     * @param mixed $id
-     */
-    public function setId($id)
-    {
-        $this->id = (integer)$id;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**
@@ -151,24 +105,5 @@ class Article extends MiddleObject implements EntityInterface
             $ids[] = $category->getId();
         }
         return $ids;
-    }
-
-    public function getImages()
-    {
-        if (is_null($this->images)) {
-            $fm = $this->getFileManager();
-            $this->images = $fm->getFilesForObject($this);
-        }
-        return $this->images;
-    }
-
-    public function getOtherImages()
-    {
-        return $this->getImages()->slice(1);
-    }
-
-    public function getTitleImage()
-    {
-        return $this->getImages()->first();
     }
 }

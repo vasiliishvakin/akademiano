@@ -10,11 +10,9 @@ use Attach\Model\FileManager;
 use Attach\Model\Parts\AttachSave;
 use DeltaCore\AdminControllerInterface;
 use DeltaUtils\ArrayUtils;
-use DeltaUtils\FileSystem;
 use Articles\Model\Article;
-use Articles\Model\ArticlesManager;
 
-class AdminController extends IndexController implements  AdminControllerInterface
+class AdminController extends IndexController implements AdminControllerInterface
 {
     use AclController;
     use AttachSave;
@@ -49,7 +47,7 @@ class AdminController extends IndexController implements  AdminControllerInterfa
             $categories = $this->getArticlesManager()->getCategories();
             $itemCategories = array_flip($item->getCategoriesIds());
             $viewCats = [];
-            foreach($categories as $category) {
+            foreach ($categories as $category) {
                 $id = $category->getId();
                 $active = isset($itemCategories[$id]);
                 $viewCats[] = ["id" => $id, "name" => $category->getName(), "active" => $active];
@@ -84,7 +82,7 @@ class AdminController extends IndexController implements  AdminControllerInterfa
         }
         $nm->load($item, $requestParams);
         $nm->save($item);
-        $maxFileSize = $this->getConfig(["Articles", "Attach", "Size"], 500*1024);
+        $maxFileSize = $this->getConfig(["Articles", "Attach", "Size"], 500 * 1024);
         $this->processFilesRequest($item, $maxFileSize);
         $this->getResponse()->redirect("/admin/articles");
     }
