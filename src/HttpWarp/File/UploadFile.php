@@ -14,7 +14,9 @@ class UploadFile implements FileInterface
     use FileProperties;
 
     protected $name;
+    protected $mimeType;
     protected $type;
+    protected $subType;
     protected $size;
     protected $path;
     protected $error;
@@ -66,12 +68,40 @@ class UploadFile implements FileInterface
     /**
      * @return mixed
      */
+    public function getMimeType()
+    {
+        if (is_null($this->mimeType)) {
+            $this->mimeType = FileSystem::getFileType($this->getPath());
+        }
+        return $this->mimeType;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getType()
     {
-        if (is_null($this->type)) {
-            $this->type = FileSystem::getFileType($this->getPath());
+        if (null === $this->type) {
+            $mime = $this->getMimeType();
+            $types = explode("/", $mime);
+            $this->type = $types[0];
+            $this->subType = $types[1];
         }
         return $this->type;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSubType()
+    {
+        if (null === $this->subType) {
+            $mime = $this->getMimeType();
+            $types = explode("/", $mime);
+            $this->type = $types[0];
+            $this->subType = $types[1];
+        }
+        return $this->subType;
     }
 
     /**

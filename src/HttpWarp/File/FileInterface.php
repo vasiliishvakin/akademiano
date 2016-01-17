@@ -12,7 +12,11 @@ interface FileInterface
 
     public function getSize();
 
+    public function getMimeType();
+
     public function getType();
+
+    public function getSubType();
 
     public function mv($path);
 

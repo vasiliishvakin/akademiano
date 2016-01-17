@@ -51,7 +51,7 @@ class FlowFile implements FileInterface
     /**
      * @return mixed
      */
-    public function getType()
+    public function getMimeType()
     {
         if (is_null($this->type)) {
             $this->type = FileSystem::getFileType($this->getPath());
