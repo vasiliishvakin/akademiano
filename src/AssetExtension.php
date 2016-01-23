@@ -328,6 +328,10 @@ class AssetExtension extends \Twig_Extension
             $path = dirname($path) . DIRECTORY_SEPARATOR . $prefix . basename($path);
         }
 
+        if (file_exists($path) && (filemtime($path) >= filemtime($asset->getSourceDirectory() . DIRECTORY_SEPARATOR . basename($asset->getSourcePath())))) {
+            return $path;
+        }
+
         if (!is_dir($dir = dirname($path)) && false === @mkdir($dir, 0750, true)) {
             throw new \RuntimeException('Unable to create directory ' . $dir);
         }
