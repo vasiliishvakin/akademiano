@@ -14,6 +14,8 @@ abstract class AbstractAdapter implements AdapterInterface
     protected $dsn;
     protected $params = [];
 
+    abstract public function escapeIdentifier($identifier);
+
     function __construct($dsn = null, $params = [])
     {
         if (!is_null($dsn)) {
@@ -82,11 +84,18 @@ abstract class AbstractAdapter implements AdapterInterface
                 if (ArrayUtils::getArrayType($orderBy) === -1) {
                     $orderField = $orderBy[0];
                     $orderDirect = $orderBy[1];
+                    $orderField = $this->escapeIdentifier($orderField);
                     $orderStr = " order by {$orderField} {$orderDirect}";
                 } else {
+                    $orderStr = [];
                     foreach ($orderBy as $key => $value) {
-                        $orderStr = " order by {$key} {$value}";
+                        $key = $this->escapeIdentifier($key);
+                        $orderStr [] = " {$key} {$value} ";
                     }
+                    if (empty($orderStr)) {
+                        return null;
+                    }
+                    $orderStr = " order by ". implode(",", $orderStr);
                 }
             } else {
                 $orderStr = " order by {$orderBy}";

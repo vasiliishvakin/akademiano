@@ -1,22 +1,22 @@
 {
-    "name": "deltaphp/deltadb",
-    "description": "DB models for delta framework",
-    "license": "MIT",
-    "minimum-stability": "dev",
+  "name": "deltaphp/deltadb",
+  "description": "DB models for delta framework",
+  "license": "MIT",
+  "minimum-stability": "dev",
   "prefer-stable": true,
-    "authors": [
-        {
-            "name": "orbisnull",
-            "email": "zen4dev@gmail.com"
-        }
-    ],
-    "autoload": {
-        "psr-0": {
-            "DeltaDb": "src/"
-        }
-    },
-    "require": {
-        "deltaphp/deltautils": "~1.0",
-        "ext-pgsql": "*"
+  "authors": [
+    {
+      "name": "orbisnull",
+      "email": "zen4dev@gmail.com"
     }
+  ],
+  "autoload": {
+    "psr-0": {
+      "DeltaDb": "src/"
+    }
+  },
+  "require": {
+    "deltaphp/deltautils": "~1.0",
+    "ext-pgsql": "*"
+  }
 }
