@@ -43,7 +43,11 @@ class FileManager extends Repository
             "name",
             "description",
             "path",
-            "uuid"
+            "uuid",
+            "main",
+            "order",
+            "info",
+            "created",
         ]
     ];
 
@@ -257,7 +261,72 @@ class FileManager extends Repository
         return $entity;
     }
 
-    public function saveFileForObject(EntityInterface $object, FileInterface $file, $name = null, $description = null)
+    public function filterFileData(array $data)
+    {
+        $notEmptyFunction = function ($value) {
+            $value = trim($value);
+            if (empty($value)) {
+                return null;
+            }
+            return $value;
+        };
+
+        $filters = [
+            'main' => [
+                'filter' => FILTER_VALIDATE_BOOLEAN,
+                'flags' => FILTER_NULL_ON_FAILURE,
+            ],
+            'title' => [
+                'filter' => FILTER_CALLBACK,
+                'options' => $notEmptyFunction,
+                'flags' => FILTER_NULL_ON_FAILURE,
+            ],
+            'description' => [
+                "filter" => FILTER_CALLBACK,
+                'options' => $notEmptyFunction,
+                'flags' => FILTER_NULL_ON_FAILURE,
+            ],
+            'order' => [
+                'filter' => FILTER_VALIDATE_INT,
+                'flags' => FILTER_NULL_ON_FAILURE,
+            ],
+            'info' => [
+                'filter' => FILTER_CALLBACK,
+                'options' => function ($value) {
+                    if (empty($value)) {
+                        return null;
+                    } elseif (StringUtils::isJson($value)) {
+                        return $value;
+                    }
+                    return null;
+                },
+                'flags' => FILTER_NULL_ON_FAILURE,
+            ],
+        ];
+        $data = filter_var_array($data, $filters);
+
+        $fileInfo = [];
+
+        if (!empty($data["title"])) {
+            $fileInfo["name"] = $data["title"];
+        }
+        if (!empty($data["description"])) {
+            $fileInfo["description"] = $data["description"];
+        }
+        if (!empty($data["order"])) {
+            $fileInfo["order"] = (integer)$data["order"];
+        }
+        if (!empty($data["main"])) {
+            $fileInfo["main"] = (bool)$data["main"];
+        }
+        if (!empty($data["info"])) {
+            $fileInfo["info"] = $data["info"];
+        }
+
+        return $fileInfo;
+    }
+
+    public function saveFileForObject(EntityInterface $object, FileInterface $file, $data = [])
     {
         $section = $this->getSection($object);
         $objId = $object->getId();
@@ -266,20 +335,16 @@ class FileManager extends Repository
         if (!$path) {
             throw new \RuntimeException("file not saved");
         }
-        $fileInfo = [
-            "section" => $section,
-            "object" => $objId,
-            "path" => $path,
-            "type" => $file->getType(),
-            "sub_type" => $file->getSubType(),
-            "uuid" => $uuid,
-        ];
-        if (!is_null($name)) {
-            $fileInfo["name"] = $name;
-        }
-        if (!is_null($description)) {
-            $fileInfo["description"] = $description;
-        }
+
+        $fileInfo = $this->filterFileData($data);
+
+        $fileInfo["section"] = $section;
+        $fileInfo["object"] = $objId;
+        $fileInfo["path"] = $path;
+        $fileInfo["type"] = $file->getType();
+        $fileInfo["sub_type"] = $file->getSubType();
+        $fileInfo["uuid"] = $uuid;
+
         $file = $this->create($fileInfo);
         $this->save($file);
     }
@@ -290,7 +355,7 @@ class FileManager extends Repository
         $id = $object->getId();
         $criteria ["section"] = $section;
         $criteria ["object"] = $id;
-        $items = $this->find($criteria);
+        $items = $this->find($criteria, null, null, null, ["order" => "asc"]);
         return $items;
     }
 
@@ -301,9 +366,9 @@ class FileManager extends Repository
      */
     public function deleteFilesForObjects($objectsIds, $entityClass = null, $criteria = [])
     {
-        $objectsIds = (array) $objectsIds;
+        $objectsIds = (array)$objectsIds;
         $ids = [];
-        foreach($objectsIds as $object) {
+        foreach ($objectsIds as $object) {
             if ($object instanceof EntityInterface) {
                 $ids[get_class($object)][] = $object->getId();
             } else {
@@ -316,7 +381,7 @@ class FileManager extends Repository
         if (empty($ids)) {
             return;
         }
-        foreach($ids as $class => $idsForClass) {
+        foreach ($ids as $class => $idsForClass) {
             if (empty($idsForClass)) {
                 continue;
             }
@@ -338,5 +403,17 @@ class FileManager extends Repository
             }
         }
         return $deletedRows;
+    }
+
+    public function updateFile($id, array $data = [])
+    {
+        $file = $this->findById($id);
+        if (!$file) {
+            return;
+        }
+        $data = $this->filterFileData($data);
+        $this->load($file, $data);
+        $result = $this->save($file);
+        return $result;
     }
 }

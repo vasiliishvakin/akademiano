@@ -7,6 +7,7 @@ namespace Attach\Model;
 
 
 use DeltaCore\Prototype\AbstractEntity;
+use DeltaCore\Prototype\Parts\CreatedTrait;
 use DeltaDb\EntityInterface;
 use UUID\Model\Parts\UuidhasInterface;
 use UUID\Model\Parts\UuidTrait;
@@ -16,6 +17,7 @@ class File extends AbstractEntity implements EntityInterface, UuidhasInterface
 {
     use UuidFactoryTrait;
     use UuidTrait;
+    use CreatedTrait;
 
     protected $section;
     protected $object;
@@ -25,6 +27,9 @@ class File extends AbstractEntity implements EntityInterface, UuidhasInterface
     protected $description;
     protected $path;
     protected $rootUri;
+    protected $isMain = false;
+    protected $order = 0;
+    protected $info = null;
 
     /**
      * @param mixed $description
@@ -194,5 +199,63 @@ class File extends AbstractEntity implements EntityInterface, UuidhasInterface
         }
 
         return $this->getRootUri() . "/" . $fileDir . "/" . $this->getFileName();
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isMain()
+    {
+        return $this->isMain;
+    }
+
+    public function setMain($main = false)
+    {
+        switch ($main) {
+            case "t" :
+                $main = true;
+                break;
+            case "f" :
+                $main = false;
+                break;
+        }
+        $this->isMain = (boolean) $main;
+    }
+
+    public function getMain()
+    {
+        return $this->isMain();
+    }
+
+    /**
+     * @return int
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+
+    /**
+     * @param int $order
+     */
+    public function setOrder($order)
+    {
+        $this->order = (integer) $order;
+    }
+
+    /**
+     * @return null
+     */
+    public function getInfo()
+    {
+        return $this->info;
+    }
+
+    /**
+     * @param null $info
+     */
+    public function setInfo($info)
+    {
+        $this->info = $info;
     }
 }

@@ -9,10 +9,16 @@
 namespace Attach\Model\Parts;
 
 
+use DeltaUtils\Object\Collection;
+
 trait GetImagesTrait
 {
-    /** @var  \Attach\Model\File[] */
+    /** @var  \Attach\Model\File[]|Collection */
     protected $images;
+    /** @var  \Attach\Model\File */
+    protected $titleImage;
+    /** @var  \Attach\Model\File[] */
+    protected $otherImages;
 
     public function getImages()
     {
@@ -25,11 +31,37 @@ trait GetImagesTrait
 
     public function getOtherImages()
     {
-        return $this->getImages()->slice(1);
+        if (null === $this->otherImages) {
+            $titleImage = $this->getTitleImage();
+            if ($titleImage->isMain()) {
+                $otherImages = [];
+                foreach ($this->getImages() as $image) {
+                    if ($image !== $titleImage) {
+                        $otherImages[] = $image;
+                    }
+                }
+                $this->otherImages = new Collection($otherImages);
+            } else {
+                $this->otherImages = $this->getImages()->slice(1);
+            }
+        }
+        return $this->otherImages;
     }
 
     public function getTitleImage()
     {
-        return $this->getImages()->first();
+        if (null === $this->titleImage) {
+            foreach ($this->getImages() as $image) {
+                if ($image->isMain()) {
+                    $this->titleImage = $image;
+                    break;
+                }
+            }
+            if (null === $this->titleImage) {
+                $this->titleImage = $this->getImages()->first();
+
+            }
+        }
+        return $this->titleImage;
     }
 }

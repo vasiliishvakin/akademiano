@@ -46,15 +46,37 @@ trait AttachSave
 
         //save files
         $files = $request->getFiles("files", $type, $maxFileSize);
-        $filesTitle = $request->getParam("filesTitle", []);
-        $filesDescription = $request->getParam("filesDescription", []);
+        $filesData = $request->getParam("filesData", []);
+
+
+        $fileDataFunction = function ($id, &$data) {
+            $fileData = [];
+            foreach($data as $paramName => $paramData) {
+                if (isset($paramData[$id])) {
+                    $fileData[$paramName] = $paramData[$id];
+                    unset($data[$paramName][$id]);
+                }
+                if ($paramName === "main" && (string)$paramData === (string)$id) {
+                    $fileData["main"] = true;
+                }
+            }
+            return $fileData;
+        };
+
+        //save new files
         foreach ($files as $file) {
             $name = $file->getName();
-            $fileFieldName = str_replace(".", "_", $name);
-            $title = isset($filesTitle[$fileFieldName]) ? $filesTitle[$fileFieldName] : null;
-            $description = isset($filesDescription[$fileFieldName]) ? $filesDescription[$fileFieldName] : null;
-            $fm->saveFileForObject($item, $file, $title, $description);
+            $id = str_replace(".", "_", $name);
+            $fileData = $fileDataFunction($id, $filesData);
+            $fm->saveFileForObject($item, $file, $fileData);
         }
+        //update exists
+        $filesUpdate = $request->getParam("filesUpdate", []);
+        foreach($filesUpdate as $id) {
+            $fileData = $fileDataFunction($id, $filesData);
+            $fm->updateFile($id, $fileData);
+        }
+
     }
 
     public function replaceFile(EntityInterface $item, $maxFileSize, $type = FileSystem::FST_IMAGE)

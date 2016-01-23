@@ -1,0 +1,125 @@
+<!-- files -->
+
+<style>
+    .form-inline .form-group {
+        margin-left: 0;
+        margin-right: 0;
+    }
+</style>
+
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h3>Файлы:</h3>
+    </div>
+</div>
+
+<div class="row" style="font-weight: bold; text-align: center;margin-bottom: 10px">
+    <div class="col-md-3">
+        Превью
+    </div>
+    <div class="col-md-8">
+        Параметры
+    </div>
+    <div class="col-md-1">
+        Удалить
+    </div>
+
+</div>
+{% for image in item.images %}
+    <input type="hidden" name="filesUpdate[]" value="{{ image.id }}">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col-md-12">
+                    <img class="img-rounded img-responsive" src="{{ image.uri("medium") }}" alt=""/>
+                </div>
+            </div>
+            {% if image.info.auto %}
+                <div class="row">
+                    <div class="col-md-12">
+                        Информация:
+                        {{ image.info.auto }}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+
+        <div class="col-md-8">
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="title_{{ image.id }}">Название</label>
+                <div class="col-sm-8">
+                    <input type="text" name="filesData[title][{{ image.id }}]" class="form-control"
+                           id="title_{{ image.id }}" value="{{ image.name }}">
+                </div>
+            </div>
+            <div class="form-inline" style="margin-bottom: 15px; padding-left: 30px;">
+                <div class="form-group">
+                    <div class="radio-inline">
+                        <label><input type="radio" name="filesData[main]" value="{{ image.id }}"
+                                    {{ image.isMain ? "checked" }}>Главное</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-3" for="order_{{ image.id }}">Порядок</label>
+                    <div class="col-sm-8">
+                        <input type="number" min="-999" max="999" name="filesData[order][{{ image.id }}]"
+                               class="form-control col-sm-1"
+                               id="order_{{ image.id }}" value="{{ image.order }}">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="description_{{ image.id }}">Описание</label>
+                <div class="col-sm-8">
+                    <textarea id="description_{{ image.id }}" class="form-control col-sm-8"
+                              name="filesData[description][{{ image.id }}]">{{ image.description }}</textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="info_{{ image.id }}">Параметры</label>
+                <div class="col-sm-8">
+                    <textarea id="info_{{ image.id }}" class="form-control col-sm-8"
+                              name="filesData[info][{{ image.id }}]">{{ image.info.manual }}</textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-1">
+            <div class="checkbox">
+                <label><input type="checkbox" name="filesRm[]" value="{{ image.id }}"></label>
+            </div>
+        </div>
+
+    </div>
+    {% if not loop.last %}
+        <hr width="60%" size="1">
+    {% endif %}
+{% endfor %}
+
+<hr width="90%">
+
+<div class="row">
+    <div class="col-md-12">
+        <div id="preview" style="margin-bottom: 15px"></div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label" for="files">Добавить:</label>
+            <div class="col-md-8">
+                <input id="files" name="files[]" class="file-inputs btn-primary" title="Выбрать файлы" type="file" multiple accept="photo">
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+{{ asset_js_once(["deltaphp/attach/src/Attach/assets/js/imajesUploader.js"], default, true) }}
+{{ asset_js_once(["deltaphp/attach/src/Attach/assets/js/bootstrap.file-input.js"], default, true) }}
+<script>
+    $(document).ready(function () {
+        $('.file-inputs').bootstrapFileInput();
+    });
+</script>
+
