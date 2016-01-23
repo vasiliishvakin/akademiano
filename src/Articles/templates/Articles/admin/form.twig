@@ -4,9 +4,9 @@
     {{ parent() }}
     {{ asset_js(["ckeditor/ckeditor.js"], default, true) }}
     <script>
-        $(document).ready(function () {
-            CKEDITOR.replace( '.ckeditor' );
-        });
+//        $(document).ready(function () {
+//            CKEDITOR.replace( '.ckeditor' );
+//        });
     </script>
 {% endblock head %}
 
@@ -62,32 +62,7 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <div class="col-md-4">
-                    <p>Remove Images:</p>
-                    <ul>
-                        {% for image in item.images %}
-                            <li>
-                                <img src="{{ image.uri("thumb") }}" alt=""/>
-                                <label class="checkbox-inline">
-                                    <input type="checkbox" name="filesRm[]" value="{{ image.id }}">
-                                </label>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-
-            <!-- File Button -->
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="files">New Images</label>
-                <div class="row">
-                    <div class="col-md-4" id="preview"></div>
-                </div>
-                <div class="col-md-4">
-                    <input id="files" name="files[]" class="input-file" type="file" multiple  accept="image">
-                </div>
-            </div>
+            {% include "attachImagesFields.twig" %}
 
             <div class="form-group">
                 <div class="col-md-4 col-md-offset-4">

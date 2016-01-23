@@ -23,6 +23,7 @@
 {% endblock aside %}
 
 {% block article %}
+    vsvvfa
     {% for item in items %}
         <section>
             <h2 class="article-title"><a href="/articles/id{{ "%09s"|format(item.id) }}">{{ item.title }}</a></h2>
@@ -41,7 +42,7 @@
                 {% if item.titleImage %}
                     <div class="article-thumb thumbnail">
                         <a class="photo-thumb" href="{{ item.titleImage.uri("origin") }}">
-                            <img src="{{ item.titleImage.uri("square-medium") }}"/>
+                            <img src="{{ item.titleImage.uri("medium") }}"/>
                         </a>
                     </div>
                 {% endif %}

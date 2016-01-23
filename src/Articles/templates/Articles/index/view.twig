@@ -3,10 +3,7 @@
 {% block head %}
     {{ parent() }}
     {% include "colorbox.twig" %}
-    <script type="text/javascript" src="http://vk.com/js/api/openapi.js?111"></script>
-
     <script type="text/javascript" src="static/js/calendar.js"></script>
-    {#<link rel="stylesheet" href="static/css/place.css">#}
 {% endblock head %}
 
 {% block aside %}
@@ -58,7 +55,7 @@
                 <h3>Фотографии к статье</h3>
 
                 <div class="list">
-                    {% for image in item.images %}
+                    {% for image in item.otherImages %}
                         <div class="thumbnail">
                             <a class="photo-thumb" href="{{ image.uri("origin") }}">
                                 <img src="{{ image.uri("medium") }}"/>
