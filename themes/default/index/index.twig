@@ -22,7 +22,7 @@
 
 {% endblock head %}
 
-{% block container %}
+{% block content %}
     <div class="container-narrow">
         <div class="jumbotron">
             <h1>
@@ -128,10 +128,10 @@ class NewController extends AbstractController
 &lt;html&gt;
     &lt;div class=”header”&gt;Header content&lt;/div&gt;
     &lt;div class=”body”&gt;
-                   {% block content %}
-                       Big text about DeltaPHP - new fast PHP framework...
-                       Current version: {{ version }}
-                   {% endblock %}
+                   	&#123;% block content %&#125;
+                        Big text about DeltaPHP - new fast PHP framework...
+                        Current version: 	&#123;&#123; version &#125;&#125;
+                    &#123;% endblock %&#125;
                    &lt;/div&gt;
     &lt;div class=”footer”&gt;&lt;/div&gt;
 &lt;/html&gt;</pre>
@@ -151,4 +151,4 @@ class NewController extends AbstractController
             SyntaxHighlighter.all()
         </script>
     </div>
-{% endblock container %}
+{% endblock content %}

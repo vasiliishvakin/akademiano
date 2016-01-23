@@ -65,11 +65,11 @@ return [
         "adapter" => "PgSequenceUuidComplexShort",
     ],
     "modules" => [
-        "DeltaSkeletonModule",
         "DeltaDb",
         "Pages",
         "Acl",
         "User",
+        "PermAuth",
         "DictDir",
         "SiteMenu",
         "Articles",

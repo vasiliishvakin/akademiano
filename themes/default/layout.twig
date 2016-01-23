@@ -30,30 +30,41 @@
 <body>
 
 {% block body %}
-    <div id="content">
-        {% block container %}
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        {% block content %}
+    <div class="container">
+        {% block content %}
+            <div class="row">
+                <aside class="col-md-3">
+                    {% block aside %}
 
-                        {% endblock content %}
-                    </div>
+                    {% endblock aside %}
+                </aside>
+                <article class="col-md-9">
+                    {% block article %}
+
+                    {% endblock article %}
+                </article>
+            </div>
+        {% endblock content %}
+    </div>
+
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 footer">
+                    {% block footer %}
+                        <p>© <a href="http://deltaphp.org">DeltaPHP</a> 2014</p>
+                    {% endblock footer %}
                 </div>
             </div>
-        {% endblock container %}
-    </div>
+        </div>
+    </footer>
 
-    <hr>
-    <div class="footer">
-        <p style="text-align: center">
-            © <a href="http://deltaphp.org">DeltaPHP</a> 2014
-        </p>
-    </div>
-
-    {% block counter %}
-
-    {% endblock counter %}
+    {% if includeAnalitics %}
+        {% block counters %}
+            {% include "analitics.twig" %}
+        {% endblock counters %}
+    {% endif %}
 
 {% endblock body %}
 

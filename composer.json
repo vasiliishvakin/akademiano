@@ -26,7 +26,6 @@
   ],
   "require": {
     "deltaphp/deltacore": "^2.0",
-    "deltaphp/deltaskeletonmodule": "^1.0",
     "twig/twig": "~1.0",
     "deltaphp/pages": "^1.0",
     "robmorgan/phinx": "dev-deltaphp",
