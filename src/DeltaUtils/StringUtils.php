@@ -231,4 +231,10 @@ class StringUtils
     {
         return false !== strpos($value, "\\");
     }
+
+    public static function isJson($value)
+    {
+        json_decode($value);
+        return (json_last_error() == JSON_ERROR_NONE);
+    }
 }
