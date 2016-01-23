@@ -847,12 +847,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/user.git",
-                "reference": "7d43c8f450604da3c9a35243652820f4830d5428"
+                "reference": "070c260458664f6cd26c37332b30c7b00c76e86f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/user/zipball/7d43c8f450604da3c9a35243652820f4830d5428",
-                "reference": "7d43c8f450604da3c9a35243652820f4830d5428",
+                "url": "https://api.github.com/repos/DeltaPHP/user/zipball/070c260458664f6cd26c37332b30c7b00c76e86f",
+                "reference": "070c260458664f6cd26c37332b30c7b00c76e86f",
                 "shasum": ""
             },
             "require": {
@@ -878,7 +878,7 @@
                 }
             ],
             "description": "User manager module",
-            "time": "2016-01-23 05:33:45"
+            "time": "2016-01-23 17:34:36"
         },
         {
             "name": "deltaphp/uuid",
