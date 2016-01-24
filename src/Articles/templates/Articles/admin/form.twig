@@ -3,10 +3,19 @@
 {% block head %}
     {{ parent() }}
     {{ asset_js(["ckeditor/ckeditor.js"], default, true) }}
+
+    <style>
+        .spoiler-block {
+            display: none;
+        }
+    </style>
+
     <script>
-//        $(document).ready(function () {
-//            CKEDITOR.replace( '.ckeditor' );
-//        });
+        $(document).ready(function () {
+            $(document).on('click', '.spoiler-btn', function () {
+                $(".spoiler-block").toggle();
+            })
+        });
     </script>
 {% endblock head %}
 
@@ -26,7 +35,8 @@
                 {% endif %}
 
                 <div class="col-md-8">
-                    <input id="title" name="title" type="text" placeholder="Title" class="form-control input-md" required="" value="{{ item.title }}">
+                    <input id="title" name="title" type="text" placeholder="Title" class="form-control input-md"
+                           required="" value="{{ item.title }}">
 
                 </div>
             </div>
@@ -38,7 +48,8 @@
                 <div class="col-md-8">
                     <select id="categories" name="categories[]" class="form-control" multiple="multiple">
                         {% for category in categories %}
-                            <option value="{{ category.id }}" {% if category.active %}selected{% endif %}>{{ category.name }}</option>
+                            <option value="{{ category.id }}"
+                                    {% if category.active %}selected{% endif %}>{{ category.name }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -62,12 +73,42 @@
                 </div>
             </div>
 
+            {#dates#}
+            <div class="form-group">
+                <div class="col-md-2 col-md-offset-10">
+                    <a href="javascript:void(0)" class="btn btn-info spoiler-btn">Настройки даты <span class="spoiler-icon glyphicon glyphicon-chevron-down"></span></a>
+                </div>
+            </div>
+            <div class="spoiler-block">
+                <!-- Text input-->
+                <div class="form-group">
+                    <label class="col-md-2 col-md-offset-7 control-label" for="created">Создано</label>
+                    <div class="col-md-3">
+                        <input id="created" name="created" type="datetime" class="form-control" value="{{ item.created|date("Y-m-d H:i") }}">
+
+                    </div>
+                </div>
+
+                <!-- Text input-->
+                <div class="form-group">
+                    <label class="col-md-2 col-md-offset-7 control-label" for="changed">Изменено</label>
+                    <div class="col-md-3">
+                        <input id="changed" name="changed" type="datetime" class="form-control" value="{{ item.changed|date("Y-m-d H:i") }}">
+
+                    </div>
+                </div>
+            </div>
+            {#end dates#}
+
+
             {% include "attachImagesFields.twig" %}
 
             <div class="form-group">
                 <div class="col-md-4 col-md-offset-4">
-                    <a href="/admin/articles" class="btn btn-warning"><span class="glyphicon glyphicon-backward"></span> Back</a>
-                    <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-save"></span> Save</button>
+                    <a href="/admin/articles" class="btn btn-warning"><span class="glyphicon glyphicon-backward"></span>
+                        Back</a>
+                    <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-save"></span> Save
+                    </button>
                 </div>
             </div>
 
