@@ -272,12 +272,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/articles.git",
-                "reference": "b82a31db7be30e71ef7a6b6be9b7cd4cfd149727"
+                "reference": "02db108580e0e8c4a33610e75ab8aaeff4456e8f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/articles/zipball/b82a31db7be30e71ef7a6b6be9b7cd4cfd149727",
-                "reference": "b82a31db7be30e71ef7a6b6be9b7cd4cfd149727",
+                "url": "https://api.github.com/repos/DeltaPHP/articles/zipball/02db108580e0e8c4a33610e75ab8aaeff4456e8f",
+                "reference": "02db108580e0e8c4a33610e75ab8aaeff4456e8f",
                 "shasum": ""
             },
             "require": {
@@ -311,7 +311,7 @@
                 }
             ],
             "description": "Articles module",
-            "time": "2016-01-23 05:45:49"
+            "time": "2016-01-24 15:55:20"
         },
         {
             "name": "deltaphp/attach",
@@ -356,12 +356,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/DeltaCore.git",
-                "reference": "36d748fda1d30c1b92ec2a95040a119bbbddb854"
+                "reference": "dec46c59272ec9dc9c9938bba4fcdf75346e52ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/DeltaCore/zipball/36d748fda1d30c1b92ec2a95040a119bbbddb854",
-                "reference": "36d748fda1d30c1b92ec2a95040a119bbbddb854",
+                "url": "https://api.github.com/repos/DeltaPHP/DeltaCore/zipball/dec46c59272ec9dc9c9938bba4fcdf75346e52ac",
+                "reference": "dec46c59272ec9dc9c9938bba4fcdf75346e52ac",
                 "shasum": ""
             },
             "require": {
@@ -388,7 +388,7 @@
                 }
             ],
             "description": "Delta PHP framework - fast, light, easy (core)",
-            "time": "2016-01-23 05:10:52"
+            "time": "2016-01-24 15:47:26"
         },
         {
             "name": "deltaphp/deltadb",
@@ -694,12 +694,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/Pages.git",
-                "reference": "5a9935c5e1cd560c35bd32ab0947632d2fd256f1"
+                "reference": "7e3adc68785236475ac69f8ba2d237ccf47d5904"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/Pages/zipball/5a9935c5e1cd560c35bd32ab0947632d2fd256f1",
-                "reference": "5a9935c5e1cd560c35bd32ab0947632d2fd256f1",
+                "url": "https://api.github.com/repos/DeltaPHP/Pages/zipball/7e3adc68785236475ac69f8ba2d237ccf47d5904",
+                "reference": "7e3adc68785236475ac69f8ba2d237ccf47d5904",
                 "shasum": ""
             },
             "require": {
@@ -730,7 +730,7 @@
                 }
             ],
             "description": "DeltaPagesModule",
-            "time": "2016-01-23 05:49:17"
+            "time": "2016-01-23 18:03:57"
         },
         {
             "name": "deltaphp/perm-auth",
@@ -847,12 +847,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/user.git",
-                "reference": "070c260458664f6cd26c37332b30c7b00c76e86f"
+                "reference": "2282b16e966a4992a4f7aa0058691065dc50112e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/user/zipball/070c260458664f6cd26c37332b30c7b00c76e86f",
-                "reference": "070c260458664f6cd26c37332b30c7b00c76e86f",
+                "url": "https://api.github.com/repos/DeltaPHP/user/zipball/2282b16e966a4992a4f7aa0058691065dc50112e",
+                "reference": "2282b16e966a4992a4f7aa0058691065dc50112e",
                 "shasum": ""
             },
             "require": {
@@ -878,7 +878,7 @@
                 }
             ],
             "description": "User manager module",
-            "time": "2016-01-23 17:34:36"
+            "time": "2016-01-24 15:49:02"
         },
         {
             "name": "deltaphp/uuid",
