@@ -7,7 +7,7 @@ namespace User\Model;
 
 
 use DeltaCore\Prototype\AbstractEntity;
-use DeltaCore\Prototype\Parts\TimeStamp;
+use DeltaCore\Prototype\Parts\TimeStampTrait;
 use DeltaDb\EntityInterface;
 use DeltaDb\Model\Type\Json;
 
@@ -19,7 +19,7 @@ use DeltaDb\Model\Type\Json;
  */
 class UserProvider extends AbstractEntity implements EntityInterface {
 
-    use TimeStamp;
+    use TimeStampTrait;
 
     protected $id;
     protected $provider;
