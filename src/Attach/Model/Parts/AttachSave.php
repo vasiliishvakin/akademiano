@@ -52,6 +52,10 @@ trait AttachSave
         $fileDataFunction = function ($id, &$data) {
             $fileData = [];
             foreach($data as $paramName => $paramData) {
+                if (is_numeric($id) &&  isset($paramData[(integer)$id])) {
+                    $id = (integer) $id;
+                }
+
                 if (isset($paramData[$id])) {
                     $fileData[$paramName] = $paramData[$id];
                     unset($data[$paramName][$id]);
