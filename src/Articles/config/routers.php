@@ -13,13 +13,29 @@ return [
     "articles_list" => [
         "methods" => [\DeltaRouter\Route::METHOD_GET],
         "patterns" => [
-            "type" => \DeltaRouter\RoutePattern::TYPE_REGEXP,
+            "type" => \DeltaRouter\RoutePattern::TYPE_FIRST_PREFIX,
             "value" => "^/articles/?(?P<section>\w+)?/?(?P<id>\d+)?$",
         ],
         "action" => ["index", "list"]
     ],
 
-    ["/api/article/dates", ["api", "dates"]],
+    "sitemap_articles" => [
+        "methods" => [\DeltaRouter\Route::METHOD_GET],
+        "patterns" => [
+            "type" => \DeltaRouter\RoutePattern::TYPE_FIRST_PREFIX,
+            "value" => "/articles-list",
+        ],
+        "action" => ["list", "list"]
+    ],
+
+    "api_articles_dates" => [
+        "methods" => [\DeltaRouter\Route::METHOD_GET],
+        "patterns" => [
+            "type" => \DeltaRouter\RoutePattern::TYPE_FIRST_PREFIX,
+            "value" => "/api/article/dates",
+        ],
+        "action" => ["api", "dates"]
+    ],
 
     "articles_admin_add" => [
         "methods" => [\DeltaRouter\Route::METHOD_GET],

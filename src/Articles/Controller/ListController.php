@@ -8,7 +8,7 @@ namespace Articles\Controller;
 
 class ListController extends IndexController
 {
-    public function listAction()
+    public function listAction(array $params = [])
     {
         $manager = $this->getArticlesManager();
         $count = $manager->count();
@@ -20,7 +20,7 @@ class ListController extends IndexController
         $this->getView()->assignArray($pageInfo);
         $this->getView()->assign("countItems", $count);
         $this->getView()->assign("pageTitle", "Полный список статей gisNote");
-        $this->getView()->assign("pageDescription", "Список статей gisNote" );
+        $this->getView()->assign("pageDescription", "Список статей gisNote");
         $changed = $manager->getLastChangedDate();
         $this->getResponse()->setModified($changed);
     }
