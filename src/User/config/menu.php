@@ -2,6 +2,6 @@
 
 return [
     "admin" => [
-        ["text" => "Профиль", "route" => "user"],
+        ["text" => "Профиль", "route" => "user_profile"],
     ],
 ];

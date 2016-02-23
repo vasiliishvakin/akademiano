@@ -4,11 +4,11 @@ return [
     "login" => ['/login', ['user', 'login']],
     "registration" => ['/registration', ['user', 'registration']],
     "logout" => ['/logout', ['user', 'logout']],
-    "user" => [
+    "user_profile" => [
         "methods" => [\DeltaRouter\Route::METHOD_GET],
         "patterns" => [
             "type" => \DeltaRouter\RoutePattern::TYPE_REGEXP,
-            "value" => "^/user/?(?P<id>\w+)?$",
+            "value" => "^/user/?(?P<id>\w+)?/?(?P<page>\w+)?$",
         ],
         "action" => ["user", "user"],
     ],

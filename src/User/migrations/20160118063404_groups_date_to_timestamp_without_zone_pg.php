@@ -25,10 +25,14 @@ class GroupsDateToTimestampWithoutZonePg extends AbstractMigration
      * Remember to call "create()" or "update()" and NOT "save()" when working
      * with the Table class.
      */
-    public function change()
+
+    public function up()
     {
+        $sql = "update groups set created=now() where created is null";
+        $this->execute($sql);
+        
         $table = $this->table("groups");
-        $table->changeColumn("created", "timestamp", ["timezone" => false, "default" => "CURRENT_TIMESTAMP"])
+        $table->changeColumn("created", "timestamp", ["timezone" => false, "default" => "now"])
             ->update();
     }
 }
