@@ -8,10 +8,19 @@ class UuidComplexShortPg extends AbstractMigration
 
     public function up()
     {
-        define('ROOT_DIR', realpath(__DIR__ . '/..')); // надо исключить realpath из кода и вынести в конфиг
-        define('PUBLIC_DIR', ROOT_DIR . '/public');
-        define('VENDOR_DIR', ROOT_DIR . '/vendor');
-        define('DATA_DIR', ROOT_DIR . '/data');
+        if (!defined("ROOT_DIR")) {
+            define('ROOT_DIR', realpath(__DIR__ . '/..'));
+        }
+        if (!defined("PUBLIC_DIR")) {
+            define('PUBLIC_DIR', ROOT_DIR . '/public');
+        }
+        if (!defined("VENDOR_DIR")) {
+            define('VENDOR_DIR', ROOT_DIR . '/vendor');
+        }
+        if (!defined("DATA_DIR")) {
+            define('DATA_DIR', ROOT_DIR . '/data');
+        }
+
 
         $loader = include ROOT_DIR . "/vendor/autoload.php";
 
