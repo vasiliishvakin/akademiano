@@ -5,6 +5,8 @@
 
 namespace DeltaUtils;
 
+use PhpOption\None;
+
 class ArrayUtils
 {
     const FIRST_IN_ARRAY = '____first';
@@ -81,6 +83,16 @@ class ArrayUtils
         }
 
         return $current;
+    }
+
+    public static function getMaybe($array, $path)
+    {
+        $value = self::get($array, $path);
+        if (null !== $value) {
+            return new \PhpOption\Some($value);
+        } else {
+            return \PhpOption\None::create();
+        }
     }
 
     /**
