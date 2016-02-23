@@ -199,26 +199,90 @@ class Route
         return $url;
     }
 
-    public static function isShort($route)
+    public static function isShort($routeData)
     {
-        if (is_array($route) && (!isset($route["patterns"]) || !isset($route["action"]))) {
-            return (count($route) === 2 && ArrayUtils::getArrayType($route) === -1 && mb_strpos($route[0], "/") === 0);
+        if (is_array($routeData) && (!isset($routeData["patterns"]) || !isset($routeData["action"]))) {
+            return (count($routeData) === 2 && ArrayUtils::getArrayType($routeData) === -1 && mb_strpos($routeData[0], "/") === 0);
         }
 
         return false;
     }
 
-    public static function shortNormalize(array $route)
+    public static function shortNormalize(array $routeData)
     {
-        $routeNew = [
+        if (count($routeData) < 2) {
+            throw new \RuntimeException("Route mast have at least two parameters, first for pattern and second for action: " . \DeltaUtils\Debug::var2str($routeData));
+        }
+        $routeDataNew = [
             "patterns" => [
                 [
-                    "value" => $route[0],
+                    "value" => $routeData[0],
                 ],
             ],
-            "action" => $route[1],
+            "action" => $routeData[1],
         ];
 
-        return $routeNew;
+        return $routeDataNew;
+    }
+
+    public static function isOld($routeData)
+    {
+        if (is_array($routeData) && (!isset($routeData["patterns"]) || !isset($routeData["action"]))) {
+            if (count($routeData) === 2 && ArrayUtils::getArrayType($routeData) === -1) {
+                $flag = explode("::", $routeData[0]);
+                if (count($flag) < 2) {
+                    return false;
+                }
+                $flag = $flag[0];
+                return $flag === "full" || $flag === "reg" || $flag === "str";
+            }
+        }
+
+        return false;
+    }
+
+    public static function oldNormalize(array $routeData)
+    {
+        if (count($routeData) < 2) {
+            throw new \RuntimeException("Route mast have at least two parameters, first for pattern and second for action: " . \DeltaUtils\Debug::var2str($routeData));
+        }
+        $flag = explode("::", $routeData[0]);
+        if (count($flag) < 2) {
+            return false;
+        }
+        $value = $flag[1];
+        $flag = $flag[0];
+
+        $pattern = ["value" => $value];
+
+        switch ($flag) {
+            case "str" :
+                break;
+            case "full" :
+                $pattern["type"] = RoutePattern::TYPE_FULL;
+                break;
+            case "reg" :
+                $pattern["type"] = RoutePattern::TYPE_REGEXP;
+                break;
+            default:
+                throw  new \RuntimeException("Route old flag {$flag} is unknown");
+        }
+        $routeDataNew = [
+            "patterns" => [
+                $pattern,
+            ],
+            "action" => $routeData[1],
+        ];
+        return $routeDataNew;
+    }
+
+    public static function normalize($routeData)
+    {
+        if (self::isShort($routeData)) {
+            $routeData = self::shortNormalize($routeData);
+        } elseif (self::isOld($routeData)) {
+            $routeData = self::oldNormalize($routeData);
+        }
+        return $routeData;
     }
 }
