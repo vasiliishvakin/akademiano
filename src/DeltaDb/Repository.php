@@ -604,9 +604,14 @@ class Repository implements RepositoryInterface
     {
         $fields = $this->getFieldsList();
         $data = [];
+        $fieldsData = [];
+        $rawFields = [];
         foreach ($fields as $field) {
             $value = $this->getField($entity, $field);
-            if ($value instanceof \DeltaDb\EntityInterface) {
+            if ($value instanceof \DeltaDb\Model\Type\ReservableInterface) {
+                $value = $value->toReserve($this->getAdapter());
+                $rawFields[] = $field;
+            } elseif ($value instanceof \DeltaDb\EntityInterface) {
                 $value = $value->getId();
             } elseif ($value instanceof \DateTime) {
                 $value = $value->format("Y-m-d H:i:s");
@@ -615,9 +620,9 @@ class Repository implements RepositoryInterface
             } elseif (is_bool($value)) {
                 $value = $value ? 't' : 'f';
             }
-            $data[$field] = $value;
+            $fieldsData[$field] = $value;
         }
-        return ["fields" => $data];
+        return ["fields" => $fieldsData, "rawFields" => $rawFields];
     }
 
     public function count(array $criteria = [], $entityClass = null)
