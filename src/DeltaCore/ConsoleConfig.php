@@ -76,6 +76,15 @@ class ConsoleConfig extends DefaultApplicationConfig
         $this->application = $application;
     }
 
+    protected function configure()
+    {
+        parent::configure();
+        $this
+            ->setName('DeltaApp')
+            ->setVersion('1.0.0')
+            ->prepareCommands();
+    }
+
     public function loadCommands()
     {
         $appConsole = ROOT_DIR . "/App/config/console.php";
@@ -88,6 +97,30 @@ class ConsoleConfig extends DefaultApplicationConfig
         return $console;
     }
 
+    protected function prepareCommands()
+    {
+        $commands = $this->loadCommands();
+        foreach ($commands as $name => $params) {
+            $command = $this->beginCommand($name);
+            if (isset($params["description"])) {
+                $command->setDescription($params["description"]);
+            }
+            $command->setHandler($params["handler"]);
+            if (isset($params["arguments"])) {
+                foreach ($params["arguments"] as $argument) {
+                    call_user_func_array([$command, "addArgument"], $argument);
+                }
+            }
+            if (isset($params["options"])) {
+                $defaultOption = [
+                    "shortName" => null, "flags" => 0, "description" => null, "default" => null, "valueName" => '...'
+                ];
+                foreach ($params["options"] as $name => $option) {
+                    $option["longName"] = $name;
+                    $option = array_merge($defaultOption, $option);
+                    $this->addOption($option["longName"], $option["shortName"], $option["flags"], $option["description"], $option["default"], $option["valueName"]);
+                }
+            }
     public function addOptionFromArray(CommandConfig $command, $name, array $params)
     {
         $default = [
