@@ -4,9 +4,11 @@
 namespace DeltaDb\Console;
 
 use DeltaCore\Application;
+use DeltaCore\ConfigLoader;
 use DeltaDb\Adapter\PgsqlAdapter;
+use DeltaUtils\YamlWriter;
+use DeltaUtils\YamlReader;
 use Webmozart\Console\Api\Args\Args;
-use Webmozart\Console\Api\Command\Command;
 use Webmozart\Console\Api\IO\IO;
 
 class DbMain
@@ -85,9 +87,97 @@ class DbMain
         }
     }
 
+    public function askOption(Args $args, IO $io, $question, $option, Callable $filter = null)
+    {
+        $io->writeLine($question);
+        $value = $io->readLine();
+        if (null !== $filter) {
+            $value = call_user_func($filter, $value);
+        }
+        $args->setOption($option, $value);
+        return $value;
+    }
+
+    public function askArgument(Args $args, IO $io, $question, $argument, Callable $filter = null)
+    {
+        $io->writeLine($question);
+        $value = $io->readLine();
+        if (null !== $filter) {
+            $value = call_user_func($filter, $value);
+        }
+        $args->setArgument($argument, $value);
+        return $value;
+    }
+
+    public function writePhinxConfig($host, $user, $password, $database)
+    {
+        $phinxFile = ROOT_DIR . "/phinx.yml";
+        if (!file_exists($phinxFile)) {
+            $dir = ROOT_DIR;
+            exec("php {$dir}/vendor/robmorgan/phinx/bin/phinx init");
+        }
+
+        $data = YamlReader::parseFile($phinxFile);
+        $data["environments"]["default_database"] = "production";
+        $data["environments"]["production"] = [
+            "adapter" => "pgsql",
+            "host" => $host,
+            "name" => $database,
+            "user" => $user,
+            "pass" => $password,
+            "port" => "5432",
+            "charset" => "utf8"
+        ];
+        $data["paths"]["migrations"]="%%PHINX_CONFIG_DIR%%/migrations";
+        $data["paths"]["seeds"]="%%PHINX_CONFIG_DIR%%/seeds";
+        unset($data["environments"]["development"]);
+        unset($data["environments"]["testing"]);
+        return YamlWriter::emitFile($data, $phinxFile, 5);
+    }
+
+    public function writeConfig($host, $user, $password, $database)
+    {
+        $configDir = $this->getApplication()->getConfigLoader()->getConfigDir(ConfigLoader::LEVEL_PROJECT);
+        $localConfigFile = "local.config.php";
+        $localConfigDistFile = "local.config.dist.php";
+        if (!file_exists($configDir . "/" . $localConfigFile)) {
+            if (file_exists($configDir . "/" . $localConfigDistFile)) {
+                $data = include $configDir . "/" . $localConfigDistFile;
+            } else {
+                $data = [];
+            }
+        } else {
+            $data = include $configDir . "/" . $localConfigFile;
+        }
+        if (!is_array($data)) {
+            $data = [];
+        }
+        $data["database"]["default"] ["host"] = $host;
+        $data["database"]["default"] ["name"] = $database;
+        $data["database"]["default"] ["user"] = $user;
+        $data["database"]["default"] ["password"] = $password;
+
+        $content = '<?php' . PHP_EOL . 'return ' . var_export($data, true) . ";\n";
+        file_put_contents($configDir ."/" .$localConfigFile, $content, LOCK_EX | FILE_TEXT);
+    }
+
     public function handleCreate(Args $args, IO $io)
     {
-        $this->initDbAdapter($args->getOption("host"), $args->getOption("user"), $args->getOption("password"));
+        $askMode = $args->isOptionSet("ask");
+        if ($askMode) {
+            $this->askOption($args, $io, "Please enter host:", "host");
+            $this->askOption($args, $io, "Please enter user:", "user");
+            $this->askOption($args, $io, "Please enter password:", "password");
+            $this->askArgument($args, $io, "Please enter database name:", "database");
+            $this->askOption($args, $io, "Do you wont delete db if exist (1|0)", "delete");
+            $this->askOption($args, $io, "Do you wont delete disconnect other users (1|0)", "kill");
+        }
+
+        $host = $args->getOption("host");
+        $user = $args->getOption("user");
+        $password = $args->getOption("password");
+
+        $this->initDbAdapter($host, $user, $password);
 
         $database = $args->getArgument("database");
 
@@ -119,7 +209,8 @@ class DbMain
         if (!$result) {
             return 1;
         }
+        $this->writePhinxConfig($host, $user, $password, $database);
+        $this->writeConfig($host, $user, $password, $database);
+        return 0;
     }
-
-
 }

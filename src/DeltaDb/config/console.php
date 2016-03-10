@@ -59,6 +59,11 @@ return [
                         "shortName" => "k",
                         "description" => "kill all connections before delete",
                         "flags" => Option::NO_VALUE | Option::BOOLEAN,
+                    ],
+                    "ask" => [
+                        "shortName" => "a",
+                        "description" => "ask all params from console input",
+                        "flags" => Option::NO_VALUE | Option::BOOLEAN,
                     ]
                 ],
                 "arguments" => [

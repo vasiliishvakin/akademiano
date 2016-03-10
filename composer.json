@@ -16,7 +16,7 @@
     }
   },
   "require": {
-    "deltaphp/deltautils": "~1.0",
+    "deltaphp/deltautils": "^1.4",
     "ext-pgsql": "*"
   }
 }
