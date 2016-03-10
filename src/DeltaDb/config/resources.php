@@ -9,19 +9,26 @@ return [
             return $dbAdapter;
         };
     },
+    "dbAdapter" => function ($c) {
+        return $c["dbDefaultAdapterClosure"];
+    },
     "relationsFactory" => function ($c) {
         $factory = new \DeltaDb\Model\Relations\relationsFactory();
         $relations = $c->getConfig()->get(["DeltaDb", "relations"]);
         if ($relations) {
             $relations = $relations->toArray();
         }
-        foreach($relations as $name=>$params) {
+        foreach ($relations as $name => $params) {
             $managerFirst = $params[0];
             $managerSecond = $params[1];
             $factory->setManagerParams(
-              $name,
-              function() use ($c, $managerFirst) {return $c[$managerFirst];},
-              function() use ($c, $managerSecond) {return $c[$managerSecond];}
+                $name,
+                function () use ($c, $managerFirst) {
+                    return $c[$managerFirst];
+                },
+                function () use ($c, $managerSecond) {
+                    return $c[$managerSecond];
+                }
             );
         }
 

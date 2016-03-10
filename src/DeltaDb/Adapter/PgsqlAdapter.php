@@ -69,6 +69,11 @@ class PgsqlAdapter extends AbstractAdapter
         return pg_query_params($query, $params);
     }
 
+    public function getError()
+    {
+        return pg_last_error($this->getConnection());
+    }
+
     /**
      * @param int $isTransaction
      */
