@@ -15,6 +15,7 @@
         "php": "~5.6",
         "ext-pcre": "*",
         "ext-mbstring": "*",
-        "phpoption/phpoption": "^1.5"
+        "phpoption/phpoption": "^1.5",
+        "symfony/yaml": "^3.0.3"
     }
 }
