@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6ee5c26172c31e600042dcc248b1987f",
-    "content-hash": "ca2eb591083f9c3e268a7fe20c0a4444",
+    "hash": "f4bf68fc92424fc837fe2de2d60456b4",
+    "content-hash": "d9c3c02eddccdf146c8d2424aa36017f",
     "packages": [
         {
             "name": "bower-asset/SyntaxHighlighter",
@@ -513,23 +513,24 @@
         },
         {
             "name": "deltaphp/deltautils",
-            "version": "1.3",
+            "version": "1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/DeltaUtils.git",
-                "reference": "4459b25ebaf1ef2d9061e766aee63ba581548300"
+                "reference": "6b50af7b9843c7ffd90156f071e43aee585476f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/DeltaUtils/zipball/4459b25ebaf1ef2d9061e766aee63ba581548300",
-                "reference": "4459b25ebaf1ef2d9061e766aee63ba581548300",
+                "url": "https://api.github.com/repos/DeltaPHP/DeltaUtils/zipball/6b50af7b9843c7ffd90156f071e43aee585476f5",
+                "reference": "6b50af7b9843c7ffd90156f071e43aee585476f5",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
                 "ext-pcre": "*",
                 "php": "~5.6",
-                "phpoption/phpoption": "^1.5"
+                "phpoption/phpoption": "^1.5",
+                "symfony/yaml": "^3.0.3"
             },
             "type": "library",
             "autoload": {
@@ -548,7 +549,7 @@
                 }
             ],
             "description": "good tools and utils",
-            "time": "2016-03-10 05:26:40"
+            "time": "2016-03-10 11:39:43"
         },
         {
             "name": "deltaphp/dictdir",
@@ -1280,12 +1281,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "fc80e5986663859afb84d26baeb41f17ac330e43"
+                "reference": "e2e897cb15c612215d5983970a06b0b6eb009e16"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/fc80e5986663859afb84d26baeb41f17ac330e43",
-                "reference": "fc80e5986663859afb84d26baeb41f17ac330e43",
+                "url": "https://api.github.com/repos/symfony/console/zipball/e2e897cb15c612215d5983970a06b0b6eb009e16",
+                "reference": "e2e897cb15c612215d5983970a06b0b6eb009e16",
                 "shasum": ""
             },
             "require": {
@@ -1332,7 +1333,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2016-03-04 07:56:56"
+            "time": "2016-03-10 11:16:56"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -1508,12 +1509,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "8168534f91e77282a0ebf2d7ee97750515b2cb75"
+                "reference": "101c171199fd40c555e60998c63de59f83661e9c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/8168534f91e77282a0ebf2d7ee97750515b2cb75",
-                "reference": "8168534f91e77282a0ebf2d7ee97750515b2cb75",
+                "url": "https://api.github.com/repos/symfony/process/zipball/101c171199fd40c555e60998c63de59f83661e9c",
+                "reference": "101c171199fd40c555e60998c63de59f83661e9c",
                 "shasum": ""
             },
             "require": {
@@ -1549,7 +1550,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2016-03-04 07:56:56"
+            "time": "2016-03-10 11:16:56"
         },
         {
             "name": "symfony/yaml",
