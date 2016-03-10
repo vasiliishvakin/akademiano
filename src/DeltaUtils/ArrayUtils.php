@@ -85,13 +85,32 @@ class ArrayUtils
         return $current;
     }
 
-    public static function getMaybe($array, $path)
+    public static function getMaybe(array $array, $path)
     {
-        $value = self::get($array, $path);
-        if (null !== $value) {
-            return new \PhpOption\Some($value);
+        if (self::issetByPath($array, $path)) {
+            return new \PhpOption\Some(self::get($array, $path));
         } else {
             return \PhpOption\None::create();
+        }
+    }
+
+    /**
+     * @param array $array
+     * @param $path
+     * @param \Callable|array $callback
+     * @param array|null $arguments
+     */
+    public static function getAndCall(array $array, $path, $callback, array $arguments = null)
+    {
+        if (self::issetByPath($array, $path)) {
+            $value = self::get($array, $path);
+            if (null !== $arguments) {
+                array_unshift($arguments, $value);
+            }
+            else {
+                $arguments = [$value];
+            }
+            call_user_func_array($callback, $arguments);
         }
     }
 
@@ -170,7 +189,7 @@ class ArrayUtils
             if (!is_array($value)) {
                 $valArray[$key] = $default;
             } else {
-                $valArray[$key] = self::getByPath($value, $path, $default);
+                $valArray[$key] = self::get($value, $path, $default);
             }
         }
 
@@ -286,7 +305,7 @@ class ArrayUtils
 
     public static function extract(&$array, $path, $default = null)
     {
-        $value =  self::get($array, $path, $default);
+        $value = self::get($array, $path, $default);
         $array = self::remove($array, $path);
         return $value;
     }
