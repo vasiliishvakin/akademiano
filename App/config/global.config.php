@@ -65,6 +65,7 @@ return [
         "adapter" => "PgSequenceUuidComplexShort",
     ],
     "modules" => [
+        "DeltaCore",
         "DeltaDb",
         "Pages",
         "Acl",
