@@ -400,12 +400,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/DeltaDb.git",
-                "reference": "509a02ade588811d99797fa17107c72f53de04cc"
+                "reference": "6e3e1b8c783f86eb5c9ba2dd5285672125c7f6d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/DeltaDb/zipball/509a02ade588811d99797fa17107c72f53de04cc",
-                "reference": "509a02ade588811d99797fa17107c72f53de04cc",
+                "url": "https://api.github.com/repos/DeltaPHP/DeltaDb/zipball/6e3e1b8c783f86eb5c9ba2dd5285672125c7f6d5",
+                "reference": "6e3e1b8c783f86eb5c9ba2dd5285672125c7f6d5",
                 "shasum": ""
             },
             "require": {
@@ -429,7 +429,7 @@
                 }
             ],
             "description": "DB models for delta framework",
-            "time": "2016-03-10 11:43:49"
+            "time": "2016-03-11 15:17:41"
         },
         {
             "name": "deltaphp/deltarouter",
