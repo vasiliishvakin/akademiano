@@ -90,7 +90,7 @@ class DbMain
     public function askOption(Args $args, IO $io, $question, $option, Callable $filter = null)
     {
         $io->writeLine($question);
-        $value = $io->readLine();
+        $value = trim($io->readLine());
         if (null !== $filter) {
             $value = call_user_func($filter, $value);
         }
@@ -101,7 +101,7 @@ class DbMain
     public function askArgument(Args $args, IO $io, $question, $argument, Callable $filter = null)
     {
         $io->writeLine($question);
-        $value = $io->readLine();
+        $value = trim($io->readLine());
         if (null !== $filter) {
             $value = call_user_func($filter, $value);
         }
