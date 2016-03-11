@@ -400,16 +400,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/DeltaDb.git",
-                "reference": "780c96ac555c9399e5f4d65a0a7f7917a1396368"
+                "reference": "509a02ade588811d99797fa17107c72f53de04cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/DeltaDb/zipball/780c96ac555c9399e5f4d65a0a7f7917a1396368",
-                "reference": "780c96ac555c9399e5f4d65a0a7f7917a1396368",
+                "url": "https://api.github.com/repos/DeltaPHP/DeltaDb/zipball/509a02ade588811d99797fa17107c72f53de04cc",
+                "reference": "509a02ade588811d99797fa17107c72f53de04cc",
                 "shasum": ""
             },
             "require": {
-                "deltaphp/deltautils": "~1.0",
+                "deltaphp/deltautils": "^1.4",
                 "ext-pgsql": "*"
             },
             "type": "library",
@@ -429,7 +429,7 @@
                 }
             ],
             "description": "DB models for delta framework",
-            "time": "2016-03-10 05:46:22"
+            "time": "2016-03-10 11:43:49"
         },
         {
             "name": "deltaphp/deltarouter",
@@ -1281,12 +1281,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "e2e897cb15c612215d5983970a06b0b6eb009e16"
+                "reference": "a2c98b8fa4dbf72980178da8f609431727d0d9cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/e2e897cb15c612215d5983970a06b0b6eb009e16",
-                "reference": "e2e897cb15c612215d5983970a06b0b6eb009e16",
+                "url": "https://api.github.com/repos/symfony/console/zipball/a2c98b8fa4dbf72980178da8f609431727d0d9cd",
+                "reference": "a2c98b8fa4dbf72980178da8f609431727d0d9cd",
                 "shasum": ""
             },
             "require": {
@@ -1333,7 +1333,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2016-03-10 11:16:56"
+            "time": "2016-03-10 19:34:37"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -1401,12 +1401,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "5fe7556a9210273b956ad29ec97222088e1f027b"
+                "reference": "5a417b32d90765f7400c1e8a73532c688b993580"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/5fe7556a9210273b956ad29ec97222088e1f027b",
-                "reference": "5fe7556a9210273b956ad29ec97222088e1f027b",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/5a417b32d90765f7400c1e8a73532c688b993580",
+                "reference": "5a417b32d90765f7400c1e8a73532c688b993580",
                 "shasum": ""
             },
             "require": {
@@ -1442,7 +1442,7 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "https://symfony.com",
-            "time": "2016-03-04 07:56:56"
+            "time": "2016-03-10 19:37:45"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -1558,12 +1558,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "801d412451594f7c9e7950a016a377798cf9dfa0"
+                "reference": "38aebd1045f91caaf25db0164e2703b21fb5359d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/801d412451594f7c9e7950a016a377798cf9dfa0",
-                "reference": "801d412451594f7c9e7950a016a377798cf9dfa0",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/38aebd1045f91caaf25db0164e2703b21fb5359d",
+                "reference": "38aebd1045f91caaf25db0164e2703b21fb5359d",
                 "shasum": ""
             },
             "require": {
@@ -1599,7 +1599,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2016-03-04 07:56:56"
+            "time": "2016-03-10 14:06:18"
         },
         {
             "name": "twig/twig",
