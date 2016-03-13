@@ -15,7 +15,8 @@
       "Model": "./",
       "Controller": "./",
       "App": "./",
-      "Maintenance": "./"
+      "Maintenance": "./",
+      "Console": "./"
     }
   },
 

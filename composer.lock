@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f4bf68fc92424fc837fe2de2d60456b4",
+    "hash": "77122e3033201f0f2c4aa54e4a18172c",
     "content-hash": "d9c3c02eddccdf146c8d2424aa36017f",
     "packages": [
         {
@@ -322,16 +322,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/attach.git",
-                "reference": "f22ce1f47c247437505f634e1e4b7e1a14fa8cd8"
+                "reference": "2d4c2e5ae7f8d047ca30d09cb57a6fc0c5de8ed7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/attach/zipball/f22ce1f47c247437505f634e1e4b7e1a14fa8cd8",
-                "reference": "f22ce1f47c247437505f634e1e4b7e1a14fa8cd8",
+                "url": "https://api.github.com/repos/DeltaPHP/attach/zipball/2d4c2e5ae7f8d047ca30d09cb57a6fc0c5de8ed7",
+                "reference": "2d4c2e5ae7f8d047ca30d09cb57a6fc0c5de8ed7",
                 "shasum": ""
             },
             "require": {
                 "deltaphp/deltadb": "~1.3",
+                "deltaphp/httpwarp": "~1.0",
                 "deltaphp/sequence": "~1.1"
             },
             "type": "library",
@@ -351,7 +352,7 @@
                 }
             ],
             "description": "Attach files to othe objects",
-            "time": "2016-02-23 03:41:07"
+            "time": "2016-03-13 10:28:49"
         },
         {
             "name": "deltaphp/deltacore",
@@ -359,12 +360,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/DeltaCore.git",
-                "reference": "06eb24d9b0b14268315f78a36103d4789674ed7a"
+                "reference": "38b106d5a168230a3cf5b0ec04f1de2946783475"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/DeltaCore/zipball/06eb24d9b0b14268315f78a36103d4789674ed7a",
-                "reference": "06eb24d9b0b14268315f78a36103d4789674ed7a",
+                "url": "https://api.github.com/repos/DeltaPHP/DeltaCore/zipball/38b106d5a168230a3cf5b0ec04f1de2946783475",
+                "reference": "38b106d5a168230a3cf5b0ec04f1de2946783475",
                 "shasum": ""
             },
             "require": {
@@ -392,7 +393,7 @@
                 }
             ],
             "description": "Delta PHP framework - fast, light, easy (core)",
-            "time": "2016-03-10 05:38:02"
+            "time": "2016-03-13 10:26:46"
         },
         {
             "name": "deltaphp/deltadb",
@@ -437,12 +438,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/DeltaRouter.git",
-                "reference": "0f8ea4b1bc1f54f1c3a8f3fbbe567c592052882f"
+                "reference": "ec382a3b6104cd17dff86f70bba653b0043c1a17"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/DeltaRouter/zipball/0f8ea4b1bc1f54f1c3a8f3fbbe567c592052882f",
-                "reference": "0f8ea4b1bc1f54f1c3a8f3fbbe567c592052882f",
+                "url": "https://api.github.com/repos/DeltaPHP/DeltaRouter/zipball/ec382a3b6104cd17dff86f70bba653b0043c1a17",
+                "reference": "ec382a3b6104cd17dff86f70bba653b0043c1a17",
                 "shasum": ""
             },
             "require": {
@@ -473,7 +474,7 @@
                 }
             ],
             "description": "Simple router for php applications",
-            "time": "2016-02-23 01:45:35"
+            "time": "2016-03-13 07:14:28"
         },
         {
             "name": "deltaphp/deltatwigext",
@@ -513,16 +514,16 @@
         },
         {
             "name": "deltaphp/deltautils",
-            "version": "1.4",
+            "version": "1.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/DeltaUtils.git",
-                "reference": "6b50af7b9843c7ffd90156f071e43aee585476f5"
+                "reference": "a8fae9fe728de8fa1388d33d940d484e7f2157d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/DeltaUtils/zipball/6b50af7b9843c7ffd90156f071e43aee585476f5",
-                "reference": "6b50af7b9843c7ffd90156f071e43aee585476f5",
+                "url": "https://api.github.com/repos/DeltaPHP/DeltaUtils/zipball/a8fae9fe728de8fa1388d33d940d484e7f2157d3",
+                "reference": "a8fae9fe728de8fa1388d33d940d484e7f2157d3",
                 "shasum": ""
             },
             "require": {
@@ -549,7 +550,7 @@
                 }
             ],
             "description": "good tools and utils",
-            "time": "2016-03-10 11:39:43"
+            "time": "2016-03-13 06:27:44"
         },
         {
             "name": "deltaphp/dictdir",
