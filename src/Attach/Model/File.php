@@ -9,6 +9,7 @@ namespace Attach\Model;
 use DeltaCore\Prototype\AbstractEntity;
 use DeltaCore\Prototype\Parts\CreatedTrait;
 use DeltaDb\EntityInterface;
+use HttpWarp\Environment;
 use UUID\Model\Parts\UuidhasInterface;
 use UUID\Model\Parts\UuidTrait;
 use UUID\Model\Parts\UuidFactoryTrait;
@@ -30,6 +31,41 @@ class File extends AbstractEntity implements EntityInterface, UuidhasInterface
     protected $isMain = false;
     protected $order = 0;
     protected $info = null;
+    /** @var  Environment */
+    protected $environment;
+
+    protected function getSystemFields()
+    {
+        $fields = parent::getSystemFields();
+        $fields[] = "rootUri";
+        $fields[] = "uri";
+        $fields[] = "environment";
+        $fields[] = "uuidFactory";
+        return $fields;
+    }
+
+    protected function getNotExportFields()
+    {
+        $fields = parent::getNotExportFields();
+        $fields[] = "url";
+        return $fields;
+    }
+
+    /**
+     * @return Environment
+     */
+    public function getEnvironment()
+    {
+        return $this->environment;
+    }
+
+    /**
+     * @param Environment $environment
+     */
+    public function setEnvironment(Environment $environment)
+    {
+        $this->environment = $environment;
+    }
 
     /**
      * @param mixed $description

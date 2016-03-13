@@ -4,6 +4,7 @@
  */
 return [
     'fileManager' => function ($c) {
+        /** @var \DeltaCore\Application $c */
         $fm = new \Attach\Model\FileManager();
         $config = $c->getConfig();
         $fm->setConfig($config);
@@ -11,6 +12,9 @@ return [
         $fm->setSequenceManager($sm);
         $uuidFactory = $c["uuidFactory"];
         $fm->setUuidFactory($uuidFactory);
+        if (isset($c["environment"])) {
+            $fm->setEnvironment($c["environment"]);
+        }
         return $fm;
     },
 ];

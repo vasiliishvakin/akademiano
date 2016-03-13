@@ -13,6 +13,7 @@ use DeltaDb\Repository;
 use DeltaUtils\FileSystem;
 use DeltaUtils\StringUtils;
 use Hashids\Hashids;
+use HttpWarp\Environment;
 use HttpWarp\File\FileInterface;
 use HttpWarp\File\UploadFile;
 use Sequence\Model\Parts\Sequence;
@@ -33,6 +34,9 @@ class FileManager extends Repository
     /** @var  UuidFactory */
     protected $uuidFactory;
 
+    /** @var  Environment */
+    protected $environment;
+
     protected $metaInfo = [
         "fields" => [
             "id",
@@ -50,6 +54,25 @@ class FileManager extends Repository
             "created",
         ]
     ];
+
+    /**
+     * @return Environment
+     */
+    public function getEnvironment()
+    {
+        if (is_null($this->environment)) {
+            $this->environment = new Environment();
+        }
+        return $this->environment;
+    }
+
+    /**
+     * @param Environment $environment
+     */
+    public function setEnvironment($environment)
+    {
+        $this->environment = $environment;
+    }
 
     public function getRelationsConfig()
     {
@@ -75,12 +98,10 @@ class FileManager extends Repository
     {
         if (is_null($this->rootUri)) {
             $this->rootUri = "http://";
-            if ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-                || $_SERVER['SERVER_PORT'] == 443
-            ) {
+            if ($this->getEnvironment()->isSrvHttps()) {
                 $this->rootUri = "https://";
             }
-            $this->rootUri .= $_SERVER["SERVER_NAME"];
+            $this->rootUri .= $this->getEnvironment()->getServerName();
         }
         return $this->rootUri;
     }
@@ -256,7 +277,7 @@ class FileManager extends Repository
     {
         /** @var File $entity */
         $entity = parent::create($data);
-        $entity->setRootUri($this->getRootUri());
+        $entity->setEnvironment($this->getEnvironment());
         $entity->setUuidFactory($this->getUuidFactory());
         return $entity;
     }

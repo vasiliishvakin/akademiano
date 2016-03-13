@@ -17,6 +17,7 @@
   },
   "require": {
     "deltaphp/deltadb": "~1.3",
-    "deltaphp/sequence": "~1.1"
+    "deltaphp/sequence": "~1.1",
+    "deltaphp/httpwarp": "~1.0"
   }
 }
