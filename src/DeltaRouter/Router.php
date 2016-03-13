@@ -233,15 +233,14 @@ class Router
 
     public function run()
     {
-
-        if ($this->getRoutes()->isEmpty()) {
-            throw new \RuntimeException("In this router urls is not defined");
-        }
-
         if ($this->isRun) {
             return;
         } //fix double run
         $this->isRun = true;
+
+        if ($this->getRoutes()->isEmpty()) {
+            throw new \RuntimeException("In this router urls is not defined");
+        }
 
         $currentMethod = $this->getRequest()->getMethod();
         $currentUrl = $this->getCurrentUrl();
