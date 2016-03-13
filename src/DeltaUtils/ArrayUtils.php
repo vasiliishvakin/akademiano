@@ -110,7 +110,7 @@ class ArrayUtils
             else {
                 $arguments = [$value];
             }
-            call_user_func_array($callback, $arguments);
+            return call_user_func_array($callback, $arguments);
         }
     }
 
