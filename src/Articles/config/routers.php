@@ -13,7 +13,7 @@ return [
     "articles_list" => [
         "methods" => [\DeltaRouter\Route::METHOD_GET],
         "patterns" => [
-            "type" => \DeltaRouter\RoutePattern::TYPE_FIRST_PREFIX,
+            "type" => \DeltaRouter\RoutePattern::TYPE_REGEXP,
             "value" => "^/articles/?(?P<section>\w+)?/?(?P<id>\d+)?$",
         ],
         "action" => ["index", "list"]
