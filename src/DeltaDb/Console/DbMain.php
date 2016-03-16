@@ -45,18 +45,14 @@ class DbMain
     /**
      * @return PgsqlAdapter
      */
-    public function initDbAdapter($host, $user, $password)
-    {
-        $dbAdapter = new \DeltaDb\Adapter\PgsqlAdapter();
-        $dbAdapter->connect("host={$host} user={$user} password={$password}");
-        $this->setDbAdapter($dbAdapter);
-    }
-
-    /**
-     * @return PgsqlAdapter
-     */
     public function getDbAdapter()
     {
+        if (null === $this->dbAdapter) {
+            $config = $this->getApplication()->getConfig(["database", 'default'], []);
+            $dbAdapter = new \DeltaDb\Adapter\PgsqlAdapter();
+            $dbAdapter->connect("host={$config['host']} user={$config['user']} password={$config['password']} dbname={$config['database']}");
+            $this->dbAdapter = $dbAdapter;
+        }
         return $this->dbAdapter;
     }
 
@@ -163,23 +159,14 @@ class DbMain
 
     public function handleCreate(Args $args, IO $io)
     {
+
         $askMode = $args->isOptionSet("ask");
         if ($askMode) {
-            $this->askOption($args, $io, "Please enter host:", "host");
-            $this->askOption($args, $io, "Please enter user:", "user");
-            $this->askOption($args, $io, "Please enter password:", "password");
-            $this->askArgument($args, $io, "Please enter database name:", "database");
             $this->askOption($args, $io, "Do you wont delete db if exist (1|0)", "delete");
             $this->askOption($args, $io, "Do you wont delete disconnect other users (1|0)", "kill");
         }
 
-        $host = $args->getOption("host");
-        $user = $args->getOption("user");
-        $password = $args->getOption("password");
-
-        $this->initDbAdapter($host, $user, $password);
-
-        $database = $args->getArgument("database");
+        $database = $this->getApplication()->getConfig(["database", 'default', "name"]);
 
         if ($args->isOptionSet("delete")) {
             if ($args->isOptionSet("kill")) {
@@ -199,7 +186,7 @@ class DbMain
         }
 
         $sql = "CREATE DATABASE {$database} WITH";
-        if ($args->getOption("owner")) {
+        if ($args->isOptionSet("owner")) {
             $sql .= " OWNER={$args->getOption("owner")}";
         }
         $sql .= " ENCODING=UTF8";
@@ -209,6 +196,32 @@ class DbMain
         if (!$result) {
             return 1;
         }
+        return 0;
+    }
+
+    public function handleConfig(Args $args, IO $io)
+    {
+        $askMode = $args->isOptionSet("ask");
+        if ($askMode) {
+            $this->askOption($args, $io, "Please enter host:", "host");
+            $this->askOption($args, $io, "Please enter user:", "user");
+            $this->askOption($args, $io, "Please enter password:", "password");
+            $this->askArgument($args, $io, "Please enter database name:", "database");
+        }
+
+        $host = $args->getOption("host");
+        $host = $host ?: "127.0.0.1";
+        $user = $args->getOption("user");
+        $user = $user ?: "postgres";
+        $password = $args->getOption("password");
+        $password = $password ?: "123";
+
+        if (!$args->isArgumentSet("database")) {
+            $io->errorLine("Error: database name not defined");
+            return 1;
+        }
+        $database = $args->getArgument("database");
+
         $this->writePhinxConfig($host, $user, $password, $database);
         $this->writeConfig($host, $user, $password, $database);
         return 0;
