@@ -33,6 +33,35 @@ class ArrayUtils
         return $merged;
     }
 
+    public static function mergeRecursiveDisabled()
+    {
+        $arrays = func_get_args();
+        $merged = array_shift($arrays);
+        foreach ($arrays as $currentArray) {
+            foreach ($currentArray as $key => $value) {
+                if (is_array($value) && isset ($merged[$key]) && is_array($merged[$key])) {
+                    $merged[$key] = self::mergeRecursiveDisabled($merged[$key], $value);
+                } else {
+                    //проверяем что это не отключение параметров
+                    $unSetted = false;
+                    if ($value === null) {
+                        if (false !== $keyMerged = array_search($key, $merged)) {
+                            if (is_integer($keyMerged)) {
+                                unset($merged[$keyMerged]);
+                                $unSetted = true;
+                            }
+                        }
+                    }
+                    if (!$unSetted) {
+                        $merged[$key] = $value;
+                    }
+                }
+            }
+        }
+
+        return $merged;
+    }
+
     /**
      * @param array $array
      * @param array|null $path
@@ -106,8 +135,7 @@ class ArrayUtils
             $value = self::get($array, $path);
             if (null !== $arguments) {
                 array_unshift($arguments, $value);
-            }
-            else {
+            } else {
                 $arguments = [$value];
             }
             return call_user_func_array($callback, $arguments);

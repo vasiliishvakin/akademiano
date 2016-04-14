@@ -17,14 +17,14 @@ class Collection extends ArrayObject implements ArrayableInterface
     function __construct($data = null)
     {
         if (null !== $data) {
-            $this->setItems((array) $data);
+            $this->setItems((array)$data);
         }
     }
 
     public function toArray()
     {
         $array = [];
-        foreach($this as $key=>$value) {
+        foreach ($this as $key => $value) {
             if ($value instanceof ArrayableInterface) {
                 $value = $value->toArray();
             }
@@ -44,7 +44,7 @@ class Collection extends ArrayObject implements ArrayableInterface
 
     public function firstOrFail()
     {
-        if ($this->count() <=0) {
+        if ($this->count() <= 0) {
             throw new EmptyException();
         }
         return $this->first();
@@ -52,7 +52,7 @@ class Collection extends ArrayObject implements ArrayableInterface
 
     public function firstOrFalse()
     {
-        if ($this->count() <=0) {
+        if ($this->count() <= 0) {
             return false;
         }
         return $this->first();
@@ -63,12 +63,12 @@ class Collection extends ArrayObject implements ArrayableInterface
         return end($this->items);
     }
 
-    public function lists($field, $keyField=null)
+    public function lists($field, $keyField = null)
     {
-        $data =[];
+        $data = [];
         $method = 'get' . ucfirst($field);
         $keyMethod = !is_null($keyField) ? 'get' . ucfirst($keyField) : null;
-        foreach($this as $item) {
+        foreach ($this as $item) {
             if (is_callable([$item, $method])) {
                 $value = $item->{$method}();
             }
@@ -86,16 +86,64 @@ class Collection extends ArrayObject implements ArrayableInterface
         return $data;
     }
 
-    public function filter($field, $needValue)
+    public function filter($field, $needValue, $operator = "===")
     {
-        $data =[];
-        $method = 'get' . ucfirst($field);
-        foreach($this as $item) {
-            if (is_callable([$item, $method])) {
-                $value = $item->{$method}();
-                if ($value === $needValue) {
-                    $data[] = $item;
+        $data = [];
+        if (is_string($field)) {
+            $method = function ($item) use ($field) {
+                $method = 'get' . ucfirst($field);
+                if (is_callable([$item, $method])) {
+                    return $item->{$method}();
                 }
+            };
+        } elseif (is_integer($field)) {
+            $method = function ($item) use ($field) {
+                if (is_array($item) && isset($item[$field])) {
+                    return $item[$field];
+                }
+            };
+        } elseif (is_callable($field)) {
+            $method = $field;
+        }
+        foreach ($this as $item) {
+            $value = call_user_func($method, $item);
+            switch ($operator) {
+                case "===" :
+                    if ($value === $needValue) {
+                        $data[] = $item;
+                    }
+                    break;
+                case "!==" :
+                case "<>" :
+                    if ($value !== $needValue) {
+                        $data[] = $item;
+                    }
+                    break;
+                case "==" :
+                    if ($value === $needValue) {
+                        $data[] = $item;
+                    }
+                    break;
+                case "<":
+                    if ($value < $needValue) {
+                        $data[] = $item;
+                    }
+                    break;
+                case ">":
+                    if ($value > $needValue) {
+                        $data[] = $item;
+                    }
+                    break;
+                case "<=":
+                    if ($value <= $needValue) {
+                        $data[] = $item;
+                    }
+                    break;
+                case ">=":
+                    if ($value >= $needValue) {
+                        $data[] = $item;
+                    }
+                    break;
             }
         }
         return new Collection($data);
@@ -129,7 +177,7 @@ class Collection extends ArrayObject implements ArrayableInterface
         }
         $method = "get" . ucfirst($field);
         $calcItem = null;
-        foreach($this as $item) {
+        foreach ($this as $item) {
             if (is_callable([$item, $method])) {
                 $value = $item->{$method}();
                 if (is_callable($function)) {
