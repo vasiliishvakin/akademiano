@@ -91,9 +91,15 @@ class Collection extends ArrayObject implements ArrayableInterface
         $data = [];
         if (is_string($field)) {
             $method = function ($item) use ($field) {
-                $method = 'get' . ucfirst($field);
-                if (is_callable([$item, $method])) {
-                    return $item->{$method}();
+                if (is_object($item)) {
+                    $method = 'get' . ucfirst($field);
+                    if (is_callable([$item, $method])) {
+                        return $item->{$method}();
+                    }
+                } elseif (is_array($item)) {
+                    if (isset($item[$field])) {
+                        return $item[$field];
+                    }
                 }
             };
         } elseif (is_integer($field)) {
