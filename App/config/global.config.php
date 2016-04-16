@@ -16,7 +16,7 @@ return [
             "Twig_Extension_Debug",
             "DeltaTwigExt\\AssetExtension",
             "DeltaTwigExt\\UrlExtension",
-            "User\\Twig\\UserExtension"
+            "User\\Twig\\UserExtension",
         ],
         "filters" => [
             "cropBySpace" => [["\\DeltaUtils\\StringUtils", "cropBySpace"], ['pre_escape' => 'html']],
@@ -59,7 +59,11 @@ return [
         "adapter" => "\\Acl\\Model\\Adapter\\RegisteredAdapter",
     ],
     "Image" => [
-        "watermark" => new \Image\Model\Watermark(["text" => "DeltaApp"]),
+        "watermark" => [
+            \DeltaCore\Config::DYN_CONF => function ($c) {
+                $watermarkClass = "\\Image\\Model\\Watermark";
+                return new $watermarkClass (["text" => "DeltaApp"]);
+            }],
     ],
     "Sequence" => [
         "adapter" => "PgSequenceUuidComplexShort",
