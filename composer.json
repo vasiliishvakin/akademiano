@@ -1,0 +1,24 @@
+{
+  "name": "deltaphp/entity-operator",
+  "description": "description_text",
+  "license": "Apache 2",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "authors": [
+    {
+      "name": "Vasiliy Shvakin",
+      "email": "zen4dev@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "EntityOperator\\": "src"
+    }
+  },
+  "require": {
+    "deltaphp/deltacore": "^2.0",
+    "deltaphp/uuid": "~0.1",
+    "deltaphp/deltadb": "~1.3",
+    "pimple/pimple": "~3.0"
+  }
+}
