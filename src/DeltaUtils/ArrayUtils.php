@@ -64,15 +64,16 @@ class ArrayUtils
 
     /**
      * @param array $array
-     * @param array|null $path
+     * @param array|string|null $path
      * @param $value
      * @return array
      */
-    public static function set(array $array, array $path = null, $value)
+    public static function set(array $array, $path = null, $value)
     {
         if (is_null($path)) {
             return $value;
         }
+        $path = (array) $path;
         $current = &$array;
         foreach ($path as $item) {
             if (!isset($current[$item])) {
@@ -87,12 +88,12 @@ class ArrayUtils
 
     /**
      * @param array $array
-     * @param array|null $path
+     * @param array|string|null $path
      * @param $value
      * @return array
      * @deprecated
      */
-    public static function setByPath(array $array, array $path = null, $value)
+    public static function setByPath(array $array, $path = null, $value)
     {
         return self::set($array, $path, $value);
     }
@@ -336,5 +337,14 @@ class ArrayUtils
         $value = self::get($array, $path, $default);
         $array = self::remove($array, $path);
         return $value;
+    }
+
+    public static function implode($glue, $data)
+    {
+        if (!is_array($data)) {
+            return $data;
+        }
+        return implode($glue, $data);
+
     }
 }
