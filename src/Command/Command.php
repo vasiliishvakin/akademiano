@@ -80,4 +80,18 @@ class Command implements CommandInterface
             $this->params = $params;
         }
     }
+
+    /**
+     * @return bool
+     * @deprecated
+     */
+    public function isEmptyClass()
+    {
+        return !$this->hasClass();
+    }
+
+    public function hasClass()
+    {
+        return !empty($this->getClass());
+    }
 }

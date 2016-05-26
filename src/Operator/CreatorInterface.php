@@ -6,6 +6,6 @@ namespace EntityOperator\Operator;
 
 interface CreatorInterface
 {
-    public function create();
+    public function create($class = null);
 
 }
