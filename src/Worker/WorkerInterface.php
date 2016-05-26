@@ -5,7 +5,6 @@ namespace EntityOperator\Worker;
 
 
 use EntityOperator\Command\CommandInterface;
-use EntityOperator\Operator\OperatorInterface;
 
 interface WorkerInterface
 {

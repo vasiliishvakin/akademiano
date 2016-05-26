@@ -11,7 +11,7 @@ use EntityOperator\Operator\CountableInterface;
 use EntityOperator\Operator\FinderInterface;
 use EntityOperator\Operator\KeeperInterface;
 
-class PostgresWorker implements WorkerInterface, KeeperInterface, FinderInterface
+class PostgresWorker implements WorkerInterface, KeeperInterface, FinderInterface, CountableInterface
 {
     /** @var  PgsqlAdapter */
     protected $adapter;
@@ -152,10 +152,5 @@ class PostgresWorker implements WorkerInterface, KeeperInterface, FinderInterfac
     {
         // TODO: Implement delete() method.
     }
-
-
-
-
-
 
 }

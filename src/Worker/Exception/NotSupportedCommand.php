@@ -14,6 +14,4 @@ class NotSupportedCommand extends \InvalidArgumentException
         $message = "Not Supported command " . $command->getName() . " (". get_class($command) . ")";
         parent::__construct($message, $code, $previous);
     }
-
-
 }

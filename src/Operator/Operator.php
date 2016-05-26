@@ -133,7 +133,7 @@ class Operator implements OperatorInterface
             if (ArrayUtils::issetByPath($this->actionMap, $path)) {
                 $workers = ArrayUtils::get($this->actionMap, $path);
                 $workers = ArrayUtils::sortByKey($workers);
-                //$this->actionMap = ArrayUtils::set($this->actionMap, $path, $workers);
+                //may be cache like: $this->actionMap = ArrayUtils::set($this->actionMap, $path, $workers);
                 foreach ($workers as $worker) {
                     yield $this->getWorker($worker["name"]);
                 }

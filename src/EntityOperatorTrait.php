@@ -4,14 +4,12 @@
 namespace EntityOperator;
 
 
-use EntityOperator\Operator\EntityOperatorInterface;
-
 trait EntityOperatorTrait
 {
     abstract public function getDIContainer();
 
     /**
-     * @return EntityOperatorInterface
+     * @return \EntityOperator\Operator\EntityOperatorInterface
      */
     public function getEntityOperator()
     {

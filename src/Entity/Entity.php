@@ -83,6 +83,4 @@ class Entity implements EntityInterface
         $this->active = (boolean) $active;
     }
 
-    
-
 }

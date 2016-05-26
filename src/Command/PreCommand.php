@@ -27,7 +27,7 @@ class PreCommand extends SubCommand implements PreCommandInterface
     
     public function getParams($path = null, $default = null)
     {
-        if (null == $this->params) {
+        if (null === $this->params) {
             $this->params = $this->getParamsStack()->top();
         }
         return parent::getParams($path, $default);

@@ -3,7 +3,6 @@ use EntityOperator\Worker\WorkerInterface;
 use EntityOperator\Command\CommandInterface;
 use EntityOperator\Entity\TextEntity;
 use \EntityOperator\Command\PreCommandInterface;
-use \EntityOperator\Command\AfterCommandInterface;
 
 //PostgresWorker
 return [
@@ -85,15 +84,6 @@ return [
         ],
 
     ],
-    "PreWorker" => [
-        function ($s) {
-            $w = new \EntityOperator\Worker\PreTestWorker();
-            return $w;
-        },
-        WorkerInterface::PARAM_ACTIONS_MAP => [
-            PreCommandInterface::PREFIX_COMMAND_PRE . CommandInterface::COMMAND_COUNT => null,
-        ],
-    ],
     
     "TranslatorDataToObjectWorker" => [
         function($s) {
@@ -104,7 +94,5 @@ return [
         WorkerInterface::PARAM_ACTIONS_MAP => [
             \EntityOperator\Worker\TranslatorDataToObjectWorker::COMMAND_AFTER_FIND => null,
         ],
-
     ]
-
 ];

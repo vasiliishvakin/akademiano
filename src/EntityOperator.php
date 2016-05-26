@@ -11,7 +11,6 @@ use EntityOperator\Command\FindCommand;
 use EntityOperator\Command\GetCommand;
 use EntityOperator\Command\LoadCommand;
 use EntityOperator\Entity\EntityInterface;
-use EntityOperator\Operator\EntityOperatorInterface;
 use EntityOperator\Operator\Operator;
 
 class EntityOperator extends Operator implements EntityOperatorInterface

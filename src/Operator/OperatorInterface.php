@@ -3,7 +3,6 @@
 
 namespace EntityOperator\Operator;
 
-use EntityOperator\Worker\WorkerInterface;
 use \EntityOperator\Command\CommandInterface;
 
 interface OperatorInterface

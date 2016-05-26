@@ -1,7 +1,7 @@
 <?php
 
 
-namespace EntityOperator\Operator;
+namespace EntityOperator;
 
 
 interface EntityOperatorInterface extends FinderInterface, KeeperInterface, CreatorInterface, LoaderInterface

@@ -28,6 +28,4 @@ class EntityLoaderWorker implements WorkerInterface, LoaderInterface
         }
         return $entity;
     }
-
-
 }
