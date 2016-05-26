@@ -2,7 +2,6 @@
 use EntityOperator\Worker\WorkerInterface;
 use EntityOperator\Command\CommandInterface;
 use EntityOperator\Entity\TextEntity;
-use \EntityOperator\Command\PreCommandInterface;
 
 //PostgresWorker
 return [

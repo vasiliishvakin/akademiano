@@ -1,7 +1,7 @@
 {
   "name": "deltaphp/entityoperator",
   "description": "description_text",
-  "license": "Apache 2",
+  "license": "Apache-2.0",
   "minimum-stability": "dev",
   "prefer-stable": true,
   "authors": [
