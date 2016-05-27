@@ -8,6 +8,7 @@ class PreCommand extends SubCommand implements PreCommandInterface
 {
     /** @var  \SplStack */
     protected $paramsStack;
+    protected $params = null;
 
     public function getPrefix()
     {

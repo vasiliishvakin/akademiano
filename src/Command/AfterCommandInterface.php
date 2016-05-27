@@ -14,5 +14,7 @@ interface AfterCommandInterface extends PreAfterCommandInterface
      */
     public function __construct(CommandInterface $command, \SplStack $result);
 
+    public function addResult($result);
+
     public function extractResult();
 }

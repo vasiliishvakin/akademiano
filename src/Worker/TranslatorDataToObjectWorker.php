@@ -23,8 +23,10 @@ class TranslatorDataToObjectWorker  implements WorkerInterface, DelegatingWorker
     {
         switch ($command->getName()) {
             case self::COMMAND_AFTER_FIND :
-                return $this->translate($command);
-                break;
+                /** @var AfterCommandInterface $command */
+                $result = $this->translate($command);
+                $command-> addResult($result);
+                return $result;
             default:
                 throw new NotSupportedCommand($command);
         }
@@ -41,8 +43,9 @@ class TranslatorDataToObjectWorker  implements WorkerInterface, DelegatingWorker
                 return $entity;
             });
             return $items;
+        } else {
+            return $this->toEntity($result, $class);
         }
-        return $this->toEntity($result, $class);
     }
 
     public function toEntity(array $entityData, $entityClass)

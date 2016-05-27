@@ -7,11 +7,10 @@ namespace EntityOperator\Worker;
 use DeltaDb\Adapter\PgsqlAdapter;
 use DeltaUtils\Object\Collection;
 use EntityOperator\Command\CommandInterface;
-use EntityOperator\Operator\CountableInterface;
 use EntityOperator\Operator\FinderInterface;
 use EntityOperator\Operator\KeeperInterface;
 
-class PostgresWorker implements WorkerInterface, KeeperInterface, FinderInterface, CountableInterface
+class PostgresWorker implements WorkerInterface, KeeperInterface, FinderInterface
 {
     /** @var  PgsqlAdapter */
     protected $adapter;
