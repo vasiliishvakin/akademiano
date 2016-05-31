@@ -5,19 +5,20 @@ namespace EntityOperator\Worker;
 
 
 use DeltaUtils\Object\Collection;
-use EntityOperator\Command\AfterCommand;
 use EntityOperator\Command\AfterCommandInterface;
 use EntityOperator\Command\CommandInterface;
 use EntityOperator\Command\CreateCommand;
 use EntityOperator\Command\EntityOperatedCommandInterface;
 use EntityOperator\Command\LoadCommand;
 use EntityOperator\Worker\Exception\NotSupportedCommand;
+use EntityOperator\Operator\DelegatingInterface;
+use EntityOperator\Operator\DelegatingTrait;
 
-class TranslatorDataToObjectWorker  implements WorkerInterface, DelegatingWorkerInterface
+class TranslatorDataToObjectWorker  implements WorkerInterface, DelegatingInterface
 {
     const COMMAND_AFTER_FIND = AfterCommandInterface::PREFIX_COMMAND_AFTER . CommandInterface::COMMAND_FIND;
 
-    use DelegatingWorkerTrait;
+    use DelegatingTrait;
 
     public function execute(CommandInterface $command)
     {

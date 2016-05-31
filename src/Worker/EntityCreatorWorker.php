@@ -7,9 +7,13 @@ namespace EntityOperator\Worker;
 use EntityOperator\Command\CommandInterface;
 use EntityOperator\Entity\Entity;
 use EntityOperator\Operator\CreatorInterface;
+use EntityOperator\Operator\IncludeOperatorInterface;
+use EntityOperator\Operator\IncludeOperatorTrait;
 
-class EntityCreatorWorker implements WorkerInterface, CreatorInterface
+class EntityCreatorWorker implements WorkerInterface, CreatorInterface, IncludeOperatorInterface
 {
+    use IncludeOperatorTrait;
+
     public function create($class = null)
     {
         if (null === $class) {
@@ -19,7 +23,11 @@ class EntityCreatorWorker implements WorkerInterface, CreatorInterface
         if ($class[0] !== "\\") {
             $class = "\\" . $class;
         }
-        return new $class();
+        $entity = new $class();
+        if ($entity instanceof IncludeOperatorInterface) {
+            $entity->setOperator($this->getOperator());
+        }
+        return $entity;
     }
 
     public function execute(CommandInterface $command)

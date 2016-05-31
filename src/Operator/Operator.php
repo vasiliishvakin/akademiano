@@ -33,8 +33,9 @@ class Operator implements OperatorInterface
     public function getWorkers()
     {
         if (null === $this->workers) {
-            $this->workers = new Container();
-            $this->workers["operator"] = $this;
+            $this->workers = new WorkersContainer();
+           // $this->workers["operator"] = $this;
+            $this->workers->setOperator($this);
         }
         return $this->workers;
     }
@@ -191,9 +192,6 @@ class Operator implements OperatorInterface
         }
         //after execute
         $result = $this->afterExecute($command, $result);
-
-
         return $result;
     }
-
 }

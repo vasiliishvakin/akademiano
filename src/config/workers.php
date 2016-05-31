@@ -29,7 +29,7 @@ return [
         function ($s) {
             $w = new \EntityOperator\Worker\PostgresWorker();
             /** @var $o \EntityOperator\EntityOperator */
-            $adapter = $s["operator"]->getDependency("dbAdapter");
+            $adapter = $s->getOperator()->getDependency("dbAdapter");
             $w->setAdapter($adapter);
             return $w;
         },
@@ -46,8 +46,8 @@ return [
     "NamedEntitiesWorker" => [
         function ($s) {
             $w = new \EntityOperator\Worker\PostgresWorker();
-            /** @var $o \EntityOperator\EntityOperator */
-            $adapter = $s["operator"]->getDependency("dbAdapter");
+            /** @var $s\EntityOperator\Operator\WorkersContainer */
+            $adapter = $s->getOperator()->getDependency("dbAdapter");
             $w->setAdapter($adapter);
             $w->setTable("named");
             $w->addFields(["title", "description"]);
@@ -67,7 +67,7 @@ return [
         function ($s) {
             $w = new \EntityOperator\Worker\PostgresWorker();
             /** @var $o \EntityOperator\EntityOperator */
-            $adapter = $s["operator"]->getDependency("dbAdapter");
+            $adapter = $s->getOperator()->getDependency("dbAdapter");
             $w->setAdapter($adapter);
             $w->setTable("texts");
             $w->addField("content");
@@ -87,7 +87,6 @@ return [
     "TranslatorDataToObjectWorker" => [
         function($s) {
             $w = new \EntityOperator\Worker\TranslatorDataToObjectWorker();
-            $w->setOperator($s["operator"]);
             return $w;
         },
         WorkerInterface::PARAM_ACTIONS_MAP => [

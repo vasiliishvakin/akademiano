@@ -42,7 +42,7 @@ class EntityOperator extends Operator implements EntityOperatorInterface
      */
     public function find($class = null, $criteria = [], $limit = null, $offset = null, $orderBy = null)
     {
-        $command = new FindCommand(["criteria" => $criteria, "limit" => $limit, "offset" => $offset, "orderBy" => $orderBy], $class);
+        $command = new FindCommand($class, $criteria, $limit, $offset, $orderBy);
         $data =  $this->execute($command);
         return $data;
     }
