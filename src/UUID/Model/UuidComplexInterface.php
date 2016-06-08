@@ -11,7 +11,7 @@ namespace UUID\Model;
 
 use DeltaUtils\Object\Prototype\StringableInterface;
 
-interface UuidComplexInterface
+interface UuidComplexInterface extends StringableInterface
 {
     /**
      * @return integer

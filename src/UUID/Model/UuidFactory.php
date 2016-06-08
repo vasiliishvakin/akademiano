@@ -32,14 +32,29 @@ class UuidFactory
         $this->epoch = $epoch;
     }
 
-    public function create($value, $epoch = null)
+    public function create($value, $epoch = null, $class = UuidComplexShortTables::class)
     {
         if (null === $epoch) {
             $epoch = $this->getEpoch();
         }
-        $key = $value . $epoch;
+        if (!ctype_digit($value) && ctype_xdigit($value)) {
+            $value = hexdec($value);
+        }
+        $key = $class . $value . $epoch;
         if (!isset($this->uuids[$key])) {
-            $this->uuids[$key] = new UuidComplexShort($value, $epoch);
+            switch ($class) {
+                case UuidComplexShort::class : {
+                    $this->uuids[$key] = new UuidComplexShort($value, $epoch);
+                    break;
+                }
+                case UuidComplexShortTables::class : {
+                    $this->uuids[$key] = new UuidComplexShortTables($value, $epoch);
+                    break;
+                }
+                default:
+                    throw new \InvalidArgumentException();
+            }
+
         }
         return $this->uuids[$key];
     }
