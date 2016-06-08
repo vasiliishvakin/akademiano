@@ -222,4 +222,12 @@ class Collection extends ArrayObject implements ArrayableInterface
         $slice = array_slice($this->getItems(), $offset, $length, true);
         return new Collection($slice);
     }
+
+    public function map(Callable $function)
+    {
+        foreach ($this as $key => $item) {
+            $this[$key] = call_user_func($function, $item, $key);
+        }
+        return $this;
+    }
 }

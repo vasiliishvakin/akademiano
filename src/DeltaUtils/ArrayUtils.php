@@ -86,6 +86,25 @@ class ArrayUtils
         return $array;
     }
 
+
+    public static function add(array $array, $path = null, $value)
+    {
+        if (is_null($path)) {
+            return $value;
+        }
+        $path = (array) $path;
+        $current = &$array;
+        foreach ($path as $item) {
+            if (!isset($current[$item])) {
+                $current[$item] = null;
+            }
+            $current = &$current[$item];
+        }
+        $current[] = $value;
+
+        return $array;
+    }
+
     /**
      * @param array $array
      * @param array|string|null $path
