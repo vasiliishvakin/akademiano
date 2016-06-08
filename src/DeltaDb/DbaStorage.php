@@ -2,7 +2,10 @@
 
 namespace DeltaDb;
 
-class DbaStorage {
+use Acl\Model\Adapter\AbstractAdapter;
+
+class DbaStorage
+{
     const DBA_DEFAULT = 'default';
 
     protected static $storage = [];
@@ -41,7 +44,9 @@ class DbaStorage {
             throw new \RuntimeException("Dba with name $name not registerd in dba storage");
         }
 
-        if(is_array($dba)) {
+        if (is_object($dba) && $dba instanceof AbstractAdapter) {
+            self::$storage[$name] = $dba;
+        } elseif (is_array($dba)) {
             if (!isset($dba['options']) || empty($dba['options'])) {
                 $dba = call_user_func($dba['callback']);
             } else {
@@ -49,7 +54,7 @@ class DbaStorage {
             }
             self::$storage[$name] = $dba;
         }
-        return  self::$storage[$name];
+        return self::$storage[$name];
     }
 }
 
