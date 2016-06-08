@@ -5,27 +5,28 @@
 
 namespace Attach\Model;
 
-
-use DeltaCore\Prototype\AbstractEntity;
-use DeltaCore\Prototype\Parts\CreatedTrait;
-use DeltaDb\EntityInterface;
+use DeltaPhp\Operator\Entity\NamedEntity;
+use DeltaPhp\Operator\Entity\NamedEntityInterface;
 use HttpWarp\Environment;
 use UUID\Model\Parts\UuidhasInterface;
 use UUID\Model\Parts\UuidTrait;
 use UUID\Model\Parts\UuidFactoryTrait;
 
-class File extends AbstractEntity implements EntityInterface, UuidhasInterface
+/**
+ * Class File
+ * @package Attach\Model
+ * @deprecated 
+ */
+class File extends NamedEntity implements UuidhasInterface, NamedEntityInterface
 {
     use UuidFactoryTrait;
     use UuidTrait;
-    use CreatedTrait;
 
     protected $section;
     protected $object;
     protected $type;
     protected $subType;
     protected $name;
-    protected $description;
     protected $path;
     protected $rootUri;
     protected $isMain = false;
@@ -65,22 +66,6 @@ class File extends AbstractEntity implements EntityInterface, UuidhasInterface
     public function setEnvironment(Environment $environment)
     {
         $this->environment = $environment;
-    }
-
-    /**
-     * @param mixed $description
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDescription()
-    {
-        return $this->description;
     }
 
     /**

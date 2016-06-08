@@ -22,6 +22,11 @@ use UUID\Model\Parts\UuidTrait;
 use UUID\Model\UuidComplexShort;
 use UUID\Model\UuidFactory;
 
+/**
+ * Class FileManager
+ * @package Attach\Model
+ * @deprecated 
+ */
 class FileManager extends Repository
 {
     use Configurable;

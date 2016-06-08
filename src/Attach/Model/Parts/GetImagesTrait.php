@@ -9,6 +9,7 @@
 namespace Attach\Model\Parts;
 
 
+use Attach\Model\FileManager;
 use DeltaUtils\Object\Collection;
 
 trait GetImagesTrait
@@ -24,6 +25,7 @@ trait GetImagesTrait
     {
         if (is_null($this->images)) {
             $fm = $this->getFileManager();
+            /** @var FileManager images */
             $this->images = $fm->getFilesForObject($this, ["type" => "image"]);
         }
         return $this->images;
