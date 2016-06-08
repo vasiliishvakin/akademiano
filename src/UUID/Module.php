@@ -9,4 +9,4 @@ namespace UUID;
 class Module
 {
 
-} 
+}
