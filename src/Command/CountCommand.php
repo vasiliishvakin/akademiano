@@ -1,7 +1,7 @@
 <?php
 
 
-namespace EntityOperator\Command;
+namespace DeltaPhp\Operator\Command;
 
 
 class CountCommand extends Command

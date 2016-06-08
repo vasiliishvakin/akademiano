@@ -1,16 +1,17 @@
 <?php
 
 
-namespace EntityOperator\Command;
+namespace DeltaPhp\Operator\Command;
 
+
+use DeltaPhp\Operator\Entity\Entity;
 
 class GetCommand extends Command
 {
-    protected $name = self::COMMAND_GET;
-
-    public function __construct(array $params = null, $class = null)
+    public function __construct($id, $class = Entity::class, $params = [])
     {
-        parent::__construct($params, $class);
+        $params["id"] = $id;
+        parent::__construct($params, $class, self::COMMAND_GET);
     }
 
 }

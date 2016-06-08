@@ -1,32 +1,31 @@
 <?php
 
 
-namespace EntityOperator\Worker;
+namespace DeltaPhp\Operator\Worker;
 
 
 use DeltaUtils\Object\Collection;
-use EntityOperator\Command\AfterCommandInterface;
-use EntityOperator\Command\CommandInterface;
-use EntityOperator\Command\CreateCommand;
-use EntityOperator\Command\EntityOperatedCommandInterface;
-use EntityOperator\Command\LoadCommand;
-use EntityOperator\Worker\Exception\NotSupportedCommand;
-use EntityOperator\Operator\DelegatingInterface;
-use EntityOperator\Operator\DelegatingTrait;
+use DeltaPhp\Operator\Command\AfterCommandInterface;
+use DeltaPhp\Operator\Command\CommandInterface;
+use DeltaPhp\Operator\Command\CreateCommand;
+use DeltaPhp\Operator\Command\EntityOperatedCommandInterface;
+use DeltaPhp\Operator\Command\LoadCommand;
+use DeltaPhp\Operator\Worker\Exception\NotSupportedCommand;
+use DeltaPhp\Operator\DelegatingInterface;
+use DeltaPhp\Operator\DelegatingTrait;
 
-class TranslatorDataToObjectWorker  implements WorkerInterface, DelegatingInterface
+class TranslatorDataToObjectWorker implements WorkerInterface, DelegatingInterface
 {
-    const COMMAND_AFTER_FIND = AfterCommandInterface::PREFIX_COMMAND_AFTER . CommandInterface::COMMAND_FIND;
-
     use DelegatingTrait;
 
     public function execute(CommandInterface $command)
     {
         switch ($command->getName()) {
-            case self::COMMAND_AFTER_FIND :
+            case AfterCommandInterface::COMMAND_AFTER_FIND :
+            case AfterCommandInterface::COMMAND_AFTER_GET:
                 /** @var AfterCommandInterface $command */
                 $result = $this->translate($command);
-                $command-> addResult($result);
+                $command->addResult($result);
                 return $result;
             default:
                 throw new NotSupportedCommand($command);
@@ -36,10 +35,13 @@ class TranslatorDataToObjectWorker  implements WorkerInterface, DelegatingInterf
     public function translate(AfterCommandInterface $command)
     {
         $result = $command->extractResult();
+        if (null === $result) {
+            return null;
+        }
         $class = $command->hasClass() ? $command->getClass() : EntityOperatedCommandInterface::DEFAULT_CLASS;
         if ($result instanceof Collection) {
             $items = clone $result;
-            $items->map(function ($itemData) use ($class)  {
+            $items->map(function ($itemData) use ($class) {
                 $entity = $this->toEntity($itemData, $class);
                 return $entity;
             });
@@ -51,6 +53,9 @@ class TranslatorDataToObjectWorker  implements WorkerInterface, DelegatingInterf
 
     public function toEntity(array $entityData, $entityClass)
     {
+        if (empty($entityData)) {
+            return null;
+        }
         $createCommand = new CreateCommand($entityClass);
         $entity = $this->getOperator()->execute($createCommand);
 

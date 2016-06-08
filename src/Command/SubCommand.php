@@ -1,8 +1,10 @@
 <?php
 
 
-namespace EntityOperator\Command;
+namespace DeltaPhp\Operator\Command;
 
+
+use DeltaUtils\ArrayUtils;
 
 class SubCommand extends Command implements SubCommandInterface
 {
@@ -47,6 +49,10 @@ class SubCommand extends Command implements SubCommandInterface
         if (null === $this->params) {
             $this->params = $this->getParentCommand()->getParams();
         }
-        return $this->params;
+        if (null === $path) {
+            return $this->params;
+        } else {
+            return ArrayUtils::get($this->params, $path, $default);
+        }
     }
 }

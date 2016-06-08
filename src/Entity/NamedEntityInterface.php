@@ -1,7 +1,7 @@
 <?php
 
 
-namespace EntityOperator\Entity;
+namespace DeltaPhp\Operator\Entity;
 
 
 interface NamedEntityInterface extends EntityInterface

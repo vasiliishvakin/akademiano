@@ -1,11 +1,11 @@
 <?php
 
 
-namespace EntityOperator\Operator;
+namespace DeltaPhp\Operator;
 
 
 use DeltaUtils\Object\Collection;
-use EntityOperator\Entity\EntityInterface;
+use DeltaPhp\Operator\Entity\EntityInterface;
 
 interface FinderInterface extends CountableInterface
 {
@@ -15,7 +15,7 @@ interface FinderInterface extends CountableInterface
      * @param null $limit
      * @param null $offset
      * @param null $orderBy
-     * @return Collection
+     * @return Collection|EntityInterface[]
      */
     public function find($class = null, $criteria, $limit = null, $offset = null, $orderBy = null);
 

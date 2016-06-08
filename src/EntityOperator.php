@@ -1,27 +1,27 @@
 <?php
 
 
-namespace EntityOperator;
+namespace DeltaPhp\Operator;
 
 
 use DeltaUtils\Object\Collection;
-use EntityOperator\Command\CountCommand;
-use EntityOperator\Command\CreateCommand;
-use EntityOperator\Command\FindCommand;
-use EntityOperator\Command\GetCommand;
-use EntityOperator\Command\LoadCommand;
-use EntityOperator\Entity\EntityInterface;
-use EntityOperator\Operator\Operator;
+use DeltaPhp\Operator\Command\CountCommand;
+use DeltaPhp\Operator\Command\CreateCommand;
+use DeltaPhp\Operator\Command\DeleteCommand;
+use DeltaPhp\Operator\Command\FindCommand;
+use DeltaPhp\Operator\Command\GenerateIdCommand;
+use DeltaPhp\Operator\Command\GetCommand;
+use DeltaPhp\Operator\Command\LoadCommand;
+use DeltaPhp\Operator\Command\SaveCommand;
+use DeltaPhp\Operator\Entity\EntityInterface;
+use DeltaPhp\Operator\Entity\Entity;
 
-class EntityOperator extends Operator implements EntityOperatorInterface
+class EntityOperator extends Operator implements OperatorInterface
 {
-    /**
-     * @param null $class
-     * @return EntityInterface
-     */
-    public function create($class = null)
+   
+    public function create($class = null, array $params= [])
     {
-        $command = new CreateCommand($class);
+        $command = new CreateCommand($class, $params);
         return $this->execute($command);
     }
 
@@ -38,7 +38,7 @@ class EntityOperator extends Operator implements EntityOperatorInterface
      * @param null $limit
      * @param null $offset
      * @param array|string|null $orderBy
-     * @return Collection
+     * @return Collection|EntityInterface[]
      */
     public function find($class = null, $criteria = [], $limit = null, $offset = null, $orderBy = null)
     {
@@ -47,26 +47,40 @@ class EntityOperator extends Operator implements EntityOperatorInterface
         return $data;
     }
 
+    /**
+     * @param null $class
+     * @param $id
+     * @return EntityInterface
+     */
     public function get($class = null, $id)
     {
-        $command = new GetCommand(["id" => $id], $class);
+        $command = new GetCommand((string) $id, $class);
         $data =  $this->execute($command);
         return $data;
     }
 
-    public function save($entity)
+    public function save(EntityInterface $entity)
     {
-        // TODO: Implement save() method.
+        $command = new SaveCommand($entity);
+        $result = $this->execute($command);
+        return $result;
     }
 
-    public function delete($entity)
+    public function delete(EntityInterface $entity)
     {
-        // TODO: Implement delete() method.
+        $command = new DeleteCommand($entity);
+        return $this->execute($command);
     }
 
     public function count($class = null, $criteria = [])
     {
         $command = new CountCommand(["criteria" => $criteria], $class);
+        return $this->execute($command);
+    }
+
+    public function genId($class = Entity::class)
+    {
+        $command = new GenerateIdCommand($class);
         return $this->execute($command);
     }
 }

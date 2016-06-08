@@ -1,7 +1,7 @@
 <?php
 
 
-namespace EntityOperator\Command;
+namespace DeltaPhp\Operator\Command;
 
 
 class PreCommand extends SubCommand implements PreCommandInterface

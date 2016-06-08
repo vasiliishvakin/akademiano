@@ -1,7 +1,7 @@
 <?php
 
 
-namespace EntityOperator\Operator;
+namespace DeltaPhp\Operator;
 
 
 interface IncludeOperatorInterface

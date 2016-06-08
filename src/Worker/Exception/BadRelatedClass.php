@@ -1,10 +1,10 @@
 <?php
 
 
-namespace EntityOperator\Worker\Exception;
+namespace DeltaPhp\Operator\Worker\Exception;
 
 
-use EntityOperator\Worker\RelationsWorker;
+use DeltaPhp\Operator\Worker\RelationsWorker;
 use Exception;
 
 class BadRelatedClass extends \InvalidArgumentException

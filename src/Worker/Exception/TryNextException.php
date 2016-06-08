@@ -1,6 +1,6 @@
 <?php
 
-namespace EntityOperator\Worker\Exception;
+namespace DeltaPhp\Operator\Worker\Exception;
 
 class TryNextException extends \RuntimeException
 {

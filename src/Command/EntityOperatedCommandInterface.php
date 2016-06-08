@@ -1,10 +1,10 @@
 <?php
 
 
-namespace EntityOperator\Command;
+namespace DeltaPhp\Operator\Command;
 
 
-use EntityOperator\Entity\Entity;
+use DeltaPhp\Operator\Entity\Entity;
 
 interface EntityOperatedCommandInterface
 {

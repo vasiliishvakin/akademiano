@@ -1,10 +1,10 @@
 <?php
 
 
-namespace EntityOperator\Entity;
+namespace DeltaPhp\Operator\Entity;
 
 
-interface EntityInterface
+interface EntityInterface extends ExistingEntityInterface
 {
     public function getId();
 

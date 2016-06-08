@@ -1,10 +1,10 @@
 <?php
 
 
-namespace EntityOperator\Operator;
+namespace DeltaPhp\Operator;
 
 
-use EntityOperator\Command\CommandInterface;
+use DeltaPhp\Operator\Command\CommandInterface;
 
 interface DelegatingInterface extends IncludeOperatorInterface
 {

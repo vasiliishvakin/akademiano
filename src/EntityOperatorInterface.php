@@ -1,14 +1,9 @@
 <?php
 
 
-namespace EntityOperator;
+namespace DeltaPhp\Operator;
 
-use EntityOperator\Operator\FinderInterface;
-use EntityOperator\Operator\KeeperInterface;
-use EntityOperator\Operator\CreatorInterface;
-use EntityOperator\Operator\LoaderInterface;
-
-interface EntityOperatorInterface extends FinderInterface, KeeperInterface, CreatorInterface, LoaderInterface
+interface EntityOperatorInterface extends OperatorInterface, FinderInterface, KeeperInterface, CreatorInterface, LoaderInterface, GenerateIdInterface
 {
 
 }

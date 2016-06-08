@@ -1,21 +1,20 @@
 <?php
 
 
-namespace EntityOperator\Worker;
+namespace DeltaPhp\Operator\Worker;
 
 
 use DeltaUtils\Object\Collection;
-use EntityOperator\Command\CommandInterface;
-use EntityOperator\Command\FindCommand;
-use EntityOperator\Command\RelationLoadCommand;
-use EntityOperator\Entity\EntityInterface;
-use EntityOperator\Entity\RelationEntity;
-use EntityOperator\Operator\DelegatingInterface;
-use EntityOperator\Operator\DelegatingTrait;
-use EntityOperator\Operator\FinderInterface;
-use EntityOperator\Operator\KeeperInterface;
-use EntityOperator\Worker\Exception\BadField;
-use EntityOperator\Worker\Exception\BadRelatedClass;
+use DeltaPhp\Operator\Command\CommandInterface;
+use DeltaPhp\Operator\Command\FindCommand;
+use DeltaPhp\Operator\Command\RelationLoadCommand;
+use DeltaPhp\Operator\Command\RelationParamsCommand;
+use DeltaPhp\Operator\Entity\EntityInterface;
+use DeltaPhp\Operator\Entity\RelationEntity;
+use DeltaPhp\Operator\DelegatingInterface;
+use DeltaPhp\Operator\DelegatingTrait;
+use DeltaPhp\Operator\Worker\Exception\BadField;
+use DeltaPhp\Operator\Worker\Exception\BadRelatedClass;
 
 class RelationsWorker extends PostgresWorker implements DelegatingInterface, FinderInterface
 {
@@ -145,12 +144,29 @@ class RelationsWorker extends PostgresWorker implements DelegatingInterface, Fin
         return $entities;
     }
 
+    public function getParam($paramName, $params = [])
+    {
+        switch ($paramName) {
+            case self::FIELD_FIRST . "Class":
+                return $this->getFirstClass();
+            case self::FIELD_SECOND . "Class" :
+                return $this->getSecondClass();
+            case "anotherClass" :
+                if (!isset($params["class"])) {
+                    throw new \InvalidArgumentException("not set current class in params command");
+                }
+                return $this->getAnotherClass($params["class"]);
+        }
+    }
+
     public function execute(CommandInterface $command)
     {
         switch ($command->getName()) {
             case RelationLoadCommand::COMMAND_RELATION_LOAD:
                 return $this->getLinked($command->getParams("entity"));
                 break;
+            case RelationParamsCommand::COMMAND_RELATION_PARAMS :
+                return $this->getParam($command->getParams("param"), $command->getParams());
             default:
                 return parent::execute($command);
 

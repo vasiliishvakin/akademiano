@@ -1,7 +1,7 @@
 <?php
 
 
-namespace EntityOperator\Command;
+namespace DeltaPhp\Operator\Command;
 
 
 interface CommandInterface
@@ -13,6 +13,8 @@ interface CommandInterface
     const COMMAND_DELETE = "delete";
     const COMMAND_CREATE = "create";
     const COMMAND_LOAD = "load";
+    const COMMAND_RESERVE = "reserve";
+    const COMMAND_GENERATE_ID = "generate.id";
 
     public function getName();
 

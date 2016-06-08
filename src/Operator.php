@@ -1,20 +1,20 @@
 <?php
 
 
-namespace EntityOperator\Operator;
+namespace DeltaPhp\Operator;
 
 
 use DeltaUtils\ArrayUtils;
-use EntityOperator\Command\AfterCommand;
-use EntityOperator\Command\CommandChainElementInterface;
-use EntityOperator\Command\CommandFinallyInterface;
-use EntityOperator\Command\PreAfterCommandInterface;
-use EntityOperator\Command\PreCommand;
-use EntityOperator\Worker\Exception\BreakException;
-use EntityOperator\Worker\WorkerInterface;
-use EntityOperator\Command\CommandInterface;
+use DeltaPhp\Operator\Command\AfterCommand;
+use DeltaPhp\Operator\Command\CommandChainElementInterface;
+use DeltaPhp\Operator\Command\CommandFinallyInterface;
+use DeltaPhp\Operator\Command\PreAfterCommandInterface;
+use DeltaPhp\Operator\Command\PreCommand;
+use DeltaPhp\Operator\Worker\Exception\BreakException;
+use DeltaPhp\Operator\Worker\WorkerInterface;
+use DeltaPhp\Operator\Command\CommandInterface;
 use Pimple\Container;
-use EntityOperator\Worker\Exception\TryNextException;
+use DeltaPhp\Operator\Worker\Exception\TryNextException;
 
 class Operator implements OperatorInterface
 {

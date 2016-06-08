@@ -1,9 +1,9 @@
 <?php
 
 
-namespace EntityOperator\Operator;
+namespace DeltaPhp\Operator;
 
-use \EntityOperator\Command\CommandInterface;
+use \DeltaPhp\Operator\Command\CommandInterface;
 
 interface OperatorInterface
 {
@@ -13,4 +13,5 @@ interface OperatorInterface
 
     public function addAction($action, $workerName, $class = null);
 
+    public function getDependency($name);
 }

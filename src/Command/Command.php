@@ -1,7 +1,7 @@
 <?php
 
 
-namespace EntityOperator\Command;
+namespace DeltaPhp\Operator\Command;
 
 
 use DeltaUtils\ArrayUtils;
@@ -19,7 +19,7 @@ class Command implements CommandInterface
      * @param $class
      * @param array $params
      */
-    public function __construct(array $params = null, $class = null, $name = null)
+    public function __construct(array $params = [], $class = null, $name = null)
     {
         if ($name) $this->name = $name;
         if ($class) $this->class = $class;

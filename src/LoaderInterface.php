@@ -1,10 +1,10 @@
 <?php
 
 
-namespace EntityOperator\Operator;
+namespace DeltaPhp\Operator;
 
 
-use EntityOperator\Entity\EntityInterface;
+use DeltaPhp\Operator\Entity\EntityInterface;
 
 interface LoaderInterface
 {

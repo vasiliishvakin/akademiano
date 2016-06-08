@@ -1,10 +1,10 @@
 <?php
 
 
-namespace EntityOperator\Command;
+namespace DeltaPhp\Operator\Command;
 
 
-use EntityOperator\Entity\EntityInterface;
+use DeltaPhp\Operator\Entity\EntityInterface;
 
 class LoadCommand extends Command implements CommandInterface
 {
@@ -15,9 +15,9 @@ class LoadCommand extends Command implements CommandInterface
 
     public function getClass()
     {
-        if (null !== $this->class) {
+        if (null === $this->class) {
             $entity = $this->getParams("entity");
-            $this->class = (null !== $entity && is_object($entity)) ? get_class($entity) : "EntityOperator\\Entity\\Entity";
+            $this->class = (null !== $entity && is_object($entity)) ? get_class($entity) : "DeltaPhp\Operator\\Entity\\Entity";
         }
         return $this->class;
     }

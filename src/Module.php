@@ -3,20 +3,20 @@
  * User: Vasiliy Shvakin (orbisnull) zen4dev@gmail.com
  */
 
-namespace EntityOperator;
+namespace DeltaPhp\Operator;
 
 
-use EntityOperator\Worker\WorkerInterface;
+use DeltaPhp\Operator\Worker\WorkerInterface;
 use DeltaCore\Application;
 use DeltaCore\ModuleManager;
-use EntityOperator\Operator\Operator;
+use DeltaPhp\Operator\Operator;
 use Pimple\Container;
 
 class Module
 {
     public static function init(ModuleManager $moduleManager, Application $application)
     {
-        $application->extend("EntityOperator", function (Operator $operator, Container $c) use ($moduleManager) {
+        $application->extend("DeltaPhp\Operator", function (Operator $operator, Container $c) use ($moduleManager) {
             $workers = $moduleManager->getListArrayConfigs("workers");
             foreach ($workers as $workerName => $data) {
                 $workerParams = [];
@@ -30,6 +30,7 @@ class Module
                             switch ($key) {
                                 case WorkerInterface::PARAM_TABLEID: {
                                     $operator->setWorkerTable($row, $workerName);
+                                    $workerParams[WorkerInterface::PARAM_TABLEID] = $row;
                                     break;
                                 }
                                 case WorkerInterface::PARAM_ACTIONS_MAP: {

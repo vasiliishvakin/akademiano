@@ -1,8 +1,10 @@
 <?php
 
 
-namespace EntityOperator\Entity;
+namespace DeltaPhp\Operator\Entity;
 
+
+use UUID\Model\UuidComplexShortTables;
 
 class Entity implements EntityInterface
 {
@@ -12,13 +14,18 @@ class Entity implements EntityInterface
     /** @var  \DateTime */
     protected $changed;
     /** @var  boolean */
-    protected $active;
+    protected $active = true;
+    /** @var  boolean */
+    protected $existingEntity = false;
 
     /**
      * @return mixed
      */
     public function getId()
     {
+        /*if ($this->id && $this->id instanceof UuidComplexShortTables) {
+            $this->id = new UuidComplexShortTables($this->id);
+        }*/
         return $this->id;
     }
 
@@ -82,5 +89,16 @@ class Entity implements EntityInterface
         }
         $this->active = (boolean) $active;
     }
+
+    public function isExistingEntity()
+    {
+        return $this->existingEntity;
+    }
+
+    public function setExistingEntity($existing = true)
+    {
+        $this->existingEntity = $existing;
+    }
+
 
 }

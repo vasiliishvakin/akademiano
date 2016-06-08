@@ -1,6 +1,6 @@
 {
-  "name": "deltaphp/entityoperator",
-  "description": "description_text",
+  "name": "deltaphp/operator",
+  "description": "Operator for executing command by workers, with base commands and workers. It's for subject/observer patterns, event-driven architectures like event manager",
   "license": "Apache-2.0",
   "minimum-stability": "dev",
   "prefer-stable": true,
@@ -12,12 +12,13 @@
   ],
   "autoload": {
     "psr-4": {
-      "EntityOperator\\": "src"
+      "DeltaPhp\\Operator\\": "src"
     }
   },
   "require": {
     "deltaphp/deltacore": "^2.0",
-    "deltaphp/uuid": "~0.1",
+    "deltaphp/delautils": "^1.4.4",
+    "deltaphp/uuid": "~1.0",
     "deltaphp/deltadb": "~1.3",
     "pimple/pimple": "~3.0"
   }

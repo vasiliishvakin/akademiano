@@ -1,10 +1,10 @@
 <?php
 
 
-namespace EntityOperator\Worker;
+namespace DeltaPhp\Operator\Worker;
 
 
-use EntityOperator\Command\CommandInterface;
+use DeltaPhp\Operator\Command\CommandInterface;
 
 interface WorkerInterface
 {

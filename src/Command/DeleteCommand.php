@@ -1,16 +1,20 @@
 <?php
 
 
-namespace EntityOperator\Command;
+namespace DeltaPhp\Operator\Command;
 
+
+use DeltaPhp\Operator\Entity\EntityInterface;
 
 class DeleteCommand extends Command
 {
     protected $name = self::COMMAND_DELETE;
 
-    public function __construct(array $params = null, $class = null)
+    public function __construct(EntityInterface $entity, array $params = null)
     {
-        parent::__construct($params, $class);
+        $params["entity"] = $entity;
+        $class = get_class($entity);
+        parent::__construct($params, $class, self::COMMAND_DELETE);
     }
 
 }
