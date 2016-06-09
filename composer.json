@@ -17,7 +17,7 @@
   },
   "require": {
     "deltaphp/deltacore": "^2.0",
-    "deltaphp/delautils": "^1.4.4",
+    "deltaphp/deltautils": "^1.4.4",
     "deltaphp/uuid": "~1.0",
     "deltaphp/deltadb": "~1.3",
     "pimple/pimple": "~3.0"
