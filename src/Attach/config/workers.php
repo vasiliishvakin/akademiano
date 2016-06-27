@@ -22,6 +22,10 @@ return [
             CommandInterface::COMMAND_LOAD => FileEntity::class,
             CommandInterface::COMMAND_RESERVE => FileEntity::class,
             CommandInterface::COMMAND_GENERATE_ID => FileEntity::class,
+
+            \Attach\Model\Command\AddFileCommand::COMMAND_ADD_FILE => null,
+            \Attach\Model\Command\UpdateFileCommand::COMMAND_UPDATE_FILE => null,
+            \Attach\Model\Command\DeleteFileCommand::COMMAND_DELETE_FILE => null,
         ],
     ],
     "ImageAttachWorker" => [

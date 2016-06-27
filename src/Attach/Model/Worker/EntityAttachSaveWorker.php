@@ -4,6 +4,7 @@
 namespace Attach\Model\Worker;
 
 
+use Attach\Model\Command\AddFileCommand;
 use Attach\Model\Command\EntityAttachSaveCommand;
 use Attach\Model\Command\ParseRequestFilesCommand;
 use Attach\Model\FileEntity;
@@ -29,6 +30,8 @@ use Hashids\Hashids;
 use DeltaUtils\FileSystem;
 use HttpWarp\File\FileInterface;
 use UUID\Model\UuidComplexInterface;
+use Attach\Model\Command\UpdateFileCommand;
+use Attach\Model\Command\DeleteFileCommand;
 
 class EntityAttachSaveWorker implements WorkerInterface, DelegatingInterface, ConfigurableInterface
 {
@@ -40,9 +43,24 @@ class EntityAttachSaveWorker implements WorkerInterface, DelegatingInterface, Co
 
     public function execute(CommandInterface $command)
     {
-        if ($command->getName() !== EntityAttachSaveCommand::COMMAND_ATTACH_SAVE) {
-            throw new NotSupportedCommand($command);
+        switch ($command->getName()) {
+            case EntityAttachSaveCommand::COMMAND_ATTACH_SAVE: {
+                return $this->attachSave($command);
+            }
+            case AddFileCommand::COMMAND_ADD_FILE:
+                return $this->addFile($command->getParams("file"), $command->getParams("entity"), $command->getClass());
+            case UpdateFileCommand::COMMAND_UPDATE_FILE:
+                return $this->updateFile($command->getParams("file"));
+            case DeleteFileCommand::COMMAND_DELETE_FILE:
+                return $this->deleteFile($command->getParams("file"), $command->getParams("entity"), $command->getClass());
+            default :
+                throw new NotSupportedCommand($command);
         }
+
+    }
+
+    public function attachSave(EntityAttachSaveCommand $command)
+    {
         $relationClass = $command->getClass();
         /** @var EntityInterface $entity */
         $entity = $command->getParams("entity");
