@@ -1,6 +1,8 @@
 <?php
-use EntityOperator\Worker\WorkerInterface;
+use DeltaPhp\Operator\Worker\WorkerInterface;
+use DeltaPhp\Operator\Command\CommandInterface;
 use UUID\Model\Command\CreateUuidCommand;
+use UUID\Model\UuidComplexShortTables;
 
 return [
     "UuidWorker" => [
@@ -11,7 +13,7 @@ return [
             return $w;
         },
         WorkerInterface::PARAM_ACTIONS_MAP => [
-            \EntityOperator\Command\CommandInterface::COMMAND_CREATE => \UUID\Model\UuidComplexShortTables::class,
+            CommandInterface::COMMAND_CREATE => UuidComplexShortTables::class,
             CreateUuidCommand::COMMAND_UUID_CREATE => null,
         ],
     ]

@@ -3,9 +3,9 @@
 
 namespace UUID\Model\Worker;
 
-use EntityOperator\Command\CommandInterface;
-use EntityOperator\Worker\Exception\NotSupportedCommand;
-use EntityOperator\Worker\WorkerInterface;
+use DeltaPhp\Operator\Command\CommandInterface;
+use DeltaPhp\Operator\Worker\Exception\NotSupportedCommand;
+use DeltaPhp\Operator\Worker\WorkerInterface;
 use UUID\Model\Command\CreateUuidCommand;
 use UUID\Model\Parts\UuidFactoryTrait;
 use UUID\Model\UuidComplexShortTables;

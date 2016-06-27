@@ -4,9 +4,8 @@
 namespace UUID\Model\Command;
 
 
-use EntityOperator\Command\Command;
-use EntityOperator\Command\CommandInterface;
-use UUID\Model\UuidComplexShort;
+use DeltaPhp\Operator\Command\Command;
+use DeltaPhp\Operator\Command\CommandInterface;
 use UUID\Model\UuidComplexShortTables;
 
 class CreateUuidCommand extends Command implements CommandInterface
