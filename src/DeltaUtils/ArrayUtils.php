@@ -71,9 +71,14 @@ class ArrayUtils
     public static function set(array $array, $path = null, $value)
     {
         if (is_null($path)) {
-            return $value;
+            if (!is_array($value)) {
+                $array[] = $value;
+                return $array;
+            } else {
+                return array_merge($array, $value);
+            }
         }
-        $path = (array) $path;
+        $path = (array)$path;
         $current = &$array;
         foreach ($path as $item) {
             if (!isset($current[$item])) {
@@ -87,12 +92,19 @@ class ArrayUtils
     }
 
 
+    /**
+     * @param array $array
+     * @param null $path
+     * @param $value
+     * @return array
+     */
     public static function add(array $array, $path = null, $value)
     {
         if (is_null($path)) {
-            return $value;
+                $array[] = $value;
+                return $array;
         }
-        $path = (array) $path;
+        $path = (array)$path;
         $current = &$array;
         foreach ($path as $item) {
             if (!isset($current[$item])) {
