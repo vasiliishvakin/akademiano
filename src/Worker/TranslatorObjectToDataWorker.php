@@ -3,13 +3,13 @@
 
 namespace DeltaPhp\Operator\Worker;
 
-use DeltaUtils\Object\Prototype\ArrayableInterface;
 use DeltaPhp\Operator\Command\PreCommandInterface;
 use DeltaPhp\Operator\Command\ReserveCommand;
 use DeltaPhp\Operator\Entity\EntityInterface;
 use DeltaPhp\Operator\DelegatingTrait;
 use DeltaPhp\Operator\Command\CommandInterface;
 use DeltaPhp\Operator\DelegatingInterface;
+use DeltaPhp\Operator\Worker\Exception\NotSupportedCommand;
 
 class TranslatorObjectToDataWorker implements WorkerInterface, DelegatingInterface
 {

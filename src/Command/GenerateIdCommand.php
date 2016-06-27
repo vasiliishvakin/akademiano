@@ -3,6 +3,7 @@
 
 namespace DeltaPhp\Operator\Command;
 
+use DeltaPhp\Operator\Entity\Entity;
 
 class GenerateIdCommand extends Command implements GenerateIdCommandInterface
 {

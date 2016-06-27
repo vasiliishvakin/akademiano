@@ -4,6 +4,8 @@
 namespace DeltaPhp\Operator\Command;
 
 
+use DeltaUtils\ArrayUtils;
+
 class PreCommand extends SubCommand implements PreCommandInterface
 {
     /** @var  \SplStack */
@@ -25,7 +27,7 @@ class PreCommand extends SubCommand implements PreCommandInterface
         }
         return $this->paramsStack;
     }
-    
+
     public function getParams($path = null, $default = null)
     {
         if (null === $this->params) {
@@ -34,10 +36,20 @@ class PreCommand extends SubCommand implements PreCommandInterface
         return parent::getParams($path, $default);
     }
 
-
-    public function addParams(array $params)
+    public function hasParam($path)
     {
-        $this->getParamsStack()->push($params);
+        if (null === $this->params) {
+            $this->params = $this->getParamsStack()->top();
+        }
+        return parent::hasParam($path);
+    }
+
+
+    public function addParams($params, $path = null)
+    {
+        $paramsFull = $this->getParams();
+        $paramsFull = ArrayUtils::set($paramsFull, $path, $params);
+        $this->getParamsStack()->push($paramsFull);
         $this->params = null;
     }
 

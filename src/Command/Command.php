@@ -58,6 +58,11 @@ class Command implements CommandInterface
         $this->class = $class;
     }
 
+    public function hasParam($path)
+    {
+        return ArrayUtils::issetByPath($this->params, $path);
+    }
+
     /**
      * @return array
      */
@@ -71,6 +76,7 @@ class Command implements CommandInterface
 
     /**
      * @param array $params
+     * @param array|null $path
      */
     public function setParams($params, $path = null)
     {
@@ -79,6 +85,11 @@ class Command implements CommandInterface
         } else {
             $this->params = $params;
         }
+    }
+
+    public function addParams($params, $path = null)
+    {
+        $this->params = ArrayUtils::add($this->params, $path, $params);
     }
 
     /**

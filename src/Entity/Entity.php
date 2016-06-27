@@ -4,8 +4,6 @@
 namespace DeltaPhp\Operator\Entity;
 
 
-use UUID\Model\UuidComplexShortTables;
-
 class Entity implements EntityInterface
 {
     protected $id;
@@ -23,7 +21,7 @@ class Entity implements EntityInterface
      */
     public function getId()
     {
-        /*if ($this->id && $this->id instanceof UuidComplexShortTables) {
+        /* maybe use in the future with auto uuid object creation: if ($this->id && $this->id instanceof UuidComplexShortTables) {
             $this->id = new UuidComplexShortTables($this->id);
         }*/
         return $this->id;

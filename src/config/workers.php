@@ -5,6 +5,7 @@ use DeltaPhp\Operator\Entity\NamedEntity;
 use DeltaPhp\Operator\Entity\TextEntity;
 use DeltaPhp\Operator\Command\AfterCommandInterface;
 use DeltaPhp\Operator\WorkersContainerInterface;
+use \DeltaPhp\Operator\Command\PreCommandInterface;
 
 //PostgresWorker
 return [
@@ -28,6 +29,7 @@ return [
         WorkerInterface::PARAM_TABLEID => 1,
         WorkerInterface::PARAM_ACTIONS_MAP => [
             CommandInterface::COMMAND_FIND => null,
+            PreCommandInterface::PREFIX_COMMAND_PRE . CommandInterface::COMMAND_FIND => null,
             CommandInterface::COMMAND_GET => null,
             CommandInterface::COMMAND_COUNT => null,
             CommandInterface::COMMAND_SAVE => null,

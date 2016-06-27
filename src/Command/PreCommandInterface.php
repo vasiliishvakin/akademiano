@@ -10,8 +10,6 @@ interface PreCommandInterface extends CommandInterface, PreAfterCommandInterface
 
     public function __construct(CommandInterface $command);
 
-    public function addParams(array $params);
-
     /**
      * @return CommandInterface
      */

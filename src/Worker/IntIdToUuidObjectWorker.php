@@ -7,10 +7,10 @@ namespace DeltaPhp\Operator\Worker;
 use DeltaPhp\Operator\Command\AfterCommandInterface;
 use DeltaPhp\Operator\Command\CommandInterface;
 use DeltaPhp\Operator\Command\GenerateIdCommandInterface;
-use DeltaPhp\Operator\Command\PreAfterCommandInterface;
 use DeltaPhp\Operator\DelegatingInterface;
 use DeltaPhp\Operator\DelegatingTrait;
 use UUID\Model\Command\CreateUuidCommand;
+use DeltaPhp\Operator\Worker\Exception\NotSupportedCommand;
 
 class IntIdToUuidObjectWorker implements WorkerInterface, DelegatingInterface
 {

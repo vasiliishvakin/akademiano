@@ -22,6 +22,12 @@ interface CommandInterface
 
     public function getParams($path = null, $default = null);
 
+    public function setParams($params, $path = null);
+
+    public function addParams($params, $path = null);
+
+    public function hasParam($path);
+
     public function isEmptyClass();
 
     public function hasClass();

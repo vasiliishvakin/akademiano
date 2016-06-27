@@ -4,6 +4,7 @@
 namespace DeltaPhp\Operator\Worker;
 
 
+use DeltaPhp\Operator\Entity\EntityInterface;
 use DeltaUtils\Object\Collection;
 use DeltaPhp\Operator\Command\AfterCommandInterface;
 use DeltaPhp\Operator\Command\CommandInterface;
@@ -42,6 +43,9 @@ class TranslatorDataToObjectWorker implements WorkerInterface, DelegatingInterfa
         if ($result instanceof Collection) {
             $items = clone $result;
             $items->map(function ($itemData) use ($class) {
+                if ($itemData instanceof EntityInterface) {
+                    return $itemData;
+                }
                 $entity = $this->toEntity($itemData, $class);
                 return $entity;
             });

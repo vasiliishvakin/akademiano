@@ -15,6 +15,4 @@ class RelationParamsCommand extends Command implements CommandInterface
         $params["param"] = $name;
         parent::__construct($params, $class, self::COMMAND_RELATION_PARAMS);
     }
-
-
 }

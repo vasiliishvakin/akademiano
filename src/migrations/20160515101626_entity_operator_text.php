@@ -2,7 +2,7 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class DeltaPhp\OperatorNamed extends AbstractMigration
+class EntityOperatorText extends AbstractMigration
 {
     public function up()
     {

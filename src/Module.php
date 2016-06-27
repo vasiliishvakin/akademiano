@@ -9,14 +9,13 @@ namespace DeltaPhp\Operator;
 use DeltaPhp\Operator\Worker\WorkerInterface;
 use DeltaCore\Application;
 use DeltaCore\ModuleManager;
-use DeltaPhp\Operator\Operator;
 use Pimple\Container;
 
 class Module
 {
     public static function init(ModuleManager $moduleManager, Application $application)
     {
-        $application->extend("DeltaPhp\Operator", function (Operator $operator, Container $c) use ($moduleManager) {
+        $application->extend("Operator", function (Operator $operator, Container $c) use ($moduleManager) {
             $workers = $moduleManager->getListArrayConfigs("workers");
             foreach ($workers as $workerName => $data) {
                 $workerParams = [];

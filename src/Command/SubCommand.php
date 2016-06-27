@@ -55,4 +55,14 @@ class SubCommand extends Command implements SubCommandInterface
             return ArrayUtils::get($this->params, $path, $default);
         }
     }
+
+    public function hasParam($path)
+    {
+        if (null === $this->params) {
+            $this->params = $this->getParentCommand()->getParams();
+        }
+        return parent::hasParam($path);
+    }
+
+
 }

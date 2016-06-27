@@ -2,7 +2,7 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class DeltaPhp\OperatorEntities extends AbstractMigration
+class EntityOperatorEntities extends AbstractMigration
 {
     /**
      * Change Method.

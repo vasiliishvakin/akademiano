@@ -34,7 +34,6 @@ class Operator implements OperatorInterface
     {
         if (null === $this->workers) {
             $this->workers = new WorkersContainer();
-           // $this->workers["operator"] = $this;
             $this->workers->setOperator($this);
         }
         return $this->workers;
@@ -147,34 +146,32 @@ class Operator implements OperatorInterface
 
     public function preExecute(CommandInterface $command)
     {
-        if (!$command instanceof PreAfterCommandInterface) {
-            $preCommand = new PreCommand($command);
-            $this->execute($preCommand);
-            $command = $preCommand->extractParentCommand();
-        }
-        return  $command;
+        $preCommand = new PreCommand($command);
+        $this->execute($preCommand);
+        $command = $preCommand->extractParentCommand();
+        return $command;
     }
 
     public function afterExecute(CommandInterface $command, $result)
     {
-        if (!$command instanceof PreAfterCommandInterface) {
-            if (!$result instanceof \SplStack) {
-                $stack = new \SplStack();
-                $stack->push($result);
-                $result = $stack;
-            }
-            $afterCommand = new AfterCommand($command, $result);
-            $this->execute($afterCommand);
-            $result = $afterCommand->extractResult();
+        if (!$result instanceof \SplStack) {
+            $stack = new \SplStack();
+            $stack->push($result);
+            $result = $stack;
         }
-        return  $result;
+        $afterCommand = new AfterCommand($command, $result);
+        $this->execute($afterCommand);
+        $result = $afterCommand->extractResult();
+        return $result;
     }
 
 
     public function execute(CommandInterface $command)
     {
         //prepare action
-        $command = $this->preExecute($command);
+        if (!$command instanceof PreAfterCommandInterface) {
+            $command = $this->preExecute($command);
+        }
 
         $result = null;
         $break = !($command instanceof CommandChainElementInterface) || ($command instanceof CommandFinallyInterface);
@@ -191,7 +188,9 @@ class Operator implements OperatorInterface
             }
         }
         //after execute
-        $result = $this->afterExecute($command, $result);
+        if (!$command instanceof PreAfterCommandInterface) {
+            $result = $this->afterExecute($command, $result);
+        }
         return $result;
     }
 }

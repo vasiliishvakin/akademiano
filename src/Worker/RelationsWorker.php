@@ -4,6 +4,8 @@
 namespace DeltaPhp\Operator\Worker;
 
 
+use DeltaPhp\Operator\Command\DeleteCommand;
+use DeltaPhp\Operator\Command\GetCommand;
 use DeltaUtils\Object\Collection;
 use DeltaPhp\Operator\Command\CommandInterface;
 use DeltaPhp\Operator\Command\FindCommand;
@@ -124,7 +126,7 @@ class RelationsWorker extends PostgresWorker implements DelegatingInterface, Fin
         }
     }
 
-    public function getLinked(EntityInterface $entity)
+    public function findByEntity(EntityInterface $entity)
     {
         $knownField = $this->getFieldName($entity);
         $criteriaRelations = [$knownField => $entity->getId()];
@@ -134,7 +136,14 @@ class RelationsWorker extends PostgresWorker implements DelegatingInterface, Fin
         if ($relations->isEmpty()) {
             return new Collection();
         }
+        return $relations;
+    }
 
+    public function getLinked(EntityInterface $entity)
+    {
+        $relations = $this->findByEntity($entity);
+
+        $knownField = $this->getFieldName($entity);
         $anotherField = $this->getAnotherField($knownField);
         $secondIds = $relations->lists($anotherField);
         $anotherClass = $this->getAnotherClass($entity);
@@ -142,6 +151,18 @@ class RelationsWorker extends PostgresWorker implements DelegatingInterface, Fin
         $command = new FindCommand($anotherClass, ["id" => $secondIds]);
         $entities = $this->delegate($command);
         return $entities;
+    }
+
+    public function getAnother(RelationEntity $relation, EntityInterface $entity)
+    {
+        $knownField = $this->getFieldName($entity);
+        $anotherField = $this->getAnotherField($knownField);
+        $methodGetAnother = "get" . ucfirst($anotherField);
+        $secondId = $relation->$methodGetAnother();
+        $anotherClass = $this->getAnotherClass($entity);
+        $command = new GetCommand($secondId, $anotherClass);
+        $entityAnother = $this->delegate($command);
+        return $entityAnother;
     }
 
     public function getParam($paramName, $params = [])
@@ -159,6 +180,15 @@ class RelationsWorker extends PostgresWorker implements DelegatingInterface, Fin
         }
     }
 
+    public function deleteAnother(EntityInterface $entity)
+    {
+        $anotherEntities = $this->getLinked($entity);
+        foreach ($anotherEntities as $anotherEntity) {
+            $command = new DeleteCommand($anotherEntity);
+            $this->delegate($command);
+        }
+    }
+
     public function execute(CommandInterface $command)
     {
         switch ($command->getName()) {
@@ -167,6 +197,27 @@ class RelationsWorker extends PostgresWorker implements DelegatingInterface, Fin
                 break;
             case RelationParamsCommand::COMMAND_RELATION_PARAMS :
                 return $this->getParam($command->getParams("param"), $command->getParams());
+                break;
+            case CommandInterface::COMMAND_FIND :
+                if ($command->hasParam("entity")) {
+                    return $this->findByEntity($command->getParams("entity"));
+                } else {
+                    return parent::execute($command);
+                }
+                break;
+            case CommandInterface::COMMAND_DELETE :
+                $id = $command->getParams("id");
+                $relation = $command->getParams("entity");
+                if ($command->hasParam("currentLinkedEntity")) {
+                    $entity = $command->getParams("currentLinkedEntity");
+                    $anotherEntity = $this->getAnother($relation, $entity);
+                }
+                parent::delete($id);
+                if (isset($anotherEntity)) {
+                    $commandDeleteAnother = new DeleteCommand($anotherEntity);
+                    $this->delegate($commandDeleteAnother);
+                }
+                break;
             default:
                 return parent::execute($command);
 

@@ -5,6 +5,8 @@ namespace DeltaPhp\Operator\Worker;
 
 
 use DeltaDb\Adapter\PgsqlAdapter;
+use DeltaPhp\Operator\Command\PreCommand;
+use DeltaPhp\Operator\Command\PreCommandInterface;
 use DeltaUtils\Object\Collection;
 use DeltaUtils\Object\Prototype\StringableInterface;
 use DeltaPhp\Operator\Command\CommandInterface;
@@ -128,6 +130,15 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
             case GenerateIdCommandInterface::COMMAND_GENERATE_ID : {
                 return $this->genId($command->getParams("tableId"));
             }
+            case PreCommandInterface::PREFIX_COMMAND_PRE . CommandInterface::COMMAND_FIND: {
+                /** @var PreCommand $command */
+                $criteria = $command->getParams("criteria");
+                if (null !== $criteria) {
+                    $criteria = $this->filterCriteria($command->getParams("criteria", []));
+                    $command->addParams($criteria, "criteria");
+                }
+                break;
+            }
             default:
                 throw new \InvalidArgumentException("Command type \" {$command->getName()} not supported");
         }
@@ -212,13 +223,13 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
             $getMethod = "get" . ucfirst($field);
             if (method_exists($entity, $getMethod) && is_callable([$entity, $getMethod])) {
                 $fieldValue = $entity->$getMethod();
-                $fieldValue = $this->filterFieldOnReserve($entity, $field, $fieldValue);
+                $fieldValue = $this->filterFieldToPostgresType($fieldValue, $field, $entity);
                 $data[$field] = $fieldValue;
             } else {
                 $isMethod = "is" . ucfirst($field);
                 if (method_exists($entity, $isMethod) && is_callable([$entity, $isMethod])) {
                     $fieldValue = $entity->$isMethod();
-                    $fieldValue = $this->filterFieldOnReserve($entity, $field, $fieldValue);
+                    $fieldValue = $this->filterFieldToPostgresType($fieldValue, $field, $entity);
                     $data[$field] = $fieldValue;
                 }
             }
@@ -226,7 +237,7 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
         return $data;
     }
 
-    public function filterFieldOnReserve(EntityInterface $entity, $fieldName, $value)
+    public function filterFieldToPostgresType($value, $fieldName = null, EntityInterface $entity = null)
     {
         if ($value instanceof EntityInterface) {
             $value = (string)$value->getId();
@@ -251,6 +262,14 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
         $adapter = $this->getAdapter();
         $result = $adapter->selectCell($sql);
         return $result;
+    }
+
+    public function filterCriteria(array $criteria)
+    {
+        foreach ($criteria as $key => $value) {
+            $criteria[$key] = $this->filterFieldToPostgresType($value, $key);
+        }
+        return $criteria;
     }
 
 }
