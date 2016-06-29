@@ -28,6 +28,12 @@ return [
             "cutStr" => [["\\DeltaUtils\\StringUtils", "cutStr"], ['pre_escape' => 'html', 'is_safe' => array('html')]],
             "nl2Array" => [["\\DeltaUtils\\StringUtils", "nl2Array"], []],
             "idStr" => [["\\DeltaUtils\\StringUtils", "toIdStr9"], []],
+            "dechex" => [function($id) {
+                if(is_object($id) && method_exists($id, "__toString")) {
+                    $id = (string) $id;
+                }
+                return dechex((int) $id);
+            }, []],
             "dateIntl" => [["\\DeltaUtils\\Time", "toStrIntl"], []],
             "date2Month" => [["\\DeltaUtils\\Time", "calendarMonth"], ['is_safe' => array('html')]],
         ],
@@ -82,5 +88,6 @@ return [
         "Sequence",
         "Image",
         "UUID",
+        "DeltaPhp\\Operator",
     ],
 ];
