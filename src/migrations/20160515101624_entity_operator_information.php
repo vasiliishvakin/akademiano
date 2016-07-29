@@ -2,7 +2,7 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class EntityOperatorEntities extends AbstractMigration
+class EntityOperatorInformation extends AbstractMigration
 {
     /**
      * Change Method.
@@ -28,16 +28,22 @@ class EntityOperatorEntities extends AbstractMigration
     public function up()
     {
         $sql = <<<SQL
-        
-CREATE TABLE public.entities
+CREATE TABLE information
 (
-  id bigint NOT NULL,
-  created timestamp without time zone,
-  changed timestamp without time zone,
-  active boolean DEFAULT true,
-  CONSTRAINT entities_pkey PRIMARY KEY (id)
-);
+-- Унаследована from table entities:  id bigint NOT NULL,
+-- Унаследована from table entities:  created timestamp without time zone,
+-- Унаследована from table entities:  changed timestamp without time zone,
+-- Унаследована from table entities:  active boolean DEFAULT true,
+  title text,
+  description text,
+  content text,
+  CONSTRAINT information_pkey PRIMARY KEY (id)
+)
+INHERITS (entities);
 SQL;
+        $this->execute($sql);
+
+        $sql = "CREATE SEQUENCE uuid_complex_short_tables_2";
         $this->execute($sql);
     }
 }

@@ -7,7 +7,7 @@ class EntityOperatorText extends AbstractMigration
     public function up()
     {
         $sql = <<<SQL
-CREATE TABLE public.texts
+CREATE TABLE texts
 (
 -- Унаследована from table named:  id bigint NOT NULL,
 -- Унаследована from table named:  created timestamp without time zone,
@@ -18,7 +18,7 @@ CREATE TABLE public.texts
   content text,
   CONSTRAINT text_pkey PRIMARY KEY (id)
 )
-INHERITS (public.named);
+INHERITS (named);
 SQL;
         $this->execute($sql);
     }
