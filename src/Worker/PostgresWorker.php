@@ -13,6 +13,7 @@ use DeltaPhp\Operator\Command\CommandInterface;
 use DeltaPhp\Operator\Command\GenerateIdCommandInterface;
 use DeltaPhp\Operator\Entity\EntityInterface;
 use DeltaPhp\Operator\LoaderInterface;
+use DeltaUtils\StringUtils;
 
 class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperInterface, FinderInterface, LoaderInterface, ReserveInterface, GenerateIdWorkerInterface
 {
@@ -204,8 +205,10 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
     {
         $fields = $this->getFields();
         foreach ($fields as $field) {
-            if (isset($data[$field])) {
-                $method = "set" . ucfirst($field);
+            $objectAttribute = StringUtils::lowDashToCamelCase($field);
+            $value = isset($data[$objectAttribute]) ? $data[$objectAttribute] : (isset($data[$field]) ? $data[$field] : null);
+            if ($value) {
+                $method = "set" . ucfirst($objectAttribute);
                 if (method_exists($entity, $method)) {
                     $value = $data[$field];
                     $entity->{$method}($value);

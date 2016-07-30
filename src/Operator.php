@@ -93,6 +93,15 @@ class Operator implements OperatorInterface
         return $this->getWorker($workerName);
     }
 
+    public function getTableIdByWorker($worker)
+    {
+        $workers = array_flip($this->workerTables);
+        if (!isset($workers[$worker])) {
+            return null;
+        }
+        return $workers[$worker];
+    }
+
     public function getWorkerParams($workerName = null, $paramName = null)
     {
         if (null === $workerName) {

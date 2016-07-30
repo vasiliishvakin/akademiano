@@ -52,6 +52,7 @@ return [
         WorkerInterface::PARAM_TABLEID => 2,
         WorkerInterface::PARAM_ACTIONS_MAP => [
             CommandInterface::COMMAND_FIND => NamedEntity::class,
+            PreCommandInterface::PREFIX_COMMAND_PRE . CommandInterface::COMMAND_FIND => null,
             CommandInterface::COMMAND_GET => NamedEntity::class,
             CommandInterface::COMMAND_COUNT => NamedEntity::class,
             CommandInterface::COMMAND_SAVE => NamedEntity::class,
@@ -74,6 +75,7 @@ return [
         WorkerInterface::PARAM_TABLEID => 3,
         WorkerInterface::PARAM_ACTIONS_MAP => [
             CommandInterface::COMMAND_FIND => TextEntity::class,
+            PreCommandInterface::PREFIX_COMMAND_PRE . CommandInterface::COMMAND_FIND => null,
             CommandInterface::COMMAND_GET => TextEntity::class,
             CommandInterface::COMMAND_COUNT => TextEntity::class,
             CommandInterface::COMMAND_SAVE => TextEntity::class,
@@ -82,7 +84,6 @@ return [
             CommandInterface::COMMAND_RESERVE => TextEntity::class,
             CommandInterface::COMMAND_GENERATE_ID => TextEntity::class,
         ],
-
     ],
 
     "TranslatorDataToObjectWorker" => [
@@ -126,5 +127,5 @@ return [
         WorkerInterface::PARAM_ACTIONS_MAP => [
             \DeltaPhp\Operator\Worker\IntIdToUuidObjectWorker::COMMAND_AFTER_GENERATE_ID => null,
         ],
-    ]
+    ],
 ];

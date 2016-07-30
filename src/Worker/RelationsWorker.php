@@ -146,6 +146,10 @@ class RelationsWorker extends PostgresWorker implements DelegatingInterface, Fin
         $knownField = $this->getFieldName($entity);
         $anotherField = $this->getAnotherField($knownField);
         $secondIds = $relations->lists($anotherField);
+
+        if (empty($secondIds)) {
+            return new Collection();
+        }
         $anotherClass = $this->getAnotherClass($entity);
 
         $command = new FindCommand($anotherClass, ["id" => $secondIds]);
