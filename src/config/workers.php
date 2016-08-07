@@ -2,10 +2,12 @@
 use DeltaPhp\Operator\Worker\WorkerInterface;
 use DeltaPhp\Operator\Command\CommandInterface;
 use DeltaPhp\Operator\Entity\NamedEntity;
-use DeltaPhp\Operator\Entity\TextEntity;
+use DeltaPhp\Operator\Entity\ContentEntity;
 use DeltaPhp\Operator\Command\AfterCommandInterface;
 use DeltaPhp\Operator\WorkersContainerInterface;
 use \DeltaPhp\Operator\Command\PreCommandInterface;
+use DeltaPhp\Operator\Entity\RelationEntity;
+use DeltaPhp\Operator\Entity\TagEntity;
 
 //PostgresWorker
 return [
@@ -52,7 +54,7 @@ return [
         WorkerInterface::PARAM_TABLEID => 2,
         WorkerInterface::PARAM_ACTIONS_MAP => [
             CommandInterface::COMMAND_FIND => NamedEntity::class,
-            PreCommandInterface::PREFIX_COMMAND_PRE . CommandInterface::COMMAND_FIND => null,
+            PreCommandInterface::PREFIX_COMMAND_PRE . CommandInterface::COMMAND_FIND => NamedEntity::class,
             CommandInterface::COMMAND_GET => NamedEntity::class,
             CommandInterface::COMMAND_COUNT => NamedEntity::class,
             CommandInterface::COMMAND_SAVE => NamedEntity::class,
@@ -62,27 +64,51 @@ return [
             CommandInterface::COMMAND_GENERATE_ID => NamedEntity::class,
         ],
     ],
+    
 
-    "TextEntitiesWorker" => [
+    "ContentEntitiesWorker" => [
         function (WorkersContainerInterface $s) {
             $w = new \DeltaPhp\Operator\Worker\PostgresWorker();
             $adapter = $s->getOperator()->getDependency("dbAdapter");
             $w->setAdapter($adapter);
-            $w->setTable("texts");
-            $w->addField("content");
+            $w->setTable("content");
+            $w->addFields(["title", "description", "content"]);
             return $w;
         },
         WorkerInterface::PARAM_TABLEID => 3,
         WorkerInterface::PARAM_ACTIONS_MAP => [
-            CommandInterface::COMMAND_FIND => TextEntity::class,
-            PreCommandInterface::PREFIX_COMMAND_PRE . CommandInterface::COMMAND_FIND => null,
-            CommandInterface::COMMAND_GET => TextEntity::class,
-            CommandInterface::COMMAND_COUNT => TextEntity::class,
-            CommandInterface::COMMAND_SAVE => TextEntity::class,
-            CommandInterface::COMMAND_DELETE => TextEntity::class,
-            CommandInterface::COMMAND_LOAD => TextEntity::class,
-            CommandInterface::COMMAND_RESERVE => TextEntity::class,
-            CommandInterface::COMMAND_GENERATE_ID => TextEntity::class,
+            CommandInterface::COMMAND_FIND => ContentEntity::class,
+            PreCommandInterface::PREFIX_COMMAND_PRE . CommandInterface::COMMAND_FIND => ContentEntity::class,
+            CommandInterface::COMMAND_GET => ContentEntity::class,
+            CommandInterface::COMMAND_COUNT => ContentEntity::class,
+            CommandInterface::COMMAND_SAVE => ContentEntity::class,
+            CommandInterface::COMMAND_DELETE => ContentEntity::class,
+            CommandInterface::COMMAND_LOAD => ContentEntity::class,
+            CommandInterface::COMMAND_RESERVE => ContentEntity::class,
+            CommandInterface::COMMAND_GENERATE_ID => ContentEntity::class,
+        ],
+    ],
+
+    "RelationEntitiesWorker" => [
+        function (WorkersContainerInterface $s) {
+            $w = new \DeltaPhp\Operator\Worker\PostgresWorker();
+            $adapter = $s->getOperator()->getDependency("dbAdapter");
+            $w->setAdapter($adapter);
+            $w->setTable("relations");
+            $w->addFields(["first", "second"]);
+            return $w;
+        },
+        WorkerInterface::PARAM_TABLEID => 4,
+        WorkerInterface::PARAM_ACTIONS_MAP => [
+            CommandInterface::COMMAND_FIND => RelationEntity::class,
+            PreCommandInterface::PREFIX_COMMAND_PRE . CommandInterface::COMMAND_FIND => RelationEntity::class,
+            CommandInterface::COMMAND_GET => RelationEntity::class,
+            CommandInterface::COMMAND_COUNT => RelationEntity::class,
+            CommandInterface::COMMAND_SAVE => RelationEntity::class,
+            CommandInterface::COMMAND_DELETE => RelationEntity::class,
+            CommandInterface::COMMAND_LOAD => RelationEntity::class,
+            CommandInterface::COMMAND_RESERVE => RelationEntity::class,
+            CommandInterface::COMMAND_GENERATE_ID => RelationEntity::class,
         ],
     ],
 

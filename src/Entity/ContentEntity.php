@@ -4,7 +4,7 @@
 namespace DeltaPhp\Operator\Entity;
 
 
-class TextEntity extends NamedEntity implements TextEntityInterface
+class ContentEntity extends NamedEntity implements ContentEntityInterface
 {
 
     protected $content;

@@ -9,7 +9,7 @@ trait OperatorDiTrait
     abstract public function getDIContainer();
 
     /**
-     * @return \DeltaPhp\Operator\OperatorInterface
+     * @return \DeltaPhp\Operator\EntityOperator
      */
     public function getOperator()
     {

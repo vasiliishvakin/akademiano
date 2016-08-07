@@ -4,7 +4,7 @@
 namespace DeltaPhp\Operator\Entity;
 
 
-interface TextEntityInterface extends NamedEntityInterface
+interface ContentEntityInterface extends NamedEntityInterface
 {
     public function getContent();
 }

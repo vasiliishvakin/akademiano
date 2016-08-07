@@ -20,5 +20,9 @@ CREATE TABLE relations
 INHERITS (entities);
 SQL;
         $this->execute($sql);
+
+
+        $sql = "CREATE SEQUENCE uuid_complex_short_tables_4";
+        $this->execute($sql);
     }
 }
