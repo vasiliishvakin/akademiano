@@ -12,23 +12,22 @@ namespace Attach\Model\Parts;
 use Attach\Model\FileManager;
 use DeltaUtils\Object\Collection;
 
-trait GetImagesTrait
+/**
+ * Class GetImagesTrait
+ * @package Attach\Model\Parts
+ */
+trait ImagesTrait
 {
-    /** @var  \Attach\Model\File[]|Collection */
+    /** @var  \Attach\Model\ImageFile[]|Collection */
     protected $images;
-    /** @var  \Attach\Model\File */
+    /** @var  \Attach\Model\ImageFile */
     protected $titleImage;
-    /** @var  \Attach\Model\File[] */
+    /** @var  \Attach\Model\ImageFile[] */
     protected $otherImages;
 
     public function getImages()
     {
-        if (is_null($this->images)) {
-            $fm = $this->getFileManager();
-            /** @var FileManager images */
-            $this->images = $fm->getFilesForObject($this, ["type" => "image"]);
-        }
-        return $this->images;
+        
     }
 
     public function getOtherImages()

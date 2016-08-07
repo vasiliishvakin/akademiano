@@ -7,7 +7,7 @@ class ImagesWithOperator extends AbstractMigration
     public function up()
     {
         $sql = <<<SQL
-CCREATE TABLE images
+CREATE TABLE images
 (
 -- Унаследована from table files:  id bigint NOT NULL,
 -- Унаследована from table files:  created timestamp without time zone,

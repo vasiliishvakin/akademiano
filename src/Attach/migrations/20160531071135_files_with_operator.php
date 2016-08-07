@@ -6,6 +6,10 @@ class FilesWithOperator extends AbstractMigration
 {
     public function up()
     {
+        $table = $this->table("files");
+        $table->rename("files_old");
+        $table->save();
+
         $sql = <<<SQL
 CREATE TABLE files
 (
@@ -18,7 +22,7 @@ CREATE TABLE files
   type text,
   sub_type text,
   path text,
-  CONSTRAINT files_pkey PRIMARY KEY (id)
+  CONSTRAINT files_eo_pkey PRIMARY KEY (id)
 )
 INHERITS (named);
 SQL;
