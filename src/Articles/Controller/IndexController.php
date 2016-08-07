@@ -9,16 +9,24 @@ namespace Articles\Controller;
 use Articles\Model\Parts\GetArticlesManager;
 use DeltaCore\AbstractController;
 use DeltaDb\Adapter\WhereParams\Between;
+use DeltaPhp\Operator\EntityOperator;
 use DeltaUtils\ArrayUtils;
 use DeltaUtils\Time;
+use DeltaRouter\Exception\NotFoundException;
 
 class IndexController extends AbstractController
 {
-    use GetArticlesManager;
 
     public function listAction(array $params = [])
     {
-        $manager = $this->getArticlesManager();
+        /** @var EntityOperator $operator */
+        $operator = $this->getOperator();
+
+        $items = $operator->find();
+        if ($items->isEmpty()) {
+            throw new NotFoundException("Articles not found");
+        }
+
         $itemsPerPage = $this->getConfig(["Articles", "itemsPerPage"], 10);
         $section = ArrayUtils::get($params, ["section"]);
         $criteria = [];
