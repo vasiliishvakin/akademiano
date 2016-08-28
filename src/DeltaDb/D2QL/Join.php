@@ -116,14 +116,6 @@ class Join extends Element implements CriteriaInterface
 
     public function toSql()
     {
-        /*switch ($this->getType()) {
-            case self::TYPE_LEFT :
-                $joinType = "left";
-                break;
-            default:
-                throw  new \LogicException("bad join type");
-
-        }*/
         $joinType = $this->getType();
         $t1 = $this->escapeIdentifier($this->getTable());
         $t2 = $this->escapeIdentifier($this->getRelatedTable());

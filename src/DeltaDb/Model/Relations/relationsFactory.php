@@ -44,5 +44,4 @@ class relationsFactory
     {
         return isset($this->managersParams[$managerName]) ? $this->managersParams[$managerName] : null;
     }
-
-} 
+}

@@ -80,7 +80,7 @@ class Criteria extends Element implements CriteriaIncludeInterface, ElementInter
                     $tables[$criteriaTable] = $criteriaTable;
                 }
                 $relatedTable = $criteriaItem->getRelatedTable();
-                if (null !== $relatedTable and !isset($tables[$relatedTable])) {
+                if (null !== $relatedTable && !isset($tables[$relatedTable])) {
                     $tables[$relatedTable] = $relatedTable;
                 }
             }

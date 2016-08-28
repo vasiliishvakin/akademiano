@@ -603,7 +603,6 @@ class Repository implements RepositoryInterface
     public function reserve(EntityInterface $entity)
     {
         $fields = $this->getFieldsList();
-        $data = [];
         $fieldsData = [];
         $rawFields = [];
         foreach ($fields as $field) {

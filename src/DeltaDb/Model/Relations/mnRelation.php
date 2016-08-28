@@ -89,6 +89,4 @@ class mnRelation extends AbstractEntity implements EntityInterface
     {
         $this->secondManager = $secondManager;
     }
-
-
 } 

@@ -16,7 +16,7 @@ abstract class AbstractAdapter implements AdapterInterface
 
     abstract public function escapeIdentifier($identifier);
 
-    function __construct($dsn = null, $params = [])
+    public function __construct($dsn = null, $params = [])
     {
         if (!is_null($dsn)) {
             $this->setDsn($dsn);
@@ -55,7 +55,7 @@ abstract class AbstractAdapter implements AdapterInterface
         $this->params = $params;
     }
 
-    public function IsConnect()
+    public function isConnect()
     {
         return !is_null($this->connection);
     }
@@ -105,4 +105,4 @@ abstract class AbstractAdapter implements AdapterInterface
         return $orderStr;
     }
 
-} 
+}

@@ -8,7 +8,7 @@ namespace DeltaDb\Adapter;
 
 interface AdapterInterface
 {
-    function __construct($dsn = null);
+    public function __construct($dsn = null);
 
     public function connect($dsn = null);
 
@@ -48,4 +48,4 @@ interface AdapterInterface
 
     public function count($table, array $criteria = []);
 
-} 
+}

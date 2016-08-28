@@ -74,7 +74,7 @@ class PgsqlAdapter extends AbstractAdapter
     /**
      * @param int $isTransaction
      */
-    protected function setIsTransaction($isTransaction)
+    protected function setTransaction($isTransaction)
     {
         $this->isTransaction = $isTransaction;
     }
@@ -82,7 +82,7 @@ class PgsqlAdapter extends AbstractAdapter
     /**
      * @return int
      */
-    public function IsTransaction()
+    public function isTransaction()
     {
         return $this->isTransaction;
     }
@@ -92,7 +92,7 @@ class PgsqlAdapter extends AbstractAdapter
         if ($this->isTransaction()) {
             throw new \LogicException('Transaction already started');
         }
-        $this->setIsTransaction(true);
+        $this->setTransaction(true);
         pg_query('BEGIN');
     }
 
@@ -102,7 +102,7 @@ class PgsqlAdapter extends AbstractAdapter
             throw new \LogicException('Transaction not started');
         }
         pg_query('COMMIT');
-        $this->setIsTransaction(false);
+        $this->setTransaction(false);
     }
 
     public function rollBack()
@@ -111,7 +111,7 @@ class PgsqlAdapter extends AbstractAdapter
             throw new \LogicException('Transaction not started');
         }
         pg_query('ROLLBACK');
-        $this->setIsTransaction(false);
+        $this->setTransaction(false);
     }
 
     public function insert($table, $fields, $idName = null, $rawFields = null)

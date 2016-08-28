@@ -11,7 +11,7 @@ class Between
     protected $start;
     protected $end;
 
-    function __construct($start, $end)
+    public function __construct($start, $end)
     {
         $this->setStart($start);
         $this->setEnd($end);
@@ -48,5 +48,4 @@ class Between
     {
         $this->end = $end;
     }
-
 }

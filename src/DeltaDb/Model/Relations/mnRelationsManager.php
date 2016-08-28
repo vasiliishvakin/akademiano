@@ -1,14 +1,10 @@
 <?php
-/**
- * User: Vasiliy Shvakin (orbisnull) zen4dev@gmail.com
- */
 
 namespace DeltaDb\Model\Relations;
 
 
 use DeltaDb\EntityInterface;
 use DeltaDb\Repository;
-use DeltaUtils\Parts\InnerCache;
 use DeltaUtils\StringUtils;
 
 class mnRelationsManager extends Repository

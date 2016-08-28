@@ -34,8 +34,8 @@ class VariableEntity extends AbstractEntity implements EntityInterface, MagicMet
             $prepareFields[$field] = null;
         }
         $this->fields = $prepareFields;
-    } 
-  
+    }
+
     public function getFieldsList()
     {
         return array_keys($this->fields);
@@ -68,21 +68,22 @@ class VariableEntity extends AbstractEntity implements EntityInterface, MagicMet
         return $this->fields[$field];
     }
 
-    function __call($name, $arguments)
+    public function __call($name, $arguments)
     {
         try {
             $result = parent::__call($name, $arguments);
             return $result;
-        }catch (\BadMethodCallException $e) {}
+        } catch (\BadMethodCallException $e) {
+        }
 
         $prefix = lcfirst(substr($name, 0, 3));
         $field = lcfirst(substr($name, 3));
-        if ( ($prefix !== "get" && $prefix !== "set") || !$this->isFieldExist($field)) {
+        if (($prefix !== "get" && $prefix !== "set") || !$this->isFieldExist($field)) {
             throw new \BadMethodCallException("method $name not exist");
         }
-        switch($prefix) {
+        switch ($prefix) {
             case "set":
-                if (count($arguments)!==1) {
+                if (count($arguments) !== 1) {
                     throw new \InvalidArgumentException("In set field method you mast set value");
                 }
                 return $this->setField($field, $arguments[0]);
@@ -93,7 +94,7 @@ class VariableEntity extends AbstractEntity implements EntityInterface, MagicMet
         }
     }
 
-    function __get($field)
+    public function __get($field)
     {
         $field = StringUtils::lowDashToCamelCase($field);
         if (!$this->isFieldExist($field)) {
@@ -102,7 +103,7 @@ class VariableEntity extends AbstractEntity implements EntityInterface, MagicMet
         return $this->getField($field);
     }
 
-    function __isset($field)
+    public function __isset($field)
     {
         $field = StringUtils::lowDashToCamelCase($field);
         $fieldList = array_flip($this->getFieldsList());
@@ -116,6 +117,4 @@ class VariableEntity extends AbstractEntity implements EntityInterface, MagicMet
         }
         return $this->getField("id");
     }
-
-
-} 
+}
