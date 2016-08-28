@@ -1,7 +1,4 @@
 <?php
-/**
- * User: Vasiliy Shvakin (orbisnull) zen4dev@gmail.com
- */
 
 namespace DeltaDb\Adapter;
 
@@ -164,7 +161,12 @@ class PgsqlAdapter extends AbstractAdapter
             return pg_escape_identifier($identifier);
         }
         $fieldArr = explode(".", $identifier);
-        return $fieldArr[0] . "." . pg_escape_identifier($fieldArr[1]);
+        return pg_escape_identifier($fieldArr[0]) . "." . pg_escape_identifier($fieldArr[1]);
+    }
+
+    public function escape($value)
+    {
+        return pg_escape_literal($value);
     }
 
     public function getWhere(array $criteria, $num = 0)
