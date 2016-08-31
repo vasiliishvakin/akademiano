@@ -15,6 +15,7 @@ interface CommandInterface
     const COMMAND_LOAD = "load";
     const COMMAND_RESERVE = "reserve";
     const COMMAND_GENERATE_ID = "generate.id";
+    const COMMAND_WORKER_INFO = "worker.info";
 
     public function getName();
 

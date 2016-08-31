@@ -5,6 +5,9 @@ namespace DeltaPhp\Operator\Worker;
 
 
 use DeltaDb\Adapter\PgsqlAdapter;
+use DeltaDb\D2QL\Criteria;
+use DeltaDb\D2QL\Select;
+use DeltaDb\D2QL\Where;
 use DeltaPhp\Operator\Command\PreCommand;
 use DeltaPhp\Operator\Command\PreCommandInterface;
 use DeltaUtils\Object\Collection;
@@ -134,10 +137,15 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
             case PreCommandInterface::PREFIX_COMMAND_PRE . CommandInterface::COMMAND_FIND: {
                 /** @var PreCommand $command */
                 $criteria = $command->getParams("criteria");
-                if (null !== $criteria) {
+                if (null !== $criteria && (!$criteria instanceof Criteria)) {
                     $criteria = $this->filterCriteria($command->getParams("criteria", []));
                     $command->addParams($criteria, "criteria");
                 }
+                break;
+            }
+            case CommandInterface::COMMAND_WORKER_INFO: {
+                $attribute = $command->getParams("attribute");
+                return $this->getAttribute($attribute, $command->getParams());
                 break;
             }
             default:
@@ -145,12 +153,36 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
         }
     }
 
-    public function find($criteria, $limit = null, $offset = null, $orderBy = null)
+    protected function findByCriteria(Criteria $criteria, $limit = null, $offset = null, $orderBy = null)
+    {
+        $adapter = $this->getAdapter();
+        $table = $this->getTable();
+        $query = (new Select($adapter))
+            ->addTable($table)
+            ->addField("*", $table, true)
+            ->setCriteria($criteria);
+        $sql = $query->toSql();
+        $data = $adapter->select($sql);
+        $data = new Collection($data);
+        return $data;
+    }
+
+    protected function findBy(array $criteria, $limit = null, $offset = null, $orderBy = null)
     {
         $adapter = $this->getAdapter();
         $table = $this->getTable();
         $data = $adapter->selectBy($table, $criteria, $limit, $offset, $orderBy);
         $data = new Collection($data);
+        return $data;
+    }
+
+    public function find($criteria, $limit = null, $offset = null, $orderBy = null)
+    {
+        if ($criteria instanceof Criteria) {
+            return $this->findByCriteria($criteria, $limit, $offset, $orderBy);
+        } else {
+            return $this->findBy($criteria, $limit, $offset, $orderBy);
+        }
         return $data;
     }
 
@@ -169,7 +201,7 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
     {
         $adapter = $this->getAdapter();
         $table = $this->getTable();
-        return $adapter->count($table, $criteria);
+        return (integer) $adapter->count($table, $criteria);
     }
 
     public function get($id)
@@ -275,4 +307,17 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
         return $criteria;
     }
 
+    public function getAttribute($attribute, array $params = [])
+    {
+        switch ($attribute) {
+            case "table" : {
+                return $this->getTable();
+                break;
+            }
+            case "fields" : {
+                return $this->getFields();
+                break;
+            }
+        }
+    }
 }

@@ -4,8 +4,12 @@
 namespace DeltaPhp\Operator\Worker;
 
 
+use DeltaDb\D2QL\Criteria;
+use DeltaDb\D2QL\Join;
+use DeltaDb\D2QL\Where;
 use DeltaPhp\Operator\Command\DeleteCommand;
 use DeltaPhp\Operator\Command\GetCommand;
+use DeltaPhp\Operator\Command\InfoWorkerCommand;
 use DeltaUtils\Object\Collection;
 use DeltaPhp\Operator\Command\CommandInterface;
 use DeltaPhp\Operator\Command\FindCommand;
@@ -190,6 +194,57 @@ class RelationsWorker extends PostgresWorker implements DelegatingInterface, Fin
         foreach ($anotherEntities as $anotherEntity) {
             $command = new DeleteCommand($anotherEntity);
             $this->delegate($command);
+        }
+    }
+
+    protected function getTableForClass($class)
+    {
+        $command = new InfoWorkerCommand("table", $class);
+        $table = $this->delegate($command);
+        return $table;
+    }
+
+
+    public function getRelatedCriteria($knownClass, $joinType = Join::TYPE_INNER)
+    {
+        $criteria = new Criteria($this->getAdapter());
+        $knownField = $this->getFieldName($knownClass);
+        $destinationField = $this->getAnotherField($knownField);
+        $destinationClass = $this->getAnotherClass($knownClass);
+
+        $relationTable = $this->getTable();
+        $knownTable = $this->getTableForClass($knownClass);
+        $destinationTable = $this->getTableForClass($destinationClass);
+
+        //join for relation table
+        $criteria->createJoin($relationTable, $knownField, $knownTable, "id", $joinType);
+
+        //join for another table
+        $criteria->createJoin($destinationTable, "id", $relationTable, $destinationField, $joinType);
+
+        /*$criteria->createWhere($relationTable, $knownField, "{$knownTable}.id", "=", Where::REL_AND, Where::TYPE_ID);
+        $criteria->createWhere($relationTable, $destinationField, "{$destinationTable}.id", "=", Where::REL_AND, Where::TYPE_ID);*/
+
+        return $criteria;
+    }
+
+    public function getAttribute($attribute, array $params = [])
+    {
+        switch ($attribute) {
+            case "relatedCriteria" : {
+                $currentClass = $params["currentClass"];
+                $type = isset($params["joinType"]) ? $params["joinType"] : Join::TYPE_INNER;
+                return $this->getRelatedCriteria($currentClass, $type);
+                break;
+            }
+            case "relatedTable" : {
+                $currentClass = $params["currentClass"];
+                $relatedClass = $this->getAnotherClass($currentClass);
+                return $this->getTableForClass($relatedClass);
+                break;
+            }
+            default:
+                return parent::getAttribute($attribute, $params);
         }
     }
 

@@ -39,6 +39,7 @@ return [
             CommandInterface::COMMAND_LOAD => null,
             CommandInterface::COMMAND_RESERVE => null,
             CommandInterface::COMMAND_GENERATE_ID => null,
+            CommandInterface::COMMAND_WORKER_INFO => null,
         ],
     ],
 
@@ -62,6 +63,7 @@ return [
             CommandInterface::COMMAND_LOAD => NamedEntity::class,
             CommandInterface::COMMAND_RESERVE => NamedEntity::class,
             CommandInterface::COMMAND_GENERATE_ID => NamedEntity::class,
+            CommandInterface::COMMAND_WORKER_INFO => NamedEntity::class,
         ],
     ],
     
@@ -86,6 +88,7 @@ return [
             CommandInterface::COMMAND_LOAD => ContentEntity::class,
             CommandInterface::COMMAND_RESERVE => ContentEntity::class,
             CommandInterface::COMMAND_GENERATE_ID => ContentEntity::class,
+            CommandInterface::COMMAND_WORKER_INFO => ContentEntity::class,
         ],
     ],
 
@@ -109,6 +112,7 @@ return [
             CommandInterface::COMMAND_LOAD => RelationEntity::class,
             CommandInterface::COMMAND_RESERVE => RelationEntity::class,
             CommandInterface::COMMAND_GENERATE_ID => RelationEntity::class,
+            CommandInterface::COMMAND_WORKER_INFO => RelationEntity::class,
         ],
     ],
 

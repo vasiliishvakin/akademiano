@@ -61,6 +61,11 @@ class EntityOperator extends Operator implements OperatorInterface
 
     public function save(EntityInterface $entity)
     {
+        if (null === $entity->getId() && method_exists($entity, "setId")) {
+            $id = $this->genId(get_class($entity));
+            $entity->setId($id);
+        }
+
         $command = new SaveCommand($entity);
         $result = $this->execute($command);
         return $result;
