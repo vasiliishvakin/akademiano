@@ -12,7 +12,7 @@ namespace DeltaUtils\Object;
 use DeltaUtils\Object\Prototype\ArrayableInterface;
 use DeltaUtils\Exception\EmptyException;
 
-class Collection extends ArrayObject implements ArrayableInterface
+class Collection extends ArrayObject implements ArrayableInterface, \JsonSerializable
 {
     function __construct($data = null)
     {
@@ -229,5 +229,10 @@ class Collection extends ArrayObject implements ArrayableInterface
             $this[$key] = call_user_func($function, $item, $key);
         }
         return $this;
+    }
+
+    function jsonSerialize()
+    {
+        return $this->toArray();
     }
 }
