@@ -9,9 +9,11 @@ use Exception;
 
 class BadRelatedClass extends \InvalidArgumentException
 {
-    public function __construct(RelationsWorker $worker, $class, $code = 0, Exception $previous = null)
+    public function __construct(RelationsWorker $worker = null, $class = null, $code = 0, Exception $previous = null)
     {
-        $message = "";
+        if (!empty($worker) && !empty($class)) {
+            $message = "In worker " . get_class($worker) . " bad class " . $class;
+        }
         parent::__construct($message, $code, $previous);
     }
 }

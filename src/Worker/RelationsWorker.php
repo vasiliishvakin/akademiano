@@ -95,26 +95,28 @@ class RelationsWorker extends PostgresWorker implements DelegatingInterface, Fin
     public function getAnotherClass($entity)
     {
         $class = (is_object($entity)) ? $class = get_class($entity) : $entity;
-        switch ($class) {
-            case $this->getFirstClass() :
-                return $this->getSecondClass();
-            case $this->getSecondClass():
-                return $this->getFirstClass();
-            default:
-                throw new BadRelatedClass();
+        $firstClass = $this->getFirstClass();
+        $secondClass = $this->getSecondClass();
+        if ($class === $firstClass || is_subclass_of($class, $firstClass)) {
+            return $this->getSecondClass();
+        } elseif ($class === $secondClass || is_subclass_of($class, $secondClass)) {
+            return $this->getFirstClass();
+        } else {
+            throw new BadRelatedClass($this, $class);
         }
     }
 
     public function getFieldName($entity)
     {
         $class = (is_object($entity)) ? $class = get_class($entity) : $entity;
-        switch ($class) {
-            case $this->getFirstClass() :
-                return self::FIELD_FIRST;
-            case $this->getSecondClass():
-                return self::FIELD_SECOND;
-            default:
-                throw new BadRelatedClass($this, $class);
+        $firstClass = $this->getFirstClass();
+        $secondClass = $this->getSecondClass();
+        if ($class === $firstClass || is_subclass_of($class, $firstClass)) {
+            return self::FIELD_FIRST;
+        } elseif ($class === $secondClass || is_subclass_of($class, $secondClass)) {
+            return self::FIELD_SECOND;
+        } else {
+            throw new BadRelatedClass($this, $class);
         }
     }
 

@@ -15,11 +15,12 @@ use DeltaPhp\Operator\Command\LoadCommand;
 use DeltaPhp\Operator\Command\SaveCommand;
 use DeltaPhp\Operator\Entity\EntityInterface;
 use DeltaPhp\Operator\Entity\Entity;
+use DeltaDb\D2QL\Criteria;
 
 class EntityOperator extends Operator implements OperatorInterface
 {
-   
-    public function create($class = null, array $params= [])
+
+    public function create($class = null, array $params = [])
     {
         $command = new CreateCommand($class, $params);
         return $this->execute($command);
@@ -34,16 +35,16 @@ class EntityOperator extends Operator implements OperatorInterface
 
     /**
      * @param null $class
-     * @param array $criteria
+     * @param Criteria|array $criteria
      * @param null $limit
      * @param null $offset
      * @param array|string|null $orderBy
      * @return Collection|EntityInterface[]
      */
-    public function find($class = null, $criteria = [], $limit = null, $offset = null, $orderBy = null)
+    public function find($class = null, $criteria = null, $limit = null, $offset = null, $orderBy = null)
     {
         $command = new FindCommand($class, $criteria, $limit, $offset, $orderBy);
-        $data =  $this->execute($command);
+        $data = $this->execute($command);
         return $data;
     }
 
@@ -54,8 +55,8 @@ class EntityOperator extends Operator implements OperatorInterface
      */
     public function get($class = null, $id)
     {
-        $command = new GetCommand((string) $id, $class);
-        $data =  $this->execute($command);
+        $command = new GetCommand((string)$id, $class);
+        $data = $this->execute($command);
         return $data;
     }
 
@@ -77,7 +78,7 @@ class EntityOperator extends Operator implements OperatorInterface
         return $this->execute($command);
     }
 
-    public function count($class = null, $criteria = [])
+    public function count($class = null, $criteria = null)
     {
         $command = new CountCommand(["criteria" => $criteria], $class);
         return $this->execute($command);

@@ -167,7 +167,7 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
         return $data;
     }
 
-    protected function findBy(array $criteria, $limit = null, $offset = null, $orderBy = null)
+    protected function findByArray(array $criteria, $limit = null, $offset = null, $orderBy = null)
     {
         $adapter = $this->getAdapter();
         $table = $this->getTable();
@@ -181,27 +181,43 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
         if ($criteria instanceof Criteria) {
             return $this->findByCriteria($criteria, $limit, $offset, $orderBy);
         } else {
-            return $this->findBy($criteria, $limit, $offset, $orderBy);
+            return $this->findByArray($criteria, $limit, $offset, $orderBy);
         }
-        return $data;
     }
 
     public function findOne($criteria)
     {
+        $data = $this->find($criteria, 1);
+        return $data->first();
+    }
+
+    protected function countByCriteria(Criteria $criteria=null)
+    {
         $adapter = $this->getAdapter();
         $table = $this->getTable();
-        $data = $adapter->selectBy($table, $criteria, 1);
-        if (empty($data)) {
-            return null;
-        }
-        return reset($data);
+        $query = (new Select($adapter))
+            ->addTable($table)
+            ->addField("count(*)", null, true)
+            ->setCriteria($criteria);
+        $sql = $query->toSql();
+        $data = $adapter->selectCell($sql);
+        return (integer) $data;
+    }
+
+    protected function countByArray(array  $criteria = null)
+    {
+        $adapter = $this->getAdapter();
+        $table = $this->getTable();
+        return (integer)$adapter->count($table, $criteria);
     }
 
     public function count($criteria)
     {
-        $adapter = $this->getAdapter();
-        $table = $this->getTable();
-        return (integer) $adapter->count($table, $criteria);
+        if ($criteria instanceof Criteria) {
+            return $this->countByCriteria($criteria);
+        } else {
+            return $this->countByArray($criteria);
+        }
     }
 
     public function get($id)
