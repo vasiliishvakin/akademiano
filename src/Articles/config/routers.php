@@ -14,7 +14,7 @@ return [
         "methods" => [\DeltaRouter\Route::METHOD_GET],
         "patterns" => [
             "type" => \DeltaRouter\RoutePattern::TYPE_REGEXP,
-            "value" => "^/articles/?(?P<section>\w+)?/?(?P<id>\d+)?$",
+            "value" => "^/articles/?(?P<tag>\w+)?/?(?P<tagId>\w+)?$",
         ],
         "action" => ["index", "list"]
     ],

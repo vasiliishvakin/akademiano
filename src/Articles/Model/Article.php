@@ -8,6 +8,7 @@ use DeltaPhp\Operator\Entity\ContentEntityInterface;
 use DeltaPhp\Operator\Entity\EntityInterface;
 use DeltaPhp\Operator\DelegatingInterface;
 use DeltaPhp\Operator\DelegatingTrait;
+use DeltaPhp\Operator\Command\RelationLoadCommand;
 
 /**
  * Class Article
@@ -20,11 +21,21 @@ class Article extends ContentEntity implements ArticleInterface, ContentEntityIn
     use DelegatingTrait;
     use ImagesTrait;
 
+    public function getImages()
+    {
+        if (null === $this->images) {
+            $command = new RelationLoadCommand(ArticleImageRelation::class, $this);
+            $this->images = $this->delegate($command);
+        }
+        return $this->images;
+    }
+
+
     /**
      * @return mixed
      */
     public function getCategories()
     {
-        throw new \LogicException("");
+        //throw new \LogicException("");
     }
 }
