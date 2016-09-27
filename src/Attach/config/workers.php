@@ -78,7 +78,7 @@ return [
             $worker->setAdapter($adapter);
             return $worker;
         },
-        WorkerInterface::PARAM_TABLEID => 90,
+        WorkerInterface::PARAM_TABLEID => 80,
         WorkerInterface::PARAM_ACTIONS_MAP => [
             RelationLoadCommand::COMMAND_RELATION_LOAD => EntityFileRelation::class,
             CommandInterface::COMMAND_FIND => EntityFileRelation::class,
@@ -101,7 +101,7 @@ return [
             $worker->setAdapter($adapter);
             return $worker;
         },
-        WorkerInterface::PARAM_TABLEID => 90,
+        WorkerInterface::PARAM_TABLEID => 81,
         WorkerInterface::PARAM_ACTIONS_MAP => [
             RelationLoadCommand::COMMAND_RELATION_LOAD => EntityImageRelation::class,
             CommandInterface::COMMAND_FIND => EntityImageRelation::class,
