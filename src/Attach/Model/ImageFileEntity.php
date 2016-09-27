@@ -8,7 +8,12 @@ namespace Attach\Model;
 
 use DeltaPhp\Operator\Entity\NamedEntityInterface;
 
-class ImageFile extends FileEntity implements NamedEntityInterface
+class ImageFileEntity extends FileEntity implements NamedEntityInterface
 {
+    public function isMain()
+    {
+        return true;
+
+    }
 
 }

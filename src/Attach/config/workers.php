@@ -1,8 +1,12 @@
 <?php
 use DeltaPhp\Operator\Worker\WorkerInterface;
 use DeltaPhp\Operator\Command\CommandInterface;
-use Attach\Model\ImageFile;
+use Attach\Model\ImageFileEntity;
 use Attach\Model\FileEntity;
+use DeltaPhp\Operator\Entity\Entity;
+use Attach\Model\EntityFileRelation;
+use Attach\Model\EntityImageRelation;
+use DeltaPhp\Operator\Command\RelationLoadCommand;
 
 return [
     "FileAttachWorker" => [
@@ -37,14 +41,14 @@ return [
         },
         WorkerInterface::PARAM_TABLEID => 13,
         WorkerInterface::PARAM_ACTIONS_MAP => [
-            CommandInterface::COMMAND_FIND => ImageFile::class,
-            CommandInterface::COMMAND_GET => ImageFile::class,
-            CommandInterface::COMMAND_COUNT => ImageFile::class,
-            CommandInterface::COMMAND_SAVE => ImageFile::class,
-            CommandInterface::COMMAND_DELETE => ImageFile::class,
-            CommandInterface::COMMAND_LOAD => ImageFile::class,
-            CommandInterface::COMMAND_RESERVE => ImageFile::class,
-            CommandInterface::COMMAND_GENERATE_ID => ImageFile::class,
+            CommandInterface::COMMAND_FIND => ImageFileEntity::class,
+            CommandInterface::COMMAND_GET => ImageFileEntity::class,
+            CommandInterface::COMMAND_COUNT => ImageFileEntity::class,
+            CommandInterface::COMMAND_SAVE => ImageFileEntity::class,
+            CommandInterface::COMMAND_DELETE => ImageFileEntity::class,
+            CommandInterface::COMMAND_LOAD => ImageFileEntity::class,
+            CommandInterface::COMMAND_RESERVE => ImageFileEntity::class,
+            CommandInterface::COMMAND_GENERATE_ID => ImageFileEntity::class,
         ],
     ],
     "ParseRequestFilesWorker" => [
@@ -65,6 +69,51 @@ return [
         },
         WorkerInterface::PARAM_ACTIONS_MAP => [
             \Attach\Model\Command\EntityAttachSaveCommand::COMMAND_ATTACH_SAVE => \DeltaPhp\Operator\Entity\RelationEntity::class
+        ],
+    ],
+    "EntityFilesWorker" => [
+        function ($s) {
+            $worker = new \DeltaPhp\Operator\Worker\RelationsWorker(Entity::class, FileEntity::class, EntityFileRelation::class, "entity_file_relations");
+            $adapter = $s->getOperator()->getDependency("dbAdapter");
+            $worker->setAdapter($adapter);
+            return $worker;
+        },
+        WorkerInterface::PARAM_TABLEID => 90,
+        WorkerInterface::PARAM_ACTIONS_MAP => [
+            RelationLoadCommand::COMMAND_RELATION_LOAD => EntityFileRelation::class,
+            CommandInterface::COMMAND_FIND => EntityFileRelation::class,
+            CommandInterface::COMMAND_LOAD => EntityFileRelation::class,
+            CommandInterface::COMMAND_RESERVE => EntityFileRelation::class,
+            CommandInterface::COMMAND_GENERATE_ID => EntityFileRelation::class,
+            CommandInterface::COMMAND_GET => EntityFileRelation::class,
+            CommandInterface::COMMAND_COUNT => EntityFileRelation::class,
+            CommandInterface::COMMAND_SAVE => EntityFileRelation::class,
+            CommandInterface::COMMAND_DELETE => EntityFileRelation::class,
+            \DeltaPhp\Operator\Command\RelationParamsCommand::COMMAND_RELATION_PARAMS => EntityFileRelation::class,
+            CommandInterface::COMMAND_WORKER_INFO => EntityFileRelation::class,
+        ],
+    ],
+
+    "EntityImagesWorker" => [
+        function ($s) {
+            $worker = new \DeltaPhp\Operator\Worker\RelationsWorker(Entity::class, ImageFileEntity::class, EntityImageRelation::class, "entity_file_relations");
+            $adapter = $s->getOperator()->getDependency("dbAdapter");
+            $worker->setAdapter($adapter);
+            return $worker;
+        },
+        WorkerInterface::PARAM_TABLEID => 90,
+        WorkerInterface::PARAM_ACTIONS_MAP => [
+            RelationLoadCommand::COMMAND_RELATION_LOAD => EntityImageRelation::class,
+            CommandInterface::COMMAND_FIND => EntityImageRelation::class,
+            CommandInterface::COMMAND_LOAD => EntityImageRelation::class,
+            CommandInterface::COMMAND_RESERVE => EntityImageRelation::class,
+            CommandInterface::COMMAND_GENERATE_ID => EntityImageRelation::class,
+            CommandInterface::COMMAND_GET => EntityImageRelation::class,
+            CommandInterface::COMMAND_COUNT => EntityImageRelation::class,
+            CommandInterface::COMMAND_SAVE => EntityImageRelation::class,
+            CommandInterface::COMMAND_DELETE => EntityImageRelation::class,
+            \DeltaPhp\Operator\Command\RelationParamsCommand::COMMAND_RELATION_PARAMS => EntityImageRelation::class,
+            CommandInterface::COMMAND_WORKER_INFO => EntityImageRelation::class,
         ],
     ],
 ];
