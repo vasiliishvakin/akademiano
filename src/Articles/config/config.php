@@ -3,7 +3,7 @@ return [
     "Articles" => [
         "Tags" => [
             "Dictionaries" => [
-                "217af7771084002",
+                "29cfb336d884001",
             ],
         ]
 

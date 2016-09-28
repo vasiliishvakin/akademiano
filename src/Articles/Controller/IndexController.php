@@ -23,25 +23,6 @@ class IndexController extends AbstractController
 {
     use OperatorDiTrait;
 
-    public function getTags()
-    {
-        $operator = $this->getOperator();
-        //get tags
-        $dictionary = $this->getConfig()->getOrThrow(["Articles", "Tags", "Dictionaries"])->toArray();
-        $dictionary = hexdec(reset($dictionary));
-
-        /** @var Criteria $criteriaTag */
-        $criteriaTag = $operator->execute(
-            new InfoWorkerCommand("relatedCriteria", DictionaryTagRelation::class, ["currentClass" => Tag::class, "joinType" => Join::TYPE_INNER])
-        );
-        $dictionaryTable = $operator->execute(
-            new InfoWorkerCommand("table", Dictionary::class)
-        );
-        $criteriaTag->createWhere($dictionaryTable, "id", $dictionary);
-        $tags = $operator->find(Tag::class, $criteriaTag);
-        return $tags;
-    }
-
     public function listAction(array $params = [])
     {
         $operator = $this->getOperator();
@@ -82,7 +63,7 @@ class IndexController extends AbstractController
             "countItems" => $count,
             "pageTitle" => $titleStart . $titleEnd,
             "pageDescription" => $descriptionStart . $descriptionEnd,
-            "categories" => $this->getTags(),
+            "categories" => (new ArticleTags($this->getOperator(), $this->getConfig("Articles")))->getTags(),
         ];
     }
 
@@ -105,7 +86,7 @@ class IndexController extends AbstractController
             "pageTitle" => "{$item->getTitle()}",
             "pageDescription" => "{$item->getDescription()}",
             "pageImage" => $item->getTitleImage() ? $item->getTitleImage()->getUri("medium") : false,
-            "categories" => $this->getTags(),
+            "categories" => $tags = (new ArticleTags($this->getOperator(), $this->getConfig("Articles")))->getTags(),
         ];
     }
 }
