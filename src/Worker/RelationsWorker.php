@@ -6,6 +6,7 @@ namespace DeltaPhp\Operator\Worker;
 
 use DeltaDb\D2QL\Criteria;
 use DeltaDb\D2QL\Join;
+use DeltaDb\D2QL\Prototype\WherePrototype;
 use DeltaDb\D2QL\Where;
 use DeltaPhp\Operator\Command\DeleteCommand;
 use DeltaPhp\Operator\Command\GetCommand;
@@ -207,8 +208,11 @@ class RelationsWorker extends PostgresWorker implements DelegatingInterface, Fin
     }
 
 
-    public function getRelatedCriteria($knownClass, $joinType = Join::TYPE_INNER)
+    public function getRelatedCriteria($knownClass = null, $joinType = Join::TYPE_INNER, $relatedCondition = null)
     {
+        if (null === $knownClass) {
+            $knownClass = $this->getFirstClass();
+        }
         $criteria = new Criteria($this->getAdapter());
         $knownField = $this->getFieldName($knownClass);
         $destinationField = $this->getAnotherField($knownField);
@@ -224,9 +228,15 @@ class RelationsWorker extends PostgresWorker implements DelegatingInterface, Fin
         //join for another table
         $criteria->createJoin($destinationTable, "id", $relationTable, $destinationField, $joinType);
 
-        /*$criteria->createWhere($relationTable, $knownField, "{$knownTable}.id", "=", Where::REL_AND, Where::TYPE_ID);
-        $criteria->createWhere($relationTable, $destinationField, "{$destinationTable}.id", "=", Where::REL_AND, Where::TYPE_ID);*/
-
+        //create where for joined table
+        if (null !== $relatedCondition) {
+            if (!$relatedCondition instanceof WherePrototype) {
+                $relatedCondition = new WherePrototype($relatedCondition);
+            }
+            $criteria->createWhere($destinationTable, $relatedCondition->getField(), $relatedCondition->getValue(),
+                $relatedCondition->getOperator(), Where::REL_AND, $relatedCondition->getType()
+            );
+        }
         return $criteria;
     }
 
@@ -236,7 +246,8 @@ class RelationsWorker extends PostgresWorker implements DelegatingInterface, Fin
             case "relatedCriteria" : {
                 $currentClass = $params["currentClass"];
                 $type = isset($params["joinType"]) ? $params["joinType"] : Join::TYPE_INNER;
-                return $this->getRelatedCriteria($currentClass, $type);
+                $relatedCondition = isset($params["relatedCondition"]) ? $params["relatedCondition"] : null;
+                return $this->getRelatedCriteria($currentClass, $type, $relatedCondition);
                 break;
             }
             case "relatedTable" : {

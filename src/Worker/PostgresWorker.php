@@ -8,6 +8,7 @@ use DeltaDb\Adapter\PgsqlAdapter;
 use DeltaDb\D2QL\Criteria;
 use DeltaDb\D2QL\Select;
 use DeltaDb\D2QL\Where;
+use DeltaPhp\Operator\Command\CreateCriteriaCommand;
 use DeltaPhp\Operator\Command\PreCommand;
 use DeltaPhp\Operator\Command\PreCommandInterface;
 use DeltaUtils\Object\Collection;
@@ -147,6 +148,9 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
                 $attribute = $command->getParams("attribute");
                 return $this->getAttribute($attribute, $command->getParams());
                 break;
+            }
+            case CreateCriteriaCommand::COMMAND_CREATE_CRITERIA: {
+                return $this->createCriteria();
             }
             default:
                 throw new \InvalidArgumentException("Command type \" {$command->getName()} not supported");
@@ -335,5 +339,12 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
                 break;
             }
         }
+    }
+
+    public function createCriteria()
+    {
+        $criteria = new Criteria();
+        $criteria->setAdapter($this->getAdapter());
+        return $criteria;
     }
 }
