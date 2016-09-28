@@ -37,7 +37,9 @@ trait ImagesTrait
 
     public function getOtherImages()
     {
-        if (null === $this->otherImages) {
+        if ($this->getImages()->isEmpty()) {
+            $this->otherImages = new Collection();
+        } elseif (null === $this->otherImages) {
             $titleImage = $this->getTitleImage();
             if ($titleImage->isMain()) {
                 $otherImages = [];

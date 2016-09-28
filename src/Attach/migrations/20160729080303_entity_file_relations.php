@@ -7,7 +7,7 @@ class EntityFileRelations extends AbstractMigration
     public function up()
     {
         $sql = <<<SQL
-CCREATE TABLE public.entity_file_relations
+CREATE TABLE public.entity_file_relations
 (
 -- Унаследована from table relations:  id bigint NOT NULL,
 -- Унаследована from table relations:  created timestamp without time zone,
