@@ -9,6 +9,8 @@ trait CriteriaInclude
     /** @var  Criteria */
     protected $criteria;
 
+    abstract public function getAdapter();
+
     /**
      * @return Criteria
      */
@@ -29,6 +31,19 @@ trait CriteriaInclude
         $this->criteria = $criteria;
         return $this;
     }
+
+    public function addCriteria(Criteria $criteria)
+    {
+        $this->getCriteria()->addCriteria($criteria);
+    }
+
+    public function createCriteria()
+    {
+        $criteria = new Criteria($this->getAdapter());
+        $this->addCriteria($criteria);
+        return $criteria;
+    }
+
 
     public function getCriteriaTables()
     {

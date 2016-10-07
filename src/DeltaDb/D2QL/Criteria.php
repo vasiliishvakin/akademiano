@@ -39,9 +39,9 @@ class Criteria extends Element implements CriteriaIncludeInterface, ElementInter
      * @param string $type
      * @return Select|WhereGroup
      */
-    public function createWhere($table, $field, $value, $operator = "=", $relation = Where::REL_AND, $type = Where::TYPE_NORMAL)
+    public function createWhere($field, $value, $operator = "=", $table = null, $relation = Where::REL_AND, $type = Where::TYPE_NORMAL)
     {
-        $criteria = new Where($this->getAdapter(), $table, $field, $value, $operator, $relation, $type);
+        $criteria = new Where($this->getAdapter(), $field, $value, $operator, $table, $relation, $type);
         $this->addCriteria($criteria);
         return $this;
     }

@@ -33,7 +33,7 @@ class Where extends Element implements CriteriaInterface, WhereInterface
     protected $type = self::TYPE_NORMAL;
 
 
-    public function __construct(PgsqlAdapter $adapter, $table, $field, $value, $operator = "=", $relation = self::REL_AND, $type = self::TYPE_NORMAL)
+    public function __construct(PgsqlAdapter $adapter, $field, $value, $operator = "=", $table = null, $relation = self::REL_AND, $type = self::TYPE_NORMAL)
     {
         $this->setAdapter($adapter);
         $this->setTable($table);
@@ -165,7 +165,7 @@ class Where extends Element implements CriteriaInterface, WhereInterface
 
     public function toSql()
     {
-        $field = $this->escapeIdentifier($this->getTable()) . "." . $this->escapeIdentifier($this->getField());
+        $field = ((!empty($this->getTable())) ? $this->escapeIdentifier($this->getTable()) . "." : "") . $this->escapeIdentifier($this->getField());
         switch ($this->getType()) {
             case self::TYPE_NORMAL: {
                 $value = $this->escape($this->getValue());
@@ -181,7 +181,7 @@ class Where extends Element implements CriteriaInterface, WhereInterface
             }
 
         }
-        $sql = $field . " ". $this->getOperator() . " " . $value;
+        $sql = $field . " " . $this->getOperator() . " " . $value;
 
         return $sql;
     }

@@ -30,6 +30,32 @@ class PgsqlAdapter extends AbstractAdapter
         return $rows;
     }
 
+    public function selectAndSmartFetch($query)
+    {
+        $result = call_user_func_array([$this, 'query'], func_get_args());
+        if (!$result) {
+            throw new \RuntimeException("Bad query: \"$query\"");
+        }
+        $numRows = pg_num_rows($result);
+        $numFields = pg_num_fields($result);
+        if ($numRows === 0 ) {
+            return null;
+        }
+        if ($numFields === 1) {
+            $result = pg_fetch_all_columns($result);
+            if ($numRows === 1) {
+                return reset($result);
+            }
+            return $result;
+        } else {
+            if ($numRows === 1) {
+                return pg_fetch_row($result);
+            } else {
+                return pg_fetch_all($result);
+            }
+        }
+    }
+
     public function selectRow($query)
     {
         $result = call_user_func_array([$this, 'query'], func_get_args());
@@ -319,10 +345,6 @@ class PgsqlAdapter extends AbstractAdapter
     {
         $query = "select * from \"{$table}\"";
         $limitSql = $this->getLimit($limit, $offset);
-        if (empty($criteria)) {
-            $query .= $limitSql;
-            return $this->select($query);
-        }
         $orderStr = $this->getOrderBy($orderBy);
         $query .= $this->getWhere($criteria);
         $query .= $orderStr;

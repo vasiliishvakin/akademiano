@@ -7,15 +7,41 @@ class Select extends Query implements SelectInterface
 {
     use CriteriaInclude;
 
+    /**
+     * @var bool
+     */
+    protected $distinct = false;
+
     protected $tables = [];
 
     protected $fields = [];
 
     protected $order = [];
 
-    protected $limit = [];
+    protected $limit;
 
-    protected $offset = [];
+    protected $offset;
+
+    /**
+     * @return boolean
+     */
+    public function isDistinct()
+    {
+        return $this->distinct;
+    }
+
+    /**
+     * @param boolean $distinct
+     */
+    public function setDistinct($distinct)
+    {
+        $this->distinct = $distinct;
+    }
+
+    public function getDistinct()
+    {
+        return ($this->isDistinct()) ? "distinct" : "";
+    }
 
     public function addTable($table)
     {
@@ -128,8 +154,12 @@ class Select extends Query implements SelectInterface
                 $table = $defaultTable;
             }
             foreach ($fields as $fieldData) {
-                $field = ($fieldData["isExpression"]) ? $fieldData["field"] : $this->escapeIdentifier($fieldData["field"]);
-                $fieldsSql[] = $this->escapeIdentifier($table) . "." . $field;
+                if ($fieldData["isExpression"]) {
+                    $field = str_replace("__TABLE__", $table, $fieldData["field"]);
+                    $fieldsSql[] = $field;
+                } else {
+                    $fieldsSql[] = $this->escapeIdentifier($table) . "." . $this->escapeIdentifier($fieldData["field"]);
+                }
             }
         }
         $fieldsSql = implode(", ", $fieldsSql);
@@ -168,7 +198,7 @@ class Select extends Query implements SelectInterface
         $where = $this->getSqlWhere();
         $where = ("" === $where) ? "" : "where " . $where;
 
-        $sql = $this->getSqlStart() . " " . $this->getSqlFields() . " from " . $this->getSqlFrom() . " " . $this->getSqlJoin()
+        $sql = $this->getSqlStart() . " " . $this->getDistinct() . " " . $this->getSqlFields() . " from " . $this->getSqlFrom() . " " . $this->getSqlJoin()
             . " " . $where;
 
         return $sql;
