@@ -11,6 +11,9 @@ use DeltaDb\EntityInterface;
 use HttpWarp\Request;
 use DeltaUtils\FileSystem;
 
+/**
+ * @deprecated
+ */
 trait AttachSave
 {
     /**

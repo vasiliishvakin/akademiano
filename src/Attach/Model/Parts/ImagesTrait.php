@@ -10,6 +10,7 @@ namespace Attach\Model\Parts;
 
 
 use Attach\Model\EntityImageRelation;
+use Attach\Model\ImageFileEntity;
 use DeltaUtils\Object\Collection;
 use DeltaPhp\Operator\Command\RelationLoadCommand;
 
@@ -26,11 +27,28 @@ trait ImagesTrait
     /** @var  \Attach\Model\ImageFileEntity[] */
     protected $otherImages;
 
+    /**
+     * @return \Attach\Model\ImageFileEntity[]|Collection
+     */
     public function getImages()
     {
         if (null === $this->images) {
             $command = new RelationLoadCommand(EntityImageRelation::class, $this);
-            $this->images = $this->delegate($command);
+            /** @var Collection $images */
+            $images = $this->delegate($command);
+            $images->usort(function (ImageFileEntity $imageA, ImageFileEntity $imageB) {
+                if ($imageA->isMain()) {
+                    return -1;
+                } elseif ($imageB->isMain()) {
+                    return 1;
+                } else {
+                    if ($imageA->getOrder() === $imageB->getOrder()) {
+                        return 0;
+                    }
+                    return ($imageA->getOrder() < $imageB->getOrder()) ? -1 : 1;
+                }
+            });
+            $this->images = $images;
         }
         return $this->images;
     }

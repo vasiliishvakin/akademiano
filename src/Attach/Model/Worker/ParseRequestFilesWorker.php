@@ -6,6 +6,7 @@ namespace Attach\Model\Worker;
 
 use Attach\Model\FileEntity;
 use Attach\Model\RequestFiles;
+use DeltaPhp\Operator\Worker\WorkerMetaMapPropertiesTrait;
 use DeltaUtils\Object\Collection;
 use DeltaPhp\Operator\Command\CommandInterface;
 use DeltaPhp\Operator\Command\CreateCommand;
@@ -18,6 +19,7 @@ use Attach\Model\Command\ParseRequestFilesCommand;
 class ParseRequestFilesWorker implements WorkerInterface, DelegatingInterface
 {
     use DelegatingTrait;
+    use WorkerMetaMapPropertiesTrait;
 
     public function execute(CommandInterface $command)
     {
@@ -38,14 +40,25 @@ class ParseRequestFilesWorker implements WorkerInterface, DelegatingInterface
          */
         $createFile = function ($id, $data = []) use ($fileClass) {
             $command = new CreateCommand($fileClass);
+            /** @var FileEntity $file */
             $file = $this->delegate($command);
             if (is_numeric($id)) {
                 $file->setId((integer)$id);
             } else {
                 $file->setFieldId($id);
             }
+
+            $segregated = isset($data["__segregated__"]) ? $data["__segregated__"] : [];
+            foreach ($segregated as $sgField => $sgId) {
+                $data[$sgField][$sgId] = true;
+            }
+
             foreach ($data as $paramName => $paramData) {
                 if (isset($paramData[$id])) {
+                    //change empty strings to null
+                    if (is_string($paramData[$id]) && $paramData[$id]==="") {
+                        $paramData[$id] = null;
+                    }
                     $method = "set" . ucfirst($paramName);
                     if (method_exists($file, $method)) {
                         $file->{$method}($paramData[$id]);
@@ -75,6 +88,7 @@ class ParseRequestFilesWorker implements WorkerInterface, DelegatingInterface
         foreach ($filesUpdateRaw as $id) {
             $file = $createFile($id, $filesUploadedData);
             $updatedFiles[] = $file;
+
         }
 
         $filesDeletedRaw = $request->getParam("filesRm", []);

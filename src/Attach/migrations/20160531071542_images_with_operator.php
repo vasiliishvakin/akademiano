@@ -18,6 +18,8 @@ CREATE TABLE images
 -- Унаследована from table files:  type text,
 -- Унаследована from table files:  sub_type text,
 -- Унаследована from table files:  path text,
+  main boolean,
+  "order" integer NOT NULL DEFAULT 0,
   CONSTRAINT images_pkey PRIMARY KEY (id)
 )
 INHERITS (files);

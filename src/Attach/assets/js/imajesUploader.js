@@ -33,7 +33,7 @@ function previewImage(name, dataUri) {
 
     var main = $(document.createElement("input"));
     main.attr("type", "radio");
-    main.attr("name", "filesData[main]");
+    main.attr("name", "filesData[__segregated__][main]");
     main.val(name);
     main.attr("id", "filesMain_" + name);
     main.addClass("form-control");

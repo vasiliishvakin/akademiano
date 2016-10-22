@@ -9,6 +9,8 @@ use Attach\Model\Command\EntityAttachSaveCommand;
 use Attach\Model\Command\ParseRequestFilesCommand;
 use Attach\Model\FileEntity;
 use Attach\Model\RequestFiles;
+use DeltaPhp\Operator\Command\CommandMerge;
+use DeltaPhp\Operator\Worker\WorkerMetaMapPropertiesTrait;
 use DeltaUtils\Object\Collection;
 use DeltaPhp\Operator\Command\CommandInterface;
 use DeltaPhp\Operator\Command\CreateCommand;
@@ -37,6 +39,7 @@ class EntityAttachSaveWorker implements WorkerInterface, DelegatingInterface, Co
 {
     use DelegatingTrait;
     use ConfigurableTrait;
+    use WorkerMetaMapPropertiesTrait;
 
     /** @var  Hashids */
     protected $hashids;
@@ -124,14 +127,17 @@ class EntityAttachSaveWorker implements WorkerInterface, DelegatingInterface, Co
     {
         $getFileCommand = new GetCommand($file->getId(), get_class($file));
         $existFile = $this->delegate($getFileCommand);
-        $existFile = $this->mergeFile($existFile, $file);
+
+        $mergeCommand = new CommandMerge($existFile, $file);
+        $existFile = $this->delegate($mergeCommand);
+
         $saveCommand = new SaveCommand($existFile);
         $this->delegate($saveCommand);
     }
 
     public function deleteFile(EntityInterface $entity, FileEntity $file, $relationClass)
     {
-        $relationsCommand = new FindCommand($relationClass, ["first"=>$entity->getId(),"second" => $file->getId()]);
+        $relationsCommand = new FindCommand($relationClass, ["first" => $entity->getId(), "second" => $file->getId()]);
         $relations = $this->delegate($relationsCommand);
         foreach ($relations as $relation) {
             $deleteRelationCommand = new DeleteCommand($relation);
@@ -146,19 +152,6 @@ class EntityAttachSaveWorker implements WorkerInterface, DelegatingInterface, Co
             $deleteFileCommand = new DeleteCommand($file);
             $this->delegate($deleteFileCommand);
         }
-    }
-
-    public function mergeFile(FileEntity $aEntity, FileEntity $bEntity)
-    {
-        $mergeFields = ["title", "description"];
-        foreach ($mergeFields as $field) {
-            $methodSet = "set" . ucfirst($field);
-            $methodGet = "get" . ucfirst($field);
-            if (method_exists($aEntity, $methodSet) && method_exists($bEntity, $methodGet)) {
-                $aEntity->{$methodSet}($bEntity->{$methodGet}());
-            }
-        }
-        return $aEntity;
     }
 
     /**
