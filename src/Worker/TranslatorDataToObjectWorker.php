@@ -17,6 +17,7 @@ use DeltaPhp\Operator\DelegatingTrait;
 
 class TranslatorDataToObjectWorker implements WorkerInterface, DelegatingInterface
 {
+    use WorkerMetaMapPropertiesTrait;
     use DelegatingTrait;
 
     public function execute(CommandInterface $command)

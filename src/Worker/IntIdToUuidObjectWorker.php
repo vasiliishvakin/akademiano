@@ -14,6 +14,7 @@ use DeltaPhp\Operator\Worker\Exception\NotSupportedCommand;
 
 class IntIdToUuidObjectWorker implements WorkerInterface, DelegatingInterface
 {
+    use WorkerMetaMapPropertiesTrait;
     use DelegatingTrait;
 
     const COMMAND_AFTER_GENERATE_ID = AfterCommandInterface::PREFIX_COMMAND_AFTER . GenerateIdCommandInterface::COMMAND_GENERATE_ID;

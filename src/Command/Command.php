@@ -10,8 +10,8 @@ class Command implements CommandInterface
 {
     protected $name;
     protected $class;
-    /** @var  array */
-    protected $params = [];
+    /** @var  array|null */
+    protected $params;
 
     /**
      * Command constructor.
@@ -23,7 +23,7 @@ class Command implements CommandInterface
     {
         if ($name) $this->name = $name;
         if ($class) $this->class = $class;
-        if ($params) $this->params = $params;
+        $this->setParams($params);
     }
 
     /**

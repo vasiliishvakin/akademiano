@@ -28,6 +28,7 @@ class RelationsWorker extends PostgresWorker implements DelegatingInterface, Fin
     const FIELD_FIRST = "first";
     const FIELD_SECOND = "second";
 
+    use WorkerMetaMapPropertiesTrait;
     use DelegatingTrait;
 
     protected $firstClass;
@@ -233,8 +234,8 @@ class RelationsWorker extends PostgresWorker implements DelegatingInterface, Fin
             if (!$relatedCondition instanceof WherePrototype) {
                 $relatedCondition = new WherePrototype($relatedCondition);
             }
-            $criteria->createWhere($destinationTable, $relatedCondition->getField(), $relatedCondition->getValue(),
-                $relatedCondition->getOperator(), Where::REL_AND, $relatedCondition->getType()
+            $criteria->createWhere($relatedCondition->getField(), $relatedCondition->getValue(),
+                $relatedCondition->getOperator(), $destinationTable, Where::REL_AND, $relatedCondition->getType()
             );
         }
         return $criteria;

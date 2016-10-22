@@ -8,9 +8,13 @@ use DeltaDb\Adapter\PgsqlAdapter;
 use DeltaDb\D2QL\Criteria;
 use DeltaDb\D2QL\Select;
 use DeltaDb\D2QL\Where;
+use DeltaPhp\Operator\Command\Command;
 use DeltaPhp\Operator\Command\CreateCriteriaCommand;
+use DeltaPhp\Operator\Command\CreateSelectCommand;
 use DeltaPhp\Operator\Command\PreCommand;
 use DeltaPhp\Operator\Command\PreCommandInterface;
+use DeltaPhp\Operator\Command\SelectCommand;
+use DeltaUtils\ArrayUtils;
 use DeltaUtils\Object\Collection;
 use DeltaUtils\Object\Prototype\StringableInterface;
 use DeltaPhp\Operator\Command\CommandInterface;
@@ -19,9 +23,11 @@ use DeltaPhp\Operator\Entity\EntityInterface;
 use DeltaPhp\Operator\LoaderInterface;
 use DeltaUtils\StringUtils;
 
+
 class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperInterface, FinderInterface, LoaderInterface, ReserveInterface, GenerateIdWorkerInterface
 {
     use ConfigurableTrait;
+    use WorkerMetaMapPropertiesTrait;
 
     /** @var  PgsqlAdapter */
     protected $adapter;
@@ -34,6 +40,32 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
         "changed",
         "owner",
     ];
+
+    protected $unmergedFields = [
+        "id",
+        "created",
+        "owner",
+    ];
+
+    protected static function getDefaultMapping()
+    {
+        return [
+            CommandInterface::COMMAND_FIND => null,
+            PreCommandInterface::PREFIX_COMMAND_PRE . CommandInterface::COMMAND_FIND => null,
+            CommandInterface::COMMAND_GET => null,
+            CommandInterface::COMMAND_COUNT => null,
+            CommandInterface::COMMAND_SAVE => null,
+            CommandInterface::COMMAND_DELETE => null,
+            CommandInterface::COMMAND_LOAD => null,
+            CommandInterface::COMMAND_RESERVE => null,
+            CommandInterface::COMMAND_MERGE => null,
+            CommandInterface::COMMAND_GENERATE_ID => null,
+            CommandInterface::COMMAND_WORKER_INFO => null,
+            CreateSelectCommand::COMMAND_CREATE_SELECT => null,
+            SelectCommand::COMMAND_SELECT => null,
+        ];
+    }
+
 
     /**
      * @return PgsqlAdapter
@@ -97,6 +129,33 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
         }
     }
 
+    /**
+     * @return array
+     */
+    public function getUnmergedFields()
+    {
+        return $this->unmergedFields;
+    }
+
+    public function setUnmergedFields($fields)
+    {
+        $this->unmergedFields = $fields;
+    }
+
+    public function addUnmergedField($field)
+    {
+        if (!array_search($field, $this->unmergedFields)) {
+            $this->unmergedFields[] = $field;
+        }
+    }
+
+    public function addUnmergedFields($fields)
+    {
+        foreach ($fields as $field) {
+            $this->addUnmergedField($field);
+        }
+    }
+
     public function execute(CommandInterface $command)
     {
         switch ($command->getName()) {
@@ -104,8 +163,8 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
                 $criteria = $command->getParams("criteria", []);
                 $limit = $command->getParams("limit", null);
                 $offset = $command->getParams("offset", null);
-                $order = $command->getParams("order", null);
-                return $this->find($criteria, $limit, $offset, $order);
+                $orderBy = $command->getParams("orderBy", null);
+                return $this->find($criteria, $limit, $offset, $orderBy);
             }
             case CommandInterface::COMMAND_GET: {
                 $id = $command->getParams("id");
@@ -132,6 +191,12 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
             case CommandInterface::COMMAND_RESERVE: {
                 return $this->reserve($command->getParams("entity"));
             }
+            case CommandInterface::COMMAND_MERGE: {
+                $entityA = $command->getParams("entityA");
+                $entityB = $command->getParams("entityB");
+                return $this->merge($entityA, $entityB);
+            }
+
             case GenerateIdCommandInterface::COMMAND_GENERATE_ID : {
                 return $this->genId($command->getParams("tableId"));
             }
@@ -152,6 +217,12 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
             case CreateCriteriaCommand::COMMAND_CREATE_CRITERIA: {
                 return $this->createCriteria();
             }
+            case CreateSelectCommand::COMMAND_CREATE_SELECT: {
+                return $this->createSelect();
+            }
+            case SelectCommand::COMMAND_SELECT : {
+                return $this->select($command->getParams("select"));
+            }
             default:
                 throw new \InvalidArgumentException("Command type \" {$command->getName()} not supported");
         }
@@ -163,7 +234,7 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
         $table = $this->getTable();
         $query = (new Select($adapter))
             ->addTable($table)
-            ->addField("*", $table, true)
+            ->addField("__TABLE__.*", $table, true)
             ->setCriteria($criteria);
         $sql = $query->toSql();
         $data = $adapter->select($sql);
@@ -195,7 +266,7 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
         return $data->first();
     }
 
-    protected function countByCriteria(Criteria $criteria=null)
+    protected function countByCriteria(Criteria $criteria = null)
     {
         $adapter = $this->getAdapter();
         $table = $this->getTable();
@@ -205,7 +276,7 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
             ->setCriteria($criteria);
         $sql = $query->toSql();
         $data = $adapter->selectCell($sql);
-        return (integer) $data;
+        return (integer)$data;
     }
 
     protected function countByArray(array  $criteria = null)
@@ -306,6 +377,27 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
         return $value;
     }
 
+    public function merge(EntityInterface $entityA, EntityInterface $entityB)
+    {
+        $fields = $this->getFields();
+        $unmergedFields = $this->getUnmergedFields();
+        $mergedFields = array_diff($fields, $unmergedFields);
+
+        foreach ($mergedFields as $field) {
+            $methodSet = "set" . ucfirst($field);
+            $methodGet = "get" . ucfirst($field);
+            $methodIs = "is" . ucfirst($field);
+            if (method_exists($entityA, $methodSet)) {
+                if (method_exists($entityB, $methodGet)) {
+                    $entityA->{$methodSet}($entityB->{$methodGet}());
+                } elseif (method_exists($entityB, $methodIs)) {
+                    $entityA->{$methodSet}((bool)$entityB->{$methodIs}());
+                }
+            }
+        }
+        return $entityA;
+    }
+
     public function genId()
     {
         $tableIdRaw = $this->getConfig(WorkerInterface::PARAM_TABLEID);
@@ -346,5 +438,20 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
         $criteria = new Criteria();
         $criteria->setAdapter($this->getAdapter());
         return $criteria;
+    }
+
+    public function createSelect()
+    {
+        $select = new Select();
+        $select->setAdapter($this->getAdapter());
+        $select->addTable($this->getTable());
+        return $select;
+    }
+
+    public function select(Select $select)
+    {
+        $select->addTable($this->getTable());
+        $result = $this->getAdapter()->selectAndSmartFetch($select->toSql());
+        return $result;
     }
 }

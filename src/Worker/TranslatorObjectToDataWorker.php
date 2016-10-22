@@ -13,6 +13,7 @@ use DeltaPhp\Operator\Worker\Exception\NotSupportedCommand;
 
 class TranslatorObjectToDataWorker implements WorkerInterface, DelegatingInterface
 {
+    use WorkerMetaMapPropertiesTrait;
     use DelegatingTrait;
 
     const COMMAND_BEFORE_SAVE = PreCommandInterface::PREFIX_COMMAND_PRE . CommandInterface::COMMAND_SAVE;

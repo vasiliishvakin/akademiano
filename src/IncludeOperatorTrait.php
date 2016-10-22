@@ -14,6 +14,9 @@ trait IncludeOperatorTrait
         $this->operator = $operator;
     }
 
+    /**
+     * @return EntityOperator
+     */
     public function getOperator()
     {
         return $this->operator;

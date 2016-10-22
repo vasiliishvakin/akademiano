@@ -12,6 +12,7 @@ use DeltaUtils\Object\Collection;
 
 class SetEntityExistingWorker implements WorkerInterface
 {
+    use WorkerMetaMapPropertiesTrait;
 
     public function execute(CommandInterface $command)
     {

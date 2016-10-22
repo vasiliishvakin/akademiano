@@ -12,7 +12,15 @@ use DeltaPhp\Operator\IncludeOperatorTrait;
 
 class EntityCreatorWorker implements WorkerInterface, CreatorInterface, IncludeOperatorInterface
 {
+    use WorkerMetaMapPropertiesTrait;
     use IncludeOperatorTrait;
+
+    protected static function getDefaultMapping()
+    {
+        return [
+            CommandInterface::COMMAND_CREATE => null,
+        ];
+    }
 
     public function create($class = null, array $params = [])
     {

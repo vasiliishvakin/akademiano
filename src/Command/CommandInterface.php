@@ -14,6 +14,7 @@ interface CommandInterface
     const COMMAND_CREATE = "create";
     const COMMAND_LOAD = "load";
     const COMMAND_RESERVE = "reserve";
+    const COMMAND_MERGE = "merge";
     const COMMAND_GENERATE_ID = "generate.id";
     const COMMAND_WORKER_INFO = "worker.info";
 

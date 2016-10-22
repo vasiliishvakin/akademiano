@@ -5,23 +5,23 @@ use DeltaPhp\Operator\Entity\NamedEntity;
 use DeltaPhp\Operator\Entity\ContentEntity;
 use DeltaPhp\Operator\Command\AfterCommandInterface;
 use DeltaPhp\Operator\WorkersContainerInterface;
-use \DeltaPhp\Operator\Command\PreCommandInterface;
+use DeltaPhp\Operator\Command\PreCommandInterface;
 use DeltaPhp\Operator\Entity\RelationEntity;
-use DeltaPhp\Operator\Entity\TagEntity;
+use DeltaPhp\Operator\Command\CreateSelectCommand;
+use DeltaPhp\Operator\Command\SelectCommand;
 
 //PostgresWorker
 return [
     "EntityCreatorWorker" => [
+        \DeltaPhp\Operator\Worker\EntityCreatorWorker::class,
         function ($s) {
             $w = new \DeltaPhp\Operator\Worker\EntityCreatorWorker();
             return $w;
         },
-        WorkerInterface::PARAM_ACTIONS_MAP => [
-            CommandInterface::COMMAND_CREATE => null,
-        ],
     ],
 
     "EntityWorker" => [
+        \DeltaPhp\Operator\Worker\PostgresWorker::class,
         function (WorkersContainerInterface $s) {
             $w = new \DeltaPhp\Operator\Worker\PostgresWorker();
             $adapter = $s->getOperator()->getDependency("dbAdapter");
@@ -29,18 +29,6 @@ return [
             return $w;
         },
         WorkerInterface::PARAM_TABLEID => 1,
-        WorkerInterface::PARAM_ACTIONS_MAP => [
-            CommandInterface::COMMAND_FIND => null,
-            PreCommandInterface::PREFIX_COMMAND_PRE . CommandInterface::COMMAND_FIND => null,
-            CommandInterface::COMMAND_GET => null,
-            CommandInterface::COMMAND_COUNT => null,
-            CommandInterface::COMMAND_SAVE => null,
-            CommandInterface::COMMAND_DELETE => null,
-            CommandInterface::COMMAND_LOAD => null,
-            CommandInterface::COMMAND_RESERVE => null,
-            CommandInterface::COMMAND_GENERATE_ID => null,
-            CommandInterface::COMMAND_WORKER_INFO => null,
-        ],
     ],
 
     "NamedEntitiesWorker" => [
@@ -64,9 +52,11 @@ return [
             CommandInterface::COMMAND_RESERVE => NamedEntity::class,
             CommandInterface::COMMAND_GENERATE_ID => NamedEntity::class,
             CommandInterface::COMMAND_WORKER_INFO => NamedEntity::class,
+            CreateSelectCommand::COMMAND_CREATE_SELECT => NamedEntity::class,
+            SelectCommand::COMMAND_SELECT => NamedEntity::class,
         ],
     ],
-    
+
 
     "ContentEntitiesWorker" => [
         function (WorkersContainerInterface $s) {
@@ -89,6 +79,8 @@ return [
             CommandInterface::COMMAND_RESERVE => ContentEntity::class,
             CommandInterface::COMMAND_GENERATE_ID => ContentEntity::class,
             CommandInterface::COMMAND_WORKER_INFO => ContentEntity::class,
+            CreateSelectCommand::COMMAND_CREATE_SELECT => ContentEntity::class,
+            SelectCommand::COMMAND_SELECT => ContentEntity::class,
         ],
     ],
 
@@ -113,6 +105,8 @@ return [
             CommandInterface::COMMAND_RESERVE => RelationEntity::class,
             CommandInterface::COMMAND_GENERATE_ID => RelationEntity::class,
             CommandInterface::COMMAND_WORKER_INFO => RelationEntity::class,
+            CreateSelectCommand::COMMAND_CREATE_SELECT => RelationEntity::class,
+            SelectCommand::COMMAND_SELECT => RelationEntity::class,
         ],
     ],
 
@@ -150,7 +144,7 @@ return [
     ],
 
     "IntIdToUuidObjectWorker" => [
-        function(WorkersContainerInterface $s) {
+        function (WorkersContainerInterface $s) {
             $w = new \DeltaPhp\Operator\Worker\IntIdToUuidObjectWorker();
             return $w;
         },

@@ -184,8 +184,10 @@ class Operator implements OperatorInterface
 
         $result = null;
         $break = !($command instanceof CommandChainElementInterface) || ($command instanceof CommandFinallyInterface);
+        $workersCount = 0;
         foreach ($this->getCommandWorkers($command) as $worker) {
             try {
+                $workersCount++;
                 $result = $worker->execute($command);
             } catch (TryNextException $e) {
                 $break = false;
@@ -195,6 +197,9 @@ class Operator implements OperatorInterface
             if ($break) {
                 break;
             }
+        }
+        if (!$command instanceof PreAfterCommandInterface && $workersCount === 0) {
+            throw  new \LogicException("Empty workers for command \"{$command->getName()}\" and class \"{$command->getClass()}\"");
         }
         //after execute
         if (!$command instanceof PreAfterCommandInterface) {
