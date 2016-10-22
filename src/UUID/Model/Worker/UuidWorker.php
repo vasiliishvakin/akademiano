@@ -6,6 +6,7 @@ namespace UUID\Model\Worker;
 use DeltaPhp\Operator\Command\CommandInterface;
 use DeltaPhp\Operator\Worker\Exception\NotSupportedCommand;
 use DeltaPhp\Operator\Worker\WorkerInterface;
+use DeltaPhp\Operator\Worker\WorkerMetaMapPropertiesTrait;
 use UUID\Model\Command\CreateUuidCommand;
 use UUID\Model\Parts\UuidFactoryTrait;
 use UUID\Model\UuidComplexShortTables;
@@ -13,6 +14,7 @@ use UUID\Model\UuidComplexShortTables;
 class UuidWorker implements WorkerInterface
 {
     use UuidFactoryTrait;
+    use WorkerMetaMapPropertiesTrait;
 
     public function execute(CommandInterface $command)
     {
