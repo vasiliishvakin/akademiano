@@ -10,25 +10,8 @@ class ArticleImagesToRelation extends AbstractMigration
 {
     public function up()
     {
-        if (!defined("ROOT_DIR")) {
-            define('ROOT_DIR', realpath(__DIR__ . '/..'));
-        }
-        if (!defined("PUBLIC_DIR")) {
-            define('PUBLIC_DIR', ROOT_DIR . '/public');
-        }
-        if (!defined("VENDOR_DIR")) {
-            define('VENDOR_DIR', ROOT_DIR . '/vendor');
-        }
-        if (!defined("DATA_DIR")) {
-            define('DATA_DIR', ROOT_DIR . '/data');
-        }
-
-
-        $loader = include ROOT_DIR . "/vendor/autoload.php";
-
-        $app = new Application();
-        $app->setLoader($loader);
-
+        /** @var \DeltaCore\Application $app */
+        $app = include __DIR__ . "/../App/bootstrap.php";
         $app->init();
 
         /** @var \Attach\Model\FileManager $fm */
@@ -57,12 +40,14 @@ class ArticleImagesToRelation extends AbstractMigration
             $fileObject = $operator->create(ImageFileEntity::class);
             $fileData["id"] = $getUuidFunction(ImageFileEntity::class);
             $operator->load($fileObject, $fileData);
+            usleep(mt_rand(0, 1000000));
             $operator->save($fileObject);
 
             $relation = $operator->create(ArticleImageRelation::class);
             $relation->setId($getUuidFunction(ArticleImageRelation::class));
             $relation->setFirst($article);
             $relation->setSecond($fileObject);
+            usleep(mt_rand(0, 1000000));
             $operator->save($relation);
         }
     }

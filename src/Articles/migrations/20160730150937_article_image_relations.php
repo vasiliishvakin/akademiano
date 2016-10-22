@@ -2,18 +2,18 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class ArticleImagesRelations extends AbstractMigration
+class ArticleImageRelations extends AbstractMigration
 {
     public function up()
     {
         $sql = <<<SQL
-CREATE TABLE article_images_relations
+CREATE TABLE article_image_relations
 (
   CONSTRAINT article_files_relations_pkey PRIMARY KEY (id),
   CONSTRAINT page_files_relations_first_fkey FOREIGN KEY (first)
       REFERENCES articles (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT article_images_relations_second_fkey FOREIGN KEY (second)
+  CONSTRAINT article_image_relations_second_fkey FOREIGN KEY (second)
       REFERENCES images (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION
 )

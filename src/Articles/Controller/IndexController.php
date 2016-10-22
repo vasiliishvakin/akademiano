@@ -9,15 +9,15 @@ namespace Articles\Controller;
 use Articles\Model\Article;
 use Articles\Model\ArticleTagRelation;
 use DeltaCore\AbstractController;
+use DeltaDb\Adapter\WhereParams\Between;
 use DeltaDb\D2QL\Criteria;
 use DeltaPhp\Operator\EntityOperator;
 use DeltaDb\D2QL\Join;
 use DeltaPhp\Operator\Command\InfoWorkerCommand;
 use DeltaPhp\Operator\OperatorDiTrait;
-use DeltaPhp\TagsDictionary\Entity\Dictionary;
-use DeltaPhp\TagsDictionary\Entity\DictionaryTagRelation;
 use DeltaPhp\TagsDictionary\Entity\Tag;
 use DeltaRouter\Exception\NotFoundException;
+use Articles\Model\ArticleTags;
 
 class IndexController extends AbstractController
 {
@@ -29,22 +29,40 @@ class IndexController extends AbstractController
 
         $itemsPerPage = $this->getConfig(["Articles", "itemsPerPage"], 10);
 
-        $criteria = null;
-        if (isset($params["tag"]) && isset($params["tagId"])) {
-            $tagId = hexdec($params["tagId"]);
-            /** @var Criteria $criteria */
-            $criteria = $operator->execute(
-                new InfoWorkerCommand("relatedCriteria", ArticleTagRelation::class, ["currentClass" => Article::class, "joinType" => Join::TYPE_INNER])
-            );
-            $tagTable = $operator->execute(
-                new InfoWorkerCommand("table", Tag::class)
-            );
-            $criteria->createWhere($tagTable, "id", $tagId, "=");
+        $criteria = [];
+        if (isset($params["criteria"]) && isset($params["criteriaValue"])) {
+            switch ($params["criteria"]) {
+                case "category":
+                    $tagId = hexdec($params["criteriaValue"]);
+                    $tag = $this->getOperator()->get(Tag::class, $tagId);
+                    $this->getView()->assign("currentCategory", $tag);
+
+
+                    /** @var Criteria $criteria */
+                    $criteria = $operator->execute(
+                        new InfoWorkerCommand("relatedCriteria", ArticleTagRelation::class, ["currentClass" => Article::class, "joinType" => Join::TYPE_INNER])
+                    );
+                    $tagTable = $operator->execute(
+                        new InfoWorkerCommand("table", Tag::class)
+                    );
+                    $criteria->createWhere("id", $tagId, "=", $tagTable);
+
+                    break;
+                case "archive":
+                    $dateIn = new \DateTime($params["criteriaValue"] . "00:00:00");
+                    $dateOut = new \DateTime($params["criteriaValue"] . "23:59:59");
+                    $this->getView()->assign("currentDate", new \DateTime($params["criteriaValue"]));
+
+                    $criteria = [
+                        "created" =>new Between($dateIn->format("Y-m-d"), $dateOut->format("Y-m-d")),
+                    ];
+                    break;
+            }
         }
         //get articles
         $count = $operator->count(Article::class, $criteria);
         $pageInfo = $this->getPageInfo($count, $itemsPerPage);
-        $items = $operator->find(Article::class, [], $pageInfo["perPage"], $pageInfo["offsetForPage"], "id");
+        $items = $operator->find(Article::class, $criteria, $pageInfo["perPage"], $pageInfo["offsetForPage"], "created");
 
         $defaultMetaEnd = $pageInfo["page"] == 1 ? "" : " страница " . $pageInfo["page"];
         $defaultMetaStart = "Статьи";

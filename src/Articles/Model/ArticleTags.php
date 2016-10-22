@@ -17,6 +17,8 @@ class ArticleTags
     use Configurable;
     use IncludeOperatorTrait;
 
+    protected $dictionaries;
+
 
     public function __construct(EntityOperator $operator, Config $config)
     {
@@ -24,10 +26,27 @@ class ArticleTags
         $this->setConfig($config);
     }
 
+    public function getDictionaries()
+    {
+        if (null === $this->dictionaries) {
+            $dictionaries = $this->getConfig()->getOrThrow(["Tags", "Dictionaries"])->toArray();
+            $dictionaries = array_map(function ($val) {
+                return hexdec($val);
+            }, $dictionaries);
+            $this->dictionaries = $dictionaries;
+        }
+        return $this->dictionaries;
+    }
+
+    public function getDictionary()
+    {
+        $dictionaries = $this->getDictionaries();
+        return reset($dictionaries);
+    }
+
     public function getTags()
     {
-        $dictionary = $this->getConfig()->getOrThrow(["Tags", "Dictionaries"])->toArray();
-        $dictionary = hexdec(reset($dictionary));
+        $dictionary = $this->getDictionary();
 
         $operator = $this->getOperator();
 

@@ -3,12 +3,14 @@
 use DeltaPhp\Operator\WorkersContainerInterface;
 use Articles\Model\Article;
 use DeltaPhp\Operator\Command\CommandInterface;
-use \DeltaPhp\Operator\Worker\WorkerInterface;
-use \DeltaPhp\Operator\Command\RelationLoadCommand;
-use \Articles\Model\ArticleImageRelation;
+use DeltaPhp\Operator\Worker\WorkerInterface;
+use DeltaPhp\Operator\Command\RelationLoadCommand;
+use Articles\Model\ArticleImageRelation;
 use Attach\Model\ImageFileEntity;
-use \DeltaPhp\TagsDictionary\Entity\Tag;
+use DeltaPhp\TagsDictionary\Entity\Tag;
 use Articles\Model\ArticleTagRelation;
+use DeltaPhp\Operator\Command\AfterCommandInterface;
+use DeltaPhp\Operator\Command\PreCommandInterface;
 
 return [
     "ArticleWorker" => [
@@ -28,14 +30,18 @@ return [
             CommandInterface::COMMAND_LOAD => Article::class,
             CommandInterface::COMMAND_RESERVE => Article::class,
             CommandInterface::COMMAND_GENERATE_ID => Article::class,
-            \DeltaPhp\Operator\Worker\TranslatorObjectToDataWorker::COMMAND_BEFORE_DELETE => [Article::class => -10],
             CommandInterface::COMMAND_WORKER_INFO => Article::class,
+            PreCommandInterface::PREFIX_COMMAND_PRE . CommandInterface::COMMAND_DELETE => [Article::class => -10],
+            AfterCommandInterface::PREFIX_COMMAND_AFTER . CommandInterface::COMMAND_SAVE => [Article::class => 10],
+            \DeltaPhp\Operator\Command\CreateSelectCommand::COMMAND_CREATE_SELECT => Article::class,
+            \DeltaPhp\Operator\Command\SelectCommand::COMMAND_SELECT => Article::class,
+            \Articles\Model\GetDatesCommand::COMMAND_GET_DATES => Article::class,
         ],
     ],
 
     "ArticleImagesWorker" => [
         function (WorkersContainerInterface $s) {
-            $worker = new \DeltaPhp\Operator\Worker\RelationsWorker(Article::class, ImageFileEntity::class, ArticleImageRelation::class, "article_images_relations");
+            $worker = new \DeltaPhp\Operator\Worker\RelationsWorker(Article::class, ImageFileEntity::class, ArticleImageRelation::class, "article_image_relations");
             $adapter = $s->getOperator()->getDependency("dbAdapter");
             $worker->setAdapter($adapter);
             return $worker;
@@ -58,12 +64,12 @@ return [
 
     "ArticleTagWorker" => [
         function (WorkersContainerInterface $s) {
-            $worker = new \DeltaPhp\Operator\Worker\RelationsWorker(Article::class, Tag::class, ArticleTagRelation::class, "article_tags_relations");
+            $worker = new \DeltaPhp\Operator\Worker\RelationsWorker(Article::class, Tag::class, ArticleTagRelation::class, "article_tag_relations");
             $adapter = $s->getOperator()->getDependency("dbAdapter");
             $worker->setAdapter($adapter);
             return $worker;
         },
-        WorkerInterface::PARAM_TABLEID => 102,
+        WorkerInterface::PARAM_TABLEID => 104,
         WorkerInterface::PARAM_ACTIONS_MAP => [
             RelationLoadCommand::COMMAND_RELATION_LOAD => ArticleTagRelation::class,
             CommandInterface::COMMAND_FIND => ArticleTagRelation::class,

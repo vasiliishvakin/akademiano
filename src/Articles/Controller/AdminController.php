@@ -6,16 +6,20 @@
 namespace Articles\Controller;
 
 use Acl\Model\Parts\AclController;
+use Articles\Model\ArticleImageRelation;
+use Attach\Model\Command\EntityAttachSaveCommand;
 use Attach\Model\FileManager;
 use Attach\Model\Parts\AttachSave;
 use DeltaCore\AdminControllerInterface;
+use DeltaPhp\TagsDictionary\Entity\Tag;
 use DeltaUtils\ArrayUtils;
 use Articles\Model\Article;
+use Articles\Model\ArticleTags;
+use UUID\Model\UuidComplexShortTables;
 
 class AdminController extends IndexController implements AdminControllerInterface
 {
     use AclController;
-    use AttachSave;
 
     const ITEMS_PER_PAGE = 2;
 
@@ -24,47 +28,48 @@ class AdminController extends IndexController implements AdminControllerInterfac
         return $this->isAllow();
     }
 
-    /**
-     * @return FileManager
-     */
-    public function getFileManager()
-    {
-        return $this->getArticlesManager()->getFileManager();
-    }
-
-
     public function formAction(array $params = [])
     {
         $id = ArrayUtils::get($params, "id");
-        $categories = $this->getArticlesManager()->getCategories();
+        $operator = $this->getOperator();
+        /** @var Tag[] $categories */
+        $tags = (new ArticleTags($operator, $this->getConfig("Articles")))->getTags();
         if (!empty($id)) {
-            $nm = $this->getArticlesManager();
-            $item = $nm->findById($id);
+            $id = hexdec($id);
+            /** @var Article $item */
+            $item = $operator->get(Article::class, $id);
             if (!$item) {
                 throw new \RuntimeException("Bad item id $id");
             }
             $this->getView()->assign("item", $item);
-            $categories = $this->getArticlesManager()->getCategories();
-            $itemCategories = array_flip($item->getCategoriesIds());
-            $viewCats = [];
-            foreach ($categories as $category) {
-                $id = $category->getId();
-                $active = isset($itemCategories[$id]);
-                $viewCats[] = ["id" => $id, "name" => $category->getName(), "active" => $active];
+
+            $itemTags = $item->getTags();
+            if (!$itemTags->isEmpty()) {
+                $itemTags = $itemTags->lists("id", "id");
+                $viewTags = [];
+                foreach ($tags as $tag) {
+                    $id = $tag->getId();
+                    $active = isset($itemTags[$id]);
+                    $viewTags[] = ["id" => $id, "title" => $tag->getTitle(), "select" => $active];
+                }
+                $tags = $viewTags;
             }
-            $categories = $viewCats;
         }
-        $this->getView()->assign("categories", $categories);
+        $this->getView()->assign("tags", $tags);
     }
 
     public function rmAction(array $params = [])
     {
         $this->autoRenderOff();
-        $id = ArrayUtils::get($params, "id");
-        if (empty($id)) {
-            throw new \RuntimeException("Bad item id $id");
+        if (isset($params["id"])) {
+            $id = hexdec($params["id"]);
+            $operator = $this->getOperator();
+            $item = $operator->get(Article::class, $id);
+            if (!$item) {
+                throw new \RuntimeException("Bad item id {$params["id"]}");
+            }
+            $this->getOperator()->delete($item);
         }
-        $this->getArticlesManager()->deleteById($id);
         $this->getResponse()->redirect("/admin/articles");
     }
 
@@ -73,17 +78,40 @@ class AdminController extends IndexController implements AdminControllerInterfac
         $this->autoRenderOff();
         //save item
         $request = $this->getRequest();
+        $operator = $this->getOperator();
         $requestParams = $request->getParams();
-        $nm = $this->getArticlesManager();
-        /** @var Article $item */
-        $item = isset($requestParams["id"]) ? $nm->findById($requestParams["id"]) : $nm->create();
+        if (isset($requestParams["id"])) {
+            $id = $operator->create(UuidComplexShortTables::class, ["value" => $requestParams["id"]]);
+            unset($requestParams["id"]);
+        }
+
+        if (isset($id)) {
+            /** @var Article $item */
+            $item = $operator->get(Article::class, $id) ?: $operator->create(Article::class);
+        } else {
+            $item = $operator->create(Article::class);
+        }
+
         if (empty($item)) {
             throw new \LogicException("item not found");
         }
-        $nm->load($item, $requestParams);
-        $nm->save($item);
+        $operator->load($item, $requestParams);
+        if (isset($requestParams["tags"])) {
+            $item->setTags($requestParams["tags"]);
+        }
+        $item->setId($id);
+        if (empty($requestParams["changed"])) {
+            $item->setChanged(new \DateTime());
+        }
+        $operator->save($item);
+
         $maxFileSize = $this->getConfig(["Articles", "Attach", "Size"], 500 * 1024);
-        $this->processFilesRequest($item, $maxFileSize);
+
+        $this->getOperator();
+
+        $fileCommand = new EntityAttachSaveCommand($item, $request, ArticleImageRelation::class, ["maxFileSize" => $maxFileSize]);
+        $this->getOperator()->execute($fileCommand);
+
         $this->getResponse()->redirect("/admin/articles");
     }
 }

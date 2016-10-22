@@ -25,13 +25,13 @@
         <fieldset>
 
             <!-- Form Name -->
-            <legend>{{ item ? "Edit" : "Add" }} Article {{ item.id ? "#" }}{{ item.id }}</legend>
+            <legend>{{ item ? "Edit" : "Add" }} Article {{ item.id ? "#" }}{{ item.id|dechex }}</legend>
 
             <!-- Text input-->
             <div class="form-group">
                 <label class="col-md-4 control-label" for="title">Title</label>
                 {% if item.id %}
-                    <input name="id" type="hidden" value="{{ item.id }}"/>
+                    <input name="id" type="hidden" value="{{ item.id|dechex }}"/>
                 {% endif %}
 
                 <div class="col-md-8">
@@ -43,13 +43,13 @@
 
             <!-- Select Multiple -->
             <div class="form-group">
-                <label class="col-md-4 control-label" for="categories">Categories</label>
+                <label class="col-md-4 control-label" for="tags">Tags</label>
 
                 <div class="col-md-8">
-                    <select id="categories" name="categories[]" class="form-control" multiple="multiple">
-                        {% for category in categories %}
-                            <option value="{{ category.id }}"
-                                    {% if category.active %}selected{% endif %}>{{ category.name }}</option>
+                    <select id="tags" name="tags[]" class="form-control" multiple="multiple">
+                        {% for tag in tags %}
+                            <option value="{{ tag.id }}"
+                                    {% if tag.select %}selected{% endif %}>{{ tag.title }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -66,10 +66,10 @@
 
             <!-- Textarea -->
             <div class="form-group">
-                <label class="col-md-5 control-label" for="text">Text</label>
+                <label class="col-md-5 control-label" for="content">Text</label>
 
                 <div class="col-md-12">
-                    <textarea class="form-control ckeditor" id="text" name="text" rows="10">{{ item.text }}</textarea>
+                    <textarea class="form-control ckeditor" id="content" name="content" rows="10">{{ item.content|raw }}</textarea>
                 </div>
             </div>
 
@@ -93,7 +93,7 @@
                 <div class="form-group">
                     <label class="col-md-2 col-md-offset-7 control-label" for="changed">Изменено</label>
                     <div class="col-md-3">
-                        <input id="changed" name="changed" type="datetime" class="form-control" value="{{ item.changed|date("Y-m-d H:i") }}">
+                        <input id="changed" name="changed" type="datetime" class="form-control" placeholder="{{ "now"|date("Y-m-d H:i") }}">
 
                     </div>
                 </div>

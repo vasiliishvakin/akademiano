@@ -14,7 +14,7 @@ class ListController extends IndexController
         $count = $manager->count();
         $itemsPerPage = $this->getConfig(["Articles", "itemsPerPageInList"], 200);
         $pageInfo = $this->getPageInfo($count, $itemsPerPage);
-        $orderBy = "id";
+        $orderBy = "created";
         $items = $manager->find([], null, $pageInfo["perPage"], $pageInfo["offsetForPage"], $orderBy);
         $this->getView()->assign("items", $items);
         $this->getView()->assignArray($pageInfo);

@@ -1,10 +1,73 @@
 {% extends "layoutAdmin.twig" %}
 {% block head %}
     {{ parent() }}
-   {%  include "colorbox.twig" %}
+    {% include "colorbox.twig" %}
 {% endblock head %}
 
 {% block content %}
+    <h1>Статьи ({{ countItems }})</h1>
+    <div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>image</th>
+                <th>title</th>
+                <th>created</th>
+                <th>changed</th>
+                <th>active</th>
+                <th>actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in items %}
+                <tr>
+                    <td>{{ item.id|dechex }}</td>
+                    <td>
+                        {% if item.titleImage %}
+                            <a class="photo-thumb" href="{{ item.titleImage.url("origin") }}">
+                            <img src="{{ item.titleImage.url("micro") }}" alt="" border="0">
+                                </a>
+                        {% endif %}
+                    </td>
+                    <td>{{ item.title }}</td>
+                    <td>{{ item.created|date("d.m.Y") }}</td>
+                    <td>{{ item.changed|date("d.m.Y") }}</td>
+                    <td><span class="glyphicon  {{ item.active ? "glyphicon-ok-circle": "glyphicon glyphicon-ban-circle" }}"></span></td>
+                    <td>
+                        <a href="{{ route_url('articles_admin_edit', {'id': item.id|dechex}) }}" class="btn btn-sm btn-warning"><span
+                                    class="glyphicon glyphicon-edit"></span></a>
+                        <a href="{{ route_url('articles_admin_rm', {'id': item.id|dechex}) }}" class="btn btn-sm btn-danger"><span
+                                    class="glyphicon glyphicon-remove"></span></a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+
+        </table>
+
+
+        {#paginator#}
+        <div>
+            <ul class="pagination">
+                {% if showFirstPage %}
+                    <li><a href="/admin/articles">&laquo;</a></li>
+                {% endif %}
+                {% for page in pages %}
+                    <li class="{% if page.active %}active{% endif %}"><a
+                                href="/admin/articles?p={{ page.id }}">{{ page.id }}</a></li>
+                {% endfor %}
+                {% if showLastPage %}
+                    <li><a href="/admin/articles?p={{ countPages }}">&raquo;</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+    <a href="{{ route_url('articles_admin_add') }}" class="btn btn-lg btn-success"><span class="glyphicon glyphicon-file"></span>
+        Add New</a>
+{% endblock %}
+
+{% block content2 %}
     <h1>Статьи {% if currentCategory %}in "{{ currentCategory.name }}" {% endif %} ({{ countItems }})</h1>
     <a href="/admin/articles/add" class="btn btn-lg btn-success"><span class="glyphicon glyphicon-file"></span> Add New</a>
     <div>

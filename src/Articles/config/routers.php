@@ -14,7 +14,7 @@ return [
         "methods" => [\DeltaRouter\Route::METHOD_GET],
         "patterns" => [
             "type" => \DeltaRouter\RoutePattern::TYPE_REGEXP,
-            "value" => "^/articles/?(?P<tag>\w+)?/?(?P<tagId>\w+)?$",
+            "value" => "^/articles/?(?P<criteria>\w+)?/?(?P<criteriaValue>\w+)?$",
         ],
         "action" => ["index", "list"]
     ],
@@ -50,7 +50,7 @@ return [
         "methods" => [\DeltaRouter\Route::METHOD_GET],
         "patterns" => [
             "type" => \DeltaRouter\RoutePattern::TYPE_REGEXP,
-            "value" => "/admin/articles/edit/(?P<id>\d+)",
+            "value" => "/admin/articles/edit/(?P<id>\w+)",
         ],
         "action" => ["admin", "form"]
     ],
@@ -67,7 +67,7 @@ return [
         "methods" => [\DeltaRouter\Route::METHOD_GET],
         "patterns" => [
             "type" => \DeltaRouter\RoutePattern::TYPE_REGEXP,
-            "value" => "/admin/articles/rm/(?P<id>\d+)",
+            "value" => "/admin/articles/rm/(?P<id>\w+)",
         ],
         "action" => ["admin", "rm"]
     ],

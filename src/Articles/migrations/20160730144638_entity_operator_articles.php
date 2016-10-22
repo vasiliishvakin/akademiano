@@ -27,7 +27,7 @@ SQL;
         $this->execute($sql);
 
         $table = $this->table("articles");
-        $table->addColumn("old_id", "integer");
+        $table->addColumn("old_id", "integer", ['null' => true]);
         $table->save();
 
         $tableId = 14;
