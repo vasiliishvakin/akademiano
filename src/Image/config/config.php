@@ -4,6 +4,11 @@ return [
     "Image" => [
         "watermark" => new \Image\Model\Watermark(["text" => "deltaphp/image"]),
         "templates" => [
+            "micro" => [
+                "resizeAndCrop" => [30, 30],
+                "clear",
+                "optimize"
+            ],
             "thumb" => [
                 "resizeAndCrop" => [150, 150],
                 "addWatermark" => function (\DeltaCore\Config $c) {
