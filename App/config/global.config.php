@@ -89,5 +89,6 @@ return [
         "Image",
         "UUID",
         "DeltaPhp\\Operator",
+        "DeltaPhp\\TagsDictionary",
     ],
 ];

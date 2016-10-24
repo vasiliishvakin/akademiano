@@ -38,7 +38,7 @@ class Composer
             foreach ($pathClasses as $path) {
                 $path = $pathPackage . "/" . $path;
                 $className = basename($path);
-                echo "process package $className \n";
+                echo "process package {$pathPackage} : {$className} \n";
                 self::tryAddMigration($path, $rootPath);
             }
         }
@@ -54,6 +54,8 @@ class Composer
             foreach ($clItems as $class => $path) {
                 if ($type === "psr-0") {
                     $patchArr[] = $path . $class;
+                } elseif ($type === "psr-4") {
+                    $patchArr[] = $path;
                 }
             }
         }

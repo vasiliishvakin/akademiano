@@ -25,20 +25,20 @@
         },
         {
             "name": "bower-asset/bootstrap",
-            "version": "v3.3.5",
+            "version": "v3.3.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twbs/bootstrap.git",
-                "reference": "16b48259a62f576e52c903c476bd42b90ab22482"
+                "reference": "0b9c4a4007c44201dce9a6cc1a38407005c26c86"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twbs/bootstrap/zipball/16b48259a62f576e52c903c476bd42b90ab22482",
-                "reference": "16b48259a62f576e52c903c476bd42b90ab22482",
+                "url": "https://api.github.com/repos/twbs/bootstrap/zipball/0b9c4a4007c44201dce9a6cc1a38407005c26c86",
+                "reference": "0b9c4a4007c44201dce9a6cc1a38407005c26c86",
                 "shasum": ""
             },
             "require": {
-                "bower-asset/jquery": ">=1.9.1"
+                "bower-asset/jquery": ">=1.9.1,<=3"
             },
             "type": "bower-asset-library",
             "extra": {
@@ -78,12 +78,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ckeditor/ckeditor-releases.git",
-                "reference": "e3d4dba95343f1b33d8d9a08b78cd080efa0cdc1"
+                "reference": "a55e90c4e4114c40169b054bbeb2190c3a62a055"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ckeditor/ckeditor-releases/zipball/e3d4dba95343f1b33d8d9a08b78cd080efa0cdc1",
-                "reference": "e3d4dba95343f1b33d8d9a08b78cd080efa0cdc1",
+                "url": "https://api.github.com/repos/ckeditor/ckeditor-releases/zipball/a55e90c4e4114c40169b054bbeb2190c3a62a055",
+                "reference": "a55e90c4e4114c40169b054bbeb2190c3a62a055",
                 "shasum": ""
             },
             "type": "bower-asset-library",
@@ -104,7 +104,7 @@
                 "text",
                 "wysiwyg"
             ],
-            "time": "2016-05-12 15:38:49"
+            "time": "2016-02-04 17:41:24"
         },
         {
             "name": "bower-asset/colorbox",
@@ -112,12 +112,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jackmoore/colorbox.git",
-                "reference": "99590c8a170e3e724c94a52cc8030434c5a0d43b"
+                "reference": "99201fd67aeec66d8947c88fc732e7c7fbf6c6df"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jackmoore/colorbox/zipball/99590c8a170e3e724c94a52cc8030434c5a0d43b",
-                "reference": "99590c8a170e3e724c94a52cc8030434c5a0d43b",
+                "url": "https://api.github.com/repos/jackmoore/colorbox/zipball/99201fd67aeec66d8947c88fc732e7c7fbf6c6df",
+                "reference": "99201fd67aeec66d8947c88fc732e7c7fbf6c6df",
                 "shasum": ""
             },
             "require": {
@@ -146,7 +146,7 @@
                 "popup",
                 "ui"
             ],
-            "time": "2016-05-10 22:22:07"
+            "time": "2015-05-14 17:05:17"
         },
         {
             "name": "bower-asset/html5shiv",
@@ -322,12 +322,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/attach.git",
-                "reference": "95bbcbcba1c56bace5818e7f5531da6d08c20afc"
+                "reference": "7f87bb296f96e7da57e689b3bbd252292609d93b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/attach/zipball/95bbcbcba1c56bace5818e7f5531da6d08c20afc",
-                "reference": "95bbcbcba1c56bace5818e7f5531da6d08c20afc",
+                "url": "https://api.github.com/repos/DeltaPHP/attach/zipball/7f87bb296f96e7da57e689b3bbd252292609d93b",
+                "reference": "7f87bb296f96e7da57e689b3bbd252292609d93b",
                 "shasum": ""
             },
             "require": {
@@ -352,7 +352,7 @@
                 }
             ],
             "description": "Attach files to othe objects",
-            "time": "2016-06-27 17:13:36"
+            "time": "2016-10-22 18:50:04"
         },
         {
             "name": "deltaphp/deltacore",
@@ -360,12 +360,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/DeltaCore.git",
-                "reference": "5ba91fe2733de808f5a67a46436c4d6cfb180ee4"
+                "reference": "bd55c557d897fa4b6304353b02821f4924501364"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/DeltaCore/zipball/5ba91fe2733de808f5a67a46436c4d6cfb180ee4",
-                "reference": "5ba91fe2733de808f5a67a46436c4d6cfb180ee4",
+                "url": "https://api.github.com/repos/DeltaPHP/DeltaCore/zipball/bd55c557d897fa4b6304353b02821f4924501364",
+                "reference": "bd55c557d897fa4b6304353b02821f4924501364",
                 "shasum": ""
             },
             "require": {
@@ -393,20 +393,20 @@
                 }
             ],
             "description": "Delta PHP framework - fast, light, easy (core)",
-            "time": "2016-06-08 18:16:37"
+            "time": "2016-10-22 17:33:32"
         },
         {
             "name": "deltaphp/deltadb",
-            "version": "1.3.x-dev",
+            "version": "1.4.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/DeltaDb.git",
-                "reference": "2e77dc96271a077c6fab7eedc8c7b6d71bb9c183"
+                "reference": "550bf23e946d8dbfece576ebc3f2a23f4bb806f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/DeltaDb/zipball/2e77dc96271a077c6fab7eedc8c7b6d71bb9c183",
-                "reference": "2e77dc96271a077c6fab7eedc8c7b6d71bb9c183",
+                "url": "https://api.github.com/repos/DeltaPHP/DeltaDb/zipball/550bf23e946d8dbfece576ebc3f2a23f4bb806f3",
+                "reference": "550bf23e946d8dbfece576ebc3f2a23f4bb806f3",
                 "shasum": ""
             },
             "require": {
@@ -430,7 +430,7 @@
                 }
             ],
             "description": "DB models for delta framework",
-            "time": "2016-06-08 18:08:03"
+            "time": "2016-10-07 08:50:32"
         },
         {
             "name": "deltaphp/deltarouter",
@@ -514,16 +514,16 @@
         },
         {
             "name": "deltaphp/deltautils",
-            "version": "1.4.5",
+            "version": "1.4.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/DeltaUtils.git",
-                "reference": "4686fb474a3c152b67d72559ff85bad2ea394d89"
+                "reference": "846b8abe14a68001fc82c3e2abb1fcfd6853f5dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/DeltaUtils/zipball/4686fb474a3c152b67d72559ff85bad2ea394d89",
-                "reference": "4686fb474a3c152b67d72559ff85bad2ea394d89",
+                "url": "https://api.github.com/repos/DeltaPHP/DeltaUtils/zipball/846b8abe14a68001fc82c3e2abb1fcfd6853f5dc",
+                "reference": "846b8abe14a68001fc82c3e2abb1fcfd6853f5dc",
                 "shasum": ""
             },
             "require": {
@@ -550,7 +550,7 @@
                 }
             ],
             "description": "good tools and utils",
-            "time": "2016-06-27 15:18:44"
+            "time": "2016-09-22 10:45:54"
         },
         {
             "name": "deltaphp/dictdir",
@@ -558,12 +558,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/DictDir.git",
-                "reference": "2fa7fca1039dbf73475b3f27f82ae29356d871b0"
+                "reference": "1bdf8d751dbddf066f076ee64bc1c8676fccd46a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/DictDir/zipball/2fa7fca1039dbf73475b3f27f82ae29356d871b0",
-                "reference": "2fa7fca1039dbf73475b3f27f82ae29356d871b0",
+                "url": "https://api.github.com/repos/DeltaPHP/DictDir/zipball/1bdf8d751dbddf066f076ee64bc1c8676fccd46a",
+                "reference": "1bdf8d751dbddf066f076ee64bc1c8676fccd46a",
                 "shasum": ""
             },
             "require": {
@@ -587,7 +587,7 @@
                 }
             ],
             "description": "module for work with simple dict-type data",
-            "time": "2016-01-10 17:38:05"
+            "time": "2016-10-22 18:58:11"
         },
         {
             "name": "deltaphp/dtpl",
@@ -664,12 +664,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/image.git",
-                "reference": "6aeb4163ea6441bc0e4076d68d4d9018b7e8e0ca"
+                "reference": "1f6d21ce823f912d99911eb9e6a9b079e39aed1a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/image/zipball/6aeb4163ea6441bc0e4076d68d4d9018b7e8e0ca",
-                "reference": "6aeb4163ea6441bc0e4076d68d4d9018b7e8e0ca",
+                "url": "https://api.github.com/repos/DeltaPHP/image/zipball/1f6d21ce823f912d99911eb9e6a9b079e39aed1a",
+                "reference": "1f6d21ce823f912d99911eb9e6a9b079e39aed1a",
                 "shasum": ""
             },
             "require": {
@@ -693,7 +693,7 @@
                 }
             ],
             "description": "Resize and othe operations on images by request",
-            "time": "2016-01-13 08:59:16"
+            "time": "2016-10-22 18:51:25"
         },
         {
             "name": "deltaphp/operator",
@@ -701,12 +701,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/Operator.git",
-                "reference": "78c94fcd493e41e35dffe76beea7e02b2064db9d"
+                "reference": "35cca8cfe8ae2682537657e629377f60e6ca1d6d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/Operator/zipball/78c94fcd493e41e35dffe76beea7e02b2064db9d",
-                "reference": "78c94fcd493e41e35dffe76beea7e02b2064db9d",
+                "url": "https://api.github.com/repos/DeltaPHP/Operator/zipball/35cca8cfe8ae2682537657e629377f60e6ca1d6d",
+                "reference": "35cca8cfe8ae2682537657e629377f60e6ca1d6d",
                 "shasum": ""
             },
             "require": {
@@ -733,7 +733,7 @@
                 }
             ],
             "description": "Operator for executing command by workers, with base commands and workers. It's for subject/observer patterns, event-driven architectures like event manager",
-            "time": "2016-06-27 17:11:11"
+            "time": "2016-10-22 18:10:04"
         },
         {
             "name": "deltaphp/pages",
@@ -741,12 +741,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/Pages.git",
-                "reference": "2d37241cc705bbf0e47ee91d034f3637f4f08b01"
+                "reference": "cdd8ea59623a8f18a25bf56840398b7376d167e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/Pages/zipball/2d37241cc705bbf0e47ee91d034f3637f4f08b01",
-                "reference": "2d37241cc705bbf0e47ee91d034f3637f4f08b01",
+                "url": "https://api.github.com/repos/DeltaPHP/Pages/zipball/cdd8ea59623a8f18a25bf56840398b7376d167e3",
+                "reference": "cdd8ea59623a8f18a25bf56840398b7376d167e3",
                 "shasum": ""
             },
             "require": {
@@ -778,7 +778,7 @@
                 }
             ],
             "description": "DeltaPagesModule",
-            "time": "2016-06-27 17:19:47"
+            "time": "2016-10-22 18:53:01"
         },
         {
             "name": "deltaphp/perm-auth",
@@ -934,12 +934,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DeltaPHP/UUID.git",
-                "reference": "d3f5f4186618290b104d818d4f0ac50c80e0ea09"
+                "reference": "603e19a35896367638c18353228e2ed7bacccab8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DeltaPHP/UUID/zipball/d3f5f4186618290b104d818d4f0ac50c80e0ea09",
-                "reference": "d3f5f4186618290b104d818d4f0ac50c80e0ea09",
+                "url": "https://api.github.com/repos/DeltaPHP/UUID/zipball/603e19a35896367638c18353228e2ed7bacccab8",
+                "reference": "603e19a35896367638c18353228e2ed7bacccab8",
                 "shasum": ""
             },
             "require": {
@@ -963,7 +963,7 @@
                 }
             ],
             "description": "uuid module",
-            "time": "2016-06-27 15:34:47"
+            "time": "2016-10-22 18:12:01"
         },
         {
             "name": "hashids/hashids",
@@ -971,16 +971,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ivanakimov/hashids.php.git",
-                "reference": "40cd4446a57bce4b4f15f813bde5599a1694e172"
+                "reference": "6bd7ceffb2ccddef6cd64e88f1717f97d131cc3c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ivanakimov/hashids.php/zipball/40cd4446a57bce4b4f15f813bde5599a1694e172",
-                "reference": "40cd4446a57bce4b4f15f813bde5599a1694e172",
+                "url": "https://api.github.com/repos/ivanakimov/hashids.php/zipball/6bd7ceffb2ccddef6cd64e88f1717f97d131cc3c",
+                "reference": "6bd7ceffb2ccddef6cd64e88f1717f97d131cc3c",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.3.3 || ^7.0"
+                "ext-bcmath": "*",
+                "php": "^5.6.4 || ^7.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^4.8 || ^5.0"
@@ -1020,7 +1021,7 @@
                 "obfuscate",
                 "youtube"
             ],
-            "time": "2016-04-26 16:46:41"
+            "time": "2016-01-21 04:26:38"
         },
         {
             "name": "kriswallsmith/assetic",
@@ -1155,12 +1156,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/silexphp/Pimple.git",
-                "reference": "64e0f8320639b434baa073a40dd1e037e3286555"
+                "reference": "44515c40a4c4effc53c1e6c0e7158f711473dc98"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silexphp/Pimple/zipball/64e0f8320639b434baa073a40dd1e037e3286555",
-                "reference": "64e0f8320639b434baa073a40dd1e037e3286555",
+                "url": "https://api.github.com/repos/silexphp/Pimple/zipball/44515c40a4c4effc53c1e6c0e7158f711473dc98",
+                "reference": "44515c40a4c4effc53c1e6c0e7158f711473dc98",
                 "shasum": ""
             },
             "require": {
@@ -1193,7 +1194,54 @@
                 "container",
                 "dependency injection"
             ],
-            "time": "2015-09-11 15:11:22"
+            "time": "2016-09-10 19:36:25"
+        },
+        {
+            "name": "psr/log",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/log.git",
+                "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
+                "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Log\\": "Psr/Log/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for logging libraries",
+            "homepage": "https://github.com/php-fig/log",
+            "keywords": [
+                "log",
+                "psr",
+                "psr-3"
+            ],
+            "time": "2016-10-10 12:19:37"
         },
         {
             "name": "robmorgan/phinx",
@@ -1270,17 +1318,20 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/config.git",
-                "reference": "5d688ee77abc1a9a13135d8d62be515ac402d34a"
+                "reference": "80af51af5ec2dd777411152dd035d7e6b187c2fe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/config/zipball/5d688ee77abc1a9a13135d8d62be515ac402d34a",
-                "reference": "5d688ee77abc1a9a13135d8d62be515ac402d34a",
+                "url": "https://api.github.com/repos/symfony/config/zipball/80af51af5ec2dd777411152dd035d7e6b187c2fe",
+                "reference": "80af51af5ec2dd777411152dd035d7e6b187c2fe",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.5.9",
                 "symfony/filesystem": "~2.8|~3.0"
+            },
+            "require-dev": {
+                "symfony/yaml": "~3.0"
             },
             "suggest": {
                 "symfony/yaml": "To use the yaml reference dumper"
@@ -1315,7 +1366,7 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "https://symfony.com",
-            "time": "2016-06-29 05:43:10"
+            "time": "2016-10-03 23:53:52"
         },
         {
             "name": "symfony/console",
@@ -1323,16 +1374,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "e4c612542171072eb54754489f23576e50d16a47"
+                "reference": "72fafa731ed6dcfdeadc60ed92922e8d6ff451b5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/e4c612542171072eb54754489f23576e50d16a47",
-                "reference": "e4c612542171072eb54754489f23576e50d16a47",
+                "url": "https://api.github.com/repos/symfony/console/zipball/72fafa731ed6dcfdeadc60ed92922e8d6ff451b5",
+                "reference": "72fafa731ed6dcfdeadc60ed92922e8d6ff451b5",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.5.9",
+                "symfony/debug": "~2.8|~3.0",
                 "symfony/polyfill-mbstring": "~1.0"
             },
             "require-dev": {
@@ -1377,7 +1429,64 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2016-06-29 07:02:38"
+            "time": "2016-10-21 21:28:04"
+        },
+        {
+            "name": "symfony/debug",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/debug.git",
+                "reference": "61de4883414e3a640ffac1798d411a37dc71bc20"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/61de4883414e3a640ffac1798d411a37dc71bc20",
+                "reference": "61de4883414e3a640ffac1798d411a37dc71bc20",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.9",
+                "psr/log": "~1.0"
+            },
+            "conflict": {
+                "symfony/http-kernel": ">=2.3,<2.3.24|~2.4.0|>=2.5,<2.5.9|>=2.6,<2.6.2"
+            },
+            "require-dev": {
+                "symfony/class-loader": "~2.8|~3.0",
+                "symfony/http-kernel": "~2.8|~3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Debug\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Debug Component",
+            "homepage": "https://symfony.com",
+            "time": "2016-09-30 10:45:11"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -1385,12 +1494,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
-                "reference": "6d07e9b202576411d80e70ddc0fd8d6b4c975b78"
+                "reference": "e8f47a327c2f0fd5aa04fa60af2b693006ed7283"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/6d07e9b202576411d80e70ddc0fd8d6b4c975b78",
-                "reference": "6d07e9b202576411d80e70ddc0fd8d6b4c975b78",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/e8f47a327c2f0fd5aa04fa60af2b693006ed7283",
+                "reference": "e8f47a327c2f0fd5aa04fa60af2b693006ed7283",
                 "shasum": ""
             },
             "require": {
@@ -1437,7 +1546,7 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
-            "time": "2016-06-29 05:43:10"
+            "time": "2016-10-13 06:29:04"
         },
         {
             "name": "symfony/filesystem",
@@ -1445,12 +1554,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "45e9008bc169ab89cc031bf723219092838b0b3d"
+                "reference": "3cb2b5ed69642d29543e823cae185ff2a63899bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/45e9008bc169ab89cc031bf723219092838b0b3d",
-                "reference": "45e9008bc169ab89cc031bf723219092838b0b3d",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/3cb2b5ed69642d29543e823cae185ff2a63899bd",
+                "reference": "3cb2b5ed69642d29543e823cae185ff2a63899bd",
                 "shasum": ""
             },
             "require": {
@@ -1486,7 +1595,7 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "https://symfony.com",
-            "time": "2016-06-29 05:43:10"
+            "time": "2016-10-18 04:30:21"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -1494,12 +1603,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "f9bc5072e11b2ad15ea55e0f4171cc870dc33a1d"
+                "reference": "53ad9faffe141fbe8f98cd6a7fd9a5e84513f56c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/f9bc5072e11b2ad15ea55e0f4171cc870dc33a1d",
-                "reference": "f9bc5072e11b2ad15ea55e0f4171cc870dc33a1d",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/53ad9faffe141fbe8f98cd6a7fd9a5e84513f56c",
+                "reference": "53ad9faffe141fbe8f98cd6a7fd9a5e84513f56c",
                 "shasum": ""
             },
             "require": {
@@ -1545,7 +1654,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2016-06-07 08:38:42"
+            "time": "2016-08-30 17:06:17"
         },
         {
             "name": "symfony/process",
@@ -1553,12 +1662,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "cdb8db3590748b544e673f8879269afa3c65460a"
+                "reference": "fbaacdfc701a0ad50622eee45cfa2112f0ee144e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/cdb8db3590748b544e673f8879269afa3c65460a",
-                "reference": "cdb8db3590748b544e673f8879269afa3c65460a",
+                "url": "https://api.github.com/repos/symfony/process/zipball/fbaacdfc701a0ad50622eee45cfa2112f0ee144e",
+                "reference": "fbaacdfc701a0ad50622eee45cfa2112f0ee144e",
                 "shasum": ""
             },
             "require": {
@@ -1594,7 +1703,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2016-06-29 05:43:10"
+            "time": "2016-10-01 14:21:27"
         },
         {
             "name": "symfony/yaml",
@@ -1602,12 +1711,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "bebaa0496239958f0c41cdc33392a7aa8e59f578"
+                "reference": "3d42c56f989688ad0790dcdc3c706d60748af6a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/bebaa0496239958f0c41cdc33392a7aa8e59f578",
-                "reference": "bebaa0496239958f0c41cdc33392a7aa8e59f578",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/3d42c56f989688ad0790dcdc3c706d60748af6a6",
+                "reference": "3d42c56f989688ad0790dcdc3c706d60748af6a6",
                 "shasum": ""
             },
             "require": {
@@ -1649,7 +1758,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2016-06-29 05:48:55"
+            "time": "2016-10-21 21:10:51"
         },
         {
             "name": "twig/twig",
@@ -1657,12 +1766,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "cdccdbbdf35f38a70eb6931667a76fc68012a999"
+                "reference": "9cab8b9f376e7a0e5a4c9d8a45e27848cbfb6b50"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/cdccdbbdf35f38a70eb6931667a76fc68012a999",
-                "reference": "cdccdbbdf35f38a70eb6931667a76fc68012a999",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/9cab8b9f376e7a0e5a4c9d8a45e27848cbfb6b50",
+                "reference": "9cab8b9f376e7a0e5a4c9d8a45e27848cbfb6b50",
                 "shasum": ""
             },
             "require": {
@@ -1675,7 +1784,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.24-dev"
+                    "dev-master": "1.27-dev"
                 }
             },
             "autoload": {
@@ -1710,7 +1819,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2016-06-24 05:05:43"
+            "time": "2016-10-24 15:26:26"
         },
         {
             "name": "webmozart/assert",
@@ -1718,16 +1827,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/webmozart/assert.git",
-                "reference": "3a8e045064f294992a13966b6c892fb9d64853a3"
+                "reference": "c0c92082a2ffef8fab7941d4f6fd6a6a72ed627c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozart/assert/zipball/3a8e045064f294992a13966b6c892fb9d64853a3",
-                "reference": "3a8e045064f294992a13966b6c892fb9d64853a3",
+                "url": "https://api.github.com/repos/webmozart/assert/zipball/c0c92082a2ffef8fab7941d4f6fd6a6a72ed627c",
+                "reference": "c0c92082a2ffef8fab7941d4f6fd6a6a72ed627c",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.3.3|^7.0"
+                "php": "^5.3.3 || ^7.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^4.6",
@@ -1736,7 +1845,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.1-dev"
+                    "dev-master": "1.2-dev"
                 }
             },
             "autoload": {
@@ -1760,7 +1869,7 @@
                 "check",
                 "validate"
             ],
-            "time": "2016-03-04 13:27:44"
+            "time": "2016-10-17 06:50:33"
         },
         {
             "name": "webmozart/console",
@@ -1768,12 +1877,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/webmozart/console.git",
-                "reference": "0c3c2be6c6045a1b7975156d699bc7d5c4abf6ab"
+                "reference": "3211236e0eea7c5afb437ef1c2b36b923ad25c37"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozart/console/zipball/0c3c2be6c6045a1b7975156d699bc7d5c4abf6ab",
-                "reference": "0c3c2be6c6045a1b7975156d699bc7d5c4abf6ab",
+                "url": "https://api.github.com/repos/webmozart/console/zipball/3211236e0eea7c5afb437ef1c2b36b923ad25c37",
+                "reference": "3211236e0eea7c5afb437ef1c2b36b923ad25c37",
                 "shasum": ""
             },
             "require": {
@@ -1810,7 +1919,7 @@
                 }
             ],
             "description": "A usable, beautiful and easily testable console toolkit written in PHP.",
-            "time": "2016-02-05 10:02:58"
+            "time": "2016-08-15 15:30:41"
         }
     ],
     "packages-dev": [],
