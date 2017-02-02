@@ -1,15 +1,11 @@
 <?php
-/**
- * User: Vasiliy Shvakin (orbisnull) zen4dev@gmail.com
- */
 
 namespace DeltaDb\Model\Type;
 
-
-use DeltaUtils\Object\Prototype\ArrayableInterface;
 use DeltaDb\Model\Type\ReservableInterface;
 use DeltaUtils\Object\Prototype\StringableInterface;
 use DeltaUtils\StringUtils;
+use DeltaUtils\Object\Prototype\ArrayableInterface;
 
 class PgPoint implements \JsonSerializable, ArrayableInterface, StringableInterface, ReservableInterface
 {
