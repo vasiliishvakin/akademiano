@@ -1,18 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: orbisnull
- * Date: 13.10.2015
- * Time: 13:10
- */
 
-namespace DeltaRouter;
+namespace Akademiano\Router;
 
 
-use DeltaUtils\Object\Prototype\ArrayableInterface;
-use DeltaUtils\Parts\SetParams;
-use DeltaUtils\RegexpUtils;
-use HttpWarp\Url;
+use Akademiano\Utils\Object\Prototype\ArrayableInterface;
+use Akademiano\Utils\Parts\SetParams;
+use Akademiano\Utils\RegexpUtils;
+use Akademiano\HttpWarp\Url;
 
 class RoutePattern implements ArrayableInterface
 {
@@ -34,7 +28,7 @@ class RoutePattern implements ArrayableInterface
     protected $type = self::TYPE_PREFIX;
     protected $value;
 
-    function __construct(array $params = null)
+    public function __construct(array $params = null)
     {
         if (!is_null($params)) {
             $this->setParams($params);

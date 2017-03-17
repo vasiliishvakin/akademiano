@@ -1,18 +1,13 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: orbisnull
- * Date: 13.10.2015
- * Time: 17:55
- */
 
-namespace DeltaRouter;
+namespace Akademiano\Router;
 
 
-use DeltaUtils\ArrayUtils;
-use DeltaUtils\Object\Collection;
-use DeltaUtils\Parts\SetParams;
-use HttpWarp\Url;
+use Akademiano\Router\RoutePattern;
+use Akademiano\Utils\ArrayTools;
+use Akademiano\Utils\Object\Collection;
+use Akademiano\Utils\Parts\SetParams;
+use Akademiano\HttpWarp\Url;
 
 class Route
 {
@@ -35,7 +30,7 @@ class Route
 
     protected $args = [];
 
-    function __construct($params = null)
+    public function __construct($params = null)
     {
         $this->patterns = new Collection();
         if (!is_null($params)) {
@@ -97,7 +92,7 @@ class Route
     public function setPatterns($patterns)
     {
         $patterns = (array)$patterns;
-        if (ArrayUtils::getArrayType($patterns) === ArrayUtils::ARRAY_TYPE_ASSOC) {
+        if (ArrayTools::getArrayType($patterns) === ArrayTools::ARRAY_TYPE_ASSOC) {
             $patterns = [$patterns];
         }
         foreach ($patterns as $pattern) {
@@ -202,7 +197,7 @@ class Route
     public static function isShort($routeData)
     {
         if (is_array($routeData) && (!isset($routeData["patterns"]) || !isset($routeData["action"]))) {
-            return (count($routeData) === 2 && ArrayUtils::getArrayType($routeData) === -1 && mb_strpos($routeData[0], "/") === 0);
+            return (count($routeData) === 2 && ArrayTools::getArrayType($routeData) === -1 && mb_strpos($routeData[0], "/") === 0);
         }
 
         return false;
@@ -228,7 +223,7 @@ class Route
     public static function isOld($routeData)
     {
         if (is_array($routeData) && (!isset($routeData["patterns"]) || !isset($routeData["action"]))) {
-            if (count($routeData) === 2 && ArrayUtils::getArrayType($routeData) === -1) {
+            if (count($routeData) === 2 && ArrayTools::getArrayType($routeData) === -1) {
                 $flag = explode("::", $routeData[0]);
                 if (count($flag) < 2) {
                     return false;

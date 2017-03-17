@@ -1,29 +1,29 @@
 {
-  "name": "deltaphp/deltarouter",
-  "description": "Simple router for php applications",
-  "license": "MIT",
+  "name": "akademiano/router",
+  "description": "Akademiano routing library",
+  "license": "Apache-2.0",
   "minimum-stability": "dev",
   "prefer-stable": true,
   "authors": [
     {
-      "name": "orbisnull",
-      "email": "zen4dev@gmail.com"
+      "name": "Vasiliy Shvakin",
+      "email": "mrdatamapper@gmail.com"
     }
   ],
   "autoload": {
-    "psr-0": {
-      "DeltaRouter": "src/"
+    "psr-4": {
+      "Akademiano\\Router\\": "src/"
     }
   },
   "require": {
-    "php": "~5.6",
+    "php": "^5.6 || ^7.0",
     "ext-fileinfo": "*",
-    "deltaphp/httpwarp": "~1.0",
-    "deltaphp/deltautils": "^1.2.2"
+    "akademiano/httpwarp": "^1.0.0-beta.1",
+    "akademiano/utils": "^1.0.0-beta.1"
   },
   "require-dev": {
-    "ext-ctype": "*",
-    "codeception/codeception": "*",
-    "codeception/mockery-module": "*"
+    "codeception/codeception": "^2.2.10",
+    "satooshi/php-coveralls": "^1.0.1",
+    "mockery/mockery": "^0.9.9"
   }
 }

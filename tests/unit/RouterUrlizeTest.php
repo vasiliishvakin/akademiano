@@ -1,7 +1,7 @@
 <?php
 
-use DeltaRouter\RoutePattern;
-use DeltaRouter\Router;
+use Akademiano\Router\RoutePattern;
+use Akademiano\Router\Router;
 
 class RouterUrlizeTest extends \Codeception\TestCase\Test
 {
@@ -10,7 +10,7 @@ class RouterUrlizeTest extends \Codeception\TestCase\Test
      */
     protected $tester;
     /**
-     * @var \Router
+     * @var Router
      */
     protected $router;
 

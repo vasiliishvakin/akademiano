@@ -1,20 +1,19 @@
 <?php
-namespace DeltaRouter;
+namespace Akademiano\Router;
 
-use DeltaRouter\Exception\NotFoundException;
-use DeltaUtils\Object\Collection;
-use DeltaUtils\RegexpUtils;
-use HttpWarp\Request;
-use HttpWarp\Url;
+use Akademiano\Router\Exception\NotFoundException;
+use Akademiano\Router\Route;
+use Akademiano\Utils\Object\Collection;
+use Akademiano\Utils\RegexpUtils;
+use Akademiano\HttpWarp\Request;
+use Akademiano\HttpWarp\Url;
 
-/**
- * класс осуществляет роутинг и вызывает нужные обработчики
- */
+
 class Router
 {
     const RUN_NEXT = "____run_next";
 
-    /** @var array Collection|Router[] */
+    /** @var array Collection|Route[] */
     protected $routes;
     protected $isRun = false;
     /** @var  Route */
@@ -25,7 +24,7 @@ class Router
      */
     protected $request;
 
-    function __construct(Request $request = null)
+    public function __construct(Request $request = null)
     {
         if (!is_null($request)) {
             $this->setRequest($request);
@@ -127,7 +126,7 @@ class Router
         return $routesTree;
     }
 
-    public function isMatchByType($value, $pattern, $type = self::TYPE_FULL, array &$matches = [])
+    public function isMatchByType($value, $pattern, $type = RoutePattern::TYPE_FULL, array &$matches = [])
     {
         switch ($type) {
             case RoutePattern::TYPE_FULL :
@@ -284,7 +283,7 @@ class Router
         }
     }
 
-    function __invoke()
+    public function __invoke()
     {
         return $this->run();
     }

@@ -1,10 +1,9 @@
 <?php
 
-use HttpWarp\Url;
-use DeltaRouter\RoutePattern;
-use DeltaRouter\Route;
-use DeltaRouter\Router;
-use HttpWarp\Request;
+use Akademiano\HttpWarp\Url;
+use Akademiano\Router\RoutePattern;
+use Akademiano\Router\Route;
+use Akademiano\Router\Router;
 
 
 class RoutingTest extends \Codeception\TestCase\Test
@@ -26,7 +25,7 @@ class RoutingTest extends \Codeception\TestCase\Test
     {
         $this->router = new Router();
         $this->url = new Url();
-        $this->request = \Mockery::mock("\\HttpWarp\\Request",
+        $this->request = \Mockery::mock("\\Akademiano\\HttpWarp\\Request",
             [
                 "getMethod" => "GET",
             ])->makePartial();
@@ -62,7 +61,7 @@ class RoutingTest extends \Codeception\TestCase\Test
     }
 
     /**
-     * @expectedException \DeltaRouter\Exception\NotFoundException
+     * @expectedException \Akademiano\Router\Exception\NotFoundException
      */
     public function testNotRouted()
     {
@@ -84,7 +83,7 @@ class RoutingTest extends \Codeception\TestCase\Test
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      */
     public function testEmpty()
     {
