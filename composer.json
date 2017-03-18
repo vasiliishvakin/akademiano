@@ -1,26 +1,39 @@
 {
-    "name": "deltaphp/deltacore",
-    "description": "Delta PHP framework - fast, light, easy (core)",
-    "license": "MIT",
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "authors": [
-        {
-            "name": "Vasiliy Shvakin",
-            "email": "zen4dev@gmail.com"
-        }
-    ],
-    "autoload": {
-        "psr-0": {
-            "DeltaCore": "src/"
-        }
-    },
-    "require": {
-        "deltaphp/deltarouter": "^1.0",
-        "deltaphp/httpwarp": "^1.0",
-        "deltaphp/deltautils": "^1.3",
-        "deltaphp/dtpl": "^1.0",
-        "pimple/pimple": "^3.0",
-        "webmozart/console": "~1.0@beta"
+  "name": "akademiano/core",
+  "description": "Akademiano PHP framework - fast, light, easy (core)",
+  "license": "Apache-2.0",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "authors": [
+    {
+      "name": "Vasiliy Shvakin",
+      "email": "mrdatamapper@gmail.com"
     }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Akademiano\\Core\\": "src/",
+      "Akademiano\\Core\\Tests\\Data\\": "tests/_data/"
+    }
+  },
+  "require": {
+    "php": "^5.6 || ^7.0",
+    "akademiano/core-controller": "^1.0.0-beta.1",
+    "akademiano/utils": "^1.0.0-beta.2",
+    "akademiano/config": "^1.0.0-beta.1",
+    "akademiano/router": "^1.0.0-beta.1",
+    "akademiano/entity": "^1.0.0-beta.1",
+    "akademiano/httpwarp": "^1.0.0-beta.1",
+    "akademiano/simplaview": "^1.0.0-beta.1",
+    "akademiano/user": "^1.0.0-beta.1",
+    "akademiano/twig-extensions": "^1.0.0-beta.1",
+    "akademiano/acl": "^1.0.0-beta.1",
+    "pimple/pimple": "^3.0",
+    "webmozart/console": "~1.0@beta"
+  },
+  "require-dev": {
+    "codeception/codeception": "^2.2.10",
+    "satooshi/php-coveralls": "^1.0.1",
+    "mockery/mockery": "^0.9.9"
+  }
 }
