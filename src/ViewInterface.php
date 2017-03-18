@@ -1,6 +1,6 @@
 <?php
 
-namespace dTpl;
+namespace Akademiano\SimplaView;
 
 interface ViewInterface
 {

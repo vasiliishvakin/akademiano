@@ -1,10 +1,9 @@
 <?php
-/**
- * User: Vasiliy Shvakin (orbisnull) zen4dev@gmail.com
- */
 
-namespace dTpl;
+namespace Akademiano\SimplaView;
 
+
+use Akademiano\Utils\ArrayTools;
 
 class View extends AbstractView implements ViewInterface
 {
@@ -25,7 +24,7 @@ class View extends AbstractView implements ViewInterface
         $templateFile = $this->getTemplate();
         $arrayTemplates = $this->getArrayTemplates();
         $strTemplate = null;
-        if(isset($arrayTemplates[$templateFile])) {
+        if (isset($arrayTemplates[$templateFile])) {
             $strTemplate = $arrayTemplates[$templateFile];
         };
         $content = null;
@@ -64,7 +63,7 @@ class View extends AbstractView implements ViewInterface
         }
         $globalVars = $this->getGlobalVars();
         $vars = $this->getAssignedVars();
-        $vars = self::mergeRecursive($globalVars, $vars, $params);
+        $vars = ArrayTools::mergeRecursive($globalVars, $vars, $params);
         if (isset($vars['this'])) {
             unset($vars['this']);
         }
@@ -75,7 +74,7 @@ class View extends AbstractView implements ViewInterface
     {
         $templateFile = $template . '.' . $this->getTemplateExtension();
         $arrayTemplates = $this->getArrayTemplates();
-        if(isset($arrayTemplates[$templateFile])) {
+        if (isset($arrayTemplates[$templateFile])) {
             return true;
         };
         $path = $this->getFilePath($templateFile);
