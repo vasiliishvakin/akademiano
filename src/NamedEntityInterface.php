@@ -4,7 +4,7 @@
 namespace Akademiano\Entity;
 
 
-interface EntityNamedInterface extends EntityInterface
+interface NamedEntityInterface extends EntityInterface
 {
     public function getTitle();
     public function getDescription();

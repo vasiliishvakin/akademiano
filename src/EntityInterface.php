@@ -4,13 +4,8 @@
 namespace Akademiano\Entity;
 
 
-interface EntityInterface
+interface EntityInterface extends BaseEntityInterface
 {
-    /**
-     * @return UuidInterface
-     */
-    public function getId();
-
     public function setCreated($date);
 
     /**
@@ -43,5 +38,4 @@ interface EntityInterface
     public function getOwner();
 
     public function setOwner($owner);
-
 }
