@@ -1,11 +1,8 @@
 <?php
-/**
- * User: Vasiliy Shvakin (orbisnull) zen4dev@gmail.com
- */
 
-namespace App\Controller;
+namespace Akademiano\App\Controller;
 
-use DeltaCore\AbstractController;
+use Akademiano\Core\AbstractController;
 
 class IndexController extends AbstractController
 {
@@ -14,4 +11,4 @@ class IndexController extends AbstractController
         $this->getView()->assign('canonicalRef', '/');
     }
 
-} 
+}

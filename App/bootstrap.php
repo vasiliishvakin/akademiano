@@ -15,7 +15,7 @@ if (!defined("DATA_DIR")) {
 
 $loader = require ROOT_DIR . "/vendor/autoload.php";
 
-$app = new \DeltaCore\Application();
+$app = new \Akademiano\Core\Application();
 $app->setLoader($loader);
 
 return $app;

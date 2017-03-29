@@ -1,13 +1,10 @@
 <?php
-/**
- * User: Vasiliy Shvakin (orbisnull) zen4dev@gmail.com
- */
 
-namespace Controller;
+namespace Akademiano\App\Controller;
 
 
-use DeltaCore\AbstractController;
-use User\Model\UserManager;
+use Akademiano\Core\AbstractController;
+use Akademiano\User\AuthInterface;
 
 class ErrorController  extends AbstractController
 {
@@ -19,12 +16,12 @@ class ErrorController  extends AbstractController
     public function accessDeniedAction()
     {
         $this->getResponse()->setCode(403);
-        /** @var UserManager $userManager */
-        $userManager = $this->getApplication()['userManager'];
+        /** @var AuthInterface $userManager */
+        $userManager = $this->getDIContainer()['custodian'];
         $user = $userManager->getCurrentUser();
         if (!$user) {
             return $this->redirect("/login");
         }
         $this->getView()->assign("user", $user);
     }
-} 
+}

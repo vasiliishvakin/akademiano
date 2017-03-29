@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Console;
+namespace Akademiano\App\Console;
 
 use Symfony\Component\Process\Process;
 use Webmozart\Console\Api\Args\Args;

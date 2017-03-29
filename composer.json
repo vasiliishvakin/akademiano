@@ -1,100 +1,80 @@
 {
-  "name": "deltaphp/delta-skeleton-application",
-  "description": "Skeleton application on delta framework",
-  "license": "MIT",
+  "name": "akademiano/application",
+  "description": "Skeleton application on akademiano php framework",
+  "license": "Apache-2.0",
   "minimum-stability": "dev",
-  "prefer-stable": false,
+  "prefer-stable": true,
   "authors": [
     {
       "name": "Vasiliy Shvakin",
-      "email": "zen4dev@gmail.com"
+      "email": "mrdatamapper@gmail.com"
     }
   ],
   "autoload": {
-    "psr-0": {
-      "Model": "./",
-      "Controller": "./",
-      "App": "./",
-      "Maintenance": "./",
-      "Console": "./"
+    "psr-4": {
+      "Akademiano\\App\\": "App"
     }
   },
-
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "git@github.com:DeltaPHP/phinx.git"
-    }
-  ],
+  "provide": {
+        "akademiano/application-implementation": "1.0.0"
+  },
   "require": {
-    "deltaphp/deltacore": "^2.0",
-    "twig/twig": "~1.0",
-    "deltaphp/pages": "~1.1",
-    "robmorgan/phinx": "dev-deltaphp",
-    "kriswallsmith/assetic": "^1.3.1",
-    "deltaphp/deltatwigext": "^0.1",
-    "deltaphp/sitemenu": "^2.0",
-    "deltaphp/acl" : "^2.0",
-    "deltaphp/dictdir" : "^2.0",
+    "akademiano/core": "^1.0.0-beta.5",
+    "akademiano/menu": "^1.0.0-beta.1",
+    "akademiano/site-all": "^1.0.0-beta.2",
+    "akademiano/site-default": "^1.0.0-beta.1",
+
+    "symfony/process": "^3.0",
+    "symfony/yaml": "^3.0",
 
     "bower-asset/bootstrap": "^3.3.5",
     "bower-asset/jquery": "^2.1.4",
     "bower-asset/html5shiv": "^3.7.3",
-    "bower-asset/respond": "^1.4.2",
-    "bower-asset/syntaxhighlighter": "^3.0.83",
-
-    "deltaphp/articles": "~2.0",
-    "deltaphp/image": "~1.0",
-    "deltaphp/uuid": "~1.0",
-    "hashids/hashids": "~1.0.5",
-    "symfony/process": "^3.0",
-    "symfony/yaml": "^3.0",
-    "deltaphp/operator": "^0.1.0"
-
+    "bower-asset/respond": "^1.4.2"
   },
-  "scripts": {
-    "post-install-cmd": [
-      "Maintenance\\Composer::postInstallCmd"
-    ],
-    "post-update-cmd": [
-      "Maintenance\\Composer::postInstallCmd"
-    ]
+  "require-dev": {
+    "codeception/codeception": "^2.2.10",
+    "codeception/c3": "^2.0.10",
+    "satooshi/php-coveralls": "^1.0",
+    "mockery/mockery": "^0.9.9"
   },
-  "extra": {
-    "asset-installer-paths": {
-      "npm-asset-library": "public/assets/vendor",
-      "bower-asset-library": "public/assets/vendor"
-    },
-    "asset-ignore-files": {
-      "bower-asset/bootstrap": [
-        "/.*",
-        "_config.yml",
-        "CNAME",
-        "composer.json",
-        "CONTRIBUTING.md",
-        "docs",
-        "js/tests",
-        "test-infra",
-        "fonts",
-        "grunt",
-        "js",
-        "less",
-        "Gruntfile.js",
-        "package.json",
-        "package.js"
-      ],
-      "bower-asset/jquery": [
-        "**/.*",
-        "build",
-        "dist/cdn",
-        "speed",
-        "test",
-        "*.md",
-        "AUTHORS.txt",
-        "Gruntfile.js",
-        "package.json",
-        "src"
-      ]
+  "config": {
+    "fxp-asset": {
+      "installer-paths": {
+        "npm-asset-library": "public/assets/vendor",
+        "bower-asset-library": "public/assets/vendor"
+      },
+      "ignore-files": {
+        "bower-asset/bootstrap": [
+          "/.*",
+          "_config.yml",
+          "CNAME",
+          "composer.json",
+          "CONTRIBUTING.md",
+          "docs",
+          "js/tests",
+          "test-infra",
+          "fonts",
+          "grunt",
+          "js",
+          "less",
+          "Gruntfile.js",
+          "package.json",
+          "package.js"
+        ],
+        "bower-asset/jquery": [
+          "**/.*",
+          "build",
+          "dist/cdn",
+          "speed",
+          "test",
+          "*.md",
+          "AUTHORS.txt",
+          "Gruntfile.js",
+          "package.json",
+          "src"
+        ]
+      }
     }
   }
 }

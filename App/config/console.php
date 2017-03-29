@@ -1,13 +1,10 @@
 <?php
 
-use Webmozart\Console\Api\Args\Format\Option;
-use \Webmozart\Console\Api\Args\Format\Argument;
-
 return [
     "git" => [
         "description" => "Main application functions",
         "handler" => function () {
-            return new \App\Console\Git();
+            return new \Akademiano\App\Console\Git();
         },
         "subCommands" => [
             "branch" => [
