@@ -1,28 +1,21 @@
 <?php
-/**
- * User: Vasiliy Shvakin (orbisnull) zen4dev@gmail.com
- */
 
-namespace SiteMenu\Model;
+namespace Akademiano\Menu\Model;
+
+use Akademiano\HttpWarp\Environment;
+use Akademiano\HttpWarp\EnvironmentIncludeInterface;
+use Akademiano\HttpWarp\Parts\EnvironmentIncludeTrait;
+use Akademiano\Router\Router;
+use Akademiano\Utils\Object\Collection;
 
 
-use DeltaCore\Parts\MagicSetGetManagers;
-use DeltaCore\Prototype\MagicMethodInterface;
-use DeltaRouter\Router;
-
-/**
- * Class Menu
- * @package SiteMenu\Model
- * @method setAclManager(\Acl\Model\AclManager $manager)
- * @method \Acl\Model\AclManager getAclManager()
- */
-class Menu implements \Countable, MagicMethodInterface
+class Menu implements \Countable, EnvironmentIncludeInterface
 {
-    use MagicSetGetManagers;
+    use EnvironmentIncludeTrait;
 
     protected $name;
-    /** @var Item[] */
-    protected $items = [];
+    /** @var Item[]|Collection */
+    protected $items;
 
     /** @var  Router */
     protected $router;
@@ -32,13 +25,17 @@ class Menu implements \Countable, MagicMethodInterface
 
     protected $isSortedItems = false;
 
-    function __construct($name = null, $router = null)
+    public function __construct($name = null, $router = null, Environment $environment = null)
     {
-        if (!is_null($name)) {
+        $this->items = new Collection();
+        if (null !== $name) {
             $this->setName($name);
         }
-        if (!is_null($router)) {
+        if (null !== $router) {
             $this->setRouter($router);
+        }
+        if (null !== $environment) {
+            $this->setEnvironment($environment);
         }
     }
 
@@ -53,7 +50,7 @@ class Menu implements \Countable, MagicMethodInterface
     /**
      * @param Router $router
      */
-    public function setRouter($router)
+    public function setRouter(Router $router)
     {
         $this->router = $router;
     }
@@ -82,9 +79,7 @@ class Menu implements \Countable, MagicMethodInterface
         if (!$this->activeItem) {
             $this->getActiveItem();
         }
-        if (!$this->isSortedItems) {
-            $this->sortItems();
-        }
+        $this->sort();
         return $this->items;
     }
 
@@ -93,16 +88,16 @@ class Menu implements \Countable, MagicMethodInterface
      */
     public function setItems(array $items)
     {
-        $this->items = [];
-        foreach($items as $item) {
+        $this->items = new Collection();
+        foreach ($items as $item) {
             $this->addItem($item);
         }
     }
 
     public function addItem(Item $item)
     {
-        $item->setAclManager($this->getAclManager());
         $this->items[$item->getId()] = $item;
+        $this->isSortedItems = false;
     }
 
     /**
@@ -122,17 +117,9 @@ class Menu implements \Countable, MagicMethodInterface
     public function getActiveItem()
     {
         if (is_null($this->activeItem)) {
-            $items = $this->items;
-            usort($items, function ($a, $b) {
-                $lA = strlen((string)$a->getUrl());
-                $lB = strlen((string)$b->getUrl());
-                if ($lA == $lB) {
-                    return 0;
-                }
-                return ($lA > $lB) ? -1 : 1;
-            });
-            foreach ($items as $item) {
-                if ($item->isEquivRoute($this->getRouter()->getCurrentRoute()) || $item->isEquivUrl($this->getRouter()->getCurrentUrl())){
+            $this->sort();
+            foreach ($this->items as $item) {
+                if ($item->isEquivRoute($this->getRouter()->getCurrentRoute()) || $item->isEquivUrl($this->getRouter()->getCurrentUrl())) {
                     $item->setActive();
                     $this->activeItem = $item;
                     break;
@@ -150,16 +137,31 @@ class Menu implements \Countable, MagicMethodInterface
         }
     }
 
-    public function sortItems()
+    public function sort()
     {
-        uasort($this->items, function($a, $b){
-            $lA = $a->getOrder();
-            $lB = $b->getOrder();
-            if ($lA == $lB) {
-                return 0;
-            }
-            return ($lA < $lB) ? -1 : 1;
-        });
-        $this->isSortedItems = true;
+        if (!$this->isSortedItems) {
+            $this->items->usort(
+                function (Item $a, Item $b) {
+                    $lA = $a->getOrder();
+                    $lB = $b->getOrder();
+                    if ($lA == $lB) {
+                        return 0;
+                    }
+                    return ($lA < $lB) ? -1 : 1;
+                });
+            $this->isSortedItems = true;
+        }
+    }
+
+    public function createItem(array $data, Router $router = null, Environment $environment = null)
+    {
+        if (null === $router) {
+            $router = $this->getRouter();
+        }
+        if (null === $environment) {
+            $environment = $this->getEnvironment();
+        }
+        $item = new Item($data, $router, $environment);
+        return $item;
     }
 }

@@ -1,25 +1,19 @@
 <?php
-/**
- * User: Vasiliy Shvakin (orbisnull) zen4dev@gmail.com
- */
 
-namespace SiteMenu\Model;
+namespace Akademiano\Menu\Model;
 
-use DeltaCore\Parts\MagicSetGetManagers;
-use DeltaCore\Prototype\MagicMethodInterface;
-use DeltaRouter\Route;
-use DeltaRouter\Router;
-use HttpWarp\Url;
 
-/**
- * Class Item
- * @package SiteMenu\Model
- * @method setAclManager(\Acl\Model\AclManager $manager)
- * @method \Acl\Model\AclManager getAclManager()
- */
-class Item implements MagicMethodInterface
+use Akademiano\HttpWarp\Environment;
+use Akademiano\HttpWarp\EnvironmentIncludeInterface;
+use Akademiano\HttpWarp\Parts\EnvironmentIncludeTrait;
+use Akademiano\Router\Router;
+use Akademiano\Router\Route;
+use Akademiano\HttpWarp\Url;
+
+
+class Item implements EnvironmentIncludeInterface
 {
-    use MagicSetGetManagers;
+    use EnvironmentIncludeTrait;
 
     protected $id;
     protected $text;
@@ -36,10 +30,13 @@ class Item implements MagicMethodInterface
     protected $order = 0;
     protected $active = false;
 
-    function __construct($data = null, Router $router = null)
+    public function __construct($data = null, Router $router = null, Environment $environment = null)
     {
-        if ($router) {
+        if (null !== $router) {
             $this->setRouter($router);
+        }
+        if (null !== $environment) {
+            $this->setEnvironment($environment);
         }
         if ($data) {
             foreach ($data as $name => $value) {
@@ -51,7 +48,6 @@ class Item implements MagicMethodInterface
         }
     }
 
-
     public function getId()
     {
         if (is_null($this->id)) {
@@ -60,7 +56,6 @@ class Item implements MagicMethodInterface
 
         return $this->id;
     }
-
 
     /**
      * @return Router
@@ -73,7 +68,7 @@ class Item implements MagicMethodInterface
     /**
      * @param Router $router
      */
-    public function setRouter($router)
+    public function setRouter(Router $router)
     {
         $this->router = $router;
     }
@@ -152,7 +147,7 @@ class Item implements MagicMethodInterface
             }
             $this->url = $this->getRoute()->getUrl($this->getRouteParams());
         } elseif (is_string($this->url)) {
-            $this->url = new Url($this->url);
+            $this->url = new Url($this->url, $this->getEnvironment());
         }
 
         return $this->url;
@@ -247,15 +242,6 @@ class Item implements MagicMethodInterface
     public function setActive($active = true)
     {
         $this->active = $active;
-    }
-
-    public function isAllow($user = null)
-    {
-        if ($aclManager = $this->getAclManager()) {
-            return $aclManager->isAllow((string)$this->getUrl()->getPath(), $user);
-        }
-
-        return true;
     }
 
     public function isEquivRoute(Route $route)
