@@ -1,38 +1,27 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: orbisnull
- * Date: 27.10.2015
- * Time: 15:40
- */
 
-namespace DeltaTwigExt;
+namespace Akademiano\Twig\Extensions;
 
-
+use Akademiano\Config\ConfigurableTrait;
 use Assetic\Asset\AssetCollection;
 use Assetic\Asset\AssetReference;
 use Assetic\Asset\BaseAsset;
 use Assetic\Asset\FileAsset;
 use Assetic\AssetManager;
-use Assetic\AssetWriter;
-use Assetic\Filter\CssEmbedFilter;
-use Assetic\Filter\FilterCollection;
-use Assetic\Util\FilesystemUtils;
-use DeltaCore\Parts\Configurable;
-use DeltaUtils\FileSystem;
-use DeltaUtils\StringUtils;
-use HttpWarp\Environment;
+use Akademiano\Utils\FileSystem;
+use Akademiano\Utils\StringUtils;
+use Akademiano\HttpWarp\Environment;
 
 class AssetExtension extends \Twig_Extension
 {
     const ASSET_CSS = 1;
     const ASSET_JS = 2;
 
-    use Configurable;
+    use ConfigurableTrait;
 
     protected $rootDir;
     protected $publicDir;
-    /** @var  Array */
+    /** @var  array */
     protected $paths;
 
     /** @var  AssetManager */
@@ -47,7 +36,7 @@ class AssetExtension extends \Twig_Extension
 
     public function getName()
     {
-        return 'delta_asset';
+        return 'akademiano_asset';
     }
 
     public function getFunctions()
@@ -194,7 +183,7 @@ class AssetExtension extends \Twig_Extension
     }
 
     /**
-     * @return Array
+     * @return array
      */
     public function getPaths()
     {
@@ -230,7 +219,7 @@ class AssetExtension extends \Twig_Extension
     }
 
     /**
-     * @param Array $paths
+     * @param array $paths
      */
     public function setPaths(array $paths)
     {
@@ -348,9 +337,6 @@ class AssetExtension extends \Twig_Extension
         $webPatches = [];
         if ($debug) {
             $ac = $this->loadAssets($files, $filters, $debug);
-            /*$fc = new FilterCollection([
-                new CssEmbedFilter()
-            ]);*/
             /** @var FileAsset $asset */
             foreach ($ac as $asset) {
                 $filePath = $asset->getSourceDirectory();
@@ -367,12 +353,6 @@ class AssetExtension extends \Twig_Extension
 
         } else {
             throw new \LogicException("Only debug mode support");
-            //получили коллекцию ассетов
-            /* $fileName = hash("md5", implode('|', $files)) . "css";
-             $pubDir = $this->getOutputDir();
-             $filePath = $pubDir . DIRECTORY_SEPARATOR . $fileName;
-             $ac = $this->loadAssets($files, $filters, $debug);*/
-            //фильтры
         }
 
         return $webPatches;

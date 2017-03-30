@@ -1,15 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: orbisnull
- * Date: 30.10.2015
- * Time: 16:41
- */
 
-namespace DeltaTwigExt;
-
-
-use DeltaRouter\Router;
+namespace Akademiano\Twig\Extensions;
 
 class UrlExtension extends \Twig_Extension
 {
@@ -18,9 +9,13 @@ class UrlExtension extends \Twig_Extension
 
     public function getName()
     {
-        return 'delta_url';
+        return 'akademiano_url';
     }
 
+    /**
+     * @return array
+     * add is need is_safe' => ['html'],
+     */
     public function getFunctions()
     {
         return [
@@ -28,14 +23,12 @@ class UrlExtension extends \Twig_Extension
                 'route_url',
                 [$this, 'routeUrl'],
                 [
-//                    'is_safe' => ['html'],
                 ]
             ),
             new \Twig_SimpleFunction(
                 'url',
                 [$this, 'routeUrl'],
                 [
-//                    'is_safe' => ['html'],
                 ]
             ),
         ];
@@ -61,5 +54,4 @@ class UrlExtension extends \Twig_Extension
     {
         return call_user_func($this->getRouteGenerator(), $routeId, $params);
     }
-
 }
