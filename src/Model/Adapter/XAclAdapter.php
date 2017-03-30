@@ -1,13 +1,10 @@
 <?php
-/**
- * User: Vasiliy Shvakin (orbisnull) zen4dev@gmail.com
- */
 
-namespace Acl\Model\Adapter;
+namespace Akademiano\Acl\Model\Adapter;
 
 
-use DeltaUtils\ArrayUtils;
-use DeltaUtils\StringUtils;
+use Akademiano\Utils\ArrayTools;
+use Akademiano\Utils\StringUtils;
 
 class XAclAdapter extends AbstractAdapter
 {
@@ -86,8 +83,8 @@ class XAclAdapter extends AbstractAdapter
             "-u" => $user,
             "-o" => $owner,
         ];
-        $params = ArrayUtils::filterNulls($params);
-        $params = ArrayUtils::implodePairs(" ", $params, " ");
+        $params = ArrayTools::filterNulls($params);
+        $params = ArrayTools::implodePairs(" ", $params, " ");
         $output = [];
         exec("x-acl " . $params, $output, $code);
         if ($code !== 0) {
@@ -97,5 +94,4 @@ class XAclAdapter extends AbstractAdapter
 
         return $output === "Access allow";
     }
-
-} 
+}

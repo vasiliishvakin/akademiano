@@ -1,9 +1,6 @@
 <?php
-/**
- * User: Vasiliy Shvakin (orbisnull) zen4dev@gmail.com
- */
 
-namespace Acl\Model\Adapter;
+namespace Akademiano\Acl\Model\Adapter;
 
 
 class AllowAdapter implements AdapterInterface
@@ -13,4 +10,4 @@ class AllowAdapter implements AdapterInterface
         return true;
     }
 
-} 
+}

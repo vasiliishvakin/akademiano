@@ -1,15 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: orbisnull
- * Date: 04.11.2015
- * Time: 12:15
- */
 
-namespace Acl\Model\Adapter;
+namespace Akademiano\Acl\Model\Adapter;
 
 
-use User\Model\GuestUser;
+use Akademiano\User\GuestUserInterface;
 
 class RegisteredAdapter extends XAclAdapter implements AdapterInterface
 {
@@ -66,7 +60,7 @@ class RegisteredAdapter extends XAclAdapter implements AdapterInterface
                 }
 
                 if ($controlled) {
-                    return (!empty($user)) && (!$user instanceof GuestUser) && (!$group instanceof $group);
+                    return (!empty($user)) && (!$user instanceof GuestUserInterface) && (!$group instanceof $group);
                 }
             }
         }
