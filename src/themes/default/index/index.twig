@@ -1,0 +1,23 @@
+{% extends "layout.twig" %}
+
+{% block head %}
+    {{ parent() }}
+
+    <link href="/static/css/delta.css" rel="stylesheet">
+
+{% endblock head %}
+
+{% block content %}
+    <div class="container-narrow">
+        <div class="jumbotron">
+            <h1>
+                Akademiano Default All Site Template
+            </h1>
+
+            <p class="lead">
+                Default start page of Akademiano framework.
+            </p>
+            <a class="btn btn-large btn-success" href="https://github.com/mrdatamapper/akademiano-application">Github</a>
+        </div>
+    </div>
+{% endblock content %}
