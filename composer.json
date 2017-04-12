@@ -20,7 +20,8 @@
     "ext-pcre": "*",
     "ext-mbstring": "*",
     "phpoption/phpoption": "^1.5",
-    "symfony/yaml": "^3.2.3"
+    "symfony/yaml": "^3.2.3",
+    "pimple/pimple": "^3.0"
   },
   "require-dev": {
     "codeception/codeception": "^2.2.10",
