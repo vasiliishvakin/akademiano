@@ -3,160 +3,109 @@
 namespace Akademiano\Config;
 
 
+use Akademiano\Config\FS\ConfigDir;
 use Akademiano\Utils\ArrayTools;
 use Akademiano\Utils\DIContainerIncludeInterface;
+use Akademiano\Utils\Exception\PathRestrictException;
 use Akademiano\Utils\FileSystem;
 use Akademiano\Utils\Parts\DIContainerTrait;
-use Pimple\Container;
 
 class ConfigLoader implements DIContainerIncludeInterface
 {
     use DIContainerTrait;
 
-    const LOCAL_CONFIG = 'local';
-    const GLOBAL_CONFIG = 'global';
-    const AUTO_CONFIG = 'auto';
-    const LEVEL_APP = "App";
-    const LEVEL_PROJECT = "Project";
-    const LEVEL_SITE = "Site";
-    const LEVELS = [self::LEVEL_APP, self::LEVEL_PROJECT, self::LEVEL_SITE];
-    const TYPES_CONFIG = [self::GLOBAL_CONFIG, self::AUTO_CONFIG, self::LOCAL_CONFIG];
-
     const NAME_CONFIG = "config";
-    const NAME_RESOURCES = "resources";
-    const NAME_ROUTERS = "routers";
-    const FORMAT_PHP = "php";
 
-    const CONFIG_DIR = "config";
+    protected $rootDir;
 
-    protected $configDirs;
-    protected $configObj;
+    protected $paths = [];
 
-    /** @var  Container */
-    protected $diContainer;
+    protected $configDirs = [];
 
-    public function __construct(Container $diContainer, array $configDirs = null)
+    /** @var Config[] */
+    protected $config = [];
+
+    public function setConfigDirs(array $paths, $level = null)
     {
-        $this->setDiContainer($diContainer);
-        if (!empty($configDirs)) {
-            $this->setConfigDirs($configDirs);
+        if (isset($this->configDirs[$level])) {
+            $this->configDirs[$level] = [];
+        }
+        foreach ($paths as $path) {
+            $this->addConfigDir($path, $level);
         }
     }
 
-    /**
-     * @param mixed $configDirs
-     */
-    public function setConfigDirs($configDirs)
+    public function addConfigDir($path, $level = ConfigDir::LEVEL_DEFAULT)
     {
-        $this->configDirs = $configDirs;
+        $this->paths[$level][$path] = $path;
     }
 
-    public function getConfigDirs()
+    public function getLevels()
     {
-        if (null === $this->configDirs) {
-            $configDirs = [];
-            $diContainer = $this->getDiContainer();
+        return array_keys($this->paths);
+    }
 
-            if (empty($configDirs)) {
-                if (isset($diContainer["appDir"])) {
-                    $appDir = $diContainer["appDir"];
-                    if (null !== $appDir) {
-                        $configDirs[self::LEVEL_APP] = $appDir . DIRECTORY_SEPARATOR . self::CONFIG_DIR;
-                    }
-                }
+    /**
+     * @param mixed $rootDir
+     */
+    public function setRootDir($rootDir)
+    {
+        $this->rootDir = $rootDir;
+    }
 
-                if (isset($diContainer["sharedSiteDir"])) {
-                    $projectConfigDir = $diContainer["sharedSiteDir"];
-                    if (null !== $projectConfigDir) {
-                        $dir = $projectConfigDir . DIRECTORY_SEPARATOR . "config";
-                        if (is_dir($dir)) {
-                            $configDirs[self::LEVEL_PROJECT] = $projectConfigDir . DIRECTORY_SEPARATOR . "config";
-                        }
-                    }
-                }
+    public function getRootDir()
+    {
+        if (null === $this->rootDir) {
+            if (defined("ROOT_DIR")) {
+                $this->rootDir = ROOT_DIR;
+            }
+        }
+        return $this->rootDir;
+    }
 
-                if (isset($diContainer["currentSiteDir"])) {
-                    $siteConfigDir = $diContainer["currentSiteDir"];
-                    if (null !== $siteConfigDir) {
-                        $dir = $siteConfigDir . DIRECTORY_SEPARATOR . "config";
-                        if (is_dir($dir)) {
-                            $configDirs[self::LEVEL_SITE] = $dir;
-                        }
+    /**
+     * @param $level
+     * @return ConfigDir[]
+     */
+    public function getConfigDirs($level)
+    {
+        if (!isset($this->configDirs[$level])) {
+            $this->configDirs[$level] = [];
+        }
+        if (!empty($this->paths[$level])) {
+            foreach ($this->paths[$level] as $path) {
+                if (is_dir($path) && is_readable($path)) {
+                    if (!FileSystem::inDir($this->getRootDir(), $path)) {
+                        throw new PathRestrictException('Path %s not in Root Path', $path);
                     }
+                    $this->configDirs[$level][$path] = new ConfigDir($path, $level);
                 }
             }
-            $this->configDirs = $configDirs;
+            unset($this->paths[$level]);
         }
-        return $this->configDirs;
+        return $this->configDirs[$level];
     }
 
-    public function getConfigDir($level)
+    protected function read($level, $name = self::NAME_CONFIG)
     {
-        if (isset($this->getConfigDirs()[$level])) {
-            return $this->configDirs[$level];
+        $dirs = $this->getConfigDirs($level);
+        $config = [];
+        foreach ($dirs as $dir) {
+            $config = ArrayTools::mergeRecursiveDisabled($config, $dir->getContent($name));
         }
+        return $config;
     }
 
-    public function readConfig($level, $type, $name = self::NAME_CONFIG, $format = self::FORMAT_PHP, $default = [])
-    {
-        switch ($type) {
-            case self::GLOBAL_CONFIG:
-                $prefix = "";
-                break;
-            case self::LOCAL_CONFIG:
-                $prefix = "local.";
-                break;
-            case self::AUTO_CONFIG:
-                $prefix = "auto.";
-                break;
-        }
-        $file = $this->getConfigDir($level) . "/{$prefix}{$name}.{$format}";
-
-        switch ($format) {
-            case self::FORMAT_PHP:
-                return FileSystem::getPhpConfig($file, $default);
-                break;
-            default:
-                throw new \InvalidArgumentException("Reader for format {$format} not found");
-        }
-    }
-
-    /**
-     * @param array $config
-     * @deprecated
-     */
-    public function joinConfigLeft(array $config)
-    {
-        $confObj = $this->getConfig();
-        $confObj->joinLeft($config);
-    }
-
-    /**
-     * @param array $config
-     * @deprecated
-     */
-    public function joinConfigRight(array $config)
-    {
-        $confObj = $this->getConfig();
-        $confObj->joinRight($config);
-    }
-
-
-    /**
-     * @param string $name
-     * @return Config
-     */
     public function getConfig($name = self::NAME_CONFIG)
     {
-        $fullConfig = [];
-        foreach (self::LEVELS as $level) {
-            foreach (self::TYPES_CONFIG as $type) {
-                $config = $this->readConfig($level, $type, $name, self::FORMAT_PHP, null);
-                if (null !== $config) {
-                    $fullConfig = ArrayTools::mergeRecursiveDisabled($fullConfig, $config);
-                }
+        if (!isset($this->config[$name])) {
+            $levels = $this->getLevels();
+            $config = [];
+            foreach ($levels as $level) {
+                $config = ArrayTools::mergeRecursiveDisabled($config, $this->read($level, $name));
             }
+            $this->config[$name] = new Config($config, $this->getDiContainer());
         }
-        return new Config($fullConfig, $this->getDiContainer());
+        return $this->config[$name];
     }
 }
