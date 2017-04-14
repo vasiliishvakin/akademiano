@@ -189,4 +189,28 @@ class FileSystem
         return $default;
     }
 
+    public static function sanitize($string, $parent = null, $checkAccess = true)
+    {
+        $stringSani = str_replace(["\\", "/", ".."], "", $string);
+        if ($parent) {
+            if ($stringSani !== $string) {
+                return null;
+            }
+            $path = $parent . DIRECTORY_SEPARATOR . $stringSani;
+            $realPath = realpath($path);
+            if (!$realPath) {
+                return null;
+            }
+            if ($realPath !== $path) {
+                return null;
+            }
+            if ($checkAccess) {
+                if (!is_readable($realPath)) {
+                    return null;
+                }
+            }
+        }
+        return $stringSani;
+    }
+
 }
