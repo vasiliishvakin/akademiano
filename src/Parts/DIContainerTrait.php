@@ -22,6 +22,9 @@ trait DIContainerTrait
      */
     public function getDiContainer()
     {
+        if (null === $this->diContainer) {
+            $this->diContainer = new Container();
+        }
         return $this->diContainer;
     }
 }

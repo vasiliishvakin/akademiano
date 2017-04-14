@@ -132,7 +132,7 @@ class ArrayTools
         $path = (array)$path;
         $current = $array;
         foreach ($path as $item) {
-            if (!isset($current[$item])) {
+            if (!array_key_exists($item, $current)) {
                 return $default;
             }
             $current = $current[$item];
@@ -190,7 +190,7 @@ class ArrayTools
 
         $current = $array;
         foreach ($path as $item) {
-            if (!isset($current[$item])) {
+            if (!array_key_exists($item, $current)) {
                 return false;
             }
             $current = $current[$item];
