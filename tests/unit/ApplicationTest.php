@@ -82,7 +82,7 @@ class ApplicationTest extends \Codeception\Test\Unit
             ->andReturn($url);
 
         $this->application->setRequest($request);
-        $this->application->setRoutes($routes);
+        $this->application->initRoutes($routes);
         $this->application->run();
     }
 
@@ -127,7 +127,7 @@ class ApplicationTest extends \Codeception\Test\Unit
         $this->application->setResponse($response);
         $this->application->setView($view);
 
-        $this->application->setRoutes($routes);
+        $this->application->initRoutes($routes);
 
         $this->application->run();
     }

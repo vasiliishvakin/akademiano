@@ -28,9 +28,15 @@ use Pimple\Container;
 
 class Application implements ConfigInterface, DIContainerIncludeInterface
 {
+    const CONFIG_NAME_RESOURCES = "resources";
+    const CONFIG_NAME_ROUTES = "routes";
+
+    const CONFIG_LEVEL_APP = 100;
+    const CONFIG_LEVEL_PROJECT = 200;
+    const CONFIG_LEVEL_SITE = 300;
+
     use DIContainerTrait;
     use ApplicationBaseComponentsTrait;
-
 
     /** @var  bool */
     protected $initialized = false;
@@ -88,15 +94,12 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
         $this->initialized = $initialized;
     }
 
-
     public function setLoader(ClassLoader $loader)
     {
         $this->addToDiContainer("loader", function () use ($loader) {
             return $loader;
         });
     }
-
-
 
     public function setModuleManager(ModuleManager $moduleManager)
     {
@@ -206,20 +209,20 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
     /**
      * @return Config
      */
-    public function readRouters()
+    public function getRoutes()
     {
-        return $this->getConfigLoader()->getConfig(ConfigLoader::NAME_ROUTERS);
+        return $this->getDiContainer()["routes"];
     }
 
     /**
      * @return Config
      */
-    public function readResources()
+    public function getResources()
     {
-        return $this->getConfigLoader()->getConfig(ConfigLoader::NAME_RESOURCES);
+        return $this->getDiContainer()["resources"];
     }
 
-    public function setRoute($route, $name = null)
+    public function initRoute($route, $name = null)
     {
         $route = Route::normalize($route);
         if (is_array($route["action"])) {
@@ -230,26 +233,19 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
         $this->getRouter()->setRoute($route, $name);
     }
 
-    public function setRoutes($routes)
+    public function initRoutes($routes)
     {
-        if ($routes instanceof ArrayableInterface) {
-            $routes = $routes->toArray();
-        }
         foreach ($routes as $name => $route) {
-            $this->setRoute($route, $name);
+            $this->initRoute($route, $name);
         }
 
         return true;
     }
 
-    public function setResources($resources)
+    public function initResources($resources)
     {
-        if ($resources instanceof ArrayableInterface) {
-            $resources = $resources->toArray();
-        }
-
         foreach ($resources as $name => $value) {
-            $this[$name] = $value;
+            $this->getDiContainer()[$name] = $value;
         }
     }
 
@@ -285,23 +281,11 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
         }
         $this->setInitialized(true);
 
-        $mm = $this->getModuleManager();
+        $resources = $this->getResources();
+        $this->initResources($resources);
 
-        $resources = $this->readResources();
-        $moduleResources = $mm->getResources();
-        $resources->joinLeft($moduleResources);
-        $this->setResources($resources);
-
-        $modulesConfig = $mm->getConfig();
-        $this->getConfig()->joinLeft($modulesConfig);
-
-        $routers = $this->readRouters();
-        $modulesRouters = $mm->getRouters();
-        $routers->joinLeft($modulesRouters);
-        $this->setRoutes($routers);
-
-
-        //resourses
+        $routes = $this->getRoutes();
+        $this->initRoutes($routes);
 
         /** @var \Closure[] $initClosures */
         $initClosures = $this->getConfig("init", [])->toArray();
@@ -311,6 +295,7 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
             }
         }
 
+        $mm = $this->getModuleManager();
         $mm->load($this);
     }
 
@@ -449,17 +434,5 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
         }
 
         return true;
-    }
-
-    public function getAppDir()
-    {
-        if (!class_exists(\Akademiano\App\Module::class)) {
-            return null;
-        }
-        if (false === $file = $this->getLoader()->findFile(\Akademiano\App\Module::class)) {
-            return null;
-        }
-        $dir = dirname($file);
-        return $dir;
     }
 }

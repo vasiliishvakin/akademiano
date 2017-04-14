@@ -45,9 +45,31 @@ class ApplicationComponentsProvider implements ServiceProviderInterface
             };
         }
 
+        if (!isset($pimple['baseConfigLoader'])) {
+            $pimple['baseConfigLoader'] = function (Container $pimple) {
+                $configLoader = new ConfigLoader($pimple);
+                return $configLoader;
+            };
+        }
+
         if (!isset($pimple['configLoader'])) {
             $pimple['configLoader'] = function (Container $pimple) {
-                return new ConfigLoader($pimple);
+                $configLoader = new ConfigLoader($pimple);
+                /** @var ModuleManager $moduleManager */
+                $moduleManager = $pimple["moduleManager"];
+                $configDirs = $moduleManager->getConfigDirs();
+                foreach ($configDirs as $dir) {
+                    $configLoader->addConfigDir($dir, 500);
+                }
+                return $configLoader;
+            };
+        }
+
+        if (!isset($pimple["baseConfig"])) {
+            $pimple["baseConfig"] = function (Container $pimple) {
+                /** @var ConfigLoader $configLoader */
+                $configLoader = $pimple["baseConfigLoader"];
+                return $configLoader->getConfig(ConfigLoader::NAME_CONFIG);
             };
         }
 
@@ -59,20 +81,42 @@ class ApplicationComponentsProvider implements ServiceProviderInterface
             };
         }
 
+        if (!isset($pimple["resources"])) {
+            $pimple["resources"] = function (Container $pimple) {
+                /** @var ConfigLoader $configLoader */
+                $configLoader = $pimple["configLoader"];
+                return $configLoader->getConfig(Application::CONFIG_NAME_RESOURCES);
+            };
+        }
+
+        if (!isset($pimple["routes"])) {
+            $pimple["routes"] = function (Container $pimple) {
+                /** @var ConfigLoader $configLoader */
+                $configLoader = $pimple["configLoader"];
+                return $configLoader->getConfig(Application::CONFIG_NAME_ROUTES);
+            };
+        }
+
+
         if (!isset($pimple["environment"])) {
             $pimple["environment"] = function (Container $pimple) {
                 return new Environment();
             };
         }
 
+        if (!isset($pimple['modulesList'])) {
+            $pimple['modulesList'] = function (Container $pimple) {
+                /** @var Config $config */
+                $config = $pimple["baseConfig"];
+                return $config->get("modules", [])->toArray();
+            };
+        }
+
         if (!isset($pimple["moduleManager"])) {
             $pimple["moduleManager"] = function (Container $pimple) {
-                /** @var Config $config */
-                $config = $pimple["config"];
-                $modulesList = $config->get("modules", [])->toArray();
+                $modulesList = $pimple["modulesList"];
                 $mm = new ModuleManager($modulesList, $pimple);
                 $mm->setLoader($pimple["loader"]);
-
                 return $mm;
             };
         }

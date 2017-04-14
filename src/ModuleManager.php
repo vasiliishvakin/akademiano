@@ -27,6 +27,9 @@ class ModuleManager
     /** @var  Container */
     protected $diContainer;
 
+    /** @var  array */
+    protected $configDirs;
+
     public function __construct(array $modules, Container $diContainer)
     {
         $this->setModulesList($modules);
@@ -42,7 +45,7 @@ class ModuleManager
     }
 
     /**
-     * @return DI
+     * @return Container
      */
     public function getDiContainer()
     {
@@ -141,80 +144,18 @@ class ModuleManager
         return $path;
     }
 
-    public function getRouters()
+    public function getConfigDirs()
     {
-        $modules = $this->getModulesList();
-        $routers = [];
-        foreach ($modules as $module) {
-            $path = $this->getModulePath($module);
-            if (!$path) {
-                throw new \Exception("Path for module $module not found");
-            }
-            $routersFile = $path . "/config/routers.php";
-            if (!file_exists($routersFile)) {
-                continue;
-            }
-            $moduleRoutes = include $routersFile;
-            foreach ($moduleRoutes as $key => &$route) {
-                $route = Route::normalize($route);
-                if (is_array($route["action"])) {
-                    $route["action"] = [
-                        [
-                            "module" => $module,
-                            "controller" => $route["action"][0]
-                        ],
-                        "action" => $route["action"][1],
-                    ];
+        if (null === $this->configDirs) {
+            $modules = $this->getModulesList();
+            $this->configDirs = [];
+            foreach ($modules as $module) {
+                $dir = $this->getModuleConfigPath($module);
+                if ($dir) {
+                    $this->configDirs[] = $dir;
                 }
             }
-            $routers = array_merge($routers, $moduleRoutes);
         }
-
-        return new Config($routers);
-    }
-
-    public function getConfig()
-    {
-        return $this->getListArrayConfigs("config", true);
-    }
-
-    public function getResources()
-    {
-        return $this->getListArrayConfigs("resources");
-    }
-
-    public function getAdminConfig()
-    {
-        return $this->getListArrayConfigs("admin");
-    }
-
-    /**
-     * @param $fileConfigName
-     * @param bool $recursiveMerge
-     * @return Config
-     * @throws \Exception
-     */
-    public function getListArrayConfigs($fileConfigName, $recursiveMerge = false)
-    {
-        $modules = $this->getModulesList();
-        $configs = [];
-        foreach ($modules as $module) {
-            $path = $this->getModulePath($module);
-            if (!$path) {
-                throw new \Exception("Path for module $module not found");
-            }
-            $configFile = $path . "/config/{$fileConfigName}.php";
-            if (!file_exists($configFile)) {
-                continue;
-            }
-            $moduleResources = include $configFile;
-            if ($recursiveMerge) {
-                $configs = ArrayTools::mergeRecursive($configs, $moduleResources);
-            } else {
-                $configs = array_merge($configs, $moduleResources);
-            }
-        }
-
-        return new Config($configs, $this->getDiContainer());
+        return $this->configDirs;
     }
 }
