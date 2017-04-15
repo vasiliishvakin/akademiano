@@ -48,13 +48,14 @@ class ApplicationComponentsProvider implements ServiceProviderInterface
         if (!isset($pimple['baseConfigLoader'])) {
             $pimple['baseConfigLoader'] = function (Container $pimple) {
                 $configLoader = new ConfigLoader($pimple);
+                //add base dirs
                 return $configLoader;
             };
         }
 
         if (!isset($pimple['configLoader'])) {
             $pimple['configLoader'] = function (Container $pimple) {
-                $configLoader = new ConfigLoader($pimple);
+                $configLoader = $pimple["baseConfigLoader"];
                 /** @var ModuleManager $moduleManager */
                 $moduleManager = $pimple["moduleManager"];
                 $configDirs = $moduleManager->getConfigDirs();
