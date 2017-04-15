@@ -27,9 +27,6 @@ class ConfigLoader implements DIContainerIncludeInterface
 
     public function setConfigDirs(array $paths, $level = null)
     {
-        if (isset($this->configDirs[$level])) {
-            $this->configDirs[$level] = [];
-        }
         foreach ($paths as $path) {
             $this->addConfigDir($path, $level);
         }
@@ -38,6 +35,7 @@ class ConfigLoader implements DIContainerIncludeInterface
     public function addConfigDir($path, $level = ConfigDir::LEVEL_DEFAULT)
     {
         $this->paths[$level][$path] = $path;
+        $this->config = [];
     }
 
     public function getLevels()
