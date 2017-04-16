@@ -2,9 +2,10 @@
 
 namespace Akademiano\HttpWarp\Parts;
 
+use Akademiano\HttpWarp\EnvironmentIncludeInterface;
 use Akademiano\HttpWarp\Request;
 
-trait GetRequest
+trait RequestIncludeTrait
 {
     /**
      * @var Request
@@ -14,7 +15,7 @@ trait GetRequest
     /**
      * @param Request $request
      */
-    public function setRequest($request)
+    public function setRequest(Request $request)
     {
         $this->request = $request;
     }
@@ -26,6 +27,9 @@ trait GetRequest
     {
         if (is_null($this->request)) {
             $this->request = new Request();
+            if ($this instanceof EnvironmentIncludeInterface) {
+                $this->request->setEnvironment($this->getEnvironment());
+            }
         }
         return $this->request;
     }

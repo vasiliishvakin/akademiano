@@ -8,7 +8,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->request = new \Akademiano\HttpWarp\Request();
-
     }
 
     protected function tearDown()

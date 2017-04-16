@@ -2,11 +2,14 @@
 
 namespace Akademiano\HttpWarp;
 
+use Akademiano\HttpWarp\Parts\EnvironmentIncludeTrait;
 use Akademiano\HttpWarp\Url\Path;
 use Akademiano\HttpWarp\Url\Query;
 
-class Url
+class Url implements EnvironmentIncludeInterface
 {
+    use EnvironmentIncludeTrait;
+
     protected $defaultPorts = [80, 443];
     protected $rawUrl;
     protected $scheme;
@@ -19,10 +22,13 @@ class Url
     protected $query;
     protected $fragment;
 
-    public function __construct($url = null)
+    public function __construct($url = null, Environment $environment = null)
     {
-        if (!is_null($url)) {
+        if (null !== $url) {
             $this->setUrl($url);
+        }
+        if (null !== $environment) {
+            $this->setEnvironment($environment);
         }
     }
 
@@ -37,7 +43,7 @@ class Url
     public function getScheme()
     {
         if (is_null($this->scheme)) {
-            $this->scheme = isset($this->port) && ($this->port == 443) ? "https" : "http";
+            $this->scheme = $this->getEnvironment()->getScheme();
         }
 
         return $this->scheme;
@@ -57,7 +63,7 @@ class Url
     public function getDomain()
     {
         if (is_null($this->domain)) {
-            $this->domain = isset($_SERVER["HTTP_HOST"]) ? $_SERVER["HTTP_HOST"] : $_SERVER["SERVER_NAME"];
+            $this->domain = $this->getEnvironment()->getServerName();
         }
 
         return $this->domain;
@@ -77,7 +83,7 @@ class Url
     public function getPort()
     {
         if (is_null($this->port)) {
-            $this->port = isset($this->scheme) && $this->scheme === "https" ? 443 : 80;
+            $this->port = $this->getEnvironment()->getPort();
         }
 
         return $this->port;

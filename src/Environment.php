@@ -12,6 +12,11 @@ class Environment
 
     protected $isEqualServerEnv;
 
+    protected $requestMethod;
+
+    protected $requestUri;
+
+    protected $queryString;
 
     public function getSrvScheme()
     {
@@ -37,7 +42,7 @@ class Environment
     public function isHttps()
     {
         if (null === $this->https) {
-            $this->https =  $this->isSrvHttps();
+            $this->https = $this->isSrvHttps();
         }
         return $this->https;
     }
@@ -101,6 +106,7 @@ class Environment
 
     /**
      * @return mixed
+     * @deprecated
      */
     public function isSrvEnv()
     {
@@ -109,4 +115,69 @@ class Environment
         }
         return $this->isEqualServerEnv;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getRequestMethod()
+    {
+        if (null === $this->requestMethod) {
+            if (isset($_SERVER["REQUEST_METHOD"])) {
+                $this->requestMethod = $_SERVER["REQUEST_METHOD"];
+            }
+        }
+        return $this->requestMethod;
+    }
+
+    /**
+     * @param mixed $requestMethod
+     */
+    public function setRequestMethod($requestMethod)
+    {
+        $this->requestMethod = $requestMethod;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRequestUri()
+    {
+        if (null ===$this->requestUri) {
+            if (isset($_SERVER["REQUEST_URI"])) {
+                $this->requestUri = $_SERVER["REQUEST_URI"];
+            }
+        }
+        return $this->requestUri;
+    }
+
+    /**
+     * @param mixed $requestUri
+     */
+    public function setRequestUri($requestUri)
+    {
+        $this->requestUri = $requestUri;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getQueryString()
+    {
+        if (null === $this->queryString) {
+            if (isset($_SERVER["QUERY_STRING"])) {
+                $this->queryString = $_SERVER["QUERY_STRING"];
+            }
+        }
+        return $this->queryString;
+    }
+
+    /**
+     * @param mixed $queryString
+     */
+    public function setQueryString($queryString)
+    {
+        $this->queryString = $queryString;
+    }
+
+
 }

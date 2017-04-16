@@ -2,20 +2,46 @@
 
 namespace Akademiano\HttpWarp;
 
+use Akademiano\HttpWarp\Parts\EnvironmentIncludeTrait;
 use Akademiano\Utils\CatchError;
 use Akademiano\HttpWarp\File\UploadFile;
 
-class Request
+class Request implements EnvironmentIncludeInterface
 {
+    use EnvironmentIncludeTrait;
+
+    const METHOD_GET = "GET";
+    const METHOD_POST = "POST";
+    const METHOD_PUT = "PUT";
+    const METHOD_HEAD = "HEAD";
+    const METHOD_DELETE = "DELETE";
+
     protected $method;
     protected $params;
     protected $url;
     protected $uriNormal;
 
+    /** @var  array */
+    protected $rawFiles;
+
+    /** @var  File\UploadFile[] */
+    protected $files = [];
+
+    /**
+     * Request constructor.
+     * @param Environment $environment
+     */
+    public function __construct(Environment $environment = null)
+    {
+        if (null !== $environment) {
+            $this->setEnvironment($environment);
+        }
+    }
+
     public function getMethod()
     {
         if (is_null($this->method)) {
-            $this->method = $_SERVER['REQUEST_METHOD'];
+            $this->method = $this->getEnvironment()->getRequestMethod();
         }
         return $this->method;
     }
@@ -24,15 +50,15 @@ class Request
     {
         if (is_null($this->params)) {
             switch ($this->getMethod()) {
-                case 'GET':
-                case 'HEAD' :
+                case self::METHOD_GET:
+                case self::METHOD_HEAD :
                     $this->params = $_GET;
                     break;
-                case 'POST':
+                case self::METHOD_POST:
                     $this->params = $_POST;
                     break;
-                case 'PUT':
-                case 'DELETE':
+                case self::METHOD_PUT:
+                case self::METHOD_DELETE:
                     parse_str(file_get_contents('php://input'), $this->params);
                     break;
                 default:
@@ -59,12 +85,12 @@ class Request
 
     public function isGet()
     {
-        return $this->getMethod() === 'GET';
+        return $this->getMethod() === self::METHOD_GET;
     }
 
     public function isPost()
     {
-        return $this->getMethod() === 'POST';
+        return $this->getMethod() === self::METHOD_POST;
     }
 
     public function hasParam($name)
@@ -97,19 +123,18 @@ class Request
     public function getUrl()
     {
         if (is_null($this->url)) {
-            $url = new Url();
-            $url->setScheme($this->isHttps() ? "https" : "http");
-            $url->setDomain($_SERVER["HTTP_HOST"] ?: $_SERVER["SERVER_NAME"]);
-            $url->setPort($_SERVER["SERVER_PORT"]);
-            $url->setPath($_SERVER["REQUEST_URI"]);
-            if (isset($_SERVER["QUERY_STRING"])) {
-                $url->setQuery($_SERVER["QUERY_STRING"]);
+            $url = new Url(null, $this->getEnvironment());
+            $url->setScheme($this->getEnvironment()->getScheme());
+            $url->setDomain($this->getEnvironment()->getServerName());
+            $url->setPort($this->getEnvironment()->getPort());
+            $url->setPath($this->getEnvironment()->getRequestUri());
+            if (null !== $this->getEnvironment()->getQueryString()) {
+                $url->setQuery($this->getEnvironment()->getQueryString());
             }
             $this->url = $url;
         }
         return $this->url;
     }
-
 
     /**
      * @param string $name
@@ -120,56 +145,47 @@ class Request
      */
     public function getFiles($name = "files", $type = null, $maxSize = null, $withErrors = false)
     {
-        $files = [];
-        if (!isset($_FILES) || empty($_FILES) || !isset($_FILES[$name])) {
-            return $files;
-        }
-        $inFiles = $_FILES[$name];
-        $countFiles = count($inFiles["name"]);
-        if ($countFiles == 1) {
-            $inFiles = [$inFiles];
-        } elseif ($countFiles > 1) {
-            $newInFiles = [];
-            foreach ($inFiles as $key => $info) {
-                for ($i = 0; $i < $countFiles; $i++) {
-                    $newInFiles[$i][$key] = $info[$i];
-                }
-            }
-            $inFiles = $newInFiles;
-        }
-
-        foreach ($inFiles as $fileData) {
-            foreach ($fileData as $key => $value) {
-                if (is_array($value)) {
-                    if (count($value) > 1) {
-                        throw new \LogicException("To many values in file param");
+        if (!isset($this->files[$name])) {
+            $this->files[$name] = [];
+            if (isset($_FILES) && !empty($_FILES) && isset($_FILES[$name])) {
+                $inFiles = $_FILES[$name];
+                $countFiles = count($inFiles["name"]);
+                if ($countFiles == 1) {
+                    $inFiles = [$inFiles];
+                } elseif ($countFiles > 1) {
+                    $newInFiles = [];
+                    foreach ($inFiles as $key => $info) {
+                        for ($i = 0; $i < $countFiles; $i++) {
+                            $newInFiles[$i][$key] = $info[$i];
+                        }
                     }
-                    $fileData[$key] = reset($value);
+                    $inFiles = $newInFiles;
+                }
+
+                foreach ($inFiles as $fileData) {
+                    foreach ($fileData as $key => $value) {
+                        if (is_array($value)) {
+                            if (count($value) > 1) {
+                                throw new \LogicException("To many values in file param");
+                            }
+                            $fileData[$key] = reset($value);
+                        }
+                    }
+                    if (!$withErrors && $fileData["error"] !== 0) {
+                        continue;
+                    }
+                    $file = new UploadFile($fileData["name"], $fileData["tmp_name"], $fileData["error"]);
+                    if ($type && !$file->checkType($type)) {
+                        continue;
+                    }
+                    if ($maxSize && $file->getSize() > $maxSize) {
+                        continue;
+                    }
+                    $this->files[$name][] = $file;
                 }
             }
-            if (!$withErrors && $fileData["error"] !== 0) {
-                continue;
-            }
-            $file = new UploadFile($fileData["name"], $fileData["tmp_name"], $fileData["error"]);
-            if ($type && !$file->checkType($type)) {
-                continue;
-            }
-            if ($maxSize && $file->getSize() > $maxSize) {
-                continue;
-            }
-            $files[] = $file;
         }
-        return $files;
-    }
-
-    public function isHttps()
-    {
-        return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']==="on");
-    }
-
-    public function getProtocol()
-    {
-        return $this->isHttps() ? "https" : "http";
+        return $this->files[$name];
     }
 
     public function isCheckModified()
