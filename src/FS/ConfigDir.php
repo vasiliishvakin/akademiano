@@ -13,6 +13,7 @@ class ConfigDir
 {
     const LEVEL_DEFAULT = 0;
 
+    protected $rawPath;
     protected $path;
     protected $level;
 
@@ -61,6 +62,13 @@ class ConfigDir
      */
     public function getPath()
     {
+        if (null === $this->path) {
+            $path = realpath($this->rawPath);
+            if (!$path) {
+                throw  new ConfigDirectoryNotReadException('Path "%s" path not exist', $this->rawPath);
+            }
+            $this->path = $path;
+        }
         return $this->path;
     }
 
@@ -69,7 +77,8 @@ class ConfigDir
      */
     public function setPath($path)
     {
-        $this->path = $path;
+        $this->rawPath = $path;
+        $this->path = null;
     }
 
     /**

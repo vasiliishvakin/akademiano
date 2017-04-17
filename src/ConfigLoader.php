@@ -9,6 +9,7 @@ use Akademiano\Utils\DIContainerIncludeInterface;
 use Akademiano\Utils\Exception\PathRestrictException;
 use Akademiano\Utils\FileSystem;
 use Akademiano\Utils\Parts\DIContainerTrait;
+use Pimple\Container;
 
 class ConfigLoader implements DIContainerIncludeInterface
 {
@@ -25,8 +26,23 @@ class ConfigLoader implements DIContainerIncludeInterface
     /** @var Config[] */
     protected $config = [];
 
+    protected $levels = [];
+
+
+    public function __construct(Container $diContainer = null)
+    {
+        if (null !== $diContainer) {
+            $this->setDiContainer($diContainer);
+        }
+    }
+
+
     public function setConfigDirs(array $paths, $level = null)
     {
+        $this->levels = [];
+        $this->paths = [];
+        $this->configDirs = [];
+        $this->paths = [];
         foreach ($paths as $path) {
             $this->addConfigDir($path, $level);
         }
@@ -35,12 +51,14 @@ class ConfigLoader implements DIContainerIncludeInterface
     public function addConfigDir($path, $level = ConfigDir::LEVEL_DEFAULT)
     {
         $this->paths[$level][$path] = $path;
+        $this->levels[$level] = $level;
         $this->config = [];
     }
 
     public function getLevels()
     {
-        return array_keys($this->paths);
+        ksort($this->levels);
+        return $this->levels;
     }
 
     /**
