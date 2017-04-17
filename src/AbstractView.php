@@ -3,7 +3,7 @@
 namespace Akademiano\SimplaView;
 
 
-use Akademiano\Core\Config;
+use Akademiano\Config\Config;
 
 abstract class AbstractView implements ViewInterface
 {
