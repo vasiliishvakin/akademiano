@@ -330,12 +330,14 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
             $possibleControllers = [];
             $controllerId = lcfirst($controllerInfo);
             $controllerName = ucfirst($controllerInfo);
-            if ($this["isCurrentSiteDirDefault"]) {
+            if ($this->isCurrentSiteDirDefault()) {
                 $possibleControllers[] = "Sites\\_Default\\Controller\\" . $controllerName . 'Controller';
             } else {
-                $currentSite = $this["currentSite"];
-                $currentSiteNS = ucfirst(str_replace(".", "_", $currentSite));
-                $possibleControllers[] = "Sites\\" . $currentSiteNS . "\\Controller\\" . $controllerName . 'Controller';
+                $currentSite = $this->getCurrentSite();
+                if (!empty($currentSite)) {
+                    $currentSiteNS = ucfirst(str_replace(".", "_", $currentSite));
+                    $possibleControllers[] = "Sites\\" . $currentSiteNS . "\\Controller\\" . $controllerName . 'Controller';
+                }
             }
 
             $possibleControllers[] = "Sites\\All\\Controller\\" . $controllerName . 'Controller';

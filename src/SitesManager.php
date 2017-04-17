@@ -4,23 +4,56 @@
 namespace Akademiano\Core;
 
 
-use Akademiano\Utils\DIContainerIncludeInterface;
-use Akademiano\Utils\Parts\DIContainerTrait;
+use Akademiano\HttpWarp\Environment;
+use Akademiano\HttpWarp\EnvironmentIncludeInterface;
+use Akademiano\HttpWarp\Parts\EnvironmentIncludeTrait;
+use Composer\Autoload\ClassLoader;
 
-class SitesManager implements DIContainerIncludeInterface
+class SitesManager implements EnvironmentIncludeInterface
 {
-    use DIContainerTrait;
+    use EnvironmentIncludeTrait;
+
+    /** @var  ClassLoader */
+    protected $loader;
 
     protected $currentSite;
 
+
+    public function __construct(ClassLoader $loader, Environment $environment)
+    {
+        if (null !== $loader) {
+            $this->setLoader($loader);
+        }
+        if (null !== $environment) {
+            $this->setEnvironment($environment);
+        }
+    }
+
+
+    /**
+     * @return ClassLoader
+     */
+    public function getLoader()
+    {
+        return $this->loader;
+    }
+
+    /**
+     * @param ClassLoader $loader
+     */
+    public function setLoader(ClassLoader $loader)
+    {
+        $this->loader = $loader;
+    }
+
     public function getCurrentSite()
     {
-        /** @var \Akademiano\HttpWarp\Environment $environment */
-        $environment = $this->getDiContainer()["environment"];
-        $site = $environment->getServerName();
-        $site = strtolower(str_replace(["/", "\\", ".."], "", trim($site)));
-        return $site;
-
+        if (null === $this->currentSite) {
+            $environment = $this->getEnvironment();
+            $site = $environment->getServerName();
+            $this->currentSite = strtolower(str_replace(["/", "\\", ".."], "", trim($site)));
+        }
+        return $this->currentSite;
     }
 
     public function getSiteDir($siteName)
@@ -37,14 +70,14 @@ class SitesManager implements DIContainerIncludeInterface
             return null;
         }
 
-        $file = $this->getDiContainer()["loader"]->findFile($siteClass);
+        $file = $this->getLoader()->findFile($siteClass);
         $dir = realpath(dirname($file));
         return $dir;
     }
 
     public function isCurrentSiteDirDefault()
     {
-        $siteName = $this->getDiContainer()["currentSite"];
+        $siteName = $this->getCurrentSiteDir();
         if ($this->getSiteDir($siteName)) {
             return false;
         } elseif ($this->getSiteDir("_default")) {
@@ -56,7 +89,6 @@ class SitesManager implements DIContainerIncludeInterface
 
     public function getCurrentSiteDir()
     {
-        $siteName = $this->getDiContainer()["currentSite"];
-        return $this->getSiteDir($siteName) ?: $this->getSiteDir("_default");
+        return $this->getSiteDir($this->getCurrentSite()) ?: $this->getSiteDir("_default");
     }
 }

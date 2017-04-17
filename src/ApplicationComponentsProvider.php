@@ -55,12 +55,13 @@ class ApplicationComponentsProvider implements ServiceProviderInterface
 
         if (!isset($pimple['configLoader'])) {
             $pimple['configLoader'] = function (Container $pimple) {
+                /** @var ConfigLoader $configLoader */
                 $configLoader = $pimple["baseConfigLoader"];
                 /** @var ModuleManager $moduleManager */
                 $moduleManager = $pimple["moduleManager"];
                 $configDirs = $moduleManager->getConfigDirs();
                 foreach ($configDirs as $dir) {
-                    $configLoader->addConfigDir($dir, 500);
+                    $configLoader->addConfigDir($dir, -10);
                 }
                 return $configLoader;
             };
@@ -139,7 +140,7 @@ class ApplicationComponentsProvider implements ServiceProviderInterface
         };
 
         $pimple["sitesManager"] = function (Container $pimple) {
-            return new SitesManager($pimple);
+            return new SitesManager($pimple["loader"], $pimple["environment"]);
         };
 
         $pimple["currentSite"] = function (Container $pimple) {
@@ -173,8 +174,8 @@ class ApplicationComponentsProvider implements ServiceProviderInterface
     {
         /** @var Config $config */
         $config = $pimple["config"];
-        $viewConfig = $config->get('view');
-        $viewAdapter = $viewConfig->get('adapter', 'Twig');
+        $viewConfig = $config->get('view', []);
+        $viewAdapter = $viewConfig->get('adapter', 'Twig', []);
 
         /** @var ViewInterface view */
         $view = ViewFactory::getView($viewAdapter, $viewConfig);

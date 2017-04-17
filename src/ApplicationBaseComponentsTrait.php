@@ -80,4 +80,9 @@ trait ApplicationBaseComponentsTrait
         $this->getDiContainer()["currentSite"];
     }
 
+    public function isCurrentSiteDirDefault()
+    {
+        $this->getDiContainer()["isCurrentSiteDirDefault"];
+    }
+
 }
