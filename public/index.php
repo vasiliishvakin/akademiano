@@ -22,9 +22,13 @@ $loader = require ROOT_DIR . "/vendor/autoload.php";
 $app = new \Akademiano\Core\Application();
 $app->setLoader($loader);
 
+$app->getDiContainer()["environment"]->setServerName("all");
+
 $app->getDiContainer()->extend('baseConfigLoader', function (\Akademiano\Config\ConfigLoader $configLoader, \Pimple\Container $pimple) {
     $configLoader->addConfigDir(ROOT_DIR . "/src/config");
     return $configLoader;
 });
+
+
 
 $app->run();
