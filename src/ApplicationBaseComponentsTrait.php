@@ -68,21 +68,21 @@ trait ApplicationBaseComponentsTrait
     //advanced
 
     /**
-     * @return UserInterface|null
+     * @return \Akademiano\Entity\UserInterface|null
      */
     public function getCurrentUser()
     {
-        $this->getDiContainer()["currentUser"];
+        return $this->getDiContainer()["currentUser"];
     }
 
     public function getCurrentSite()
     {
-        $this->getDiContainer()["currentSite"];
+        return $this->getDiContainer()["currentSite"];
     }
 
     public function isCurrentSiteDirDefault()
     {
-        $this->getDiContainer()["isCurrentSiteDirDefault"];
+        return $this->getDiContainer()["isCurrentSiteDirDefault"];
     }
 
 }

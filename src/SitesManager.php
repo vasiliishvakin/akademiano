@@ -4,6 +4,7 @@
 namespace Akademiano\Core;
 
 
+use Akademiano\Core\Exception\NoAnySiteException;
 use Akademiano\HttpWarp\Environment;
 use Akademiano\HttpWarp\EnvironmentIncludeInterface;
 use Akademiano\HttpWarp\Parts\EnvironmentIncludeTrait;
@@ -72,18 +73,26 @@ class SitesManager implements EnvironmentIncludeInterface
 
         $file = $this->getLoader()->findFile($siteClass);
         $dir = realpath(dirname($file));
+        if (false === $dir) {
+            return null;
+        }
         return $dir;
     }
 
     public function isCurrentSiteDirDefault()
     {
-        $siteName = $this->getCurrentSiteDir();
-        if ($this->getSiteDir($siteName)) {
-            return false;
-        } elseif ($this->getSiteDir("_default")) {
+        $siteDir= $this->getCurrentSiteDir();
+        $defaultDir = $this->getSiteDir("_default");
+
+        if (empty($siteDir)) {
+            if (empty($defaultDir)) {
+                throw new NoAnySiteException();
+            }
             return true;
-        } else {
+        } elseif (empty($defaultDir)) {
             return false;
+        } else {
+            return $siteDir === $defaultDir;
         }
     }
 

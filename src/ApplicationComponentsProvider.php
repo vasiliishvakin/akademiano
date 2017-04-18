@@ -19,6 +19,10 @@ use Pimple\ServiceProviderInterface;
 
 class ApplicationComponentsProvider implements ServiceProviderInterface
 {
+    const CONFIG_LEVEL_MODULES = -10;
+    const CONFIG_LEVEL_SITES_SHARED = 10;
+    const CONFIG_LEVEL_SITES_CURRENT = 20;
+
     public function register(Container $pimple)
     {
         if (!isset($pimple['sessions'])) {
@@ -48,7 +52,18 @@ class ApplicationComponentsProvider implements ServiceProviderInterface
         if (!isset($pimple['baseConfigLoader'])) {
             $pimple['baseConfigLoader'] = function (Container $pimple) {
                 $configLoader = new ConfigLoader($pimple);
-                //add base dirs
+                if (!empty($pimple["sharedSiteDir"])) {
+                    $configDir = $pimple["sharedSiteDir"] . DIRECTORY_SEPARATOR . "config";
+                    if (is_dir($configDir)) {
+                        $configLoader->addConfigDir($configDir, self::CONFIG_LEVEL_SITES_SHARED);
+                    }
+                }
+                if (!empty($pimple["currentSiteDir"])) {
+                    $configDir = $pimple["currentSiteDir"] . DIRECTORY_SEPARATOR . "config";
+                    if (is_dir($configDir)) {
+                        $configLoader->addConfigDir($configDir, self::CONFIG_LEVEL_SITES_CURRENT);
+                    }
+                }
                 return $configLoader;
             };
         }
@@ -61,8 +76,9 @@ class ApplicationComponentsProvider implements ServiceProviderInterface
                 $moduleManager = $pimple["moduleManager"];
                 $configDirs = $moduleManager->getConfigDirs();
                 foreach ($configDirs as $dir) {
-                    $configLoader->addConfigDir($dir, -10);
+                    $configLoader->addConfigDir($dir, self::CONFIG_LEVEL_MODULES);
                 }
+
                 return $configLoader;
             };
         }
@@ -217,7 +233,7 @@ class ApplicationComponentsProvider implements ServiceProviderInterface
             $defaultThemeDirs = array_filter($defaultThemeDirs, function ($dir) {
                 return is_dir($dir);
             });
-            $themeContainedDirs = $themeContainedDirs + $defaultThemeDirs;
+            $themeContainedDirs = array_merge($themeContainedDirs, $defaultThemeDirs);
             $view->addTemplateDirs($themeContainedDirs);
 
             //module templates

@@ -341,7 +341,6 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
             }
 
             $possibleControllers[] = "Sites\\All\\Controller\\" . $controllerName . 'Controller';
-            $possibleControllers[] = "Akademiano\\App\\Controller\\" . $controllerName . 'Controller';
 
             foreach ($possibleControllers as $pController) {
                 if (class_exists($pController)) {
