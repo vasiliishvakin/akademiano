@@ -1,6 +1,6 @@
 {
-  "name": "akademiano/site-all",
-  "description": "sites all",
+  "name": "datamapper/site-all",
+  "description": "datamap shared sites data",
   "license": "Apache-2.0",
   "minimum-stability": "dev",
   "prefer-stable": true,
