@@ -51,16 +51,20 @@ class TwigView extends AbstractView implements ViewInterface
             case "\\Akademiano\\Twig\\Extensions\\AssetExtension" :
                 $extension = new AssetExtension();
                 $assetsPaths = ArrayTools::get($config, ["assetExtension", "paths"], $extension->getPaths());
-                if ($assetsPaths instanceof  Config) {
+                if ($assetsPaths instanceof Config) {
                     $assetsPaths = $assetsPaths->toArray();
                 }
-                if (isset($config["themesDir"]) && isset($config["theme"])) {
-                    if ($config["theme"] !== "default") {
-                        $themePath = ROOT_DIR . "/" .$config["themesDir"] ."/default";
-                        array_unshift($assetsPaths, $themePath);
+                $assetsTemplates = [];
+                foreach ($this->getTemplateDirs() as $dir) {
+                    $assetDir = $dir . DIRECTORY_SEPARATOR . AssetExtension::ASSETS_DIR;
+                    if (is_dir($assetDir)) {
+                        $assetsTemplates[$dir] = $dir;
                     }
-                    $themePath = ROOT_DIR . "/" .$config["themesDir"] ."/" . $config["theme"];
-                    array_unshift($assetsPaths, $themePath);
+                }
+
+                $assetsPaths = array_merge($assetsTemplates, $assetsPaths);
+
+                if (!empty($assetsPaths)) {
                     $extension->setPaths($assetsPaths);
                 }
                 break;
@@ -97,7 +101,7 @@ class TwigView extends AbstractView implements ViewInterface
                 $arrayLoader = new \Twig_Loader_Array($templatesArray);
                 $loader = new \Twig_Loader_Chain([$loaderFs, $arrayLoader]);
             }
-            $options = isset($config['options']) ? $config['options']: [];
+            $options = isset($config['options']) ? $config['options'] : [];
             if ($options instanceof Config) {
                 $options = $options->toArray();
             }
@@ -112,7 +116,7 @@ class TwigView extends AbstractView implements ViewInterface
             $loader = isset($loader) ? $loader : $loaderFs;
             $this->render = new \Twig_Environment($loader, $options);
 
-            $extensions = isset($config['extensions']) ? $config['extensions']: [];
+            $extensions = isset($config['extensions']) ? $config['extensions'] : [];
             if ($extensions instanceof Config) {
                 $extensions = $extensions->toArray();
             }
@@ -120,11 +124,11 @@ class TwigView extends AbstractView implements ViewInterface
                 $extension = $this->initExtension($extension, $this->render, $loaderFs);
                 $this->render->addExtension($extension);
             }
-            $filters = isset($config['filters']) ? $config['filters']: [];
+            $filters = isset($config['filters']) ? $config['filters'] : [];
             if ($filters instanceof Config) {
                 $filters = $filters->toArray();
             }
-            foreach ($filters as $name=>$filter) {
+            foreach ($filters as $name => $filter) {
                 $callable = $filter[0];
                 $params = isset($filter[1]) ? $filter[1] : [];
                 $this->render->addFilter(new \Twig_SimpleFilter($name, $callable, $params));
@@ -142,7 +146,7 @@ class TwigView extends AbstractView implements ViewInterface
         $vars = ArrayTools::mergeRecursive($vars, $params);
         $globalVars = $this->getGlobalVars();
         $render = $this->getRender();
-        foreach ($globalVars as $name=>$value) {
+        foreach ($globalVars as $name => $value) {
             $render->addGlobal($name, $value);
         }
         /** @var \Twig_Environment $template */
