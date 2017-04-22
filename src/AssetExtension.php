@@ -14,6 +14,8 @@ use Akademiano\HttpWarp\Environment;
 
 class AssetExtension extends \Twig_Extension
 {
+    const ASSETS_DIR = "assets";
+
     const ASSET_CSS = 1;
     const ASSET_JS = 2;
 
@@ -188,11 +190,13 @@ class AssetExtension extends \Twig_Extension
     public function getPaths()
     {
         if (is_null($this->paths)) {
-            $this->paths = [
+            $paths = [
                 $this->getRootDir() . "/public/assets/vendor",
                 $this->getRootDir() . "/public",
                 $this->getRootDir() . "/vendor/",
             ];
+
+            $this->paths = array_combine($paths, $paths);
         }
 
         return $this->paths;
