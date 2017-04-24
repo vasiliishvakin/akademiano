@@ -1,15 +1,20 @@
 <?php
 namespace Akademiano\Router;
 
+use Akademiano\HttpWarp\Environment;
+use Akademiano\HttpWarp\EnvironmentIncludeInterface;
 use Akademiano\HttpWarp\Exception\NotFoundException;
+use Akademiano\HttpWarp\Parts\EnvironmentIncludeTrait;
 use Akademiano\Utils\Object\Collection;
 use Akademiano\Utils\RegexpUtils;
 use Akademiano\HttpWarp\Request;
 use Akademiano\HttpWarp\Url;
 
 
-class Router
+class Router implements EnvironmentIncludeInterface
 {
+    use EnvironmentIncludeTrait;
+
     const RUN_NEXT = "____run_next";
 
     /** @var array Collection|Route[] */
@@ -23,10 +28,13 @@ class Router
      */
     protected $request;
 
-    public function __construct(Request $request = null)
+    public function __construct(Request $request = null, Environment $environment = null)
     {
-        if (!is_null($request)) {
+        if (null !== $request) {
             $this->setRequest($request);
+        }
+        if (null !== $environment) {
+            $this->setEnvironment($environment);
         }
         $this->routes = new Collection();
     }
@@ -51,6 +59,23 @@ class Router
         return $this->request;
     }
 
+    public function getEnvironment()
+    {
+        if (null === $this->environment) {
+            if ($this->getRequest() instanceof EnvironmentIncludeInterface) {
+                $environment = $this->getRequest()->getEnvironment();
+                if ($environment instanceof Environment) {
+                    $this->setEnvironment($environment);
+                }
+            }
+            if (null === $this->environment) {
+                $this->environment = new Environment();
+            }
+        }
+        return $this->environment;
+    }
+
+
     /**
      * @return Collection|Route[]
      */
@@ -69,6 +94,7 @@ class Router
                 $route["id"] = $name;
             }
             $route = new Route($route);
+            $route->setEnvironment($this->getEnvironment());
         }
         $this->routes[$route->getId()] = $route;
     }

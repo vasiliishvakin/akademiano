@@ -3,14 +3,18 @@
 namespace Akademiano\Router;
 
 
+use Akademiano\HttpWarp\EnvironmentIncludeInterface;
+use Akademiano\HttpWarp\Parts\EnvironmentIncludeTrait;
 use Akademiano\Router\RoutePattern;
 use Akademiano\Utils\ArrayTools;
 use Akademiano\Utils\Object\Collection;
 use Akademiano\Utils\Parts\SetParams;
 use Akademiano\HttpWarp\Url;
 
-class Route
+class Route implements EnvironmentIncludeInterface
 {
+    use EnvironmentIncludeTrait;
+
     const METHOD_ALL = "ALL";
     const METHOD_GET = "GET";
     const METHOD_POST = "POST";
@@ -166,6 +170,7 @@ class Route
     public function getUrl(array $params = [])
     {
         $url = new Url();
+        $url->setEnvironment($this->getEnvironment());
         foreach ($this->getPatterns() as $pattern) {
             switch ($pattern->getPart()) {
                 case RoutePattern::PART_DOMAIN:

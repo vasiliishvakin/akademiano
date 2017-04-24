@@ -14,14 +14,31 @@ class RouterUrlizeTest extends \Codeception\TestCase\Test
      */
     protected $router;
 
+    /** @var  \Mockery\MockInterface */
+    protected $environment;
+
+    protected $request;
+
     protected function _before()
     {
-        $this->router = new Router();
+        $environment = \Mockery::mock(\Akademiano\HttpWarp\Environment::class);
+        $environment->shouldReceive("getPort")->andReturn(80);
+        $environment->shouldReceive("getScheme")->andReturn('http');
+
+        $request = \Mockery::mock(\Akademiano\HttpWarp\Request::class);
+        $request->shouldReceive("getEnvironment")->andReturn($environment);
+
+        $this->environment = $environment;
+
+        $this->router = new Router($request);
+
     }
 
     protected function _after()
     {
         unset($this->router);
+        unset($this->environment);
+        unset($this->request);
     }
 
     // tests
@@ -71,6 +88,9 @@ class RouterUrlizeTest extends \Codeception\TestCase\Test
                 ],
         ];
         $router->setRoutes($routes);
+
+        $url = $router->getUrl("domain_full");
+        $url->__toString();
 
         $this->assertEquals("http://example.com", (string)$router->getUrl("domain_full"));
         $this->assertEquals("http://example.com.ru", (string)$router->getUrl("domain_prefix", ["ru"]));
@@ -126,6 +146,8 @@ class RouterUrlizeTest extends \Codeception\TestCase\Test
         ];
         $router->setRoutes($routes);
 
+        $this->environment->shouldReceive("getServerName")->andReturn("example.com");
+
         $this->assertEquals("http://example.com/example", (string)$router->getUrl("path_full"));
         $this->assertEquals("http://example.com/example/test", (string)$router->getUrl("path_prefix", ["test"]));
         $this->assertEquals("http://example.com/example/test", (string)$router->getUrl("path_regexp_lite", ["subname" => "test"]));
@@ -148,6 +170,8 @@ class RouterUrlizeTest extends \Codeception\TestCase\Test
                 ],
         ];
         $router->setRoutes($routes);
+
+        $this->environment->shouldReceive("getServerName")->andReturn("example.com");
 
         $this->assertEquals("http://example.com/?action=test&p=3", (string)$router->getUrl("query", ["p"=>3, "action" => "test"]));
     }
