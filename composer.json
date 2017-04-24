@@ -18,8 +18,8 @@
   "require": {
     "php": "^5.6 || ^7.0",
     "ext-fileinfo": "*",
-    "akademiano/httpwarp": "^1.0.0-beta.1",
-    "akademiano/utils": "^1.0.0-beta.1"
+    "akademiano/httpwarp": "^1.0.0-beta.4",
+    "akademiano/utils": "^1.0.0-beta.4"
   },
   "require-dev": {
     "codeception/codeception": "^2.2.10",

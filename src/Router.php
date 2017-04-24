@@ -1,8 +1,7 @@
 <?php
 namespace Akademiano\Router;
 
-use Akademiano\Router\Exception\NotFoundException;
-use Akademiano\Router\Route;
+use Akademiano\HttpWarp\Exception\NotFoundException;
 use Akademiano\Utils\Object\Collection;
 use Akademiano\Utils\RegexpUtils;
 use Akademiano\HttpWarp\Request;

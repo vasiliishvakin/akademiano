@@ -61,7 +61,7 @@ class RoutingTest extends \Codeception\TestCase\Test
     }
 
     /**
-     * @expectedException \Akademiano\Router\Exception\NotFoundException
+     * @expectedException \Akademiano\HttpWarp\Exception\NotFoundException
      */
     public function testNotRouted()
     {
