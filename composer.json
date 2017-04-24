@@ -12,11 +12,16 @@
   ],
   "autoload": {
     "psr-4": {
-      "Akademiano\\Sites\\": "src/"
+      "Akademiano\\Sites\\": "src/",
+      "Sites\\_Testsite_test\\": "tests/_data/sites/test-site/src/"
     }
   },
   "require": {
-    "php": "^5.6 || ^7.0"
+    "php": "^5.6 || ^7.0",
+    "akademiano/utils": "^1.0.0-beta.5",
+    "akademiano/httpwarp": "^1.0.0-beta.4",
+    "akademiano/core-controller": "^1.0.0-beta.1",
+    "akademiano/simplaview": "^1.0.0-beta.2"
   },
   "require-dev": {
     "codeception/codeception": "^2.2.10",
