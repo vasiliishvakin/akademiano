@@ -5,6 +5,8 @@ namespace Akademiano\Core;
 
 
 
+use Akademiano\Sites\SiteInterface;
+
 trait ApplicationBaseComponentsTrait
 {
     /**
@@ -75,14 +77,11 @@ trait ApplicationBaseComponentsTrait
         return $this->getDiContainer()["currentUser"];
     }
 
+    /**
+     * @return SiteInterface
+     */
     public function getCurrentSite()
     {
         return $this->getDiContainer()["currentSite"];
     }
-
-    public function isCurrentSiteDirDefault()
-    {
-        return $this->getDiContainer()["isCurrentSiteDirDefault"];
-    }
-
 }

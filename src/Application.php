@@ -57,7 +57,7 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
         return $this->diContainer;
     }
 
-    private function addToDiContainer($id, $value)
+    public function addToDiContainer($id, $value)
     {
         $di = $this->getDiContainerRaw();
         if (isset($di[$id])) {

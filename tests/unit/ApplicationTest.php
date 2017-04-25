@@ -11,11 +11,18 @@ class ApplicationTest extends \Codeception\Test\Unit
     /** @var  \Akademiano\Core\Application */
     protected $application;
 
+    /** @var  \Mockery\MockInterface|\Akademiano\HttpWarp\Environment */
+    protected $environment;
+
     protected function _before()
     {
         $this->application = new \Akademiano\Core\Application();
         $loader = include ROOT_DIR . "/vendor/autoload.php";
         $this->application->setLoader($loader);
+        $this->environment = \Mockery::mock(\Akademiano\HttpWarp\Environment::class);
+        $this->application->addToDiContainer("environment", function () {
+            return $this->environment;
+        });
     }
 
     protected function _after()
@@ -23,6 +30,10 @@ class ApplicationTest extends \Codeception\Test\Unit
         \Mockery::close();
         if (isset($this->application)) {
             unset($this->application);
+        }
+
+        if (isset($this->environment)) {
+            unset($this->environment);
         }
     }
 
@@ -74,7 +85,9 @@ class ApplicationTest extends \Codeception\Test\Unit
 
         $url = new \Akademiano\HttpWarp\Url("http://example.com/");
 
-        $environment = \Mockery::mock(\Akademiano\HttpWarp\Environment::class);
+        $this->environment->shouldReceive("getServerName")
+            ->andReturn("_testsite_test");
+
 
         $request = \Mockery::mock(\Akademiano\HttpWarp\Request::class);
 
@@ -83,7 +96,7 @@ class ApplicationTest extends \Codeception\Test\Unit
         $request->shouldReceive("getUrl")
             ->andReturn($url);
         $request->shouldReceive("getEnvironment")
-            ->andReturn($environment);
+            ->andReturn($this->environment);
 
         $this->application->setRequest($request);
         $this->application->initRoutes($routes);
@@ -105,6 +118,9 @@ class ApplicationTest extends \Codeception\Test\Unit
             ],
         ];
 
+        $this->environment->shouldReceive("getServerName")
+            ->andReturn("_testsite_test");
+
 
         $url = new \Akademiano\HttpWarp\Url("http://example.com/normal");
 
@@ -119,7 +135,7 @@ class ApplicationTest extends \Codeception\Test\Unit
         $request->shouldReceive("getUrl")
             ->andReturn($url);
         $request->shouldReceive("getEnvironment")
-            ->andReturn($environment);
+            ->andReturn($this->environment);
 
         $response = Mockery::mock(\Akademiano\HttpWarp\Response::class);
         $response->shouldReceive("setDefaults");

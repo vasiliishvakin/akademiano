@@ -6,6 +6,7 @@ namespace Akademiano\Core;
 
 use Akademiano\Config\Config;
 use Akademiano\Config\ConfigLoader;
+use Akademiano\Config\FS\ConfigDir;
 use Akademiano\HttpWarp\Environment;
 use Akademiano\HttpWarp\Request;
 use Akademiano\HttpWarp\Response;
@@ -53,16 +54,16 @@ class ApplicationComponentsProvider implements ServiceProviderInterface
         if (!isset($pimple['baseConfigLoader'])) {
             $pimple['baseConfigLoader'] = function (Container $pimple) {
                 $configLoader = new ConfigLoader($pimple);
-                if (!empty($pimple["sharedSiteDir"])) {
-                    $configDir = $pimple["sharedSiteDir"] . DIRECTORY_SEPARATOR . "config";
-                    if (is_dir($configDir)) {
-                        $configLoader->addConfigDir($configDir, self::CONFIG_LEVEL_SITES_SHARED);
+                if (!empty($pimple["sharedSite"])) {
+                    $configDir = $pimple["sharedSite"]->getConfigDir();
+                    if ($configDir instanceof ConfigDir) {
+                        $configLoader->attachConfigDir($configDir, self::CONFIG_LEVEL_SITES_SHARED);
                     }
                 }
-                if (!empty($pimple["currentSiteDir"])) {
-                    $configDir = $pimple["currentSiteDir"] . DIRECTORY_SEPARATOR . "config";
-                    if (is_dir($configDir)) {
-                        $configLoader->addConfigDir($configDir, self::CONFIG_LEVEL_SITES_CURRENT);
+                if (!empty($pimple["currentSite"])) {
+                    $configDir = $pimple["currentSite"]->getConfigDir();
+                    if ($configDir instanceof ConfigDir) {
+                        $configLoader->attachConfigDir($configDir, self::CONFIG_LEVEL_SITES_CURRENT);
                     }
                 }
                 return $configLoader;
@@ -180,49 +181,46 @@ class ApplicationComponentsProvider implements ServiceProviderInterface
         /** @var Config $config */
         $config = $pimple["config"];
         $viewConfig = $config->get('view', []);
-        $viewAdapter = $viewConfig->get('adapter', 'Twig', []);
+        $viewAdapter = $viewConfig->get(['adapter', 'Twig'], []);
 
         /** @var ViewInterface view */
         $view = ViewFactory::getView($viewAdapter, $viewConfig);
         //set templates dir
+        $themeContainedDirs = [];
         if ($view instanceof AbstractView) {
             //themes
-            $themeContainedDirs = [];
             $theme = $viewConfig->get("theme", "default");
             if ($theme !== "default") {
                 $themePath = null;
-                $siteThemeDirs = [];
-                if ($pimple["currentSiteDir"]) {
-                    $siteThemeDirs[] = $pimple["currentSiteDir"] . DIRECTORY_SEPARATOR . AbstractView::THEMES_DIR . DIRECTORY_SEPARATOR . $theme;
+                if ($pimple["currentSite"] && ($themeDir = $pimple["currentSite"]->getTheme($theme))) {
+                    $themePath = (string)$themeDir;
                 }
-                if ($pimple["sharedSiteDir"]) {
-                    $siteThemeDirs[] = $pimple["sharedSiteDir"] . DIRECTORY_SEPARATOR . AbstractView::THEMES_DIR . DIRECTORY_SEPARATOR . $theme;
-                }
-                foreach ($siteThemeDirs as $dir) {
-                    if (is_dir($dir)) {
-                        $themePath = $dir;
-                        break;
+                if (!$themePath) {
+                    if ($pimple["sharedSite"] && ($themeDir = $pimple["sharedSite"]->getTheme($theme))) {
+                        $themePath = (string)$themeDir;
                     }
                 }
-                if (null === $themePath) {
+
+                if (!$themePath) {
                     throw  new \RuntimeException("Theme {$theme} not exist");
                 }
                 $themeContainedDirs[] = $themePath;
             }
 
             //default theme dirs
-            $defaultThemeDirs = [];
-            if ($pimple["currentSiteDir"]) {
-                $defaultThemeDirs[] = $pimple["currentSiteDir"] . DIRECTORY_SEPARATOR . AbstractView::THEMES_DIR . DIRECTORY_SEPARATOR . "default";
+            $themePath = null;
+            if ($pimple["currentSite"] && ($themeDir = $pimple["currentSite"]->getTheme("default"))) {
+                $themePath = (string)$themeDir;
             }
-            if ($pimple["sharedSiteDir"]) {
-                $defaultThemeDirs[] = $pimple["sharedSiteDir"] . DIRECTORY_SEPARATOR . AbstractView::THEMES_DIR . DIRECTORY_SEPARATOR . "default";
+            if (!$themePath) {
+                if ($pimple["sharedSite"] && ($themeDir = $pimple["sharedSite"]->getTheme("default"))) {
+                    $themePath = (string)$themeDir;
+                }
             }
-
-            $defaultThemeDirs = array_filter($defaultThemeDirs, function ($dir) {
-                return is_dir($dir);
-            });
-            $themeContainedDirs = array_merge($themeContainedDirs, $defaultThemeDirs);
+            if (!$themePath) {
+                throw  new \RuntimeException("Theme  default not exist");
+            }
+            $themeContainedDirs[] = $themePath;
             $view->addTemplateDirs($themeContainedDirs);
 
             //module templates
