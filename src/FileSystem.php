@@ -2,6 +2,7 @@
 
 namespace Akademiano\Utils;
 
+use Akademiano\Utils\Exception\CopyErrorException;
 use Akademiano\Utils\Object\File;
 
 class FileSystem
@@ -88,7 +89,8 @@ class FileSystem
         $itemType = self::FST_ALL,
         $level = false,
         $showHidden = false
-    ) {
+    )
+    {
         if (!$path) {
             return null;
         }
@@ -140,9 +142,44 @@ class FileSystem
         return self::getItems($path, $resultType, self::FST_FILE, $level, $showHidden);
     }
 
+    public static function isFileInDir($dirPath, $filePath)
+    {
+        $fileDirPath = self::getDirName($filePath);
+        if (null === $fileDirPath) {
+            return true;
+        }
+        return self::inDir($dirPath, $fileDirPath);
+    }
+
     public static function inDir($parentDir, $dir, $checkRealPath = true)
     {
-        return (boolean) self::getSubDir($parentDir, $dir, $checkRealPath);
+        if ($checkRealPath) {
+            $parentDir = realpath($parentDir);
+            if (!$parentDir) {
+                throw new \RuntimeException("Bad path in parent dir: $parentDir");
+            }
+            $dir = realpath($dir);
+            if (!$dir) {
+                throw new \RuntimeException("Bad checked path: $dir");
+            }
+        }
+        if ($parentDir === $dir) {
+            return true;
+        }
+
+        $parentLen = mb_strlen($parentDir);
+        $dirLen = mb_strlen($dir);
+        if ($parentLen > $dirLen) {
+            return false;
+        }
+        $partDir = mb_substr($dir, 0, $parentLen);
+        if ((!$parentDir || !$dir || !$partDir) || ($parentDir !== $partDir)) {
+            return false;
+        }
+
+        $subDir = trim(mb_substr($dir, $parentLen), "/");
+
+        return (bool) $subDir;
     }
 
     public static function getSubDir($parentDir, $dir, $checkRealPath = true)
@@ -176,7 +213,9 @@ class FileSystem
         for ($i = 1; $i <= $level; $i++) {
             $path = dirname($path);
         }
-
+        if ("." === $path) {
+            return null;
+        }
         return $path;
     }
 
@@ -211,6 +250,19 @@ class FileSystem
             }
         }
         return $stringSani;
+    }
+
+    public static function copyOrThrow($source, $dest, $context = null)
+    {
+        if (null !== $context) {
+            $result = copy($source, $dest, $context);
+        } else {
+            $result = copy($source, $dest);
+        }
+        if (!$result) {
+            throw new CopyErrorException(sprintf('Could not copy from "%s" to "%s"', $source, $dest));
+        }
+        return true;
     }
 
 }
