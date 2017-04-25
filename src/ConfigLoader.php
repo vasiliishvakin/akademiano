@@ -55,6 +55,15 @@ class ConfigLoader implements DIContainerIncludeInterface
         $this->config = [];
     }
 
+    public function attachConfigDir(ConfigDir $dir, $level = null)
+    {
+        if (null !== $level) {
+            $dir->setLevel($level);
+        }
+        $this->configDirs[$dir->getLevel()][$dir->getPath()] = $dir;
+        $this->levels[$level] = $level;
+    }
+
     public function getLevels()
     {
         ksort($this->levels);
