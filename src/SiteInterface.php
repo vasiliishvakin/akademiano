@@ -4,8 +4,8 @@
 namespace Akademiano\Sites;
 
 
-use Akademiano\Sites\Site\DataStore;
-use Akademiano\Sites\Site\PublicStore;
+use Akademiano\Sites\Site\DataStorage;
+use Akademiano\Sites\Site\PublicStorage;
 use Akademiano\Sites\Site\ThemesDir;
 use Akademiano\Utils\Object\Prototype\StringableInterface;
 
@@ -15,29 +15,31 @@ interface SiteInterface extends StringableInterface
     public function getName();
 
     /**
-     * @param mixed $name
+     * @param string $name
      */
     public function setName($name);
 
-    /**
-     * @return DataStore
-     */
-    public function getDataStore();
+    public function getNamespace();
 
     /**
-     * @return mixed
+     * @return DataStorage
+     */
+    public function getDataStorage();
+
+    /**
+     * @return string
      */
     public function getPublicGlobalPath();
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getPublicWebPath();
 
     /**
-     * @return PublicStore|null
+     * @return PublicStorage|null
      */
-    public function getPublicStore();
+    public function getPublicStorage();
 
     /**
      * @return ThemesDir

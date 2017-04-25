@@ -49,7 +49,7 @@ class SitesManagerTest extends \Codeception\Test\Unit
         unlink($tempSubDir);
         mkdir($tempSubDir);
 
-        if (!is_dir($pubSitesDir = $tempSubDir . DIRECTORY_SEPARATOR . \Akademiano\Sites\Site\PublicStore::GLOBAL_DIR)) {
+        if (!is_dir($pubSitesDir = $tempSubDir . DIRECTORY_SEPARATOR . \Akademiano\Sites\Site\PublicStorage::GLOBAL_DIR)) {
             mkdir($pubSitesDir, 0777);
         }
         $rootDir = $site->getRootDir();
@@ -58,14 +58,14 @@ class SitesManagerTest extends \Codeception\Test\Unit
         $site->setRootDir($rootDir);
 
         $this->tester->assertEquals(
-            $tempSubDir . DIRECTORY_SEPARATOR . \Akademiano\Sites\Site\PublicStore::GLOBAL_DIR . DIRECTORY_SEPARATOR . $siteName,
+            $tempSubDir . DIRECTORY_SEPARATOR . \Akademiano\Sites\Site\PublicStorage::GLOBAL_DIR . DIRECTORY_SEPARATOR . $siteName,
             $publicGlobalPath
         );
 
-        $this->tester->assertEquals("/" . \Akademiano\Sites\Site\PublicStore::GLOBAL_DIR . "/" . $siteName, $site->getPublicWebPath());
+        $this->tester->assertEquals("/" . \Akademiano\Sites\Site\PublicStorage::GLOBAL_DIR . "/" . $siteName, $site->getPublicWebPath());
 
-        $publicStore = $site->getPublicStore();
-        $this->tester->assertInstanceOf(\Akademiano\Sites\Site\PublicStore::class, $publicStore);
+        $publicStore = $site->getPublicStorage();
+        $this->tester->assertInstanceOf(\Akademiano\Sites\Site\PublicStorage::class, $publicStore);
 
         $this->tester->assertNull($publicStore->getFile("not-exist-file"));
         $this->tester->expectException(
@@ -78,7 +78,7 @@ class SitesManagerTest extends \Codeception\Test\Unit
         $fileName = "test-file.txt";
         $testFile = $publicStore->getFile($fileName);
         $this->tester->assertInstanceOf(\Akademiano\Sites\Site\File::class, $testFile);
-        $this->tester->assertEquals("/" . \Akademiano\Sites\Site\PublicStore::GLOBAL_DIR . "/" . $siteName . "/" . $fileName, $testFile->getWebPath());
+        $this->tester->assertEquals("/" . \Akademiano\Sites\Site\PublicStorage::GLOBAL_DIR . "/" . $siteName . "/" . $fileName, $testFile->getWebPath());
         $this->tester->assertEquals($pubSitesDir . DIRECTORY_SEPARATOR . $siteName . DIRECTORY_SEPARATOR . $fileName, $testFile->getPath());
     }
 }

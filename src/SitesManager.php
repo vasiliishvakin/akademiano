@@ -4,12 +4,15 @@
 namespace Akademiano\Sites;
 
 
+use Akademiano\Router\Route;
+use Akademiano\Router\Router;
 use Akademiano\Sites\Exception\InvalidSiteNameException;
 use Akademiano\Sites\Exception\NoAnySiteException;
 use Akademiano\HttpWarp\Environment;
 use Akademiano\HttpWarp\EnvironmentIncludeInterface;
 use Akademiano\HttpWarp\Parts\EnvironmentIncludeTrait;
 use Akademiano\Sites\Exception\NoSharedSiteException;
+use Akademiano\Config\FS\ConfigDir;
 use Composer\Autoload\ClassLoader;
 
 class SitesManager implements EnvironmentIncludeInterface
@@ -80,7 +83,56 @@ class SitesManager implements EnvironmentIncludeInterface
         $this->rootDir = $rootDir;
     }
 
-    public function filterSiteName($name)
+    public function getPublishedRoutes()
+    {
+        return [
+            "_sites_published_default_route" => [
+                "patterns" => [
+                    "type" =>\Akademiano\Router\RoutePattern::TYPE_REGEXP,
+                    "value" => "\/(?P<filePath>.+)",
+                ],
+                "action" => [
+                    [
+                        "module" => __NAMESPACE__,
+                        "controller" => "sitePublishedFile",
+                    ],
+                    "index"],
+            ],
+        ];
+    }
+
+    public function getConfigLoaderPostProcessors()
+    {
+        return [
+            Router::CONFIG_NAME => [
+                function (array $content, ConfigDir $dir, $name, $level) {
+                    if ($name !== Router::CONFIG_NAME) {
+                        return $content;
+                    }
+                    $siteNs = $dir->getParams("siteNamespace");
+                    if (!$siteNs) {
+                        return $content;
+                    }
+                    foreach ($content as $routeId => $route) {
+                        $route = Route::normalize($route);
+                        if (is_array($route["action"])) {
+                            $route["action"] = [
+                                [
+                                    "module" => $siteNs,
+                                    "controller" => $route["action"][0]
+                                ],
+                                "action" => $route["action"][1],
+                            ];
+                        }
+                        $content[$routeId] = $route;
+                    }
+                    return $content;
+                },
+            ]
+        ];
+    }
+
+    public static function filterSiteName($name)
     {
         if (strtok($name, " /\\ ? * :") !== $name) {
             throw new InvalidSiteNameException(sprintf('Invalid site name %s', $name));
@@ -96,7 +148,7 @@ class SitesManager implements EnvironmentIncludeInterface
 
     public function getSite($name)
     {
-        $name = $this->filterSiteName($name);
+        $name = self::filterSiteName($name);
         if (!array_key_exists($name, $this->sites)) {
             $siteClass = "Sites\\" . $name . "\\Site";
             if (!class_exists($siteClass)) {
@@ -124,7 +176,7 @@ class SitesManager implements EnvironmentIncludeInterface
             }
             $this->currentSite = $site->getName();
         }
-        return $this->sites[$this->currentSite];
+        return $this->getSite($this->currentSite);
     }
 
     public function getSharedSite()

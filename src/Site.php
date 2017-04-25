@@ -5,8 +5,10 @@ namespace Akademiano\Sites;
 
 
 use Akademiano\SimplaView\AbstractView;
-use Akademiano\Sites\Site\DataStore;
-use Akademiano\Sites\Site\PublicStore;
+use Akademiano\Sites\Site\ConfigDir;
+use Akademiano\Sites\Site\DataStorage;
+use Akademiano\Sites\Site\PublicStorage;
+use Akademiano\Sites\Site\Theme;
 use Akademiano\Sites\Site\ThemesDir;
 use Composer\Autoload\ClassLoader;
 
@@ -19,23 +21,29 @@ abstract class Site implements SiteInterface
     protected $rootDir;
 
     protected $name;
+
     protected $path;
 
-    /** @var  DataStore */
-    protected $dataStore;
+    /** @var  DataStorage */
+    protected $dataStorage;
+
+    protected $dataGlobalPath;
 
     protected $publicGlobalPath;
 
     protected $publicWebPath;
 
-    /** @var  PublicStore */
-    protected $publicStore;
+    /** @var  PublicStorage */
+    protected $publicStorage;
 
     /** @var  ClassLoader */
     protected $loader;
 
     /** @var  ThemesDir */
     protected $themesDir;
+
+    /** @var  ConfigDir */
+    protected $configDir;
 
     /**
      * Site constructor.
@@ -92,16 +100,16 @@ abstract class Site implements SiteInterface
     public function getName()
     {
         if (null === $this->name) {
-            $class = get_class($this);
             $this->name = strtolower(
-                substr(
-                    $class,
-                    strpos($class, self::NAMESPASE_PART_PREFIX) + self::NAMESPASE_PART_PREFIX_LENGTH,
-                    -self::NAMESPASE_PART_SUFFIX_LENGTH
-                )
+                substr(get_class($this), $prefixPos = strpos(get_class($this), "\\") +1, strrpos(get_class($this), "\\") - $prefixPos)
             );
         }
         return $this->name;
+    }
+
+    public function getNamespace()
+    {
+        return "\\" . substr(get_class($this), 0, strrpos(get_class($this), "\\"));
     }
 
     /**
@@ -136,20 +144,50 @@ abstract class Site implements SiteInterface
 
 
     /**
-     * @return DataStore
+     * @return DataStorage
      */
-    public function getDataStore()
+    public function getDataStorage()
     {
-        return $this->dataStore;
+        if (null === $this->dataStorage) {
+            $dataInternalPath = realpath($this->getPath() . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . DataStorage::INTERNAL_DIR);
+            if (!is_dir($dataInternalPath)) {
+                $this->dataStorage = false;
+            } else {
+                $dataStorage = new DataStorage($dataInternalPath, $this->getDataGlobalPath());
+                $this->dataStorage = $dataStorage;
+            }
+        }
+        return (false !== $this->dataStorage) ? $this->dataStorage : null;
     }
 
     /**
-     * @param DataStore $dataStore
+     * @param DataStorage $dataStorage
      */
-    public function setDataStore($dataStore)
+    public function setDataStorage($dataStorage)
     {
-        $this->dataStore = $dataStore;
+        $this->dataStorage = $dataStorage;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getDataGlobalPath()
+    {
+        if (null === $this->dataGlobalPath) {
+            $dataGlobalPath = $this->getRootDir() . DIRECTORY_SEPARATOR . DataStorage::GLOBAL_DIR
+                . DIRECTORY_SEPARATOR . $this->getName();
+            if (!is_dir($dataGlobalPath)) {
+                $created = mkdir($dataGlobalPath, 0750);
+                if (!$created) {
+                    throw new \RuntimeException(sprintf('Could not create public store directory "%s"', $publicGlobalPath));
+                }
+            }
+            $this->dataGlobalPath = $dataGlobalPath;
+        }
+        return $this->dataGlobalPath;
+    }
+
+
 
     /**
      * @return mixed
@@ -157,7 +195,7 @@ abstract class Site implements SiteInterface
     public function getPublicGlobalPath()
     {
         if (null === $this->publicGlobalPath) {
-            $publicGlobalPath = $this->getRootDir() . DIRECTORY_SEPARATOR . PublicStore::GLOBAL_DIR
+            $publicGlobalPath = $this->getRootDir() . DIRECTORY_SEPARATOR . PublicStorage::GLOBAL_DIR
                 . DIRECTORY_SEPARATOR . $this->getName();
             if (!is_dir($publicGlobalPath)) {
                 $created = mkdir($publicGlobalPath, 0750);
@@ -187,7 +225,7 @@ abstract class Site implements SiteInterface
             if (!$this->getPublicGlobalPath()) {
                 throw new \RuntimeException(sprintf('Not exist public store directory'));
             }
-            $this->publicWebPath = "/" . PublicStore::GLOBAL_DIR . "/" . $this->getName();
+            $this->publicWebPath = "/" . PublicStorage::GLOBAL_DIR . "/" . $this->getName();
         }
         return $this->publicWebPath;
     }
@@ -201,28 +239,28 @@ abstract class Site implements SiteInterface
     }
 
     /**
-     * @return PublicStore|null
+     * @return PublicStorage|null
      */
-    public function getPublicStore()
+    public function getPublicStorage()
     {
-        if (null === $this->publicStore) {
-            $publicInternalPath = realpath($this->getPath() . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . PublicStore::INTERNAL_DIR);
+        if (null === $this->publicStorage) {
+            $publicInternalPath = realpath($this->getPath() . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . PublicStorage::INTERNAL_DIR);
             if (!is_dir($publicInternalPath)) {
-                $this->publicStore = false;
+                $this->publicStorage = false;
             } else {
-                $publicStore = new PublicStore($publicInternalPath, $this->getPublicGlobalPath(), $this->getPublicWebPath());
-                $this->publicStore = $publicStore;
+                $publicStore = new PublicStorage($publicInternalPath, $this->getPublicGlobalPath(), $this->getPublicWebPath());
+                $this->publicStorage = $publicStore;
             }
         }
-        return (false !== $this->publicStore) ? $this->publicStore : null;
+        return (false !== $this->publicStorage) ? $this->publicStorage : null;
     }
 
     /**
-     * @param PublicStore $publicStore
+     * @param PublicStorage $publicStorage
      */
-    public function setPublicStore(PublicStore $publicStore)
+    public function setPublicStorage(PublicStorage $publicStorage)
     {
-        $this->publicStore = $publicStore;
+        $this->publicStorage = $publicStorage;
     }
 
     /**
@@ -248,6 +286,46 @@ abstract class Site implements SiteInterface
     public function setThemesDir(ThemesDir $themesDir)
     {
         $this->themesDir = $themesDir;
+    }
+
+    /**
+     * @param $theme
+     * @return Theme|null
+     */
+    public function getTheme($theme)
+    {
+        if ($this->getThemesDir()) {
+            return $this->getThemesDir()->getTheme($theme);
+        }
+    }
+
+    /**
+     * @return ConfigDir
+     */
+    public function getConfigDir()
+    {
+        if (null === $this->configDir) {
+            $configPath = $this->getPath() . DIRECTORY_SEPARATOR . \Akademiano\Config\ConfigLoader::NAME_CONFIG;
+            if (!is_dir($configPath) || !is_readable($configPath)) {
+                $this->configDir = false;
+            } else {
+
+                $this->configDir = new ConfigDir(
+                    $configPath,
+                    \Akademiano\Config\FS\ConfigDir::LEVEL_DEFAULT,
+                    ["siteNamespace" => $this->getNamespace()]
+                    );
+            }
+        }
+        return (false !== $this->configDir) ? $this->configDir : null;
+    }
+
+    /**
+     * @param ConfigDir $configDir
+     */
+    public function setConfigDir($configDir)
+    {
+        $this->configDir = $configDir;
     }
 
     public function __toString()

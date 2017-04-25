@@ -4,11 +4,11 @@
 namespace Akademiano\Sites\Controller;
 
 
-use Akademiano\Core\Controller\AbstractController;
+use Akademiano\Core\Controller\AkademianoController;
 use Akademiano\Sites\Site;
 use Akademiano\HttpWarp\Exception\NotFoundException;
 
-class SitePublishedFileController extends AbstractController
+class SitePublishedFileController extends AkademianoController
 {
     /**
      * @return Site
@@ -18,9 +18,12 @@ class SitePublishedFileController extends AbstractController
         return $this->getDiContainer()["currentSite"];
     }
 
+    /**
+     * @return Site\PublicStore
+     */
     public function getSitePublicStore()
     {
-        return $this->getCurrentSite()->getPublicStore();
+        return $this->getCurrentSite()->getPublicStorage();
     }
 
     public function getFile($path)
@@ -29,10 +32,7 @@ class SitePublishedFileController extends AbstractController
         if (!$store) {
             throw new NotFoundException(sprintf('File "%s" not found', $path));
         }
-        $file = $store->getFile($path);
-        if (!$file) {
-            throw new NotFoundException('File "%s" not found', $path);
-        }
+        $file = $store->getFileOrThrow($path);
         $file->sendContent();
     }
 
