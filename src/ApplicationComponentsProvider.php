@@ -16,6 +16,7 @@ use Akademiano\SimplaView\ViewInterface;
 use Akademiano\User\AuthInterface;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use Akademiano\Sites\SitesManager;
 
 class ApplicationComponentsProvider implements ServiceProviderInterface
 {
@@ -165,22 +166,10 @@ class ApplicationComponentsProvider implements ServiceProviderInterface
             return $sitesManager->getCurrentSite();
         };
 
-        $pimple["currentSiteDir"] = function (Container $pimple) {
+        $pimple["sharedSite"] = function (Container $pimple) {
             /** @var SitesManager $sitesManager */
             $sitesManager = $pimple["sitesManager"];
-            return $sitesManager->getCurrentSiteDir();
-        };
-
-        $pimple["sharedSiteDir"] = function (Container $pimple) {
-            /** @var SitesManager $sitesManager */
-            $sitesManager = $pimple["sitesManager"];
-            return $sitesManager->getSiteDir("all");
-        };
-
-        $pimple["isCurrentSiteDirDefault"] = function (Container $pimple) {
-            /** @var SitesManager $sitesManager */
-            $sitesManager = $pimple["sitesManager"];
-            return $sitesManager->isCurrentSiteDirDefault();
+            return $sitesManager->getSite(SitesManager::SITE_SHARED);
         };
 
         $pimple["applicationComponents"] = true;

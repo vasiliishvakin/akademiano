@@ -74,12 +74,16 @@ class ApplicationTest extends \Codeception\Test\Unit
 
         $url = new \Akademiano\HttpWarp\Url("http://example.com/");
 
+        $environment = \Mockery::mock(\Akademiano\HttpWarp\Environment::class);
 
         $request = \Mockery::mock(\Akademiano\HttpWarp\Request::class);
+
         $request->shouldReceive("getMethod")
             ->andReturn("GET");
         $request->shouldReceive("getUrl")
             ->andReturn($url);
+        $request->shouldReceive("getEnvironment")
+            ->andReturn($environment);
 
         $this->application->setRequest($request);
         $this->application->initRoutes($routes);
@@ -104,12 +108,18 @@ class ApplicationTest extends \Codeception\Test\Unit
 
         $url = new \Akademiano\HttpWarp\Url("http://example.com/normal");
 
+        $environment = \Mockery::mock(\Akademiano\HttpWarp\Environment::class);
+
 
         $request = \Mockery::mock(\Akademiano\HttpWarp\Request::class);
+
+
         $request->shouldReceive("getMethod")
             ->andReturn("GET");
         $request->shouldReceive("getUrl")
             ->andReturn($url);
+        $request->shouldReceive("getEnvironment")
+            ->andReturn($environment);
 
         $response = Mockery::mock(\Akademiano\HttpWarp\Response::class);
         $response->shouldReceive("setDefaults");
