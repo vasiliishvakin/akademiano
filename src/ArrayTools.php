@@ -28,6 +28,11 @@ class ArrayTools
         return $merged;
     }
 
+    /**
+     * @param array
+     * @param array
+     * @return array
+     */
     public static function mergeRecursiveDisabled()
     {
         $arrays = func_get_args();
