@@ -4,9 +4,9 @@ namespace Akademiano\Acl\Controller;
 
 
 use Akademiano\Acl\RestrictedControllerInterface;
-use Akademiano\Core\Controller\AbstractController;
+use Akademiano\Core\Controller\AkademianoController;
 
-class ErrorController extends AbstractController implements RestrictedControllerInterface
+class ErrorAkademianoController extends AkademianoController implements RestrictedControllerInterface
 {
     public function checkAccess()
     {

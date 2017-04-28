@@ -16,9 +16,9 @@
     }
   },
   "require": {
-    "akademiano/core-controller": "^1.0.0-beta.1",
+    "akademiano/core-controller": "^1.0.0-beta.2",
     "akademiano/user": "^1.0.0-beta.1",
-    "akademiano/utils": "^1.0.0-beta.1"
+    "akademiano/utils": "^1.0.0-beta.6"
   },
   "require-dev": {
     "codeception/codeception": "^2.2.10",
