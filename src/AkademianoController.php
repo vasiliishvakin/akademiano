@@ -7,11 +7,9 @@ use Akademiano\HttpWarp\Request;
 use Akademiano\HttpWarp\Response;
 use Akademiano\Router\Router;
 use Akademiano\SimplaView\ViewInterface;
-use Akademiano\Utils\DIContainerIncludeInterface;
 use Akademiano\Utils\Parts\DIContainerTrait;
-use Pimple\Container;
 
-abstract class AbstractController implements ControllerInterface
+class AkademianoController implements ControllerInterface
 {
     use ConfigurableTrait;
     use DIContainerTrait;
