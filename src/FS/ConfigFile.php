@@ -77,6 +77,9 @@ class ConfigFile
         return (array) include $path;
     }
 
+    /**
+     * @return array
+     */
     public function getContent()
     {
         if (null === $this->content) {

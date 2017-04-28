@@ -24,15 +24,15 @@ class ConfigDir
 
     protected $content = [];
 
-    /**
-     * ConfigDir constructor.
-     * @param $path
-     * @param $level
-     */
-    public function __construct($path, $level)
+    protected $params = [];
+
+    public function __construct($path, $level, array $params = null)
     {
         $this->setPath($path);
         $this->setLevel($level);
+        if (null !== $params) {
+            $this->setParams($params);
+        }
 
         $this->addType(ConfigFile::TYPE_GLOBAL, "");
         $this->addType(ConfigFile::TYPE_AUTO, "auto");
@@ -58,7 +58,7 @@ class ConfigDir
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getPath()
     {
@@ -95,6 +95,26 @@ class ConfigDir
     public function setLevel($level)
     {
         $this->level = $level;
+    }
+
+    /**
+     * @return array
+     */
+    public function getParams($path = null, $default = null)
+    {
+        if (null !== $path) {
+            return ArrayTools::get($this->params, $path, $default);
+        } else {
+            return $this->params;
+        }
+    }
+
+    /**
+     * @param array $params
+     */
+    public function setParams(array $params)
+    {
+        $this->params = $params;
     }
 
     public function addFile(ConfigFile $file)
@@ -144,6 +164,10 @@ class ConfigDir
         return $this->files[$configName];
     }
 
+    /**
+     * @param $configName
+     * @return array
+     */
     protected function read($configName)
     {
         $files = $this->getFiles($configName);
@@ -154,6 +178,10 @@ class ConfigDir
         return $content;
     }
 
+    /**
+     * @param $configName
+     * @return array
+     */
     public function getContent($configName)
     {
         if (!isset($this->content[$configName])) {
