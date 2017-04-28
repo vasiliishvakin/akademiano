@@ -19,7 +19,7 @@
     "akademiano/site-all-implementation": "1.0.0"
   },
   "require": {
-    "akademiano/core": "^1.0.0-beta.5",
+    "akademiano/core": "^1.0.0-beta.7",
     "bower-asset/bootstrap": "^3.3.5",
     "bower-asset/jquery": "^2.1.4",
     "bower-asset/html5shiv": "^3.7.3",
