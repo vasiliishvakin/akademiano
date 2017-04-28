@@ -16,14 +16,5 @@ coverage:
     enabled: true
     remote: false
     include:
-        - App/*
-        - bin/*
         - public/index.php
     exclude:
-modules:
-    config:
-        Db:
-            dsn: ''
-            user: ''
-            password: ''
-            dump: tests/_data/dump.sql

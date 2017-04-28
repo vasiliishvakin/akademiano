@@ -19,10 +19,10 @@
         "akademiano/application-implementation": "1.0.0"
   },
   "require": {
-    "akademiano/core": "^1.0.0-beta.5",
+    "akademiano/core": "^1.0.0-beta.7",
     "akademiano/menu": "^1.0.0-beta.1",
-    "akademiano/site-all": "^1.0.0-beta.2",
-    "akademiano/site-default": "^1.0.0-beta.1",
+    "akademiano/site-all": "^1.0.0-beta.3",
+    "akademiano/site-default": "^1.0.0-beta.2",
 
     "symfony/process": "^3.0",
     "symfony/yaml": "^3.0",
@@ -37,6 +37,9 @@
     "codeception/c3": "^2.0.10",
     "satooshi/php-coveralls": "^1.0",
     "mockery/mockery": "^0.9.9"
+  },
+  "suggest": {
+    "fxp/composer-asset-plugin": "Need be installed in global space for support frontend libraries load"
   },
   "config": {
     "fxp-asset": {

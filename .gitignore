@@ -1,8 +1,9 @@
-vendor
+/vendor/
 local.config.php
-data
-public/data
-public/assets
+/data/
+/public/data/
+/public/assets/
+/published/
 
 tests/_output/*
 
