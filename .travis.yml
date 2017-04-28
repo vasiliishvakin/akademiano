@@ -30,7 +30,7 @@ before_script:
   - sleep 10
 
 script:
-  - php vendor/bin/codecept run  --coverage --coverage-xml
+  - php vendor/bin/codecept run  --coverage --coverage-xml -d -v
 
 after_success:
   - sh -c 'if [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then php vendor/bin/coveralls -v; fi;'

@@ -4,7 +4,7 @@
 namespace Sites\_Default;
 
 
-class Site
+class Site extends \Akademiano\Sites\Site
 {
 
 }
