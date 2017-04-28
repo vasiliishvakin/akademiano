@@ -6,6 +6,7 @@ use Akademiano\Acl\RestrictedControllerInterface;
 use Akademiano\Config\Config;
 use Akademiano\Config\ConfigInterface;
 use Akademiano\Config\ConfigLoader;
+use Akademiano\Sites\Site;
 use Akademiano\Utils\DIContainerIncludeInterface;
 use Akademiano\Utils\Exception\DIContainerAlreadyExistsServiceException;
 use Akademiano\HttpWarp\Environment;
@@ -29,7 +30,6 @@ use Pimple\Container;
 class Application implements ConfigInterface, DIContainerIncludeInterface
 {
     const CONFIG_NAME_RESOURCES = "resources";
-    const CONFIG_NAME_ROUTES = "routes";
 
     const CONFIG_LEVEL_APP = 100;
     const CONFIG_LEVEL_PROJECT = 200;
@@ -222,7 +222,7 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
         return $this->getDiContainer()["resources"];
     }
 
-    public function initRoute($route, $name = null)
+    public function prepareRoute($route, $name = null)
     {
         $route = Route::normalize($route);
         if (is_array($route["action"])) {
@@ -230,15 +230,15 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
             $route["args"] = isset($route["args"]) ? array_merge($route["action"], [$route["args"]]) : $route["action"];
             $route["action"] = [$this, 'action'];
         }
-        $this->getRouter()->setRoute($route, $name);
+        return $route;
     }
 
     public function initRoutes($routes)
     {
         foreach ($routes as $name => $route) {
-            $this->initRoute($route, $name);
+            $route = $this->prepareRoute($route);
+            $this->getRouter()->setRoute($route, $name);
         }
-
         return true;
     }
 
@@ -287,6 +287,12 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
         $routes = $this->getRoutes();
         $this->initRoutes($routes);
 
+        $publishedRoutes = $this->getSitesManager()->getPublishedRoutes();
+        foreach ($publishedRoutes as $name=>$route) {
+            $route = $this->prepareRoute($route);
+            $this->getRouter()->setAfterRoute($route, $name);
+        }
+
         /** @var \Closure[] $initClosures */
         $initClosures = $this->getConfig("init", [])->toArray();
         foreach ($initClosures as $initClosure) {
@@ -330,16 +336,16 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
             $possibleControllers = [];
             $controllerId = lcfirst($controllerInfo);
             $controllerName = ucfirst($controllerInfo);
-            if ($this->isCurrentSiteDirDefault()) {
-                $possibleControllers[] = "Sites\\_Default\\Controller\\" . $controllerName . 'Controller';
-            } else {
-                $currentSite = $this->getCurrentSite();
-                if (!empty($currentSite)) {
-                    $currentSiteNS = ucfirst(str_replace(".", "_", $currentSite));
-                    $possibleControllers[] = "Sites\\" . $currentSiteNS . "\\Controller\\" . $controllerName . 'Controller';
+
+
+            $possibleControllers[] = "Sites\\_Default\\Controller\\" . $controllerName . 'Controller';
+
+            $currentSite = $this->getCurrentSite();
+            if (!empty($currentSite)) {
+                if ($currentSite->getName() !== "_default") {
+                    $possibleControllers[] = $currentSite->getNamespace() . "\\Controller\\" . $controllerName . 'Controller';
                 }
             }
-
             $possibleControllers[] = "Sites\\All\\Controller\\" . $controllerName . 'Controller';
 
             foreach ($possibleControllers as $pController) {
@@ -395,7 +401,7 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
         }
 
         $controller->init();
-        //prepare arguments (merge arrays from args aon route params in one)
+//prepare arguments (merge arrays from args aon route params in one)
         if (!empty($arguments)) {
             $arguments = array_merge(...$arguments);
         } else {

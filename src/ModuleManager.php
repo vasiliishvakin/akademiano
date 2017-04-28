@@ -3,12 +3,12 @@
 namespace Akademiano\Core;
 
 
+use Akademiano\Config\FS\ConfigDir;
+use Akademiano\Router\Router;
 use Composer\Autoload\ClassLoader;
-use Akademiano\Utils\ArrayTools;
 use Akademiano\Utils\Parts\InnerCache;
 use Akademiano\Router\Route;
 use Pimple\Container;
-use Akademiano\Config\Config;
 
 class ModuleManager
 {
@@ -150,12 +150,48 @@ class ModuleManager
             $modules = $this->getModulesList();
             $this->configDirs = [];
             foreach ($modules as $module) {
-                $dir = $this->getModuleConfigPath($module);
-                if ($dir) {
-                    $this->configDirs[] = $dir;
+                $dirPath = $this->getModuleConfigPath($module);
+                if ($dirPath) {
+                    $this->configDirs[] = [
+                        "path" => $dirPath,
+                        "params" => [
+                            "module" => $module,
+                        ]
+                    ];
                 }
             }
         }
         return $this->configDirs;
+    }
+
+    public function getConfigLoaderPostProcessors()
+    {
+        return [
+            Router::CONFIG_NAME => [
+                function (array $content, ConfigDir $dir, $name, $level) {
+                    if ($name !== Router::CONFIG_NAME) {
+                        return $content;
+                    }
+                    $module = $dir->getParams("module");
+                    if (!$module) {
+                        return $content;
+                    }
+                    foreach ($content as $routeId => $route) {
+                        $route = Route::normalize($route);
+                        if (is_array($route["action"])) {
+                            $route["action"] = [
+                                [
+                                    "module" => $module,
+                                    "controller" => $route["action"][0]
+                                ],
+                                "action" => $route["action"][1],
+                            ];
+                        }
+                        $content[$routeId] = $route;
+                    }
+                    return $content;
+                },
+            ]
+        ];
     }
 }

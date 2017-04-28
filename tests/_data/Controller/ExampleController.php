@@ -5,9 +5,9 @@ namespace Akademiano\Core\Tests\Data\Controller;
 
 
 
-use Akademiano\Core\Controller\AbstractController;
+use Akademiano\Core\Controller\AkademianoController;
 
-class ExampleController extends AbstractController
+class ExampleController extends AkademianoController
 {
 
     public function indexAction()

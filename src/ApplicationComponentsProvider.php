@@ -54,6 +54,15 @@ class ApplicationComponentsProvider implements ServiceProviderInterface
         if (!isset($pimple['baseConfigLoader'])) {
             $pimple['baseConfigLoader'] = function (Container $pimple) {
                 $configLoader = new ConfigLoader($pimple);
+                $postProcessors = $pimple["sitesManager"]->getConfigLoaderPostProcessors();
+                foreach ($postProcessors as $configName => $processors) {
+                    $processors = (array) $processors;
+                    foreach ($processors as $processor) {
+                        $configLoader->addPostProcessor($processor, $configName);
+                    }
+                }
+
+
                 if (!empty($pimple["sharedSite"])) {
                     $configDir = $pimple["sharedSite"]->getConfigDir();
                     if ($configDir instanceof ConfigDir) {
@@ -76,9 +85,25 @@ class ApplicationComponentsProvider implements ServiceProviderInterface
                 $configLoader = $pimple["baseConfigLoader"];
                 /** @var ModuleManager $moduleManager */
                 $moduleManager = $pimple["moduleManager"];
+
+                $postProcessors = $moduleManager->getConfigLoaderPostProcessors();
+                foreach ($postProcessors as $configName => $processors) {
+                    $processors = (array) $processors;
+                    foreach ($processors as $processor) {
+                        $configLoader->addPostProcessor($processor, $configName);
+                    }
+                }
+
                 $configDirs = $moduleManager->getConfigDirs();
-                foreach ($configDirs as $dir) {
-                    $configLoader->addConfigDir($dir, self::CONFIG_LEVEL_MODULES);
+                foreach ($configDirs as $dirInfo) {
+                    if (is_array($dirInfo)) {
+                        $path = (isset($dirInfo["path"])) ? $dirInfo["path"] : $dirInfo[0];
+                        $params = (isset($dirInfo["params"])) ? $dirInfo["params"] : (isset($dirInfo[1]) ? $dirInfo[1] : null);
+                    } else {
+                        $path = $dirInfo;
+                        $params= null;
+                    }
+                    $configLoader->addConfigDir($path, self::CONFIG_LEVEL_MODULES, $params);
                 }
 
                 return $configLoader;
@@ -113,7 +138,7 @@ class ApplicationComponentsProvider implements ServiceProviderInterface
             $pimple["routes"] = function (Container $pimple) {
                 /** @var ConfigLoader $configLoader */
                 $configLoader = $pimple["configLoader"];
-                return $configLoader->getConfig(Application::CONFIG_NAME_ROUTES);
+                return $configLoader->getConfig(Router::CONFIG_NAME);
             };
         }
 
@@ -181,46 +206,37 @@ class ApplicationComponentsProvider implements ServiceProviderInterface
         /** @var Config $config */
         $config = $pimple["config"];
         $viewConfig = $config->get('view', []);
-        $viewAdapter = $viewConfig->get(['adapter', 'Twig'], []);
+        $viewAdapter = $viewConfig->get('adapter', 'Twig');
 
         /** @var ViewInterface view */
         $view = ViewFactory::getView($viewAdapter, $viewConfig);
         //set templates dir
-        $themeContainedDirs = [];
         if ($view instanceof AbstractView) {
             //themes
             $theme = $viewConfig->get("theme", "default");
+            $themeContainedDirs = [];
             if ($theme !== "default") {
-                $themePath = null;
                 if ($pimple["currentSite"] && ($themeDir = $pimple["currentSite"]->getTheme($theme))) {
-                    $themePath = (string)$themeDir;
+                    $themeContainedDirs[] = (string)$themeDir;
                 }
-                if (!$themePath) {
-                    if ($pimple["sharedSite"] && ($themeDir = $pimple["sharedSite"]->getTheme($theme))) {
-                        $themePath = (string)$themeDir;
-                    }
+                if ($pimple["sharedSite"] && ($themeDir = $pimple["sharedSite"]->getTheme($theme))) {
+                    $themeContainedDirs[] = (string)$themeDir;
                 }
 
-                if (!$themePath) {
+                if (empty($themeContainedDirs)) {
                     throw  new \RuntimeException("Theme {$theme} not exist");
                 }
-                $themeContainedDirs[] = $themePath;
             }
 
-            //default theme dirs
-            $themePath = null;
             if ($pimple["currentSite"] && ($themeDir = $pimple["currentSite"]->getTheme("default"))) {
-                $themePath = (string)$themeDir;
+                $themeContainedDirs[] = (string)$themeDir;
             }
-            if (!$themePath) {
-                if ($pimple["sharedSite"] && ($themeDir = $pimple["sharedSite"]->getTheme("default"))) {
-                    $themePath = (string)$themeDir;
-                }
+            if ($pimple["sharedSite"] && ($themeDir = $pimple["sharedSite"]->getTheme("default"))) {
+                $themeContainedDirs[] = (string)$themeDir;
             }
-            if (!$themePath) {
-                throw  new \RuntimeException("Theme  default not exist");
+            if (empty($themeContainedDirs)) {
+                throw  new \RuntimeException("No any theme not exist");
             }
-            $themeContainedDirs[] = $themePath;
             $view->addTemplateDirs($themeContainedDirs);
 
             //module templates

@@ -6,6 +6,7 @@ namespace Akademiano\Core;
 
 
 use Akademiano\Sites\SiteInterface;
+use Akademiano\Sites\SitesManager;
 
 trait ApplicationBaseComponentsTrait
 {
@@ -78,10 +79,28 @@ trait ApplicationBaseComponentsTrait
     }
 
     /**
+     * @return SitesManager
+     */
+    public function getSitesManager()
+    {
+        return $this->getDiContainer()["sitesManager"];
+    }
+
+    /**
      * @return SiteInterface
      */
     public function getCurrentSite()
     {
         return $this->getDiContainer()["currentSite"];
+    }
+
+    public function getPublicStore()
+    {
+        return $this->getCurrentSite()->getPublicStorage();
+    }
+
+    public function getDatStorage()
+    {
+        return $this->getCurrentSite()->getDataStorage();
     }
 }
