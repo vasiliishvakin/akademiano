@@ -16,12 +16,16 @@ class Router implements EnvironmentIncludeInterface
     use EnvironmentIncludeTrait;
 
     const RUN_NEXT = "____run_next";
+    const CONFIG_NAME = "routes";
 
     /** @var array Collection|Route[] */
     protected $routes;
     protected $isRun = false;
     /** @var  Route */
     protected $currentRoute;
+
+    /** @var array Collection|Route[] */
+    protected $afterRoutes;
 
     /**
      * @var Request
@@ -37,6 +41,7 @@ class Router implements EnvironmentIncludeInterface
             $this->setEnvironment($environment);
         }
         $this->routes = new Collection();
+        $this->afterRoutes = new Collection();
     }
 
     /**
@@ -75,13 +80,27 @@ class Router implements EnvironmentIncludeInterface
         return $this->environment;
     }
 
-
     /**
      * @return Collection|Route[]
      */
     public function getRoutes()
     {
         return $this->routes;
+    }
+
+    public function getRoute($name)
+    {
+        return $this->getRoutes()[$name];
+    }
+
+    /**
+     * @param array $routes
+     */
+    public function setRoutes(array $routes)
+    {
+        foreach ($routes as $name => $route) {
+            $this->setRoute($route, $name);
+        }
     }
 
     public function setRoute($route, $name = null)
@@ -99,19 +118,43 @@ class Router implements EnvironmentIncludeInterface
         $this->routes[$route->getId()] = $route;
     }
 
-    public function getRoute($name)
+    /**
+     * @return Collection|Route[]
+     */
+    public function getAfterRoutes()
     {
-        return $this->getRoutes()[$name];
+        return $this->afterRoutes;
+    }
+
+    public function getAfterRoute($name)
+    {
+        $routes = $this->getAfterRoutes();
+        return isset($routes[$name]) ? $routes[$name] : null;
     }
 
     /**
      * @param array $routes
      */
-    public function setRoutes(array $routes)
+    public function setAfterRoutes(array $routes)
     {
         foreach ($routes as $name => $route) {
-            $this->setRoute($route, $name);
+            $this->setAfterRoute($route, $name);
         }
+    }
+
+    public function setAfterRoute($route, $name = null)
+    {
+        if (!$route instanceof Route) {
+            if (Route::isShort($route)) {
+                $route = Route::shortNormalize($route);
+            }
+            if (!is_null($name) && !is_numeric($name) && !isset($route["id"])) {
+                $route["id"] = $name;
+            }
+            $route = new Route($route);
+            $route->setEnvironment($this->getEnvironment());
+        }
+        $this->afterRoutes[$route->getId()] = $route;
     }
 
     public function getPatternsTree()
@@ -148,6 +191,12 @@ class Router implements EnvironmentIncludeInterface
             }
         }
 
+        foreach ($this->getAfterRoutes() as $route) {
+            $methods = $route->getMethods();
+            foreach ($methods as $method) {
+                $routesTree[$method][][] = $route;
+            }
+        }
         return $routesTree;
     }
 
@@ -262,13 +311,13 @@ class Router implements EnvironmentIncludeInterface
         } //fix double run
         $this->isRun = true;
 
-        if ($this->getRoutes()->isEmpty()) {
-            throw new \RuntimeException("In this router urls is not defined");
-        }
-
         $currentMethod = $this->getRequest()->getMethod();
         $currentUrl = $this->getCurrentUrl();
         $routes = $this->getPatternsTree();
+
+        if (empty($routes)) {
+            throw new \RuntimeException("In this router urls is not defined");
+        }
 
         $workedMethods = [];
         if (isset($routes[$currentMethod]) && count($routes[$currentMethod]) > 0) {

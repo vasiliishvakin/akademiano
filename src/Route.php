@@ -213,6 +213,9 @@ class Route implements EnvironmentIncludeInterface
         if (count($routeData) < 2) {
             throw new \RuntimeException("Route mast have at least two parameters, first for pattern and second for action: " . \DeltaUtils\Debug::var2str($routeData));
         }
+        if (isset($routeData["patterns"]) && isset($routeData["action"])){
+            return $routeData;
+        }
         $routeDataNew = [
             "patterns" => [
                 [
