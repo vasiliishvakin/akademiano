@@ -11,6 +11,7 @@ class FlowDirectory extends Directory implements FlowDirectoryInterface
 {
     protected $internalPath;
     protected $globalPath;
+    protected $existGlobalPath = false;
 
     public function __construct($internalPath, $globalPath)
     {
@@ -34,11 +35,28 @@ class FlowDirectory extends Directory implements FlowDirectoryInterface
         $this->internalPath = $internalPath;
     }
 
+    public function existGlobalPath()
+    {
+        if (null !== $this->existGlobalPath) {
+            $this->existGlobalPath = is_dir($this->globalPath);
+        }
+        return $this->existGlobalPath;
+    }
+
     /**
      * @return mixed
      */
     public function getGlobalPath()
     {
+        if (!$this->existGlobalPath()) {
+            if (!is_dir($this->globalPath)) {
+                $created = mkdir($this->globalPath, 0750);
+                if (!$created) {
+                    throw new \RuntimeException(sprintf('Could not create public store directory "%s"', $this->globalPath));
+                }
+                $this->existGlobalPath = true;
+            }
+        }
         return $this->globalPath;
     }
 

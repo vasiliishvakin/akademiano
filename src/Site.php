@@ -7,9 +7,12 @@ namespace Akademiano\Sites;
 use Akademiano\SimplaView\AbstractView;
 use Akademiano\Sites\Site\ConfigDir;
 use Akademiano\Sites\Site\DataStorage;
+use Akademiano\Sites\Site\Directory;
+use Akademiano\Sites\Site\DirectoryInterface;
 use Akademiano\Sites\Site\PublicStorage;
 use Akademiano\Sites\Site\Theme;
 use Akademiano\Sites\Site\ThemesDir;
+use Akademiano\Utils\FileSystem;
 use Composer\Autoload\ClassLoader;
 
 abstract class Site implements SiteInterface
@@ -144,7 +147,7 @@ abstract class Site implements SiteInterface
 
 
     /**
-     * @return DataStorage
+     * @return DirectoryInterface
      */
     public function getDataStorage()
     {
@@ -153,7 +156,12 @@ abstract class Site implements SiteInterface
             if (!is_dir($dataInternalPath)) {
                 $this->dataStorage = false;
             } else {
-                $dataStorage = new DataStorage($dataInternalPath, $this->getDataGlobalPath());
+                $globalPath = $this->getDataGlobalPath();
+                if (!FileSystem::inDir($dataInternalPath, $globalPath, false)) {
+                    $dataStorage = new DataStorage($dataInternalPath, $globalPath);
+                } else {
+                    $dataStorage = new Directory($dataInternalPath);
+                }
                 $this->dataStorage = $dataStorage;
             }
         }
@@ -176,17 +184,10 @@ abstract class Site implements SiteInterface
         if (null === $this->dataGlobalPath) {
             $dataGlobalPath = $this->getRootDir() . DIRECTORY_SEPARATOR . DataStorage::GLOBAL_DIR
                 . DIRECTORY_SEPARATOR . $this->getName();
-            if (!is_dir($dataGlobalPath)) {
-                $created = mkdir($dataGlobalPath, 0750);
-                if (!$created) {
-                    throw new \RuntimeException(sprintf('Could not create public store directory "%s"', $publicGlobalPath));
-                }
-            }
             $this->dataGlobalPath = $dataGlobalPath;
         }
         return $this->dataGlobalPath;
     }
-
 
 
     /**
