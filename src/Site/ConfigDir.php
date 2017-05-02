@@ -4,6 +4,8 @@
 namespace Akademiano\Sites\Site;
 
 
+use Akademiano\Utils\FileSystem;
+
 class ConfigDir extends \Akademiano\Config\FS\ConfigDir implements DirectoryInterface
 {
 
@@ -20,5 +22,16 @@ class ConfigDir extends \Akademiano\Config\FS\ConfigDir implements DirectoryInte
     public function __toString()
     {
         return $this->getPath();
+    }
+
+    public function getFilesList(
+        $path,
+        $resultType = FileSystem::LIST_SCALAR,
+        $itemType = FileSystem::FST_ALL,
+        $level = false,
+        $showHidden = false
+    )
+    {
+        throw new \LogicException(sprintf('Method "%s" in class "%s" not implemented now', __METHOD__, __CLASS__));
     }
 }

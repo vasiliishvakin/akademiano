@@ -52,7 +52,7 @@ class FlowDirectory extends Directory implements FlowDirectoryInterface
             if (!is_dir($this->globalPath)) {
                 $created = mkdir($this->globalPath, 0750);
                 if (!$created) {
-                    throw new \RuntimeException(sprintf('Could not create public store directory "%s"', $this->globalPath));
+                    throw new \RuntimeException(sprintf('Could not create global storage directory "%s"', $this->globalPath));
                 }
                 $this->existGlobalPath = true;
             }
@@ -102,6 +102,49 @@ class FlowDirectory extends Directory implements FlowDirectoryInterface
         }
         return $this->files[$relativeFilePath];
     }
+
+    public function getFilesList(
+        $subPath = null,
+        $resultType = FileSystem::LIST_SCALAR,
+        $itemType = FileSystem::FST_ALL,
+        $level = false,
+        $showHidden = false
+    )
+    {
+        $key = sprintf("%s-%s-%s-%s-%s", $subPath, $resultType, $itemType, $level, $showHidden);
+
+        if (!array_key_exists($key, $this->filesList)) {
+            //files global
+            $filesGlobal = [];
+            $path = $this->getGlobalPath();
+            if (null !== $subPath) {
+                $path = realpath($path . DIRECTORY_SEPARATOR . $subPath);
+            }
+            if (!$path || !is_dir($path) || !FileSystem::inDir($this->getPath(), $path)) {
+                $filesGlobal = [];
+            } else {
+                $filesGlobal = FileSystem::getItems($path, $resultType, $itemType, $level, $showHidden);
+            }
+
+            //files internal
+            $filesInternal = [];
+            $path = $this->getInternalPath();
+            if (null !== $subPath) {
+                $path = realpath($path . DIRECTORY_SEPARATOR . $subPath);
+            }
+            if (!$path || !is_dir($path) || !FileSystem::inDir($this->getPath(), $path)) {
+                $filesInternal = [];
+            } else {
+                $filesInternal = FileSystem::getItems($path, $resultType, $itemType, $level, $showHidden);
+            }
+
+            $filesList = array_merge($filesGlobal, $filesInternal);
+            $filesList = array_unique($filesList);
+            $this->filesList[$key] = $filesList;
+        }
+        return $this->filesList[$key];
+    }
+
 
     public function __toString()
     {

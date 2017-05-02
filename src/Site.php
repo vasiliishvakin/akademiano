@@ -23,6 +23,8 @@ abstract class Site implements SiteInterface
 
     protected $rootDir;
 
+    protected $publicDir;
+
     protected $name;
 
     protected $path;
@@ -83,7 +85,7 @@ abstract class Site implements SiteInterface
             if (defined("ROOT_DIR")) {
                 $this->rootDir = ROOT_DIR;
             } else {
-                throw new \RuntimeException("Root dir is not defined");
+                throw new \LogicException("Root dir is not defined");
             }
         }
         return $this->rootDir;
@@ -100,11 +102,34 @@ abstract class Site implements SiteInterface
     /**
      * @return mixed
      */
+    public function getPublicDir()
+    {
+        if (null === $this->publicDir) {
+            if (defined("PUBLIC_DIR")) {
+                $this->publicDir = PUBLIC_DIR;
+            } else {
+                throw new \LogicException("Public dir is not defined");
+            }
+        }
+        return $this->publicDir;
+    }
+
+    /**
+     * @param mixed $publicDir
+     */
+    public function setPublicDir($publicDir)
+    {
+        $this->publicDir = $publicDir;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getName()
     {
         if (null === $this->name) {
             $this->name = strtolower(
-                substr(get_class($this), $prefixPos = strpos(get_class($this), "\\") +1, strrpos(get_class($this), "\\") - $prefixPos)
+                substr(get_class($this), $prefixPos = strpos(get_class($this), "\\") + 1, strrpos(get_class($this), "\\") - $prefixPos)
             );
         }
         return $this->name;
@@ -198,12 +223,6 @@ abstract class Site implements SiteInterface
         if (null === $this->publicGlobalPath) {
             $publicGlobalPath = $this->getRootDir() . DIRECTORY_SEPARATOR . PublicStorage::GLOBAL_DIR
                 . DIRECTORY_SEPARATOR . $this->getName();
-            if (!is_dir($publicGlobalPath)) {
-                $created = mkdir($publicGlobalPath, 0750);
-                if (!$created) {
-                    throw new \RuntimeException(sprintf('Could not create public store directory "%s"', $publicGlobalPath));
-                }
-            }
             $this->publicGlobalPath = $publicGlobalPath;
         }
         return $this->publicGlobalPath;
@@ -249,8 +268,13 @@ abstract class Site implements SiteInterface
             if (!is_dir($publicInternalPath)) {
                 $this->publicStorage = false;
             } else {
-                $publicStore = new PublicStorage($publicInternalPath, $this->getPublicGlobalPath(), $this->getPublicWebPath());
-                $this->publicStorage = $publicStore;
+                $globalPath = $this->getPublicGlobalPath();
+                if (!FileSystem::inDir($this->getPublicDir(), $publicInternalPath, false)) {
+                    $publicStorage = new DataStorage($publicInternalPath, $globalPath);
+                } else {
+                    $publicStorage = new Directory($publicInternalPath);
+                }
+                $this->publicStorage = $publicStorage;
             }
         }
         return (false !== $this->publicStorage) ? $this->publicStorage : null;
@@ -314,8 +338,11 @@ abstract class Site implements SiteInterface
                 $this->configDir = new ConfigDir(
                     $configPath,
                     \Akademiano\Config\FS\ConfigDir::LEVEL_DEFAULT,
-                    ["siteNamespace" => $this->getNamespace()]
-                    );
+                    [
+                        "siteNamespace" => $this->getNamespace(),
+                        "siteName" => $this->getName(),
+                    ]
+                );
             }
         }
         return (false !== $this->configDir) ? $this->configDir : null;

@@ -109,8 +109,8 @@ class SitesManager implements EnvironmentIncludeInterface
                     if ($name !== Router::CONFIG_NAME) {
                         return $content;
                     }
-                    $siteNs = $dir->getParams("siteNamespace");
-                    if (!$siteNs) {
+                    $siteN = $dir->getParams("siteName");
+                    if (!$siteN) {
                         return $content;
                     }
                     foreach ($content as $routeId => $route) {
@@ -118,7 +118,7 @@ class SitesManager implements EnvironmentIncludeInterface
                         if (is_array($route["action"])) {
                             $route["action"] = [
                                 [
-                                    "module" => $siteNs,
+                                    "site" => $siteN,
                                     "controller" => $route["action"][0]
                                 ],
                                 "action" => $route["action"][1],

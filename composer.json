@@ -22,7 +22,7 @@
     "akademiano/httpwarp": "^1.0.0-beta.5",
     "akademiano/core-controller": "^1.0.0-beta.2",
     "akademiano/simplaview": "^1.0.0-beta.2",
-    "akademiano/config": "^1.0.0-beta.6",
+    "akademiano/config": "^1.0.0-beta.7",
     "akademiano/router": "^1.0.0-beta.4"
   },
   "require-dev": {
