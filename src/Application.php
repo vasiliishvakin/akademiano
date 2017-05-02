@@ -288,7 +288,7 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
         $this->initRoutes($routes);
 
         $publishedRoutes = $this->getSitesManager()->getPublishedRoutes();
-        foreach ($publishedRoutes as $name=>$route) {
+        foreach ($publishedRoutes as $name => $route) {
             $route = $this->prepareRoute($route);
             $this->getRouter()->setAfterRoute($route, $name);
         }
@@ -327,11 +327,19 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
         $controllerPath = null;
 
         if (is_array($controllerInfo)) {
-            $module = ucfirst($controllerInfo["module"]);
-            $controllerId = lcfirst($controllerInfo["controller"]);
-            $controllerName = ucfirst($controllerInfo["controller"]);
-            $controllerPath = "{$module}\\Controller\\" . $controllerName . 'Controller';
-            $template = $module . DIRECTORY_SEPARATOR . $controllerId . DIRECTORY_SEPARATOR . $actionName;
+            if (isset($controllerInfo["module"])) {
+                $module = ucfirst($controllerInfo["module"]);
+                $controllerId = lcfirst($controllerInfo["controller"]);
+                $controllerName = ucfirst($controllerInfo["controller"]);
+                $controllerPath = "{$module}\\Controller\\" . $controllerName . 'Controller';
+                $template = $module . DIRECTORY_SEPARATOR . $controllerId . DIRECTORY_SEPARATOR . $actionName;
+            } elseif ($controllerInfo["site"]) {
+                $site = ucfirst($controllerInfo["site"]);
+                $controllerId = lcfirst($controllerInfo["controller"]);
+                $controllerName = ucfirst($controllerInfo["controller"]);
+                $controllerPath = "\\Sites\\{$site}\\Controller\\" . $controllerName . 'Controller';
+                $template = $controllerId . DIRECTORY_SEPARATOR . $actionName;
+            }
         } else {
             $possibleControllers = [];
             $controllerId = lcfirst($controllerInfo);

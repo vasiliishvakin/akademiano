@@ -19,9 +19,9 @@
   "require": {
     "php": "^5.6 || ^7.0",
     "akademiano/core-controller": "^1.0.0-beta.2",
-    "akademiano/sites": "^1.0.0-beta.3",
+    "akademiano/sites": "^1.0.0-beta.5",
     "akademiano/utils": "^1.0.0-beta.6",
-    "akademiano/config": "^1.0.0-beta.6",
+    "akademiano/config": "^1.0.0-beta.7",
     "akademiano/router": "^1.0.0-beta.4",
     "akademiano/entity": "^1.0.0-beta.1",
     "akademiano/httpwarp": "^1.0.0-beta.5",
