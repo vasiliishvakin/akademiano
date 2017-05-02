@@ -143,7 +143,7 @@ class ConfigLoader implements DIContainerIncludeInterface
         $content = $dirContent;
         $processors = $this->getPostProcessors($name);
         foreach ($processors as $processor) {
-            call_user_func($processor, $content, $dir, $name, $level);
+            $content = call_user_func($processor, $content, $dir, $name, $level);
         }
         return $content;
     }
