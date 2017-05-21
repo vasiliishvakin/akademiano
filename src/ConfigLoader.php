@@ -26,6 +26,8 @@ class ConfigLoader implements DIContainerIncludeInterface
 
     protected $configDirs = [];
 
+    protected $settedPaths = [];
+
     /** @var Config[] */
     protected $config = [];
 
@@ -42,7 +44,6 @@ class ConfigLoader implements DIContainerIncludeInterface
         }
     }
 
-
     public function setConfigDirs(array $paths, $level = null)
     {
         $this->levels = [];
@@ -56,10 +57,19 @@ class ConfigLoader implements DIContainerIncludeInterface
 
     public function addConfigDir($path, $level = ConfigDir::LEVEL_DEFAULT, array $params = null)
     {
+        if (array_key_exists($path, $this->settedPaths)) {
+            if ($this->settedPaths[$path] >= $level) {
+                return;
+            } else {
+                unset($this->settedPaths[$path]);
+            }
+        }
+
         $this->paths[$level][$path] = $path;
         $this->levels[$level] = $level;
         $this->params[$level][$path] = $params;
         $this->config = [];
+        $this->settedPaths[$path] = $level;
     }
 
     public function attachConfigDir(ConfigDir $dir, $level = null)
@@ -67,8 +77,21 @@ class ConfigLoader implements DIContainerIncludeInterface
         if (null !== $level) {
             $dir->setLevel($level);
         }
-        $this->configDirs[$dir->getLevel()][$dir->getPath()] = $dir;
+
+        $level = $dir->getLevel();
+        $path = $dir->getPath();
+
+        if (array_key_exists($path, $this->settedPaths)) {
+            if ($this->settedPaths[$path] >= $level) {
+                return;
+            } else {
+                unset($this->settedPaths[$path]);
+            }
+        }
+
+        $this->configDirs[$level][$path] = $dir;
         $this->levels[$level] = $level;
+        $this->settedPaths[$path] = $level;
     }
 
     public function getLevels()
@@ -116,7 +139,8 @@ class ConfigLoader implements DIContainerIncludeInterface
                     if (!FileSystem::inDir($this->getRootDir(), $path)) {
                         throw new PathRestrictException('Path %s not in Root Path', $path);
                     }
-                    $this->configDirs[$level][$path] = new ConfigDir($path, $level, $params);
+                    $dir = new ConfigDir($path, $level, $params);
+                    $this->configDirs[$level][$dir->getPath()] = $dir;
                 }
             }
             unset($this->paths[$level]);
