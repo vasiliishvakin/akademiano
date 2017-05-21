@@ -113,6 +113,7 @@ class SitesManager implements EnvironmentIncludeInterface
                     if (!$siteN) {
                         return $content;
                     }
+                    $siteN = SitesManager::filterSiteName($siteN);
                     foreach ($content as $routeId => $route) {
                         $route = Route::normalize($route);
                         if (is_array($route["action"])) {
