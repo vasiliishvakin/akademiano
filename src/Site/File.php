@@ -10,6 +10,8 @@ class File implements StringableInterface
 {
     protected $path;
 
+    protected $content;
+
     /**
      * File constructor.
      * @param $path
@@ -33,6 +35,17 @@ class File implements StringableInterface
     public function setPath($path)
     {
         $this->path = $path;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getContent()
+    {
+        if (null === $this->content) {
+            $this->content = file_get_contents($this->getPath());
+        }
+        return $this->content;
     }
 
     public function __toString()

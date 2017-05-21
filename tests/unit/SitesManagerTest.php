@@ -35,6 +35,7 @@ class SitesManagerTest extends \Codeception\Test\Unit
 
         $siteName = "_testsite_test";
         $site = $this->sitesManager->getSite($siteName);
+
         $this->tester->assertInstanceOf(\Akademiano\Sites\SiteInterface::class, $site);
         $themesDir = $site->getThemesDir();
         $this->tester->assertInstanceOf(\Akademiano\Sites\Site\ThemesDir::class, $themesDir);
@@ -52,9 +53,13 @@ class SitesManagerTest extends \Codeception\Test\Unit
         if (!is_dir($pubSitesDir = $tempSubDir . DIRECTORY_SEPARATOR . \Akademiano\Sites\Site\PublicStorage::GLOBAL_DIR)) {
             mkdir($pubSitesDir, 0777);
         }
+        $tempSubDir = realpath($tempSubDir);
+
+
         $rootDir = $site->getRootDir();
         $site->setRootDir($tempSubDir);
         $publicGlobalPath = $site->getPublicGlobalPath();
+        $this->tester->assertEquals($tempSubDir . DIRECTORY_SEPARATOR . \Akademiano\Sites\Site\PublicStorage::GLOBAL_DIR, $site->getPublicDir());
         $site->setRootDir($rootDir);
 
         $this->tester->assertEquals(
@@ -80,5 +85,6 @@ class SitesManagerTest extends \Codeception\Test\Unit
         $this->tester->assertInstanceOf(\Akademiano\Sites\Site\File::class, $testFile);
         $this->tester->assertEquals("/" . \Akademiano\Sites\Site\PublicStorage::GLOBAL_DIR . "/" . $siteName . "/" . $fileName, $testFile->getWebPath());
         $this->tester->assertEquals($pubSitesDir . DIRECTORY_SEPARATOR . $siteName . DIRECTORY_SEPARATOR . $fileName, $testFile->getPath());
+        $this->tester->assertEquals("test-file", $testFile->getContent());
     }
 }

@@ -108,7 +108,11 @@ abstract class Site implements SiteInterface
             if (defined("PUBLIC_DIR")) {
                 $this->publicDir = PUBLIC_DIR;
             } else {
-                throw new \LogicException("Public dir is not defined");
+                $publicDir = realpath($this->getRootDir() . DIRECTORY_SEPARATOR . PublicStorage::GLOBAL_DIR);
+                if (!$publicDir && !is_dir($publicDir)) {
+                    throw new \LogicException("Public dir is not defined");
+                }
+                $this->publicDir = $publicDir;
             }
         }
         return $this->publicDir;
@@ -270,7 +274,7 @@ abstract class Site implements SiteInterface
             } else {
                 $globalPath = $this->getPublicGlobalPath();
                 if (!FileSystem::inDir($this->getPublicDir(), $publicInternalPath, false)) {
-                    $publicStorage = new DataStorage($publicInternalPath, $globalPath);
+                    $publicStorage = new PublicStorage($publicInternalPath, $globalPath, $this->getPublicWebPath());
                 } else {
                     $publicStorage = new Directory($publicInternalPath);
                 }
