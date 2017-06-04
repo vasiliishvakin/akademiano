@@ -1,14 +1,13 @@
 <?php
-/**
- * User: Vasiliy Shvakin (orbisnull) zen4dev@gmail.com
- */
 
 namespace DeltaDb\Model\Type;
 
+use DeltaDb\Model\Type\ReservableInterface;
+use DeltaUtils\Object\Prototype\StringableInterface;
+use DeltaUtils\StringUtils;
+use DeltaUtils\Object\Prototype\ArrayableInterface;
 
-use DeltaCore\Prototype\ArrayableInterface;
-
-class PgPoint implements \JsonSerializable, ArrayableInterface
+class PgPoint implements \JsonSerializable, ArrayableInterface, StringableInterface, ReservableInterface
 {
     protected $lat;
     protected $lon;
@@ -80,5 +79,20 @@ class PgPoint implements \JsonSerializable, ArrayableInterface
             'lat' => $this->getLat(),
         ];
     }
+
+    public function toReserve($adapter = null)
+    {
+        if (null == $adapter) {
+            $adapter = "PgsqlAdapter";
+        }
+        $adapter = StringUtils::cutClassName($adapter);
+        switch ($adapter) {
+            case "PgsqlAdapter" :
+                return $this->format('ST_GeographyFromText(\'SRID=4326; POINT(%1$s %2$s)\')');
+            default:
+                throw  new \LogicException("Method not implement for adapter {$adapter}");
+        }
+    }
+
 
 } 

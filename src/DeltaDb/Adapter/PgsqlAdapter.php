@@ -69,6 +69,11 @@ class PgsqlAdapter extends AbstractAdapter
         return pg_query_params($query, $params);
     }
 
+    public function getError()
+    {
+        return pg_last_error($this->getConnection());
+    }
+
     /**
      * @param int $isTransaction
      */
@@ -153,12 +158,12 @@ class PgsqlAdapter extends AbstractAdapter
         }
     }
 
-    public function escapeIdentifier($field)
+    public function escapeIdentifier($identifier)
     {
-        if (strpos($field, ".") === false) {
-            return pg_escape_identifier($field);
+        if (strpos($identifier, ".") === false) {
+            return pg_escape_identifier($identifier);
         }
-        $fieldArr = explode(".", $field);
+        $fieldArr = explode(".", $identifier);
         return $fieldArr[0] . "." . pg_escape_identifier($fieldArr[1]);
     }
 
@@ -265,9 +270,9 @@ class PgsqlAdapter extends AbstractAdapter
         foreach($fieldsNames as $fieldName) {
             if (!isset($rawFields[$fieldName])) {
                 $num++;
-                $fieldsQuery[] = pg_escape_identifier($fieldName) . '=$' . $num;
+                $fieldsQuery[] = $this->escapeIdentifier($fieldName) . '=$' . $num;
             } else {
-                $fieldsQuery[] = pg_escape_identifier($fieldName) . '=' . $fields[$fieldName];
+                $fieldsQuery[] = $this->escapeIdentifier($fieldName) . '=' . $fields[$fieldName];
                 unset($fields[$fieldName]);
             }
         }
@@ -341,7 +346,7 @@ class PgsqlAdapter extends AbstractAdapter
 
     public function max($table, $field, $criteria = [])
     {
-        $field = pg_escape_identifier($field);
+        $field = $this->escapeIdentifier($field);
         $query = "select max({$field}) from \"{$table}\"";
         if (empty($criteria)) {
             $result = $this->selectCell($query);
@@ -356,7 +361,7 @@ class PgsqlAdapter extends AbstractAdapter
 
     public function min($table, $field, $criteria = [])
     {
-        $field = pg_escape_identifier($field);
+        $field = $this->escapeIdentifier($field);
         $query = "select min({$field}) from \"{$table}\"";
         if (empty($criteria)) {
             $result = $this->selectCell($query);
@@ -369,4 +374,4 @@ class PgsqlAdapter extends AbstractAdapter
         return $result;
     }
 
-} 
+}
