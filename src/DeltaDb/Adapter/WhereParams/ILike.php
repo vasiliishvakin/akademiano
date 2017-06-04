@@ -10,7 +10,7 @@ class ILike
 {
     protected $query;
 
-    function __construct($query)
+    public function __construct($query)
     {
         $this->query = $query;
     }

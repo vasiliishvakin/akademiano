@@ -1,7 +1,4 @@
 <?php
-/**
- * User: Vasiliy Shvakin (orbisnull) zen4dev@gmail.com
- */
 
 namespace DeltaDb\Adapter;
 
@@ -31,6 +28,32 @@ class PgsqlAdapter extends AbstractAdapter
             return [];
         }
         return $rows;
+    }
+
+    public function selectAndSmartFetch($query)
+    {
+        $result = call_user_func_array([$this, 'query'], func_get_args());
+        if (!$result) {
+            throw new \RuntimeException("Bad query: \"$query\"");
+        }
+        $numRows = pg_num_rows($result);
+        $numFields = pg_num_fields($result);
+        if ($numRows === 0 ) {
+            return null;
+        }
+        if ($numFields === 1) {
+            $result = pg_fetch_all_columns($result);
+            if ($numRows === 1) {
+                return reset($result);
+            }
+            return $result;
+        } else {
+            if ($numRows === 1) {
+                return pg_fetch_row($result);
+            } else {
+                return pg_fetch_all($result);
+            }
+        }
     }
 
     public function selectRow($query)
@@ -77,7 +100,7 @@ class PgsqlAdapter extends AbstractAdapter
     /**
      * @param int $isTransaction
      */
-    protected function setIsTransaction($isTransaction)
+    protected function setTransaction($isTransaction)
     {
         $this->isTransaction = $isTransaction;
     }
@@ -85,7 +108,7 @@ class PgsqlAdapter extends AbstractAdapter
     /**
      * @return int
      */
-    public function IsTransaction()
+    public function isTransaction()
     {
         return $this->isTransaction;
     }
@@ -95,7 +118,7 @@ class PgsqlAdapter extends AbstractAdapter
         if ($this->isTransaction()) {
             throw new \LogicException('Transaction already started');
         }
-        $this->setIsTransaction(true);
+        $this->setTransaction(true);
         pg_query('BEGIN');
     }
 
@@ -105,7 +128,7 @@ class PgsqlAdapter extends AbstractAdapter
             throw new \LogicException('Transaction not started');
         }
         pg_query('COMMIT');
-        $this->setIsTransaction(false);
+        $this->setTransaction(false);
     }
 
     public function rollBack()
@@ -114,7 +137,7 @@ class PgsqlAdapter extends AbstractAdapter
             throw new \LogicException('Transaction not started');
         }
         pg_query('ROLLBACK');
-        $this->setIsTransaction(false);
+        $this->setTransaction(false);
     }
 
     public function insert($table, $fields, $idName = null, $rawFields = null)
@@ -164,7 +187,12 @@ class PgsqlAdapter extends AbstractAdapter
             return pg_escape_identifier($identifier);
         }
         $fieldArr = explode(".", $identifier);
-        return $fieldArr[0] . "." . pg_escape_identifier($fieldArr[1]);
+        return pg_escape_identifier($fieldArr[0]) . "." . pg_escape_identifier($fieldArr[1]);
+    }
+
+    public function escape($value)
+    {
+        return pg_escape_literal($value);
     }
 
     public function getWhere(array $criteria, $num = 0)
@@ -317,10 +345,6 @@ class PgsqlAdapter extends AbstractAdapter
     {
         $query = "select * from \"{$table}\"";
         $limitSql = $this->getLimit($limit, $offset);
-        if (empty($criteria)) {
-            $query .= $limitSql;
-            return $this->select($query);
-        }
         $orderStr = $this->getOrderBy($orderBy);
         $query .= $this->getWhere($criteria);
         $query .= $orderStr;

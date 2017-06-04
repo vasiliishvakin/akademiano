@@ -12,7 +12,7 @@ class PgPoint implements \JsonSerializable, ArrayableInterface, StringableInterf
     protected $lat;
     protected $lon;
 
-    function __construct(array $array = null)
+    public function __construct(array $array = null)
     {
         if ($array) {
             $this->setLat($array['lat']);
@@ -62,12 +62,16 @@ class PgPoint implements \JsonSerializable, ArrayableInterface, StringableInterf
         return sprintf($format, $this->getLon(), $this->getLat());
     }
 
+<<<<<<< HEAD
     public function pgFormat()
     {
         return $this->format("ST_GeographyFromText('POINT (%1\$s %2\$s)')");
     }
 
     function jsonSerialize()
+=======
+    public function jsonSerialize()
+>>>>>>> origin/1.4
     {
         return $this->toArray();
     }
@@ -82,7 +86,7 @@ class PgPoint implements \JsonSerializable, ArrayableInterface, StringableInterf
 
     public function toReserve($adapter = null)
     {
-        if (null == $adapter) {
+        if (null === $adapter) {
             $adapter = "PgsqlAdapter";
         }
         $adapter = StringUtils::cutClassName($adapter);
@@ -93,6 +97,4 @@ class PgPoint implements \JsonSerializable, ArrayableInterface, StringableInterf
                 throw  new \LogicException("Method not implement for adapter {$adapter}");
         }
     }
-
-
-} 
+}

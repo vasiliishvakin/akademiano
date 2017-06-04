@@ -12,7 +12,7 @@ class Json implements \JsonSerializable, \ArrayAccess
 
     protected $data;
 
-    function __construct($data = null)
+    public function __construct($data = null)
     {
         if (!is_null($data)) {
             $this->setData($data);
@@ -47,7 +47,7 @@ class Json implements \JsonSerializable, \ArrayAccess
         return $this->data;
     }
 
-    function __toString()
+    public function __toString()
     {
         return json_encode($this->getData(), JSON_UNESCAPED_UNICODE);
     }
@@ -59,7 +59,7 @@ class Json implements \JsonSerializable, \ArrayAccess
      * @return mixed data which can be serialized by <b>json_encode</b>,
      * which is a value of any type other than a resource.
      */
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         return $this->getData();
     }
@@ -129,6 +129,4 @@ class Json implements \JsonSerializable, \ArrayAccess
         unset($data[$offset]);
         $this->setData($data);
     }
-
-
 }
