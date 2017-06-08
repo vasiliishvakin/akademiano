@@ -1,16 +1,13 @@
 <?php
 
 
-namespace DeltaPhp\Operator\Worker;
+namespace Akademiano\Operator\Worker;
 
 
-use DeltaPhp\Operator\Command\CommandInterface;
+use Akademiano\Operator\Command\CommandInterface;
 
 interface WorkerInterface
 {
-    const PARAM_TABLEID = "tableId";
-    const PARAM_ACTIONS_MAP = "map";
-
     public function execute(CommandInterface $command);
 
     public static function getMetadata(array $metadata = null, $replace = true);

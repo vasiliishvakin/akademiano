@@ -1,10 +1,10 @@
 <?php
 
 
-namespace DeltaPhp\Operator\Worker;
+namespace Akademiano\Operator\Worker;
 
 
-use DeltaCore\Config;
+use Akademiano\Config\Config;
 
 trait ConfigurableTrait
 {

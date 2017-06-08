@@ -1,20 +1,21 @@
 <?php
 
 
-namespace DeltaPhp\Operator;
+namespace Akademiano\Operator;
 
 
-use DeltaUtils\ArrayUtils;
-use DeltaPhp\Operator\Command\AfterCommand;
-use DeltaPhp\Operator\Command\CommandChainElementInterface;
-use DeltaPhp\Operator\Command\CommandFinallyInterface;
-use DeltaPhp\Operator\Command\PreAfterCommandInterface;
-use DeltaPhp\Operator\Command\PreCommand;
-use DeltaPhp\Operator\Worker\Exception\BreakException;
-use DeltaPhp\Operator\Worker\WorkerInterface;
-use DeltaPhp\Operator\Command\CommandInterface;
+use Akademiano\Utils\ArrayTools;
+use Akademiano\Operator\Command\AfterCommand;
+use Akademiano\Operator\Command\CommandChainElementInterface;
+use Akademiano\Operator\Command\CommandFinallyInterface;
+use Akademiano\Operator\Command\PreAfterCommandInterface;
+use Akademiano\Operator\Command\PreCommand;
+use Akademiano\Operator\Worker\Exception\BreakException;
+use Akademiano\Operator\Worker\WorkerInterface;
+use Akademiano\Operator\Command\CommandInterface;
+use Akademiano\Operator\Worker\Exception\TryNextException;
 use Pimple\Container;
-use DeltaPhp\Operator\Worker\Exception\TryNextException;
+
 
 class Operator implements OperatorInterface
 {
@@ -76,7 +77,7 @@ class Operator implements OperatorInterface
     public function addAction($action, $workerName, $class = null, $order = 0)
     {
         $path = $class !== null ? [$action, $class] : [$action, ""];
-        $this->actionMap = ArrayUtils::add($this->actionMap, $path, ["name" => $workerName, "order" => $order]);
+        $this->actionMap = ArrayTools::add($this->actionMap, $path, ["name" => $workerName, "order" => $order]);
     }
 
     public function setWorkerTable($tableId, $workerName)
@@ -139,9 +140,9 @@ class Operator implements OperatorInterface
                 $class = "";
             }
             $path = [$action, $class];
-            if (ArrayUtils::issetByPath($this->actionMap, $path)) {
-                $workers = ArrayUtils::get($this->actionMap, $path);
-                $workers = ArrayUtils::sortByKey($workers);
+            if (ArrayTools::issetByPath($this->actionMap, $path)) {
+                $workers = ArrayTools::get($this->actionMap, $path);
+                $workers = ArrayTools::sortByKey($workers);
                 //may be cache like: $this->actionMap = ArrayUtils::set($this->actionMap, $path, $workers);
                 foreach ($workers as $worker) {
                     yield $this->getWorker($worker["name"]);

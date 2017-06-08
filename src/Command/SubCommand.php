@@ -1,10 +1,10 @@
 <?php
 
 
-namespace DeltaPhp\Operator\Command;
+namespace Akademiano\Operator\Command;
 
 
-use DeltaUtils\ArrayUtils;
+use Akademiano\Utils\ArrayTools;
 
 class SubCommand extends Command implements SubCommandInterface
 {
@@ -20,6 +20,7 @@ class SubCommand extends Command implements SubCommandInterface
 
     public function __construct(CommandInterface $command)
     {
+        parent::__construct();
         $this->command = $command;
     }
 
@@ -52,7 +53,7 @@ class SubCommand extends Command implements SubCommandInterface
         if (null === $path) {
             return $this->params;
         } else {
-            return ArrayUtils::get($this->params, $path, $default);
+            return ArrayTools::get($this->params, $path, $default);
         }
     }
 

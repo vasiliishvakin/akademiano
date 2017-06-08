@@ -1,7 +1,7 @@
 <?php
 
 
-namespace DeltaPhp\Operator\Worker\Exception;
+namespace Akademiano\Operator\Worker\Exception;
 
 
 class BreakException extends \RuntimeException

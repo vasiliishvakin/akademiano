@@ -1,7 +1,7 @@
 <?php
 
 
-namespace DeltaPhp\Operator;
+namespace Akademiano\Operator;
 
 
 trait IncludeOperatorTrait
@@ -15,7 +15,7 @@ trait IncludeOperatorTrait
     }
 
     /**
-     * @return EntityOperator
+     * @return Operator
      */
     public function getOperator()
     {

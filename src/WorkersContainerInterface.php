@@ -1,7 +1,7 @@
 <?php
 
 
-namespace DeltaPhp\Operator;
+namespace Akademiano\Operator;
 
 
 interface WorkersContainerInterface extends \ArrayAccess, IncludeOperatorInterface {}

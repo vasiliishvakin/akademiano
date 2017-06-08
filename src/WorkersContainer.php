@@ -1,10 +1,10 @@
 <?php
 
 
-namespace DeltaPhp\Operator;
+namespace Akademiano\Operator;
 
 
-use DeltaPhp\Operator\Worker\ConfigurableInterface;
+use Akademiano\Operator\Worker\ConfigurableInterface;
 use Pimple\Container;
 
 class WorkersContainer extends Container implements WorkersContainerInterface

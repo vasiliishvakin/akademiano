@@ -1,10 +1,10 @@
 <?php
 
 
-namespace DeltaPhp\Operator;
+namespace Akademiano\Operator;
 
 
-use DeltaPhp\Operator\Command\CommandInterface;
+use Akademiano\Operator\Command\CommandInterface;
 
 trait DelegatingTrait
 {

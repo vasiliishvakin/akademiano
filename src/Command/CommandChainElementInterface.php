@@ -1,7 +1,7 @@
 <?php
 
 
-namespace DeltaPhp\Operator\Command;
+namespace Akademiano\Operator\Command;
 
 
 interface CommandChainElementInterface extends CommandInterface

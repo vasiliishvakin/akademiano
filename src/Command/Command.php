@@ -1,10 +1,10 @@
 <?php
 
 
-namespace DeltaPhp\Operator\Command;
+namespace Akademiano\Operator\Command;
 
 
-use DeltaUtils\ArrayUtils;
+use Akademiano\Utils\ArrayTools;
 
 class Command implements CommandInterface
 {
@@ -60,7 +60,7 @@ class Command implements CommandInterface
 
     public function hasParam($path)
     {
-        return ArrayUtils::issetByPath($this->params, $path);
+        return ArrayTools::issetByPath($this->params, $path);
     }
 
     /**
@@ -69,7 +69,7 @@ class Command implements CommandInterface
     public function getParams($path = null, $default = null)
     {
         if (null !== $path) {
-            return ArrayUtils::get($this->params, $path, $default);
+            return ArrayTools::get($this->params, $path, $default);
         }
         return $this->params;
     }
@@ -81,7 +81,7 @@ class Command implements CommandInterface
     public function setParams($params, $path = null)
     {
         if (null !== $path) {
-            $this->params = ArrayUtils::set($this->params, $path, $params);
+            $this->params = ArrayTools::set($this->params, $path, $params);
         } else {
             $this->params = $params;
         }
@@ -89,7 +89,7 @@ class Command implements CommandInterface
 
     public function addParams($params, $path = null)
     {
-        $this->params = ArrayUtils::add($this->params, $path, $params);
+        $this->params = ArrayTools::add($this->params, $path, $params);
     }
 
     /**

@@ -1,10 +1,10 @@
 <?php
 
 
-namespace DeltaPhp\Operator\Command;
+namespace Akademiano\Operator\Command;
 
 
-use DeltaUtils\ArrayUtils;
+use Akademiano\Utils\ArrayTools;
 
 class PreCommand extends SubCommand implements PreCommandInterface
 {
@@ -48,7 +48,7 @@ class PreCommand extends SubCommand implements PreCommandInterface
     public function addParams($params, $path = null)
     {
         $paramsFull = $this->getParams();
-        $paramsFull = ArrayUtils::set($paramsFull, $path, $params);
+        $paramsFull = ArrayTools::set($paramsFull, $path, $params);
         $this->getParamsStack()->push($paramsFull);
         $this->params = null;
     }

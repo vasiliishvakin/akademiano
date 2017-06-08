@@ -1,7 +1,7 @@
 <?php
 
 
-namespace DeltaPhp\Operator;
+namespace Akademiano\Operator;
 
 
 trait OperatorDiTrait
@@ -9,7 +9,7 @@ trait OperatorDiTrait
     abstract public function getDIContainer();
 
     /**
-     * @return \DeltaPhp\Operator\EntityOperator
+     * @return Operator
      */
     public function getOperator()
     {

@@ -2,7 +2,7 @@
 
 return [
     "Operator" => function ($c) {
-        $e = new \DeltaPhp\Operator\EntityOperator();
+        $e = new \Akademiano\Operator\Operator();
         $e->setDependencies($c);
         return $e;
     },

@@ -1,25 +1,28 @@
 {
-  "name": "deltaphp/operator",
-  "description": "Operator for executing command by workers, with base commands and workers. It's for subject/observer patterns, event-driven architectures like event manager",
+  "name": "akademiano/operator",
+  "description": "Operator base classes",
   "license": "Apache-2.0",
   "minimum-stability": "dev",
   "prefer-stable": true,
   "authors": [
     {
       "name": "Vasiliy Shvakin",
-      "email": "zen4dev@gmail.com"
+      "email": "mrdatamapper@gmail.com"
     }
   ],
   "autoload": {
     "psr-4": {
-      "DeltaPhp\\Operator\\": "src"
+      "Akademiano\\Operator\\": "src/"
     }
   },
   "require": {
-    "deltaphp/deltacore": "^2.0",
-    "deltaphp/deltautils": "^1.4.4",
-    "deltaphp/uuid": "~1.0",
-    "deltaphp/deltadb": "~1.3",
-    "pimple/pimple": "~3.0"
+    "php": "^5.6 || ^7.0",
+    "akademiano/utils": "^1.0.0-beta.6",
+    "akademiano/config": "^1.0.0-beta.6"
+  },
+  "require-dev": {
+    "codeception/codeception": "^2.2.10",
+    "satooshi/php-coveralls": "^1.0.1",
+    "mockery/mockery": "^0.9.9"
   }
 }

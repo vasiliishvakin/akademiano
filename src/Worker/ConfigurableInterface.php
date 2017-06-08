@@ -1,7 +1,7 @@
 <?php
 
 
-namespace DeltaPhp\Operator\Worker;
+namespace Akademiano\Operator\Worker;
 
 
 interface ConfigurableInterface

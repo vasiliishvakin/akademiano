@@ -1,10 +1,10 @@
 <?php
 
 
-namespace DeltaPhp\Operator\Worker\Exception;
+namespace Akademiano\Operator\Worker\Exception;
 
 
-use DeltaPhp\Operator\Command\CommandInterface;
+use Akademiano\Operator\Command\CommandInterface;
 use Exception;
 
 class NotSupportedCommand extends \InvalidArgumentException

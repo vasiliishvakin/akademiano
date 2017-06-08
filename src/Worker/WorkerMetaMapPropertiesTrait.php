@@ -1,7 +1,7 @@
 <?php
 
 
-namespace DeltaPhp\Operator\Worker;
+namespace Akademiano\Operator\Worker;
 
 
 trait WorkerMetaMapPropertiesTrait
@@ -20,7 +20,7 @@ trait WorkerMetaMapPropertiesTrait
     {
 
         $defaultMetadata = static::getDefaultMetadata();
-        if (null == $metadata) {
+        if (null === $metadata) {
             return $defaultMetadata;
         }
         if ($replace) {
@@ -49,7 +49,6 @@ trait WorkerMetaMapPropertiesTrait
             }
             return $newMapping;
         }
-
     }
 
     public static function getMapping($mapping = null, $replace = false)
