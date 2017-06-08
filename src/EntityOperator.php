@@ -1,23 +1,23 @@
 <?php
 
 
-namespace DeltaPhp\Operator;
+namespace Akademiano\EntityOperator;
 
+use Akademiano\Operator\Operator;
+use Akademiano\Utils\Object\Collection;
+use Akademiano\EntityOperator\Command\CountCommand;
+use Akademiano\EntityOperator\Command\CreateCommand;
+use Akademiano\EntityOperator\Command\DeleteCommand;
+use Akademiano\EntityOperator\Command\FindCommand;
+use Akademiano\EntityOperator\Command\GenerateIdCommand;
+use Akademiano\EntityOperator\Command\GetCommand;
+use Akademiano\EntityOperator\Command\LoadCommand;
+use Akademiano\EntityOperator\Command\SaveCommand;
+use Akademiano\Entity\EntityInterface;
+use Akademiano\Entity\Entity;
+use Akademiano\Db\Adapter\D2QL\Criteria;
 
-use DeltaUtils\Object\Collection;
-use DeltaPhp\Operator\Command\CountCommand;
-use DeltaPhp\Operator\Command\CreateCommand;
-use DeltaPhp\Operator\Command\DeleteCommand;
-use DeltaPhp\Operator\Command\FindCommand;
-use DeltaPhp\Operator\Command\GenerateIdCommand;
-use DeltaPhp\Operator\Command\GetCommand;
-use DeltaPhp\Operator\Command\LoadCommand;
-use DeltaPhp\Operator\Command\SaveCommand;
-use DeltaPhp\Operator\Entity\EntityInterface;
-use DeltaPhp\Operator\Entity\Entity;
-use DeltaDb\D2QL\Criteria;
-
-class EntityOperator extends Operator implements OperatorInterface
+class EntityOperator extends Operator implements EntityOperatorInterface
 {
 
     public function create($class = null, array $params = [])

@@ -1,23 +1,26 @@
 <?php
 
 
-namespace DeltaPhp\Operator\Worker;
+namespace Akademiano\EntityOperator\Worker;
 
-use DeltaPhp\Operator\Command\PreCommandInterface;
-use DeltaPhp\Operator\Command\ReserveCommand;
-use DeltaPhp\Operator\Entity\EntityInterface;
-use DeltaPhp\Operator\DelegatingTrait;
-use DeltaPhp\Operator\Command\CommandInterface;
-use DeltaPhp\Operator\DelegatingInterface;
-use DeltaPhp\Operator\Worker\Exception\NotSupportedCommand;
+use Akademiano\EntityOperator\Command\DeleteCommand;
+use Akademiano\EntityOperator\Command\SaveCommand;
+use Akademiano\Operator\Command\PreCommandInterface;
+use Akademiano\EntityOperator\Command\ReserveCommand;
+use Akademiano\Entity\EntityInterface;
+use Akademiano\Operator\DelegatingTrait;
+use Akademiano\Operator\Command\CommandInterface;
+use Akademiano\Operator\DelegatingInterface;
+use Akademiano\Operator\Worker\Exception\NotSupportedCommand;
+use Akademiano\Operator\Worker\WorkerMetaMapPropertiesTrait;
 
 class TranslatorObjectToDataWorker implements WorkerInterface, DelegatingInterface
 {
     use WorkerMetaMapPropertiesTrait;
     use DelegatingTrait;
 
-    const COMMAND_BEFORE_SAVE = PreCommandInterface::PREFIX_COMMAND_PRE . CommandInterface::COMMAND_SAVE;
-    const COMMAND_BEFORE_DELETE = PreCommandInterface::PREFIX_COMMAND_PRE . CommandInterface::COMMAND_DELETE;
+    const COMMAND_BEFORE_SAVE = PreCommandInterface::PREFIX_COMMAND_PRE . SaveCommand::COMMAND_NAME;
+    const COMMAND_BEFORE_DELETE = PreCommandInterface::PREFIX_COMMAND_PRE . DeleteCommand::COMMAND_NAME;
 
     public function execute(CommandInterface $command)
     {

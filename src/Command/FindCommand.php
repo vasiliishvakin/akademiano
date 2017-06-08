@@ -1,14 +1,16 @@
 <?php
 
 
-namespace DeltaPhp\Operator\Command;
+namespace Akademiano\EntityOperator\Command;
+
+use Akademiano\Operator\Command\Command;
 
 
 class FindCommand extends Command
 {
-    protected $name = self::COMMAND_FIND;
+    const COMMAND_NAME = "find";
 
-    public function __construct($class = null, $criteria = [], $limit = null, $offset = null, $orderBy= null, $params = [])
+    public function __construct($class = null, $criteria = [], $limit = null, $offset = null, $orderBy = null, $params = [])
     {
         $params["criteria"] = $criteria;
         $params["limit"] = $limit;

@@ -1,19 +1,10 @@
 <?php
 
+namespace Akademiano\EntityOperator\Worker;
 
-namespace DeltaPhp\Operator\Worker;
 
-
-use DeltaPhp\Operator\Command\CommandInterface;
-
-interface WorkerInterface
+interface WorkerInterface extends \Akademiano\Operator\Worker\WorkerInterface
 {
     const PARAM_TABLEID = "tableId";
     const PARAM_ACTIONS_MAP = "map";
-
-    public function execute(CommandInterface $command);
-
-    public static function getMetadata(array $metadata = null, $replace = true);
-
-    public static function getMapping($mappingClass = null, $replace = true);
 }

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace DeltaPhp\Operator;
+namespace Akademiano\EntityOperator;
 
 
 interface CountableInterface

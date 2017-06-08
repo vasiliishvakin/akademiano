@@ -1,10 +1,10 @@
 <?php
 
 
-namespace DeltaPhp\Operator\Command;
+namespace Akademiano\EntityOperator\Command;
 
-
-use DeltaPhp\Operator\Entity\EntityInterface;
+use Akademiano\Entity\EntityInterface;
+use Akademiano\Operator\Command\CommandInterface;
 
 interface ReserveCommandInterface extends CommandInterface
 {

@@ -1,11 +1,11 @@
 <?php
 
 
-namespace DeltaPhp\Operator;
+namespace Akademiano\EntityOperator;
 
 
-use DeltaUtils\Object\Collection;
-use DeltaPhp\Operator\Entity\EntityInterface;
+use Akademiano\Utils\Object\Collection;
+use Akademiano\Entity\EntityInterface;
 
 interface FinderInterface extends CountableInterface
 {

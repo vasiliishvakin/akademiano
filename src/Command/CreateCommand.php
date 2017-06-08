@@ -1,15 +1,17 @@
 <?php
 
 
-namespace DeltaPhp\Operator\Command;
+namespace Akademiano\EntityOperator\Command;
+
+use Akademiano\Operator\Command\Command;
 
 
-class CreateCommand extends Command implements CommandInterface
+class CreateCommand extends Command
 {
-    protected $name = self::COMMAND_FIND;
+    const COMMAND_NAME = "create";
 
     public function __construct($class = null, $params = [])
     {
-        parent::__construct($params, $class, self::COMMAND_CREATE);
+        parent::__construct($params, $class);
     }
 }

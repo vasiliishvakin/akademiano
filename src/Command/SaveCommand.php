@@ -1,14 +1,14 @@
 <?php
 
 
-namespace DeltaPhp\Operator\Command;
+namespace Akademiano\EntityOperator\Command;
 
-
-use DeltaPhp\Operator\Entity\EntityInterface;
+use Akademiano\Operator\Command\Command;
+use Akademiano\Entity\EntityInterface;
 
 class SaveCommand extends Command
 {
-    protected $name = self::COMMAND_SAVE;
+    const COMMAND_NAME = "save";
 
     public function __construct(EntityInterface $entity = null, $params = [])
     {

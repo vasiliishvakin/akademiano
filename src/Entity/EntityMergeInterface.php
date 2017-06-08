@@ -1,7 +1,7 @@
 <?php
 
 
-namespace DeltaPhp\Operator\Entity;
+namespace Akademiano\EntityOperator\Entity;
 
 
 interface EntityMergeInterface

@@ -1,10 +1,10 @@
 <?php
 
 
-namespace DeltaPhp\Operator;
+namespace Akademiano\EntityOperator;
 
 
-use DeltaPhp\Operator\Entity\Entity;
+use Akademiano\Entity\Entity;
 
 interface GenerateIdInterface
 {

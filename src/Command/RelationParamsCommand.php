@@ -1,18 +1,20 @@
 <?php
 
 
-namespace DeltaPhp\Operator\Command;
+namespace Akademiano\EntityOperator\Command;
+
+use Akademiano\Operator\Command\Command;
 
 
 use DeltaPhp\Operator\Entity\RelationEntity;
 
-class RelationParamsCommand extends Command implements CommandInterface
+class RelationParamsCommand extends Command
 {
-    const COMMAND_RELATION_PARAMS = "relation.params";
+    const COMMAND_NAME = "relation.params";
 
     public function __construct($name, $class = RelationEntity::class, array $params = [])
     {
         $params["param"] = $name;
-        parent::__construct($params, $class, self::COMMAND_RELATION_PARAMS);
+        parent::__construct($params, $class);
     }
 }

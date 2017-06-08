@@ -1,14 +1,18 @@
 <?php
 
 
-namespace DeltaPhp\Operator\Worker;
+namespace Akademiano\EntityOperator\Worker;
 
 
-use DeltaPhp\Operator\Command\CommandInterface;
-use DeltaPhp\Operator\Entity\Entity;
-use DeltaPhp\Operator\CreatorInterface;
-use DeltaPhp\Operator\IncludeOperatorInterface;
-use DeltaPhp\Operator\IncludeOperatorTrait;
+use Akademiano\EntityOperator\Command\CreateCommand;
+use Akademiano\Operator\Worker\WorkerInterface;
+use Akademiano\EntityOperator\CreatorInterface;
+use Akademiano\Operator\IncludeOperatorInterface;
+use Akademiano\Operator\Worker\WorkerMetaMapPropertiesTrait;
+use Akademiano\Operator\IncludeOperatorTrait;
+use Akademiano\Operator\Command\CommandInterface;
+use Akademiano\Entity\Entity;
+
 
 class EntityCreatorWorker implements WorkerInterface, CreatorInterface, IncludeOperatorInterface
 {
@@ -18,7 +22,7 @@ class EntityCreatorWorker implements WorkerInterface, CreatorInterface, IncludeO
     protected static function getDefaultMapping()
     {
         return [
-            CommandInterface::COMMAND_CREATE => null,
+            CreateCommand::COMMAND_NAME => null,
         ];
     }
 
@@ -40,7 +44,7 @@ class EntityCreatorWorker implements WorkerInterface, CreatorInterface, IncludeO
 
     public function execute(CommandInterface $command)
     {
-        if ($command->getName() !== CommandInterface::COMMAND_CREATE) {
+        if ($command->getName() !== CreateCommand::COMMAND_NAME) {
             throw new \InvalidArgumentException("Command type \" {$command->getName()} not supported");
         }
         return $this->create($command->getClass(), $command->getParams());

@@ -1,27 +1,29 @@
 <?php
 
 
-namespace DeltaPhp\Operator\Worker;
+namespace Akademiano\EntityOperator\Worker;
 
 
-use DeltaDb\D2QL\Criteria;
-use DeltaDb\D2QL\Join;
-use DeltaDb\D2QL\Prototype\WherePrototype;
-use DeltaDb\D2QL\Where;
-use DeltaPhp\Operator\Command\DeleteCommand;
-use DeltaPhp\Operator\Command\GetCommand;
-use DeltaPhp\Operator\Command\InfoWorkerCommand;
-use DeltaUtils\Object\Collection;
-use DeltaPhp\Operator\Command\CommandInterface;
-use DeltaPhp\Operator\Command\FindCommand;
-use DeltaPhp\Operator\Command\RelationLoadCommand;
-use DeltaPhp\Operator\Command\RelationParamsCommand;
-use DeltaPhp\Operator\Entity\EntityInterface;
-use DeltaPhp\Operator\Entity\RelationEntity;
-use DeltaPhp\Operator\DelegatingInterface;
-use DeltaPhp\Operator\DelegatingTrait;
-use DeltaPhp\Operator\Worker\Exception\BadField;
-use DeltaPhp\Operator\Worker\Exception\BadRelatedClass;
+use Akademiano\Db\Adapter\D2QL\Criteria;
+use Akademiano\Db\Adapter\D2QL\Join;
+use Akademiano\Db\Adapter\D2QL\Prototype\WherePrototype;
+use Akademiano\Db\Adapter\D2QL\Where;
+use Akademiano\Entity\EntityInterface;
+use Akademiano\EntityOperator\Command\DeleteCommand;
+use Akademiano\EntityOperator\Command\FindCommand;
+use Akademiano\EntityOperator\Command\GetCommand;
+use Akademiano\EntityOperator\Command\InfoWorkerCommand;
+use Akademiano\EntityOperator\Command\RelationLoadCommand;
+use Akademiano\EntityOperator\Command\RelationParamsCommand;
+use Akademiano\EntityOperator\Entity\RelationEntity;
+use Akademiano\EntityOperator\Worker\Exception\BadFieldException;
+use Akademiano\EntityOperator\Worker\Exception\BadRelatedClassException;
+use Akademiano\Operator\Command\CommandInterface;
+use Akademiano\Operator\DelegatingInterface;
+use Akademiano\Operator\DelegatingTrait;
+use Akademiano\Operator\Worker\WorkerMetaMapPropertiesTrait;
+use Akademiano\Utils\Object\Collection;
+
 
 class RelationsWorker extends PostgresWorker implements DelegatingInterface, FinderInterface
 {
@@ -104,7 +106,7 @@ class RelationsWorker extends PostgresWorker implements DelegatingInterface, Fin
         } elseif ($class === $secondClass || is_subclass_of($class, $secondClass)) {
             return $this->getFirstClass();
         } else {
-            throw new BadRelatedClass($this, $class);
+            throw new BadRelatedClassException($this, $class);
         }
     }
 
@@ -118,7 +120,7 @@ class RelationsWorker extends PostgresWorker implements DelegatingInterface, Fin
         } elseif ($class === $secondClass || is_subclass_of($class, $secondClass)) {
             return self::FIELD_SECOND;
         } else {
-            throw new BadRelatedClass($this, $class);
+            throw new BadRelatedClassException($this, $class);
         }
     }
 
@@ -130,7 +132,7 @@ class RelationsWorker extends PostgresWorker implements DelegatingInterface, Fin
             case self::FIELD_SECOND:
                 return self::FIELD_FIRST;
             default:
-                throw new BadField($this, $field);
+                throw new BadFieldException($this, $field);
         }
     }
 
@@ -265,20 +267,20 @@ class RelationsWorker extends PostgresWorker implements DelegatingInterface, Fin
     public function execute(CommandInterface $command)
     {
         switch ($command->getName()) {
-            case RelationLoadCommand::COMMAND_RELATION_LOAD:
+            case RelationLoadCommand::COMMAND_NAME:
                 return $this->getLinked($command->getParams("entity"));
                 break;
-            case RelationParamsCommand::COMMAND_RELATION_PARAMS :
+            case RelationParamsCommand::COMMAND_NAME :
                 return $this->getParam($command->getParams("param"), $command->getParams());
                 break;
-            case CommandInterface::COMMAND_FIND :
+            case FindCommand::COMMAND_NAME :
                 if ($command->hasParam("entity")) {
                     return $this->findByEntity($command->getParams("entity"));
                 } else {
                     return parent::execute($command);
                 }
                 break;
-            case CommandInterface::COMMAND_DELETE :
+            case DeleteCommand::COMMAND_NAME :
                 $id = $command->getParams("id");
                 $relation = $command->getParams("entity");
                 if ($command->hasParam("currentLinkedEntity")) {

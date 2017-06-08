@@ -1,21 +1,18 @@
 <?php
-/**
- * User: Vasiliy Shvakin (orbisnull) zen4dev@gmail.com
- */
 
-namespace DeltaPhp\Operator;
+namespace Akademiano\EntityOperator;
 
 
-use DeltaPhp\Operator\Worker\WorkerInterface;
-use DeltaCore\Application;
-use DeltaCore\ModuleManager;
+use Akademiano\Operator\Worker\WorkerInterface;
+use Akademiano\Core\Application;
+use Akademiano\Core\ModuleManager;
 use Pimple\Container;
 
 class Module
 {
     public static function init(ModuleManager $moduleManager, Application $application)
     {
-        $application->extend("Operator", function (Operator $operator, Container $c) use ($moduleManager) {
+        $application->extend("Operator", function (EntityOperator $operator, Container $c) use ($moduleManager) {
             $workers = $moduleManager->getListArrayConfigs("workers");
             foreach ($workers as $workerName => $data) {
                 $workerParams = [];

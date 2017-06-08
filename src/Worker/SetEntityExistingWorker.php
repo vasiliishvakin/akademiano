@@ -1,14 +1,16 @@
 <?php
 
 
-namespace DeltaPhp\Operator\Worker;
+namespace Akademiano\EntityOperator\Worker;
 
-
-use DeltaPhp\Operator\Command\AfterCommandInterface;
-use DeltaPhp\Operator\Command\CommandInterface;
-use DeltaPhp\Operator\Entity\EntityInterface;
-use DeltaPhp\Operator\Worker\Exception\NotSupportedCommand;
-use DeltaUtils\Object\Collection;
+use Akademiano\EntityOperator\Command\FindCommand;
+use Akademiano\EntityOperator\Command\GetCommand;
+use Akademiano\Operator\Command\CommandInterface;
+use Akademiano\Operator\Worker\WorkerMetaMapPropertiesTrait;
+use Akademiano\Operator\Command\AfterCommandInterface;
+use Akademiano\Entity\EntityInterface;
+use Akademiano\Operator\Worker\Exception\NotSupportedCommand;
+use Akademiano\Utils\Object\Collection;
 
 class SetEntityExistingWorker implements WorkerInterface
 {
@@ -17,8 +19,9 @@ class SetEntityExistingWorker implements WorkerInterface
     public function execute(CommandInterface $command)
     {
         switch ($command->getName()) {
-            case AfterCommandInterface::COMMAND_AFTER_FIND :
-            case AfterCommandInterface::COMMAND_AFTER_GET :
+            case AfterCommandInterface::PREFIX_COMMAND_AFTER . FindCommand::COMMAND_NAME :
+            case AfterCommandInterface::PREFIX_COMMAND_AFTER . GetCommand::COMMAND_NAME :
+                /** @var AfterCommandInterface $command */
                 $result = $this->set($command);
                 $command->addResult($result);
                 return $result;

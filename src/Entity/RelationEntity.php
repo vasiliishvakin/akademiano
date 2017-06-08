@@ -1,8 +1,9 @@
 <?php
 
 
-namespace DeltaPhp\Operator\Entity;
+namespace Akademiano\EntityOperator\Entity;
 
+use Akademiano\Entity\Entity;
 
 class RelationEntity extends Entity
 {

@@ -1,29 +1,38 @@
 <?php
-use DeltaPhp\Operator\Worker\WorkerInterface;
-use DeltaPhp\Operator\Command\CommandInterface;
-use DeltaPhp\Operator\Entity\NamedEntity;
-use DeltaPhp\Operator\Entity\ContentEntity;
-use DeltaPhp\Operator\Command\AfterCommandInterface;
-use DeltaPhp\Operator\WorkersContainerInterface;
-use DeltaPhp\Operator\Command\PreCommandInterface;
-use DeltaPhp\Operator\Entity\RelationEntity;
-use DeltaPhp\Operator\Command\CreateSelectCommand;
-use DeltaPhp\Operator\Command\SelectCommand;
+use Akademiano\EntityOperator\Worker\WorkerInterface;
+use Akademiano\Entity\NamedEntity;
+use Akademiano\Entity\ContentEntity;
+use Akademiano\Operator\Command\AfterCommandInterface;
+use Akademiano\Operator\WorkersContainerInterface;
+use Akademiano\Operator\Command\PreCommandInterface;
+use Akademiano\EntityOperator\Entity\RelationEntity;
+use Akademiano\EntityOperator\Command\CreateSelectCommand;
+use Akademiano\EntityOperator\Command\SelectCommand;
+
+use Akademiano\EntityOperator\Command\FindCommand;
+use Akademiano\EntityOperator\Command\GetCommand;
+use Akademiano\EntityOperator\Command\CountCommand;
+use Akademiano\EntityOperator\Command\SaveCommand;
+use Akademiano\EntityOperator\Command\DeleteCommand;
+use Akademiano\EntityOperator\Command\LoadCommand;
+use Akademiano\EntityOperator\Command\ReserveCommand;
+use Akademiano\EntityOperator\Command\GenerateIdCommand;
+use Akademiano\Operator\Command\WorkerInfoCommand;
 
 //PostgresWorker
 return [
     "EntityCreatorWorker" => [
-        \DeltaPhp\Operator\Worker\EntityCreatorWorker::class,
+        \Akademiano\EntityOperator\Worker\EntityCreatorWorker::class,
         function ($s) {
-            $w = new \DeltaPhp\Operator\Worker\EntityCreatorWorker();
+            $w = new \Akademiano\EntityOperator\Worker\EntityCreatorWorker();
             return $w;
         },
     ],
 
     "EntityWorker" => [
-        \DeltaPhp\Operator\Worker\PostgresWorker::class,
+        \Akademiano\EntityOperator\Worker\PostgresWorker::class,
         function (WorkersContainerInterface $s) {
-            $w = new \DeltaPhp\Operator\Worker\PostgresWorker();
+            $w = new \Akademiano\EntityOperator\Worker\PostgresWorker();
             $adapter = $s->getOperator()->getDependency("dbAdapter");
             $w->setAdapter($adapter);
             return $w;
@@ -33,7 +42,7 @@ return [
 
     "NamedEntitiesWorker" => [
         function (WorkersContainerInterface $s) {
-            $w = new \DeltaPhp\Operator\Worker\PostgresWorker();
+            $w = new \Akademiano\EntityOperator\Worker\PostgresWorker();
             $adapter = $s->getOperator()->getDependency("dbAdapter");
             $w->setAdapter($adapter);
             $w->setTable("named");
@@ -42,25 +51,24 @@ return [
         },
         WorkerInterface::PARAM_TABLEID => 2,
         WorkerInterface::PARAM_ACTIONS_MAP => [
-            CommandInterface::COMMAND_FIND => NamedEntity::class,
-            PreCommandInterface::PREFIX_COMMAND_PRE . CommandInterface::COMMAND_FIND => NamedEntity::class,
-            CommandInterface::COMMAND_GET => NamedEntity::class,
-            CommandInterface::COMMAND_COUNT => NamedEntity::class,
-            CommandInterface::COMMAND_SAVE => NamedEntity::class,
-            CommandInterface::COMMAND_DELETE => NamedEntity::class,
-            CommandInterface::COMMAND_LOAD => NamedEntity::class,
-            CommandInterface::COMMAND_RESERVE => NamedEntity::class,
-            CommandInterface::COMMAND_GENERATE_ID => NamedEntity::class,
-            CommandInterface::COMMAND_WORKER_INFO => NamedEntity::class,
-            CreateSelectCommand::COMMAND_CREATE_SELECT => NamedEntity::class,
-            SelectCommand::COMMAND_SELECT => NamedEntity::class,
+            FindCommand::COMMAND_NAME => NamedEntity::class,
+            PreCommandInterface::PREFIX_COMMAND_PRE . FindCommand::COMMAND_NAME => NamedEntity::class,
+            GetCommand::COMMAND_NAME => NamedEntity::class,
+            CountCommand::COMMAND_NAME => NamedEntity::class,
+            SaveCommand::COMMAND_NAME => NamedEntity::class,
+            DeleteCommand::COMMAND_NAME => NamedEntity::class,
+            LoadCommand::COMMAND_NAME => NamedEntity::class,
+            ReserveCommand::COMMAND_NAME => NamedEntity::class,
+            GenerateIdCommand::COMMAND_NAME => NamedEntity::class,
+            CreateSelectCommand::COMMAND_NAME => NamedEntity::class,
+            SelectCommand::COMMAND_NAME => NamedEntity::class,
         ],
     ],
 
 
     "ContentEntitiesWorker" => [
         function (WorkersContainerInterface $s) {
-            $w = new \DeltaPhp\Operator\Worker\PostgresWorker();
+            $w = new \Akademiano\EntityOperator\Worker\PostgresWorker();
             $adapter = $s->getOperator()->getDependency("dbAdapter");
             $w->setAdapter($adapter);
             $w->setTable("content");
@@ -69,24 +77,23 @@ return [
         },
         WorkerInterface::PARAM_TABLEID => 3,
         WorkerInterface::PARAM_ACTIONS_MAP => [
-            CommandInterface::COMMAND_FIND => ContentEntity::class,
-            PreCommandInterface::PREFIX_COMMAND_PRE . CommandInterface::COMMAND_FIND => ContentEntity::class,
-            CommandInterface::COMMAND_GET => ContentEntity::class,
-            CommandInterface::COMMAND_COUNT => ContentEntity::class,
-            CommandInterface::COMMAND_SAVE => ContentEntity::class,
-            CommandInterface::COMMAND_DELETE => ContentEntity::class,
-            CommandInterface::COMMAND_LOAD => ContentEntity::class,
-            CommandInterface::COMMAND_RESERVE => ContentEntity::class,
-            CommandInterface::COMMAND_GENERATE_ID => ContentEntity::class,
-            CommandInterface::COMMAND_WORKER_INFO => ContentEntity::class,
-            CreateSelectCommand::COMMAND_CREATE_SELECT => ContentEntity::class,
-            SelectCommand::COMMAND_SELECT => ContentEntity::class,
+            FindCommand::COMMAND_NAME => ContentEntity::class,
+            PreCommandInterface::PREFIX_COMMAND_PRE . FindCommand::COMMAND_NAME => ContentEntity::class,
+            GetCommand::COMMAND_NAME => ContentEntity::class,
+            CountCommand::COMMAND_NAME => ContentEntity::class,
+            SaveCommand::COMMAND_NAME => ContentEntity::class,
+            DeleteCommand::COMMAND_NAME => ContentEntity::class,
+            LoadCommand::COMMAND_NAME => ContentEntity::class,
+            ReserveCommand::COMMAND_NAME => ContentEntity::class,
+            GenerateIdCommand::COMMAND_NAME => ContentEntity::class,
+            CreateSelectCommand::COMMAND_NAME => ContentEntity::class,
+            SelectCommand::COMMAND_NAME => ContentEntity::class,
         ],
     ],
 
     "RelationEntitiesWorker" => [
         function (WorkersContainerInterface $s) {
-            $w = new \DeltaPhp\Operator\Worker\PostgresWorker();
+            $w = new \Akademiano\EntityOperator\Worker\PostgresWorker();
             $adapter = $s->getOperator()->getDependency("dbAdapter");
             $w->setAdapter($adapter);
             $w->setTable("relations");
@@ -95,61 +102,51 @@ return [
         },
         WorkerInterface::PARAM_TABLEID => 4,
         WorkerInterface::PARAM_ACTIONS_MAP => [
-            CommandInterface::COMMAND_FIND => RelationEntity::class,
-            PreCommandInterface::PREFIX_COMMAND_PRE . CommandInterface::COMMAND_FIND => RelationEntity::class,
-            CommandInterface::COMMAND_GET => RelationEntity::class,
-            CommandInterface::COMMAND_COUNT => RelationEntity::class,
-            CommandInterface::COMMAND_SAVE => RelationEntity::class,
-            CommandInterface::COMMAND_DELETE => RelationEntity::class,
-            CommandInterface::COMMAND_LOAD => RelationEntity::class,
-            CommandInterface::COMMAND_RESERVE => RelationEntity::class,
-            CommandInterface::COMMAND_GENERATE_ID => RelationEntity::class,
-            CommandInterface::COMMAND_WORKER_INFO => RelationEntity::class,
-            CreateSelectCommand::COMMAND_CREATE_SELECT => RelationEntity::class,
-            SelectCommand::COMMAND_SELECT => RelationEntity::class,
+            FindCommand::COMMAND_NAME => RelationEntity::class,
+            PreCommandInterface::PREFIX_COMMAND_PRE . FindCommand::COMMAND_NAME => RelationEntity::class,
+            GetCommand::COMMAND_NAME => RelationEntity::class,
+            CountCommand::COMMAND_NAME => RelationEntity::class,
+            SaveCommand::COMMAND_NAME => RelationEntity::class,
+            DeleteCommand::COMMAND_NAME => RelationEntity::class,
+            LoadCommand::COMMAND_NAME => RelationEntity::class,
+            ReserveCommand::COMMAND_NAME => RelationEntity::class,
+            WorkerInfoCommand::COMMAND_NAME => RelationEntity::class,
+            GenerateIdCommand::COMMAND_NAME => RelationEntity::class,
+            CreateSelectCommand::COMMAND_NAME => RelationEntity::class,
+            SelectCommand::COMMAND_NAME => RelationEntity::class,
         ],
     ],
 
     "TranslatorDataToObjectWorker" => [
         function (WorkersContainerInterface $s) {
-            $w = new \DeltaPhp\Operator\Worker\TranslatorDataToObjectWorker();
+            $w = new \Akademiano\EntityOperator\Worker\TranslatorDataToObjectWorker();
             return $w;
         },
         WorkerInterface::PARAM_ACTIONS_MAP => [
-            AfterCommandInterface::COMMAND_AFTER_FIND => null,
-            AfterCommandInterface::COMMAND_AFTER_GET => null,
+            AfterCommandInterface::PREFIX_COMMAND_AFTER . FindCommand::COMMAND_NAME => null,
+            AfterCommandInterface::PREFIX_COMMAND_AFTER . GetCommand::COMMAND_NAME => null,
         ],
     ],
 
     "SetEntityExistedWorker" => [
         function (WorkersContainerInterface $s) {
-            $w = new \DeltaPhp\Operator\Worker\SetEntityExistingWorker();
+            $w = new \Akademiano\EntityOperator\Worker\SetEntityExistingWorker();
             return $w;
         },
         WorkerInterface::PARAM_ACTIONS_MAP => [
-            AfterCommandInterface::COMMAND_AFTER_FIND => [null => 5],
-            AfterCommandInterface::COMMAND_AFTER_GET => [null => 5],
+            AfterCommandInterface::PREFIX_COMMAND_AFTER . FindCommand::COMMAND_NAME => [null => 5],
+            AfterCommandInterface::PREFIX_COMMAND_AFTER . GetCommand::COMMAND_NAME => [null => 5],
         ],
     ],
 
     "TranslatorObjectToDataWorker" => [
         function (WorkersContainerInterface $s) {
-            $w = new \DeltaPhp\Operator\Worker\TranslatorObjectToDataWorker();
+            $w = new \Akademiano\EntityOperator\Worker\TranslatorObjectToDataWorker();
             return $w;
         },
         WorkerInterface::PARAM_ACTIONS_MAP => [
-            \DeltaPhp\Operator\Worker\TranslatorObjectToDataWorker::COMMAND_BEFORE_SAVE => null,
-            \DeltaPhp\Operator\Worker\TranslatorObjectToDataWorker::COMMAND_BEFORE_DELETE => null,
-        ],
-    ],
-
-    "IntIdToUuidObjectWorker" => [
-        function (WorkersContainerInterface $s) {
-            $w = new \DeltaPhp\Operator\Worker\IntIdToUuidObjectWorker();
-            return $w;
-        },
-        WorkerInterface::PARAM_ACTIONS_MAP => [
-            \DeltaPhp\Operator\Worker\IntIdToUuidObjectWorker::COMMAND_AFTER_GENERATE_ID => null,
+            \Akademiano\EntityOperator\Worker\TranslatorObjectToDataWorker::COMMAND_BEFORE_SAVE => null,
+            \Akademiano\EntityOperator\Worker\TranslatorObjectToDataWorker::COMMAND_BEFORE_DELETE => null,
         ],
     ],
 ];

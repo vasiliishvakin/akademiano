@@ -1,12 +1,14 @@
 <?php
 
 
-namespace DeltaPhp\Operator\Command;
+namespace Akademiano\EntityOperator\Command;
+
+use Akademiano\Operator\Command\Command;
 
 
 class CountCommand extends Command
 {
-    protected $name = self::COMMAND_COUNT;
+    const COMMAND_NAME = "count";
 
     public function __construct(array $params = null, $class = null)
     {

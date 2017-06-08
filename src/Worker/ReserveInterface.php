@@ -1,10 +1,11 @@
 <?php
 
 
-namespace DeltaPhp\Operator\Worker;
+namespace Akademiano\EntityOperator\Worker;
 
 
-use DeltaPhp\Operator\Entity\EntityInterface;
+use Akademiano\Entity\EntityInterface;
+use Akademiano\Operator\Worker\WorkerInterface;
 
 interface ReserveInterface extends WorkerInterface
 {

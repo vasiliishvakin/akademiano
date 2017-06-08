@@ -1,19 +1,22 @@
 <?php
 
 
-namespace DeltaPhp\Operator\Worker;
+namespace Akademiano\EntityOperator\Worker;
 
 
-use DeltaPhp\Operator\Entity\EntityInterface;
-use DeltaUtils\Object\Collection;
-use DeltaPhp\Operator\Command\AfterCommandInterface;
-use DeltaPhp\Operator\Command\CommandInterface;
-use DeltaPhp\Operator\Command\CreateCommand;
-use DeltaPhp\Operator\Command\EntityOperatedCommandInterface;
-use DeltaPhp\Operator\Command\LoadCommand;
-use DeltaPhp\Operator\Worker\Exception\NotSupportedCommand;
-use DeltaPhp\Operator\DelegatingInterface;
-use DeltaPhp\Operator\DelegatingTrait;
+use Akademiano\Entity\EntityInterface;
+use Akademiano\EntityOperator\Command\FindCommand;
+use Akademiano\EntityOperator\Command\GetCommand;
+use Akademiano\Utils\Object\Collection;
+use Akademiano\Operator\Command\AfterCommandInterface;
+use Akademiano\Operator\Command\CommandInterface;
+use Akademiano\EntityOperator\Command\CreateCommand;
+use Akademiano\EntityOperator\Command\EntityOperatedCommandInterface;
+use Akademiano\EntityOperator\Command\LoadCommand;
+use Akademiano\Operator\Worker\Exception\NotSupportedCommand;
+use Akademiano\Operator\DelegatingInterface;
+use Akademiano\Operator\DelegatingTrait;
+use Akademiano\Operator\Worker\WorkerMetaMapPropertiesTrait;
 
 class TranslatorDataToObjectWorker implements WorkerInterface, DelegatingInterface
 {
@@ -23,8 +26,8 @@ class TranslatorDataToObjectWorker implements WorkerInterface, DelegatingInterfa
     public function execute(CommandInterface $command)
     {
         switch ($command->getName()) {
-            case AfterCommandInterface::COMMAND_AFTER_FIND :
-            case AfterCommandInterface::COMMAND_AFTER_GET:
+            case AfterCommandInterface::PREFIX_COMMAND_AFTER . FindCommand::COMMAND_NAME :
+            case AfterCommandInterface::PREFIX_COMMAND_AFTER . GetCommand::COMMAND_NAME:
                 /** @var AfterCommandInterface $command */
                 $result = $this->translate($command);
                 $command->addResult($result);

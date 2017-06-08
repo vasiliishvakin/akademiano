@@ -1,27 +1,37 @@
 <?php
 
 
-namespace DeltaPhp\Operator\Worker;
+namespace Akademiano\EntityOperator\Worker;
 
 
-use DeltaDb\Adapter\PgsqlAdapter;
-use DeltaDb\D2QL\Criteria;
-use DeltaDb\D2QL\Select;
-use DeltaDb\D2QL\Where;
-use DeltaPhp\Operator\Command\Command;
-use DeltaPhp\Operator\Command\CreateCriteriaCommand;
-use DeltaPhp\Operator\Command\CreateSelectCommand;
-use DeltaPhp\Operator\Command\PreCommand;
-use DeltaPhp\Operator\Command\PreCommandInterface;
-use DeltaPhp\Operator\Command\SelectCommand;
-use DeltaUtils\ArrayUtils;
-use DeltaUtils\Object\Collection;
-use DeltaUtils\Object\Prototype\StringableInterface;
-use DeltaPhp\Operator\Command\CommandInterface;
-use DeltaPhp\Operator\Command\GenerateIdCommandInterface;
-use DeltaPhp\Operator\Entity\EntityInterface;
-use DeltaPhp\Operator\LoaderInterface;
-use DeltaUtils\StringUtils;
+use Akademiano\Db\Adapter\PgsqlAdapter;
+use Akademiano\Db\Adapter\D2QL\Criteria;
+use Akademiano\Db\Adapter\D2QL\Select;
+use Akademiano\EntityOperator\Command\MergeCommand;
+use Akademiano\EntityOperator\Command\CountCommand;
+use Akademiano\EntityOperator\Command\DeleteCommand;
+use Akademiano\EntityOperator\Command\FindCommand;
+use Akademiano\EntityOperator\Command\GenerateIdCommand;
+use Akademiano\EntityOperator\Command\GetCommand;
+use Akademiano\EntityOperator\Command\LoadCommand;
+use Akademiano\EntityOperator\Command\ReserveCommand;
+use Akademiano\EntityOperator\Command\SaveCommand;
+use Akademiano\EntityOperator\Command\CreateCriteriaCommand;
+use Akademiano\EntityOperator\Command\CreateSelectCommand;
+use Akademiano\Operator\Command\PreCommand;
+use Akademiano\Operator\Command\PreCommandInterface;
+use Akademiano\EntityOperator\Command\SelectCommand;
+use Akademiano\Operator\Command\WorkerInfoCommand;
+use Akademiano\Utils\Object\Collection;
+use Akademiano\Utils\Object\Prototype\StringableInterface;
+use Akademiano\Operator\Command\CommandInterface;
+use Akademiano\Entity\EntityInterface;
+use Akademiano\EntityOperator\LoaderInterface;
+use Akademiano\Utils\StringUtils;
+use Akademiano\Config\ConfigurableInterface;
+
+use Akademiano\Config\ConfigurableTrait;
+use Akademiano\Operator\Worker\WorkerMetaMapPropertiesTrait;
 
 
 class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperInterface, FinderInterface, LoaderInterface, ReserveInterface, GenerateIdWorkerInterface
@@ -50,19 +60,19 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
     protected static function getDefaultMapping()
     {
         return [
-            CommandInterface::COMMAND_FIND => null,
-            PreCommandInterface::PREFIX_COMMAND_PRE . CommandInterface::COMMAND_FIND => null,
-            CommandInterface::COMMAND_GET => null,
-            CommandInterface::COMMAND_COUNT => null,
-            CommandInterface::COMMAND_SAVE => null,
-            CommandInterface::COMMAND_DELETE => null,
-            CommandInterface::COMMAND_LOAD => null,
-            CommandInterface::COMMAND_RESERVE => null,
-            CommandInterface::COMMAND_MERGE => null,
-            CommandInterface::COMMAND_GENERATE_ID => null,
-            CommandInterface::COMMAND_WORKER_INFO => null,
-            CreateSelectCommand::COMMAND_CREATE_SELECT => null,
-            SelectCommand::COMMAND_SELECT => null,
+            FindCommand::COMMAND_NAME => null,
+            PreCommandInterface::PREFIX_COMMAND_PRE . FindCommand::COMMAND_NAME => null,
+            GetCommand::COMMAND_NAME => null,
+            CountCommand::COMMAND_NAME => null,
+            SaveCommand::COMMAND_NAME => null,
+            DeleteCommand::COMMAND_NAME => null,
+            LoadCommand::COMMAND_NAME => null,
+            ReserveCommand::COMMAND_NAME => null,
+            MergeCommand::COMMAND_NAME => null,
+            GenerateIdCommand::COMMAND_NAME => null,
+            WorkerInfoCommand::COMMAND_NAME => null,
+            CreateSelectCommand::COMMAND_NAME => null,
+            SelectCommand::COMMAND_NAME => null,
         ];
     }
 
@@ -159,48 +169,48 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
     public function execute(CommandInterface $command)
     {
         switch ($command->getName()) {
-            case CommandInterface::COMMAND_FIND : {
+            case FindCommand::COMMAND_NAME : {
                 $criteria = $command->getParams("criteria", []);
                 $limit = $command->getParams("limit", null);
                 $offset = $command->getParams("offset", null);
                 $orderBy = $command->getParams("orderBy", null);
                 return $this->find($criteria, $limit, $offset, $orderBy);
             }
-            case CommandInterface::COMMAND_GET: {
+            case GetCommand::COMMAND_NAME: {
                 $id = $command->getParams("id");
                 return $this->get($id);
             }
-            case CommandInterface::COMMAND_COUNT: {
+            case CountCommand::COMMAND_NAME: {
                 $criteria = $command->getParams("criteria", []);
                 return $this->count($criteria);
             }
-            case CommandInterface::COMMAND_SAVE: {
+            case SaveCommand::COMMAND_NAME: {
                 /** @var EntityInterface $entity */
                 $entity = $command->getParams("entity");
                 $isExisting = $entity->isExistingEntity();
                 $data = $command->getParams("data");
                 return $this->save($data, $isExisting);
             }
-            case CommandInterface::COMMAND_DELETE: {
+            case DeleteCommand::COMMAND_NAME: {
                 $id = $command->getParams("id");
                 return $this->delete($id);
             }
-            case CommandInterface::COMMAND_LOAD: {
+            case LoadCommand::COMMAND_NAME: {
                 return $this->load($command->getParams("entity"), $command->getParams("data"));
             }
-            case CommandInterface::COMMAND_RESERVE: {
+            case ReserveCommand::COMMAND_NAME: {
                 return $this->reserve($command->getParams("entity"));
             }
-            case CommandInterface::COMMAND_MERGE: {
+            case MergeCommand::COMMAND_NAME: {
                 $entityA = $command->getParams("entityA");
                 $entityB = $command->getParams("entityB");
                 return $this->merge($entityA, $entityB);
             }
 
-            case GenerateIdCommandInterface::COMMAND_GENERATE_ID : {
+            case GenerateIdCommand::COMMAND_NAME : {
                 return $this->genId($command->getParams("tableId"));
             }
-            case PreCommandInterface::PREFIX_COMMAND_PRE . CommandInterface::COMMAND_FIND: {
+            case PreCommandInterface::PREFIX_COMMAND_PRE . FindCommand::COMMAND_NAME: {
                 /** @var PreCommand $command */
                 $criteria = $command->getParams("criteria");
                 if (null !== $criteria && (!$criteria instanceof Criteria)) {
@@ -209,18 +219,18 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
                 }
                 break;
             }
-            case CommandInterface::COMMAND_WORKER_INFO: {
+            case WorkerInfoCommand::COMMAND_NAME: {
                 $attribute = $command->getParams("attribute");
                 return $this->getAttribute($attribute, $command->getParams());
                 break;
             }
-            case CreateCriteriaCommand::COMMAND_CREATE_CRITERIA: {
+            case CreateCriteriaCommand::COMMAND_NAME: {
                 return $this->createCriteria();
             }
-            case CreateSelectCommand::COMMAND_CREATE_SELECT: {
+            case CreateSelectCommand::COMMAND_NAME: {
                 return $this->createSelect();
             }
-            case SelectCommand::COMMAND_SELECT : {
+            case SelectCommand::COMMAND_NAME : {
                 return $this->select($command->getParams("select"));
             }
             default:
@@ -279,7 +289,7 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
         return (integer)$data;
     }
 
-    protected function countByArray(array  $criteria = null)
+    protected function countByArray(array $criteria = null)
     {
         $adapter = $this->getAdapter();
         $table = $this->getTable();

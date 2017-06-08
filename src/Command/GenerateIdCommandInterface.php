@@ -1,10 +1,12 @@
 <?php
 
 
-namespace DeltaPhp\Operator\Command;
+namespace Akademiano\EntityOperator\Command;
+
+use Akademiano\Operator\Command\CommandInterface;
 
 
-use DeltaPhp\Operator\Entity\Entity;
+use Akademiano\Entity\Entity;
 
 interface GenerateIdCommandInterface extends CommandInterface
 {

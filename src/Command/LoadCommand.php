@@ -1,23 +1,26 @@
 <?php
 
 
-namespace DeltaPhp\Operator\Command;
+namespace Akademiano\EntityOperator\Command;
 
+use Akademiano\Entity\Entity;
+use Akademiano\Operator\Command\Command;
+use Akademiano\Entity\EntityInterface;
 
-use DeltaPhp\Operator\Entity\EntityInterface;
-
-class LoadCommand extends Command implements CommandInterface
+class LoadCommand extends Command
 {
+    const COMMAND_NAME = "load";
+
     public function __construct(EntityInterface $entity, array $data)
     {
-        parent::__construct(["entity" =>$entity, "data" => $data], null, self::COMMAND_LOAD);
+        parent::__construct(["entity" =>$entity, "data" => $data], null);
     }
 
     public function getClass()
     {
         if (null === $this->class) {
             $entity = $this->getParams("entity");
-            $this->class = (null !== $entity && is_object($entity)) ? get_class($entity) : "DeltaPhp\Operator\\Entity\\Entity";
+            $this->class = (null !== $entity && is_object($entity)) ? get_class($entity) : Entity::class;
         }
         return $this->class;
     }

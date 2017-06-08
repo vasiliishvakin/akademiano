@@ -1,21 +1,18 @@
 <?php
 
 
-namespace DeltaPhp\Operator\Command;
+namespace Akademiano\EntityOperator\Command;
 
-use DeltaDb\D2QL\Select;
+use Akademiano\Operator\Command\Command;
+use Akademiano\Db\Adapter\D2QL\Select;
 
-class SelectCommand extends Command implements CommandInterface
+class SelectCommand extends Command
 {
-    const COMMAND_SELECT = "select";
-
-    protected $name = self::COMMAND_SELECT;
-
+    const COMMAND_NAME = "select";
 
     public function __construct($class, Select $select, array $params = [])
     {
-        $this->setClass($class);
         $params["select"] = $select;
-        $this->params = $params;
+        parent::__construct($params, $class);
     }
 }

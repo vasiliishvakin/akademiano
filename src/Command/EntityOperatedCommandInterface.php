@@ -1,12 +1,12 @@
 <?php
 
 
-namespace DeltaPhp\Operator\Command;
+namespace Akademiano\EntityOperator\Command;
 
+use Akademiano\Operator\Command\CommandInterface;
+use Akademiano\Entity\Entity;
 
-use DeltaPhp\Operator\Entity\Entity;
-
-interface EntityOperatedCommandInterface
+interface EntityOperatedCommandInterface extends CommandInterface
 {
     const DEFAULT_CLASS = Entity::class;
 }

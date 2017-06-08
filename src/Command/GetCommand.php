@@ -1,17 +1,19 @@
 <?php
 
 
-namespace DeltaPhp\Operator\Command;
+namespace Akademiano\EntityOperator\Command;
 
-
-use DeltaPhp\Operator\Entity\Entity;
+use Akademiano\Operator\Command\Command;
+use Akademiano\Entity\Entity;
 
 class GetCommand extends Command
 {
+    const COMMAND_NAME = "get";
+
     public function __construct($id, $class = Entity::class, $params = [])
     {
         $params["id"] = $id;
-        parent::__construct($params, $class, self::COMMAND_GET);
+        parent::__construct($params, $class);
     }
 
 }
