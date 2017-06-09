@@ -6,7 +6,7 @@ namespace Akademiano\Operator\Command;
 
 interface CommandInterface
 {
-    const COMMAND_WORKER_INFO = "worker.info";
+    const COMMAND_UNDEFINED = "undefined";
 
     public function getName();
 

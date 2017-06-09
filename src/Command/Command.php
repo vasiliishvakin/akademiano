@@ -8,6 +8,8 @@ use Akademiano\Utils\ArrayTools;
 
 class Command implements CommandInterface
 {
+    const COMMAND_NAME = CommandInterface::COMMAND_UNDEFINED;
+
     protected $name;
     protected $class;
     /** @var  array|null */
@@ -21,7 +23,7 @@ class Command implements CommandInterface
      */
     public function __construct(array $params = [], $class = null, $name = null)
     {
-        if ($name) $this->name = $name;
+        $this->name = $name ?  $name : static::COMMAND_NAME;
         if ($class) $this->class = $class;
         $this->setParams($params);
     }
