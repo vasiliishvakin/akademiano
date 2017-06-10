@@ -1,22 +1,31 @@
 {
-  "name": "deltaphp/uuid",
-  "description": "uuid module",
-  "license": "MIT",
+  "name": "akademiano/uuid",
+  "description": "uuid",
+  "license": "Apache-2.0",
   "minimum-stability": "dev",
   "prefer-stable": true,
   "authors": [
     {
-      "name": "orbisnull",
-      "email": "zen4dev@gmail.com"
+      "name": "Vasiliy Shvakin",
+      "email": "mrdatamapper@gmail.com"
     }
   ],
   "autoload": {
-    "psr-0": {
-      "UUID": "src/"
+    "psr-4": {
+      "Akademiano\\UUID\\": "src/"
     }
   },
   "require": {
-    "deltaphp/deltadb": "~1.3",
-    "deltaphp/deltacore": "^2.0"
+    "php": "^5.6 || ^7.1",
+    "akademiano/utils": "^1.0.0-beta.6",
+    "akademiano/config": "^1.0.0-beta.6",
+    "akademiano/operator": "^1.0.0-beta.2",
+    "akademiano/entity-operator": "^1.0.0-beta.1",
+    "nesbot/carbon": "^1.22"
+  },
+  "require-dev": {
+    "codeception/codeception": "^2.2.10",
+    "satooshi/php-coveralls": "^1.0.1",
+    "mockery/mockery": "^0.9.9"
   }
 }

@@ -1,19 +1,17 @@
 <?php
 
-namespace UUID\Model;
+namespace Akademiano\UUID;
 
-use DeltaUtils\Object\Prototype\StringableInterface;
+use Carbon\Carbon;
 
-class UuidComplexShortTables implements UuidComplexInterface
+class UuidComplexShort implements UuidComplexInterface
 {
-    protected $epoch = 1451317149374;
-
     protected $value;
     /** @var  \DateTime */
     protected $date;
     protected $shard;
-    protected $table;
     protected $id;
+    protected $epoch = 1451317149374;
 
 
     public function __construct($value = null, $epoch = null)
@@ -42,7 +40,6 @@ class UuidComplexShortTables implements UuidComplexInterface
         $this->date = null;
         $this->shard = null;
         $this->id = null;
-        $this->table = null;
         $this->value = (integer)$value;
     }
 
@@ -63,7 +60,7 @@ class UuidComplexShortTables implements UuidComplexInterface
     }
 
     /**
-     * @return \DateTime
+     * @return Carbon
      */
     public function getDate()
     {
@@ -72,9 +69,7 @@ class UuidComplexShortTables implements UuidComplexInterface
             $uuid = $this->getValue();
             $timestamp = $uuid >> 23;
             $timestamp = ($timestamp + $epoch) / 1000;
-            $date = new \DateTime();
-            $date->setTimezone(new \DateTimeZone('UTC'));
-            $date->setTimestamp($timestamp);
+            $date = Carbon::createFromTimestampUTC($timestamp);
             $this->date = $date;
         }
         return $this->date;
@@ -85,27 +80,19 @@ class UuidComplexShortTables implements UuidComplexInterface
      */
     public function getShard()
     {
-        if (null === $this->shard) {
-            $uuid = $this->getValue();
-            $this->shard = (($uuid << 41) >> 41) >> 19;
-        }
         return $this->shard;
     }
 
-    public function getTable()
-    {
-        if (null === $this->table) {
-            $uuid = $this->getValue();
-            $this->table = (($uuid << 45) >> 45) >> 10;
-        }
-        return $this->table;
-    }
-
+    /**
+     * @return mixed
+     */
     public function getId()
     {
         if (null === $this->id) {
             $uuid = $this->getValue();
-            $this->id = ($uuid << 54) >> 54;
+            $id = $uuid << 54;
+            $id = $id >> 54;
+            $this->id = $id;
         }
         return $this->id;
     }
@@ -115,7 +102,7 @@ class UuidComplexShortTables implements UuidComplexInterface
         return dechex($this->getValue());
     }
 
-    function __toString()
+    public function __toString()
     {
         return (string)$this->getValue();
     }

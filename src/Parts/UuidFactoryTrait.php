@@ -1,21 +1,15 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: orbisnull
- * Date: 10.01.16
- * Time: 18:26
- */
 
-namespace UUID\Model\Parts;
+namespace Akademiano\UUID\Parts;
 
 
 trait UuidFactoryTrait
 {
-    /** @var  \UUID\Model\UuidFactory */
+    /** @var  \Akademiano\UUID\UuidFactory */
     protected $uuidFactory;
 
     /**
-     * @return \UUID\Model\UuidFactory
+     * @return \Akademiano\UUID\UuidFactory
      */
     public function getUuidFactory()
     {
@@ -23,7 +17,7 @@ trait UuidFactoryTrait
     }
 
     /**
-     * @param \UUID\Model\UuidFactory $uuidFactory
+     * @param \Akademiano\UUID\UuidFactory $uuidFactory
      */
     public function setUuidFactory($uuidFactory)
     {

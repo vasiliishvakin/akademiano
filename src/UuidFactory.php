@@ -1,12 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: orbisnull
- * Date: 10.01.16
- * Time: 17:36
- */
 
-namespace UUID\Model;
+namespace Akademiano\UUID;
 
 
 class UuidFactory
@@ -54,7 +48,6 @@ class UuidFactory
                 default:
                     throw new \InvalidArgumentException();
             }
-
         }
         return $this->uuids[$key];
     }

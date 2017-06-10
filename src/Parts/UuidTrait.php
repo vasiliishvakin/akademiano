@@ -1,16 +1,16 @@
 <?php
 
-namespace UUID\Model\Parts;
+namespace Akademiano\UUID\Parts;
 
-use UUID\Model\UuidComplexInterface;
+use Akademiano\UUID\UuidComplexInterface;
 
 trait UuidTrait
 {
-    /** @var  \UUID\Model\UuidComplexShort */
+    /** @var  \Akademiano\UUID\UuidComplexShort */
     protected $uuid;
 
     /**
-     * @return \UUID\Model\UuidFactory
+     * @return \Akademiano\UUID\UuidFactory
      */
     abstract public function getUuidFactory();
 

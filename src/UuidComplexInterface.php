@@ -1,15 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: orbisnull
- * Date: 10.01.16
- * Time: 16:23
- */
 
-namespace UUID\Model;
+namespace Akademiano\UUID;
 
 
-use DeltaUtils\Object\Prototype\StringableInterface;
+use Akademiano\Utils\Object\Prototype\StringableInterface;
 
 interface UuidComplexInterface extends StringableInterface
 {
