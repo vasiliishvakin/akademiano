@@ -9,7 +9,7 @@ use Akademiano\Operator\Command\CommandInterface;
 use Akademiano\Operator\Worker\WorkerMetaMapPropertiesTrait;
 use Akademiano\Operator\Command\AfterCommandInterface;
 use Akademiano\Entity\EntityInterface;
-use Akademiano\Operator\Worker\Exception\NotSupportedCommand;
+use Akademiano\Operator\Worker\Exception\NotSupportedCommandException;
 use Akademiano\Utils\Object\Collection;
 
 class SetEntityExistingWorker implements WorkerInterface
@@ -26,7 +26,7 @@ class SetEntityExistingWorker implements WorkerInterface
                 $command->addResult($result);
                 return $result;
             default:
-                throw new NotSupportedCommand($command);
+                throw new NotSupportedCommandException($command);
         }
     }
 

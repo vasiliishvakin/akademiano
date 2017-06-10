@@ -13,7 +13,7 @@ use Akademiano\Operator\Command\CommandInterface;
 use Akademiano\EntityOperator\Command\CreateCommand;
 use Akademiano\EntityOperator\Command\EntityOperatedCommandInterface;
 use Akademiano\EntityOperator\Command\LoadCommand;
-use Akademiano\Operator\Worker\Exception\NotSupportedCommand;
+use Akademiano\Operator\Worker\Exception\NotSupportedCommandException;
 use Akademiano\Operator\DelegatingInterface;
 use Akademiano\Operator\DelegatingTrait;
 use Akademiano\Operator\Worker\WorkerMetaMapPropertiesTrait;
@@ -33,7 +33,7 @@ class TranslatorDataToObjectWorker implements WorkerInterface, DelegatingInterfa
                 $command->addResult($result);
                 return $result;
             default:
-                throw new NotSupportedCommand($command);
+                throw new NotSupportedCommandException($command);
         }
     }
 

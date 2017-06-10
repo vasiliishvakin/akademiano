@@ -11,7 +11,7 @@ use Akademiano\Entity\EntityInterface;
 use Akademiano\Operator\DelegatingTrait;
 use Akademiano\Operator\Command\CommandInterface;
 use Akademiano\Operator\DelegatingInterface;
-use Akademiano\Operator\Worker\Exception\NotSupportedCommand;
+use Akademiano\Operator\Worker\Exception\NotSupportedCommandException;
 use Akademiano\Operator\Worker\WorkerMetaMapPropertiesTrait;
 
 class TranslatorObjectToDataWorker implements WorkerInterface, DelegatingInterface
@@ -33,7 +33,7 @@ class TranslatorObjectToDataWorker implements WorkerInterface, DelegatingInterfa
                 $result = ["id" => $this->getId($command)];
                 break;
             default:
-                throw new NotSupportedCommand($command);
+                throw new NotSupportedCommandException($command);
         }
         $command->addParams($result);
         return $result;
