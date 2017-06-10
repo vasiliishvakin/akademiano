@@ -7,7 +7,7 @@ namespace Akademiano\Operator\Worker\Exception;
 use Akademiano\Operator\Command\CommandInterface;
 use Exception;
 
-class NotSupportedCommand extends \InvalidArgumentException
+class NotSupportedCommandException extends \InvalidArgumentException
 {
     public function __construct(CommandInterface $command, $code = 0, Exception $previous = null)
     {
