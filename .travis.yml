@@ -1,0 +1,25 @@
+language: php
+
+php:
+  - 5.6
+  - 7.1
+
+matrix:
+  allow_failures:
+    - php: 7.1
+
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache
+
+install:
+  - composer self-update
+  - composer install --prefer-dist
+  - ulimit -c unlimited || true
+
+script:
+  - php vendor/bin/codecept run unit  --coverage --coverage-xml
+
+after_success:
+  - sh -c 'if [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then php vendor/bin/coveralls -v; fi;'
