@@ -1,9 +1,10 @@
 <?php
 
-namespace Akademiano\Acl\Model;
+namespace Akademiano\Acl;
 
-use Akademiano\Acl\Model\Adapter\AdapterInterface;
-use Akademiano\Acl\Model\Adapter\DenyAdapter;
+use Akademiano\Acl\Adapter\AdapterInterface;
+use Akademiano\Acl\Adapter\DenyAdapter;
+use Akademiano\HttpWarp\Request;
 use Akademiano\User\AuthInterface;
 use Akademiano\Entity\UserInterface;
 use Akademiano\Entity\GroupInterface;
@@ -16,6 +17,9 @@ class AclManager implements AccessCheckInterface
 
     /** @var  AdapterInterface */
     protected $aclAdapter;
+
+    /** @var  Request */
+    protected $request;
 
     /**
      * @param AuthInterface $custodian
@@ -52,9 +56,33 @@ class AclManager implements AccessCheckInterface
         $this->aclAdapter = $aclAdapter;
     }
 
-    public function accessCheck($resource, GroupInterface $group, UserInterface $user = null, UserInterface $owner = null)
+    /**
+     * @return Request
+     */
+    public function getRequest()
     {
-        $resource = (string)$resource;
+        return $this->request;
+    }
+
+    /**
+     * @param Request $request
+     */
+    public function setRequest($request)
+    {
+        $this->request = $request;
+    }
+
+    public function getResource()
+    {
+        $resource = (string)$this->getRequest()->getUrl()->getPath();
+        return $resource;
+    }
+
+    public function accessCheck($resource = null, GroupInterface $group, UserInterface $user = null, UserInterface $owner = null)
+    {
+        if (null === $resource) {
+            $resource = $this->getResource();
+        }
         if (is_null($user)) {
             $user = $this->getCustodian()->getCurrentUser();
         }

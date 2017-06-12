@@ -1,16 +1,16 @@
 <?php
 
-namespace Akademiano\Acl\Model\Adapter;
+namespace Akademiano\Acl\Adapter;
 
 
 use Akademiano\Entity\GroupInterface;
 use Akademiano\Entity\UserInterface;
 
-class AllowAdapter implements AdapterInterface
+class DenyAdapter implements AdapterInterface
 {
     public function accessCheck($resource, GroupInterface $group, UserInterface $user = null, UserInterface $owner = null)
     {
-        return true;
+        return false;
     }
 
 }

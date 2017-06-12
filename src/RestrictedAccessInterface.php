@@ -4,7 +4,7 @@
 namespace Akademiano\Acl;
 
 
-interface RestrictedInterface
+interface RestrictedAccessInterface
 {
     public function accessCheck();
 }

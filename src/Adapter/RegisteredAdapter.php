@@ -1,6 +1,6 @@
 <?php
 
-namespace Akademiano\Acl\Model\Adapter;
+namespace Akademiano\Acl\Adapter;
 
 
 use Akademiano\User\GuestGroupInterface;

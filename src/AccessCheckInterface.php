@@ -1,6 +1,6 @@
 <?php
 
-namespace Akademiano\Acl\Model;
+namespace Akademiano\Acl;
 
 
 use Akademiano\Entity\GroupInterface;

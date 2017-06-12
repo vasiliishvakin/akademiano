@@ -1,9 +1,9 @@
 <?php
 
-namespace Akademiano\Acl\Model\Adapter;
+namespace Akademiano\Acl\Adapter;
 
 
-use Akademiano\Acl\Model\XAclConf\File;
+use Akademiano\Acl\XAclConf\File;
 use Akademiano\Utils\ArrayTools;
 use Akademiano\Entity\GroupInterface;
 use Akademiano\Entity\UserInterface;

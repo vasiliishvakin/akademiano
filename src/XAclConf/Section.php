@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Akademiano\Acl\Model\XAclConf;
+namespace Akademiano\Acl\XAclConf;
 
 
 use Akademiano\Utils\Object\Prototype\ArrayableInterface;
