@@ -7,14 +7,17 @@ namespace Acl\Controller;
 
 
 use DeltaCore\AbstractController;
+use DeltaCore\ActionsAccessAllowedInterface;
+use DeltaCore\ActionsAccessAllowedTrait;
 
-class ErrorController extends AbstractController
+class ErrorController extends AbstractController implements ActionsAccessAllowedInterface
 {
-    public function checkAccess()
-    {
-        return true;
-    }
+    use ActionsAccessAllowedTrait;
 
+    public function __construct()
+    {
+        $this->setActionsAccessAllowed(["accessDenied"]);
+    }
 
     public function accessDeniedAction()
     {

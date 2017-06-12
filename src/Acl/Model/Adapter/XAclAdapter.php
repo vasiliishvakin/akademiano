@@ -6,6 +6,7 @@
 namespace Acl\Model\Adapter;
 
 
+use Acl\Model\XAclConf\File;
 use DeltaUtils\ArrayUtils;
 use DeltaUtils\StringUtils;
 
@@ -22,20 +23,19 @@ class XAclAdapter extends AbstractAdapter
                 $fileName .= $file . filemtime($file);
             }
         }
-        $fileName = "acl_" . md5($fileName);
+        $fileName = "acl-xacl-" . md5($fileName);
         $filePath = DATA_DIR . "/acl/" . $fileName;
         if (!file_exists(DATA_DIR . "/acl/")) {
             mkdir(DATA_DIR . "/acl/", 0750, true);
         }
         if (!file_exists($filePath)) {
-            $acl = "";
-            foreach($files as $file) {
-                if (is_readable($file)) {
-                    $fileData = file_get_contents($file);
-                    $acl .= "\n" . $fileData;
-                }
+            $fullAcl = new File();
+            foreach ($files as $file) {
+                $confFile = new File($file);
+                $fullAcl->merge($confFile);
             }
-            file_put_contents($filePath, $acl . "\n");
+            $fullAcl->optimize();
+            file_put_contents($filePath, (string)$fullAcl . "\n");
         }
         return $filePath;
     }
@@ -97,5 +97,4 @@ class XAclAdapter extends AbstractAdapter
 
         return $output === "Access allow";
     }
-
-} 
+}

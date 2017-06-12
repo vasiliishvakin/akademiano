@@ -1,37 +1,41 @@
 <?php
-/**
- * User: Vasiliy Shvakin (orbisnull) zen4dev@gmail.com
- */
 
 namespace Acl\Model\Parts;
 
 
 trait AclController
 {
-    public function isAllow($resource = null, User $user= null)
-    {
-        $app = $this->getApplication();
-        /** @var AclManager $aclManager */
-        $aclManager = $app['aclManager'];
-        if (!$resource) {
-            /** @var \HttpWarp\Request $request */
-            $request = $app['request'];
-            $resource = (string) $request->getUrl()->getPath();
-        }
-        if (!$user) {
-            $user = $this->getCurrentUser();
-        }
-        return $aclManager->isAllow($resource, $user);
-    }
+    use AccessCheckTrait;
 
     /**
-     * @return User|null
+     * @return \DeltaCore\Application
      */
-    public function getCurrentUser()
+    abstract public function getApplication();
+
+    /**
+     * @return \Acl\Model\AclManager
+     */
+    public function getAclManager()
     {
-        $app = $this->getApplication();
-        /** @var UserManager $userManager */
-        $userManager = $app['userManager'];
-        return $userManager->getCurrentUser();
+        if (null === $this->aclManager) {
+            $this->aclManager = $this->getApplication()["aclManager"];
+        }
+        return $this->aclManager;
     }
-} 
+
+    public function getRequest()
+    {
+        if (null === $this->request) {
+            $this->request = $this->getApplication()["request"];
+        }
+        return $this->request;
+    }
+
+    public function getUserManager()
+    {
+        if (null === $this->userManager) {
+            $this->userManager = $this->getApplication()["userManager"];
+        }
+        return $this->userManager;
+    }
+}

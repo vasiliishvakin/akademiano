@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: orbisnull
- * Date: 04.11.2015
- * Time: 12:15
- */
 
 namespace Acl\Model\Adapter;
 
