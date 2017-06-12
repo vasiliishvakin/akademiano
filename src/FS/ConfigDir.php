@@ -122,7 +122,7 @@ class ConfigDir
         $this->files[$file->getId()] = $file;
     }
 
-    protected function findFile($configName, $type)
+    public function findFile($configName, $type, $ext = ConfigFile::EXT)
     {
         $directory = $this->getPath();
         if (!is_dir($directory)) {
@@ -132,7 +132,7 @@ class ConfigDir
         if ($prefix !== "") {
             $prefix = $prefix . ".";
         }
-        $filePath =  $prefix . $configName . "." . ConfigFile::EXT;
+        $filePath =  $prefix . $configName . "." . $ext;
         if ($filePath === FileSystem::sanitize($filePath, $directory)) {
             $filePath = $directory . DIRECTORY_SEPARATOR . $filePath;
         } else {
@@ -143,15 +143,16 @@ class ConfigDir
 
     /**
      * @param $configName
+     * @param string $ext
      * @return ConfigFile[]|array
      */
-    public function getFiles($configName)
+    public function getFiles($configName, $ext = ConfigFile::EXT)
     {
         if (!isset($this->files[$configName])) {
             $types = $this->getTypes();
             $files = [];
             foreach ($types as $type) {
-                $file = $this->findFile($configName, $type);
+                $file = $this->findFile($configName, $type, $ext);
                 if ($file) {
                     $files[$type] = new ConfigFile($file, $type);
                 }

@@ -4,6 +4,7 @@ namespace Akademiano\Config;
 
 
 use Akademiano\Config\FS\ConfigDir;
+use Akademiano\Config\FS\ConfigFile;
 use Akademiano\Utils\ArrayTools;
 use Akademiano\Utils\DIContainerIncludeInterface;
 use Akademiano\Utils\Exception\PathRestrictException;
@@ -122,32 +123,53 @@ class ConfigLoader implements DIContainerIncludeInterface
      * @param $level
      * @return ConfigDir[]
      */
-    public function getConfigDirs($level)
+    public function getConfigDirs($level = null)
     {
-        if (!isset($this->configDirs[$level])) {
-            $this->configDirs[$level] = [];
+
+        if (null === $level) {
+            $levels = $this->getLevels();
+        } else {
+            $levels = (array)$level;
         }
-        if (!empty($this->paths[$level])) {
-            foreach ($this->paths[$level] as $path) {
-                if (isset($this->params[$level][$path])) {
-                    $params = $this->params[$level][$path];
-                    unset($this->params[$level][$path]);
-                } else {
-                    $params = [];
-                }
-                if (is_dir($path) && is_readable($path)) {
-                    if (!FileSystem::inDir($this->getRootDir(), $path)) {
-                        throw new PathRestrictException('Path %s not in Root Path', $path);
-                    }
-                    $dir = new ConfigDir($path, $level, $params);
-                    $this->configDirs[$level][$dir->getPath()] = $dir;
-                }
+
+
+        $dirs = [];
+        foreach ($levels as $level) {
+            if (!isset($this->configDirs[$level])) {
+                $this->configDirs[$level] = [];
             }
-            unset($this->paths[$level]);
+            if (!empty($this->paths[$level])) {
+                foreach ($this->paths[$level] as $path) {
+                    if (isset($this->params[$level][$path])) {
+                        $params = $this->params[$level][$path];
+                        unset($this->params[$level][$path]);
+                    } else {
+                        $params = [];
+                    }
+                    if (is_dir($path) && is_readable($path)) {
+                        if (!FileSystem::inDir($this->getRootDir(), $path)) {
+                            throw new PathRestrictException('Path %s not in Root Path', $path);
+                        }
+                        $dir = new ConfigDir($path, $level, $params);
+                        $this->configDirs[$level][$dir->getPath()] = $dir;
+                    }
+                }
+                unset($this->paths[$level]);
+            }
+            $dirs = array_merge($dirs, $this->configDirs[$level]);
         }
-        return $this->configDirs[$level];
+        return $dirs;
     }
 
+    public function getFiles($configName, $ext = ConfigFile::EXT, $level = null)
+    {
+        $dirs = $this->getConfigDirs($level);
+        $files = [];
+        foreach ($dirs as $dir) {
+            $files = array_merge($files, $dir->getFiles($configName, $ext));
+        }
+        return $files;
+    }
 
     public function getPostProcessors($name)
     {
