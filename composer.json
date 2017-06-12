@@ -18,7 +18,9 @@
   "require": {
     "akademiano/core-controller": "^1.0.0-beta.2",
     "akademiano/user": "^1.0.0-beta.1",
-    "akademiano/utils": "^1.0.0-beta.6"
+    "akademiano/utils": "^1.0.0-beta.6",
+    "akademiano/entity": "^1.0.0-beta.1",
+    "akademiano/config": "^1.0.0-beta.9"
   },
   "require-dev": {
     "codeception/codeception": "^2.2.10",

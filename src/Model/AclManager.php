@@ -3,11 +3,13 @@
 namespace Akademiano\Acl\Model;
 
 use Akademiano\Acl\Model\Adapter\AdapterInterface;
+use Akademiano\Acl\Model\Adapter\DenyAdapter;
 use Akademiano\User\AuthInterface;
 use Akademiano\Entity\UserInterface;
+use Akademiano\Entity\GroupInterface;
 
 
-class AclManager
+class AclManager implements AccessCheckInterface
 {
     /** @var  AuthInterface */
     protected $custodian;
@@ -36,6 +38,9 @@ class AclManager
      */
     public function getAclAdapter()
     {
+        if (null === $this->aclAdapter) {
+            $this->aclAdapter = new DenyAdapter();
+        }
         return $this->aclAdapter;
     }
 
@@ -47,13 +52,13 @@ class AclManager
         $this->aclAdapter = $aclAdapter;
     }
 
-    public function isAllow($resource, UserInterface $user = null, $owner = null)
+    public function accessCheck($resource, GroupInterface $group, UserInterface $user = null, UserInterface $owner = null)
     {
-        $resource = (string) $resource;
+        $resource = (string)$resource;
         if (is_null($user)) {
             $user = $this->getCustodian()->getCurrentUser();
         }
         $group = $user->getGroup();
-        return $this->getAclAdapter()->isAllow($group ? $group->getTitle() : 'user', $resource, $user->getId(), $owner);
+        return $this->getAclAdapter()->accessCheck($resource, $group, $user, $owner);
     }
 }

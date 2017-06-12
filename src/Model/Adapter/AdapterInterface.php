@@ -3,8 +3,9 @@
 namespace Akademiano\Acl\Model\Adapter;
 
 
-interface AdapterInterface
+use Akademiano\Acl\Model\AccessCheckInterface;
+
+interface AdapterInterface extends AccessCheckInterface
 {
-    public function isAllow($group, $resource, $user = null, $owner = null);
 
 }

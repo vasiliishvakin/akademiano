@@ -3,9 +3,12 @@
 namespace Akademiano\Acl\Model\Adapter;
 
 
-use Akademiano\User\GuestUserInterface;
+use Akademiano\User\GuestGroupInterface;
+use Akademiano\Entity\GroupInterface;
+use Akademiano\Entity\UserInterface;
 
-class RegisteredAdapter extends XAclAdapter implements AdapterInterface
+
+class RegisteredAdapter extends XAclAdapterInterface implements AdapterInterface
 {
     protected $patches;
 
@@ -28,7 +31,7 @@ class RegisteredAdapter extends XAclAdapter implements AdapterInterface
         return $this->patches;
     }
 
-    public function isAllow($group, $resource, $user = null, $owner = null)
+    public function accessCheck($resource, GroupInterface $group, UserInterface $user = null, UserInterface $owner = null)
     {
         $resource = $this->prepareResource($resource);
         $char = mb_strcut($resource, 0, 1);
@@ -60,7 +63,7 @@ class RegisteredAdapter extends XAclAdapter implements AdapterInterface
                 }
 
                 if ($controlled) {
-                    return (!empty($user)) && (!$user instanceof GuestUserInterface) && (!$group instanceof $group);
+                    return (!empty($group) && (!$group instanceof GuestGroupInterface));
                 }
             }
         }

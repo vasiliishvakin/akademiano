@@ -3,9 +3,12 @@
 namespace Akademiano\Acl\Model\Adapter;
 
 
+use Akademiano\Entity\GroupInterface;
+use Akademiano\Entity\UserInterface;
+
 class AllowAdapter implements AdapterInterface
 {
-    public function isAllow($group, $resource, $user = null, $owner = null)
+    public function accessCheck($resource, GroupInterface $group, UserInterface $user = null, UserInterface $owner = null)
     {
         return true;
     }
