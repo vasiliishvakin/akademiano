@@ -5,8 +5,11 @@ namespace Akademiano\Api\v1\Entities;
 
 
 use Akademiano\Api\v1\AbstractApi;
+use Akademiano\Entity\EntityInterface;
 use Akademiano\EntityOperator\EntityOperator;
 use Akademiano\UUID\UuidComplexShortTables;
+use PhpOption\Some;
+use PhpOption\None;
 
 abstract class AbstractEntityApi extends AbstractApi implements EntityApiInterface
 {
@@ -17,9 +20,11 @@ abstract class AbstractEntityApi extends AbstractApi implements EntityApiInterfa
      * AbstractEntityApi constructor.
      * @param EntityOperator $operator
      */
-    public function __construct(EntityOperator $operator)
+    public function __construct(EntityOperator $operator = null)
     {
-        $this->setOperator($operator);
+        if (null !== $operator) {
+            $this->setOperator($operator);
+        }
     }
 
     /**
@@ -33,7 +38,7 @@ abstract class AbstractEntityApi extends AbstractApi implements EntityApiInterfa
     /**
      * @param EntityOperator $operator
      */
-    public function setOperator($operator)
+    public function setOperator(EntityOperator $operator)
     {
         $this->operator = $operator;
     }
@@ -41,5 +46,25 @@ abstract class AbstractEntityApi extends AbstractApi implements EntityApiInterfa
     public function intToUuidCST($value)
     {
         return $this->getOperator()->create(UuidComplexShortTables::class, ["value" => $value]);
+    }
+
+    /**
+     * @param $id
+     * @return EntityInterface
+     */
+    abstract protected function getRaw($id);
+
+    /**
+     * @param $id
+     * @return \PhpOption\Option
+     */
+    public function get($id)
+    {
+        $item = $this->getRaw($id);
+        if ($item) {
+            return new Some($item);
+        } else {
+            return None::create();
+        }
     }
 }

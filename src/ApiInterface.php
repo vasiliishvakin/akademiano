@@ -4,7 +4,9 @@
 namespace Akademiano\Api;
 
 
-interface ApiInterface
+use Akademiano\Acl\AccessCheckIncludeInterface;
+
+interface ApiInterface extends AccessCheckIncludeInterface
 {
     public function getApiVersion();
 }
