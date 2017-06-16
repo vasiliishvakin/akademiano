@@ -140,7 +140,14 @@ class AkademianoController implements ControllerInterface
         return (integer) $this->getRequest()->getParam("p", 1);
     }
 
-    public function redirect($url)
+    public function redirect($routeId, array $params = [])
+    {
+        $url = $this->getRouteUrl($routeId, $params);
+
+        $this->getResponse()->redirect($url);
+    }
+
+    public function redirectToUrl($url)
     {
         $this->getResponse()->redirect($url);
     }
