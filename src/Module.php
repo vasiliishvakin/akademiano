@@ -3,7 +3,7 @@
 namespace Akademiano\EntityOperator;
 
 
-use Akademiano\Operator\Worker\WorkerInterface;
+use Akademiano\EntityOperator\Worker\WorkerInterface;
 use Akademiano\Core\Application;
 use Akademiano\Core\ModuleManager;
 use Pimple\Container;
