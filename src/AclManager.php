@@ -78,7 +78,7 @@ class AclManager implements AccessCheckInterface
         return $resource;
     }
 
-    public function accessCheck($resource = null, GroupInterface $group, UserInterface $user = null, UserInterface $owner = null)
+    public function accessCheck($resource = null, UserInterface $owner = null, GroupInterface $group, UserInterface $user = null)
     {
         if (null === $resource) {
             $resource = $this->getResource();
@@ -87,6 +87,6 @@ class AclManager implements AccessCheckInterface
             $user = $this->getCustodian()->getCurrentUser();
         }
         $group = $user->getGroup();
-        return $this->getAclAdapter()->accessCheck($resource, $group, $user, $owner);
+        return $this->getAclAdapter()->accessCheck($resource, $owner, $group, $user);
     }
 }

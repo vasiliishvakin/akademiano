@@ -26,8 +26,8 @@ trait AccessCheckIncludeTrait
         $this->aclManager = $aclManager;
     }
 
-    public function accessCheck($resource = null, GroupInterface $group = null, UserInterface $user = null, UserInterface $owner = null)
+    public function accessCheck($resource = null, UserInterface $owner = null, GroupInterface $group = null, UserInterface $user = null)
     {
-        return $this->getAclManager()->accessCheck($resource, $group, $user, $owner);
+        return $this->getAclManager()->accessCheck($resource, $owner, $group, $user);
     }
 }

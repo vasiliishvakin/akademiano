@@ -31,7 +31,7 @@ class RegisteredAdapter extends XAclAdapterInterface implements AdapterInterface
         return $this->patches;
     }
 
-    public function accessCheck($resource, GroupInterface $group, UserInterface $user = null, UserInterface $owner = null)
+    public function accessCheck($resource, UserInterface $owner = null, GroupInterface $group, UserInterface $user = null)
     {
         $resource = $this->prepareResource($resource);
         $char = mb_strcut($resource, 0, 1);

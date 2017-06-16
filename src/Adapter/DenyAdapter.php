@@ -8,7 +8,7 @@ use Akademiano\Entity\UserInterface;
 
 class DenyAdapter implements AdapterInterface
 {
-    public function accessCheck($resource, GroupInterface $group, UserInterface $user = null, UserInterface $owner = null)
+    public function accessCheck($resource, UserInterface $owner = null, GroupInterface $group, UserInterface $user = null)
     {
         return false;
     }

@@ -140,7 +140,7 @@ class XAclAdapterInterface implements AdapterInterface, FileBasedAdapterInterfac
         return $resource;
     }
 
-    public function accessCheck($resource, GroupInterface $group, UserInterface $user = null, UserInterface $owner = null)
+    public function accessCheck($resource, UserInterface $owner = null, GroupInterface $group, UserInterface $user = null)
     {
         $resource = $this->prepareResource($resource);
         $params = [

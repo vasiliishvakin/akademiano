@@ -10,5 +10,5 @@ interface AccessCheckIncludeInterface
 {
     public function setAclManager(AccessCheckInterface $aclManager);
 
-    public function accessCheck($resource = null, GroupInterface $group = null, UserInterface $user = null, UserInterface $owner = null);
+    public function accessCheck($resource = null, UserInterface $owner = null, GroupInterface $group = null, UserInterface $user = null);
 }
