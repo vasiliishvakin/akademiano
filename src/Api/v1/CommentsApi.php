@@ -3,21 +3,15 @@
 
 namespace Akademiano\Content\Comments\Api\v1;
 
-
-use Akademiano\Acl\AccessCheckIncludeInterface;
-use Akademiano\Acl\AccessCheckIncludeTrait;
 use Akademiano\Api\v1\Entities\AbstractEntityApi;
 use Akademiano\Api\v1\Items\ItemsPage;
 use Akademiano\Content\Comments\Model\Comment;
+use Akademiano\Core\Exception\AccessDeniedException;
 use Akademiano\Utils\Paging\PagingMetadata;
-use PhpOption\None;
-use PhpOption\Some;
 use Akademiano\HttpWarp\Exception\NotFoundException;
 
-class CommentsApi extends AbstractEntityApi implements AccessCheckIncludeInterface
+class CommentsApi extends AbstractEntityApi
 {
-    use AccessCheckIncludeTrait;
-
     public function count($criteria)
     {
         return $this->getOperator()->count(Comment::class, $criteria);
@@ -32,25 +26,17 @@ class CommentsApi extends AbstractEntityApi implements AccessCheckIncludeInterfa
         return new ItemsPage($items, $pagingMetadata);
     }
 
-    public function get($id)
+    protected function getRaw($id)
     {
         $item = $this->getOperator()->get(Comment::class, $id);
 
         if (!$item) {
-            $hexId = dechex($id);
-            throw new NotFoundException("Comment with id {$hexId} not found");
+            return null;
+        }
+        if (!$this->accessCheck("comments/view/{$item->getId()}", $item->getOwner())) {
+            throw new AccessDeniedException();
         }
         return $item;
-    }
-
-    public function getMaybe($id)
-    {
-        $item = $this->get($id);
-        if ($item) {
-            return new Some($item);
-        } else {
-            return None::create();
-        }
     }
 
     public function save(array $data)
@@ -61,10 +47,16 @@ class CommentsApi extends AbstractEntityApi implements AccessCheckIncludeInterfa
         }
 
         if (isset($id)) {
-            $item = $this->getMaybe($id)->getOrThrow(
-                new NotFoundException("Exist task with is {$id} not found")
+            $item = $this->get($id)->getOrThrow(
+                new NotFoundException(sprintf('Exist comment with is %s not found', dechex($id)))
             );
+            if (!$this->accessCheck("comments/save/{$item->getId()}", $item->getOwner())) {
+                throw new AccessDeniedException();
+            }
         } else {
+            if (!$this->accessCheck("comments/create")) {
+                throw new AccessDeniedException();
+            }
             $item = $this->getOperator()->create(Comment::class);
         }
 
@@ -80,9 +72,12 @@ class CommentsApi extends AbstractEntityApi implements AccessCheckIncludeInterfa
 
     public function delete($id)
     {
-        $item = $this->get($id);
-        if (!$item) {
-            throw new NotFoundException(sprintf('Task with id "%s" not found', $id));
+        $item = $this->get($id)->getOrThrow(
+            new NotFoundException(sprintf('Comment with id "%s" not found', dechex($id)))
+        );
+
+        if (!$this->accessCheck("comments/delete/{$item->getId()}", $item->getOwner())) {
+            throw new AccessDeniedException();
         }
 
         $this->getOperator()->delete($item);

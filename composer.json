@@ -19,11 +19,12 @@
     "php": "^5.6 || ^7.1",
     "akademiano/utils": "^1.0.0-beta.6",
     "akademiano/operator": "^1.0.0-beta.2",
-    "akademiano/entity-operator": "^1.0.0-beta.1",
-    "akademiano/api": "^1.0.0-beta.1",
-    "akademiano/acl": "^1.0-beta.3",
+    "akademiano/entity-operator": "^1.0.0-beta.3",
+    "akademiano/api": "^1.0.0-beta.2",
+    "akademiano/acl": "^1.0-beta.5",
     "akademiano/entity": "^1.0.0-beta.1",
-    "phpoption/phpoption": "^1.5"
+    "phpoption/phpoption": "^1.5",
+    "robmorgan/phinx": "^0.8.1"
   },
   "require-dev": {
     "codeception/codeception": "^2.2.10",
