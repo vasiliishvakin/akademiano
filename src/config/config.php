@@ -58,7 +58,7 @@ return [
         }
     ],
     "Acl" => [
-        "adapter" => "Akademiano\\Acl\\Model\\Adapter\\RegisteredAdapter",
+        "adapter" => "Akademiano\\Acl\\Adapter\\RegisteredAdapter",
     ],
     "modules" => [
         "Akademiano\\User"
