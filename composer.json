@@ -1,6 +1,6 @@
 {
-  "name": "akademiano/user",
-  "description": "User manager base classes",
+  "name": "akademiano/user-eo",
+  "description": "User manager EntityOperator based class",
   "license": "Apache-2.0",
   "minimum-stability": "dev",
   "prefer-stable": true,
@@ -12,12 +12,14 @@
   ],
   "autoload": {
     "psr-4": {
-      "Akademiano\\User\\": "src/"
+      "Akademiano\\UserEO\\": "src/"
     }
   },
   "require": {
     "php": "^5.6 || ^7.0",
     "akademiano/entity": "^1.0.0-beta.1",
+    "akademiano/user": "^1.0.0-beta.1",
+    "akademiano/entity-operator": "^1.0.0-beta.1",
     "nesbot/carbon": "^1.22",
     "twig/twig": "^1.33.0"
   },

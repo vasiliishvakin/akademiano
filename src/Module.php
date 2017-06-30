@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Akademiano\User;
+namespace Akademiano\UserEO;
 
 
 class Module

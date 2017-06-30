@@ -2,7 +2,7 @@
 
 return [
     'custodian' => function ($c) {
-        $custodian = new \Akademiano\User\SimpleCustodian();
+        $custodian = new \Akademiano\UserEO\Custodian();
         return $custodian;
     },
 ];
