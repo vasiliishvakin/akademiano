@@ -1,15 +1,15 @@
-# akademiano-user
-[![Build Status](https://travis-ci.org/mrdatamapper/akademiano-user.svg?branch=master)](https://travis-ci.org/mrdatamapper/akademiano-user)
-[![Coverage Status](https://coveralls.io/repos/github/mrdatamapper/akademiano-user/badge.svg)](https://coveralls.io/github/mrdatamapper/akademiano-user)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/100cac0f-5490-4ae3-b1ac-1ba1d8fd6437/mini.png)](https://insight.sensiolabs.com/projects/100cac0f-5490-4ae3-b1ac-1ba1d8fd6437)
-[![Libraries.io ](https://img.shields.io/librariesio/github/mrdatamapper/akademiano-user.svg)](https://libraries.io/github/mrdatamapper/akademiano-user)
-[![GitHub release](https://img.shields.io/github/release/mrdatamapper/akademiano-user.svg)]()
+# akademiano-user-eo
+[![Build Status](https://travis-ci.org/mrdatamapper/akademiano-user-eo.svg?branch=master)](https://travis-ci.org/mrdatamapper/akademiano-user-eo)
+[![Coverage Status](https://coveralls.io/repos/github/mrdatamapper/akademiano-user-eo/badge.svg)](https://coveralls.io/github/mrdatamapper/akademiano-user-eo)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/c800166d-d7b7-405d-b1f1-21ced98a7f90/mini.png)](https://insight.sensiolabs.com/projects/c800166d-d7b7-405d-b1f1-21ced98a7f90)
+[![Libraries.io ](https://img.shields.io/librariesio/github/mrdatamapper/akademiano-user-eo.svg)](https://libraries.io/github/mrdatamapper/akademiano-user-eo)
+[![GitHub release](https://img.shields.io/github/release/mrdatamapper/akademiano-user-eo.svg)]()
 
-Akademiano user library
+Akademiano user Entity Operator used library
 
 ## Installation
 
-composer require akademiano/user
+composer require akademiano/user-eo
 
 ## Contributing
 
