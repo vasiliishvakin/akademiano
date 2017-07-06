@@ -1,0 +1,14 @@
+.card .card-content {
+    position: inherit;
+    top: auto;
+    bottom: auto;
+    left: auto;
+    right: auto;
+}
+
+.card .card-footer button, .card .card-footer a {
+    margin: auto !important;
+    position: inherit;
+    bottom: auto;
+    width: auto;
+}

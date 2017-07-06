@@ -23,7 +23,8 @@
     "bower-asset/bootstrap": "^3.3.5",
     "bower-asset/jquery": "^2.1.4",
     "bower-asset/html5shiv": "^3.7.3",
-    "bower-asset/respond": "^1.4.2"
+    "bower-asset/respond": "^1.4.2",
+    "bower-asset/font-awesome": "^4.7"
   },
   "require-dev": {
     "codeception/codeception": "^2.2.10",
