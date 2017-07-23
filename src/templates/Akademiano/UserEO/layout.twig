@@ -1,0 +1,75 @@
+{% extends "layout.twig" %}
+
+
+{% block navbar %}
+    <header class="app-header navbar">
+        <button class="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button">☰</button>
+        <a class="navbar-brand" href="#"></a>
+        <ul class="nav navbar-nav d-md-down-none">
+            <li class="nav-item">
+                <a class="nav-link navbar-toggler sidebar-toggler" href="#">☰</a>
+            </li>
+
+            <li class="nav-item px-3">
+                <a class="nav-link" href="{{ url("tasks_list") }}">Панель</a>
+            </li>
+            <li class="nav-item px-3 active">
+                <a class="nav-link" href="{{ url("tasks_list") }}">Администрирование</a>
+            </li>
+
+        </ul>
+        <ul class="nav navbar-nav ml-auto">
+            {#<li class="nav-item d-md-down-none">
+                <a class="nav-link" href="#"><i class="icon-bell"></i><span class="badge badge-pill badge-danger">5</span></a>
+            </li>
+            <li class="nav-item d-md-down-none">
+                <a class="nav-link" href="#"><i class="icon-list"></i></a>
+            </li>
+            <li class="nav-item d-md-down-none">
+                <a class="nav-link" href="#"><i class="icon-location-pin"></i></a>
+            </li>#}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                    {#<img src="img/avatars/6.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">#}
+                    <span class="d-md-down-none">admin</span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right">
+
+                    <div class="dropdown-header text-center">
+                        <strong>Account</strong>
+                    </div>
+                    <a class="dropdown-item" href="{{ url("logout") }}"><i class="fa fa-lock"></i> Logout</a>
+                </div>
+            </li>
+            &nbsp;
+           {# <li class="nav-item d-md-down-none">
+                <a class="nav-link navbar-toggler aside-menu-toggler" href="#">☰</a>
+            </li>#}
+
+        </ul>
+    </header>
+{% endblock navbar %}
+
+ {% block sidebar %}
+     <div class="sidebar">
+         <nav class="sidebar-nav">
+             <ul class="nav">
+                 <li class="nav-item ">
+                     <a class="nav-link" href="{{ url("admin_users_list") }}"><i class="icon-list"></i> Пользователи </a>
+                 </li>
+                 <li class="nav-item active">
+                     <a class="nav-link" href="{{ url("admin_groups_list") }}"><i class="icon-list"></i> Группы </a>
+                 </li>
+             </ul>
+         </nav>
+     </div>
+ {% endblock sidebar %}
+
+
+{% block breadcrumb %}
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">Начало</li>
+        <li class="breadcrumb-item ">Администрирование</li>
+        <li class="breadcrumb-item active">...</li>
+    </ol>
+{% endblock breadcrumb %}

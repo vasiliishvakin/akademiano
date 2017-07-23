@@ -25,5 +25,18 @@ return [
             $api->setCustodian($c["custodian"]);
         }
         return $api;
+    },
+
+    'groupsApi' => function($c) {
+        $operator = $c["operator"];
+        $api = new \Akademiano\UserEO\Api\v1\GroupsApi($operator);
+        if ($api instanceof \Akademiano\Acl\AccessCheckIncludeInterface) {
+            $api->setAclManager($c["aclManager"]);
+        }
+
+        if ($api instanceof \Akademiano\User\CustodianIncludeInterface) {
+            $api->setCustodian($c["custodian"]);
+        }
+        return $api;
     }
 ];

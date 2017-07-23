@@ -21,7 +21,8 @@
     "akademiano/user": "^1.0.0-beta.1",
     "akademiano/entity-operator": "^1.0.0-beta.1",
     "nesbot/carbon": "^1.22",
-    "twig/twig": "^1.33.0"
+    "twig/twig": "^1.33.0",
+    "akademiano/entity-operator-ext": "v1.0.0-beta.1"
   },
   "require-dev": {
     "codeception/codeception": "^2.2.10",
