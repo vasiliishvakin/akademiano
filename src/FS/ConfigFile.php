@@ -5,8 +5,9 @@ namespace Akademiano\Config\FS;
 
 
 use Akademiano\Config\Exception\ConfigFileNotReadException;
+use Akademiano\Utils\Object\Prototype\StringableInterface;
 
-class ConfigFile
+class ConfigFile implements StringableInterface
 {
     const TYPE_LOCAL = 'local';
     const TYPE_GLOBAL = 'global';
@@ -86,5 +87,10 @@ class ConfigFile
             $this->content = $this->read();
         }
         return $this->content;
+    }
+
+    public function __toString()
+    {
+        return $this->getPath();
     }
 }
