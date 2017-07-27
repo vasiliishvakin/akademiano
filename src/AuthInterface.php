@@ -16,19 +16,23 @@ interface AuthInterface
      */
     public function authenticate($identifier, $password);
 
-    /** UserInterface */
+    /**
+     * @return UserInterface
+     */
     public function getCurrentUser();
 
     /**
      * @param UuidInterface|null $user
      * @return bool
      */
-    public function isAuth(UuidInterface $user = null);
+    public function isAuthenticate(UuidInterface $user = null);
 
     /**
      * @param UserInterface|null $user
      * @return bool
      */
-    public function sessionClose(UserInterface $user = null);
+    public function sessionClose();
+
+    public function sessionStart(UserInterface $user);
 
 }

@@ -21,7 +21,7 @@ trait CustodianIncludeTrait
     /**
      * @param AuthInterface $custodian
      */
-    public function setCustodian($custodian)
+    public function setCustodian(AuthInterface $custodian)
     {
         $this->custodian = $custodian;
     }

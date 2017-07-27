@@ -17,6 +17,9 @@ class SimpleCustodian implements AuthInterface
         return null;
     }
 
+    /**
+     * @return UserInterface
+     */
     public function getCurrentUser()
     {
         if (null === $this->currentUser) {
@@ -25,12 +28,17 @@ class SimpleCustodian implements AuthInterface
         return $this->currentUser;
     }
 
-    public function isAuth(UuidInterface $user = null)
+    public function isAuthenticate(UuidInterface $user = null)
     {
         return false;
     }
 
-    public function sessionClose(UserInterface $user = null)
+    public function sessionClose()
+    {
+        return true;
+    }
+
+    public function sessionStart(UserInterface $user)
     {
         return true;
     }
