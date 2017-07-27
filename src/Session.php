@@ -112,7 +112,25 @@ class Session {
         return isset($_SESSION[$name]) ? $_SESSION[$name] : $default;
     }
 
+    /**
+     * @param $name
+     * @return bool|mixed
+     * @deprecated
+     */
     public function rm($name)
+    {
+        $closure = $this->getClosure('rm');
+        if ($closure) {
+            return call_user_func($closure, $name);
+        }
+        $this->prepare();
+        if (isset($_SESSION[$name])) {
+            unset($_SESSION[$name]);
+        }
+        return true;
+    }
+
+    public function delete($name)
     {
         $closure = $this->getClosure('rm');
         if ($closure) {
