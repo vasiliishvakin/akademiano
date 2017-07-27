@@ -28,6 +28,14 @@ class AkademianoController implements ControllerInterface
 
     private $autoRender = true;
 
+    public function __construct(Request $request, Response $response, ViewInterface $view, Router $router)
+    {
+        $this->setRequest($request);
+        $this->setResponse($response);
+        $this->setView($view);
+        $this->setRouter($router);
+    }
+
     /**
      * @return Router
      */

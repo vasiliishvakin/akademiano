@@ -7,6 +7,7 @@ use Akademiano\Config\Config;
 use Akademiano\Config\ConfigurableInterface;
 use Akademiano\HttpWarp\Request;
 use Akademiano\HttpWarp\Response;
+use Akademiano\SimplaView\View;
 use Akademiano\SimplaView\ViewInterface;
 use Akademiano\Utils\DIContainerIncludeInterface;
 
