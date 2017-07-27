@@ -234,4 +234,21 @@ class StringUtils
         json_decode($value);
         return (json_last_error() == JSON_ERROR_NONE);
     }
+
+    public static function obfuscateEmailV1($email)
+    {
+        $email = explode("@", $email);
+
+        $pos = mt_rand(0, mb_strlen($email[0]));
+        $char = mb_substr($email[0], $pos-1, 1);
+        $replaceArray = ["$", "#", "%", "&", "^", "!"];
+        $replaceChar = array_rand ($replaceArray);
+        $replaceChar = $replaceArray[$replaceChar];
+        $email[0] = str_ireplace($char, "{$replaceChar}", $email[0]);
+        $host = hash("adler32", $email[1]);
+        $host = hexdec($host) >> 16;
+        $email[1] = $host;
+        $email = implode("-", $email);
+        return $email;
+    }
 }
