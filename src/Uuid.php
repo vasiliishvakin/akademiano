@@ -25,16 +25,21 @@ class Uuid implements UuidInterface
         $this->value = (integer) $value;
     }
 
-
     public function getValue()
     {
-        return $this->getValue();
+        return $this->value;
     }
 
     public function getHex()
     {
         return dechex($this->getValue());
     }
+
+    public function toInt()
+    {
+        return (integer) $this->value;
+    }
+
 
     public function __toString()
     {
