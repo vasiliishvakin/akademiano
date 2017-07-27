@@ -98,9 +98,9 @@ class XAclAdapterInterface implements AdapterInterface, FileBasedAdapterInterfac
     {
         $fileName = "";
         foreach ($files as $file) {
-            $files = (string) $file;
+            $file = (string) $file;
             if (is_readable($file)) {
-                $fileName .= $file . filemtime($file);
+                $fileName .= $file . "-" . filemtime($file);
             }
         }
         $fileName = "acl-xacl-" . md5($fileName);

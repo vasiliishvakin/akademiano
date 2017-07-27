@@ -78,7 +78,7 @@ class AclManager implements AccessCheckInterface
         return $resource;
     }
 
-    public function accessCheck($resource = null, UserInterface $owner = null, GroupInterface $group, UserInterface $user = null)
+    public function accessCheck($resource = null, UserInterface $owner = null, GroupInterface $group = null, UserInterface $user = null)
     {
         if (null === $resource) {
             $resource = $this->getResource();

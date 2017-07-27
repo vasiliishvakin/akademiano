@@ -9,7 +9,7 @@ return [
         $aclManager->setRequest($c["request"]);
         /** @var \Akademiano\Config\Config $config */
         $config = $c["config"];
-        $adapterName = $config->get(["Acl", "adapter"], "Akademiano\\Acl\\Adapter\\AllowAdapter");
+        $adapterName = $config->get(["acl", "adapter"], "Akademiano\\Acl\\Adapter\\AllowAdapter");
         /** @var \Akademiano\Acl\Adapter\AdapterInterface $adapter */
         $adapter = new $adapterName;
         if ($adapter instanceof \Akademiano\Config\ConfigurableInterface) {

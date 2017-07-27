@@ -8,5 +8,5 @@ use Akademiano\Entity\UserInterface;
 
 interface AccessCheckInterface
 {
-    public function accessCheck($resource, UserInterface $owner = null, GroupInterface $group, UserInterface $user = null);
+    public function accessCheck($resource, UserInterface $owner = null, GroupInterface $group = null, UserInterface $user = null);
 }

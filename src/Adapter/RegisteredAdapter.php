@@ -21,6 +21,12 @@ class RegisteredAdapter extends XAclAdapterInterface implements AdapterInterface
             $patches = file($this->getAclFile(), FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
             $patchesTree = [];
             foreach ($patches as $path) {
+                if (false !== mb_strpos($path, "[")) {
+                    continue;
+                }
+                if (false !== $pos = mb_strpos($path, "=")) {
+                    $path = mb_strcut($path, 0, $pos);
+                }
                 $path = $this->prepareResource($path);
                 $char = mb_strcut($path, 0, 1);
                 $patchesTree[$char][] = $path;
