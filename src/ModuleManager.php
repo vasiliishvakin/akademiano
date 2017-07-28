@@ -8,6 +8,7 @@ use Akademiano\Router\Router;
 use Composer\Autoload\ClassLoader;
 use Akademiano\Utils\Parts\InnerCache;
 use Akademiano\Router\Route;
+use Akademiano\Utils\ArrayTools;
 use Pimple\Container;
 
 class ModuleManager
@@ -89,14 +90,14 @@ class ModuleManager
         return $this->loader;
     }
 
-    public function load(Application $application = null)
+    public function load(Container $container = null)
     {
         $modules = $this->getModulesList();
         foreach ($modules as $moduleName) {
             $class = "\\{$moduleName}\\Module";
-            if ($class instanceof ModuleInterface) {
-                $module = new $class;
-                $module->init($this, $application);
+            $module = new $class();
+            if ($module instanceof ModuleInterface) {
+                $module->init($this, $container);
             }
         }
     }
@@ -193,5 +194,29 @@ class ModuleManager
                 },
             ]
         ];
+    }
+
+    public function getListArrayConfigs($fileConfigName, $recursiveMerge = false)
+    {
+        $modules = $this->getModulesList();
+        $configs = [];
+        foreach ($modules as $module) {
+            $path = $this->getModulePath($module);
+            if (!$path) {
+                throw new \Exception(sprintf('Path for module %s not found', $module));
+            }
+            $configFile = $path . "/config/{$fileConfigName}.php";
+            if (!file_exists($configFile)) {
+                continue;
+            }
+            $moduleResources = include $configFile;
+            if ($recursiveMerge) {
+                $configs = ArrayTools::mergeRecursive($configs, $moduleResources);
+            } else {
+                $configs = array_merge($configs, $moduleResources);
+            }
+        }
+
+        return $configs;
     }
 }

@@ -1,18 +1,18 @@
 <?php
+
 namespace Akademiano\Core;
 
-use Akademiano\Acl\Model\AclManager;
-use Akademiano\Acl\RestrictedControllerInterface;
+use Akademiano\Acl\AclManager;
+use Akademiano\Acl\RestrictedAccessInterface;
 use Akademiano\Config\Config;
 use Akademiano\Config\ConfigInterface;
 use Akademiano\Config\ConfigLoader;
-use Akademiano\Sites\Site;
+use Akademiano\Config\ConfigurableInterface;
 use Akademiano\Utils\DIContainerIncludeInterface;
 use Akademiano\Utils\Exception\DIContainerAlreadyExistsServiceException;
 use Akademiano\HttpWarp\Environment;
-use Akademiano\Router\Exception\NotFoundException;
+use Akademiano\HttpWarp\Exception\NotFoundException;
 use Akademiano\Entity\UserInterface;
-use Akademiano\Utils\Object\Prototype\ArrayableInterface;
 use Akademiano\Utils\Parts\DIContainerTrait;
 use Composer\Autoload\ClassLoader;
 use Akademiano\Core\Exception\AccessDeniedException;
@@ -27,7 +27,7 @@ use Akademiano\Core\Controller\ControllerInterface;
 use Pimple\Container;
 
 
-class Application implements ConfigInterface, DIContainerIncludeInterface
+class Application implements ConfigInterface, DIContainerIncludeInterface, RestrictedAccessInterface
 {
     const CONFIG_NAME_RESOURCES = "resources";
 
@@ -302,7 +302,7 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
         }
 
         $mm = $this->getModuleManager();
-        $mm->load($this);
+        $mm->load($this->getDiContainer());
     }
 
     public function run()
@@ -366,15 +366,11 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
         }
 
         if (null === $controllerPath) {
-            throw new NotFoundException("Controller not found");
+            throw new NotFoundException(sprintf('Controller %s not found.',
+                json_encode($controllerInfo, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)));
         }
 
-        $controller = new $controllerPath();
-        if (!$controller instanceof ControllerInterface) {
-            throw new \ErrorException("Controller mast be implement ControllerInterface");
-        }
-        $controller->setDIContainer($this->getDiContainer());
-        $controller->setRequest($this->getRequest());
+        $request=$this->getRequest();
         $response = $this->getResponse();
 
         if (!empty($httpCachePath)) {
@@ -382,7 +378,6 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
             $httpCacheParams = $this->getConfig($httpCachePath, [])->toArray();
             $response->setDefaults($httpCacheParams);
         }
-        $controller->setResponse($response);
 
         if (!$view->exist($template)) {
             if ($actionName === "add" || $actionName === "edit") {
@@ -398,13 +393,25 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
             '_action' => $actionName,
             '_path' => $controllerId . '/' . $actionName
         ]);
-        $controller->setView($view);
 
-        if ($controller instanceof RestrictedControllerInterface) {
-            if (!$controller->checkAccess()) {
+        $controller = new $controllerPath($request, $response, $view, $this->getRouter());
+
+        if (!$controller instanceof ControllerInterface) {
+            throw new \ErrorException("Controller mast be implement ControllerInterface");
+        }
+        if ($controller instanceof ConfigurableInterface) {
+            $controller->setConfig($this->getDiContainer()["config"]);
+        }
+
+        if ($controller instanceof DIContainerIncludeInterface) {
+            $controller->setDIContainer($this->getDiContainer());
+        }
+
+        if ($controller instanceof RestrictedAccessInterface) {
+            if (!$controller->accessCheck()) {
                 throw new AccessDeniedException();
             }
-        } elseif (!$this->isAllow()) {
+        } elseif (!$this->accessCheck()) {
             throw new AccessDeniedException();
         }
 
@@ -430,24 +437,14 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
         }
     }
 
-    public function isAllow($resource = null, UserInterface $user = null)
+    public function accessCheck()
     {
         $di = $this->getDiContainer();
         if (isset($di["aclManager"])) {
             /** @var AclManager $aclManager */
             $aclManager = $di['aclManager'];
-            if (!$resource) {
-                /** @var Request $request */
-                $request = $di['request'];
-                $resource = (string)$request->getUrl()->getPath();
-            }
-            if (!$user) {
-                $user = $aclManager->getCustodian()->getCurrentUser();
-            }
-
-            return $aclManager->isAllow($resource, $user);
+            return $aclManager->accessCheck();
         }
-
         return true;
     }
 }
