@@ -4,7 +4,7 @@
 namespace Akademiano\Sites\Site;
 
 
-use Akademiano\Utils\Exception\FileNotFoundException;
+use Akademiano\HttpWarp\Exception\FileNotFoundException;
 use Akademiano\Utils\FileSystem;
 
 trait DirectoryFilesTrait
