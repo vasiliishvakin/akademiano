@@ -2,7 +2,7 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class CommentsInit extends AbstractMigration
+class EntityOperatorComments extends AbstractMigration
 {
     public function up()
     {

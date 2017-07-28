@@ -7,6 +7,7 @@ use Akademiano\Api\v1\Entities\AbstractEntityApi;
 use Akademiano\Api\v1\Items\ItemsPage;
 use Akademiano\Content\Comments\Model\Comment;
 use Akademiano\Core\Exception\AccessDeniedException;
+use Akademiano\Entity\EntityInterface;
 use Akademiano\Utils\Paging\PagingMetadata;
 use Akademiano\HttpWarp\Exception\NotFoundException;
 
@@ -39,7 +40,7 @@ class CommentsApi extends AbstractEntityApi
         return $item;
     }
 
-    public function save(array $data)
+    public function save(EntityInterface $entity, array $data)
     {
         if (isset($data["id"])) {
             $id = hexdec($data["id"]);
