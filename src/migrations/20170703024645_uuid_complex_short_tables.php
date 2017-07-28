@@ -6,6 +6,7 @@ use DeltaCore\Application;
 
 class UuidComplexShortTables extends AbstractMigration
 {
+    const OUR_EPOCH_DEFAULT = 1498995192141;
     
     public function up()
     {
@@ -30,7 +31,7 @@ class UuidComplexShortTables extends AbstractMigration
 
         $app->init();
 
-        $epoch = $app->getConfig()->get(["UUID", "complexShort", "epoch"], 1451317149374);
+        $epoch = $app->getConfig()->get(["UUID", "complexShort", "epoch"], self::OUR_EPOCH_DEFAULT);
         $shard = $app->getConfig(["UUID", "complexShort", "shard"], 1);
 
         $sql = <<<sql

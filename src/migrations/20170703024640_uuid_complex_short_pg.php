@@ -5,6 +5,7 @@ use DeltaCore\Application;
 
 class UuidComplexShortPg extends AbstractMigration
 {
+    const OUR_EPOCH_DEFAULT = 1498995192141;
 
     public function up()
     {
@@ -29,7 +30,7 @@ class UuidComplexShortPg extends AbstractMigration
 
         $app->init();
 
-        $epoch = $app->getConfig()->get(["UUID", "complexShort", "epoch"], 1451317149374);
+        $epoch = $app->getConfig()->get(["UUID", "complexShort", "epoch"], self::OUR_EPOCH_DEFAULT);
         $shard = $app->getConfig(["UUID", "complexShort", "shard"], 1);
 
         $sql = "create sequence uuid_complex_short_part;";
