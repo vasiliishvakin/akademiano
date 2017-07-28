@@ -24,7 +24,11 @@
     "bower-asset/jquery": "^2.1.4",
     "bower-asset/html5shiv": "^3.7.3",
     "bower-asset/respond": "^1.4.2",
-    "bower-asset/font-awesome": "^4.7"
+    "bower-asset/font-awesome": "^4.7",
+    "bower-asset/simple-line-icons": "^2.4",
+    "bower-asset/tether": "^1.4",
+    "bower-asset/pace": "^1.0",
+    "bower-asset/chart.js": "^2.6"
   },
   "require-dev": {
     "codeception/codeception": "^2.2.10",
