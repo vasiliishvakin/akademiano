@@ -3,8 +3,14 @@
 namespace Akademiano\Db\Adapter;
 
 
+use Akademiano\Db\Adapter\Exception\ConnectionErrorException;
+use Akademiano\Db\Adapter\Type\PgPoint;
 use Akademiano\Db\Adapter\WhereParams\Between;
 use Akademiano\Db\Adapter\WhereParams\ILike;
+use Akademiano\Entity\Uuid;
+use Akademiano\Utils\CatchError;
+use Akademiano\Utils\Object\Prototype\IntegerableInterface;
+use Akademiano\Utils\Object\Prototype\StringableInterface;
 use Akademiano\Utils\StringUtils;
 
 class PgsqlAdapter extends AbstractAdapter
@@ -13,15 +19,81 @@ class PgsqlAdapter extends AbstractAdapter
 
     public function connect()
     {
+        CatchError::start();
         $connection = pg_connect($this->getDsn());
-        $this->setConnection($connection);
+        $error = CatchError::stop();
+        if ($error) {
+            throw new ConnectionErrorException(
+                sprintf('%s (use dsn: "%s")', $error->getMessage(), $this->getDsnSafe()),
+                $error->getCode(),
+                $error
+            );
+        }
+        $this->connection = $connection;
+    }
+
+    public function query($query)
+    {
+        if (func_num_args() === 1) {
+            $result = pg_query($this->getConnection(), $query);
+        } else {
+            $params = func_get_args();
+            array_shift($params);
+            $result = $this->queryParams($query, $params);
+        }
+        return $result;
+    }
+
+    /**
+     * @return int
+     */
+    public function isTransaction()
+    {
+        return $this->isTransaction;
+    }
+
+    public function begin()
+    {
+        if ($this->isTransaction()) {
+            throw new \LogicException('Transaction already started');
+        }
+        $this->setTransaction(true);
+        $this->query('BEGIN');
+    }
+
+    public function commit()
+    {
+        if (!$this->isTransaction()) {
+            throw new \LogicException('Transaction not started');
+        }
+        $this->query('COMMIT');
+        $this->setTransaction(false);
+    }
+
+    public function rollBack()
+    {
+        if (!$this->isTransaction()) {
+            throw new \LogicException('Transaction not started');
+        }
+        $this->query('ROLLBACK');
+        $this->setTransaction(false);
+    }
+
+    public function queryParams($query, $params)
+    {
+        return pg_query_params($this->getConnection(), $query, $params);
+    }
+
+    public function getError()
+    {
+        return pg_last_error($this->getConnection());
     }
 
     public function select($query)
     {
         $result = call_user_func_array([$this, 'query'], func_get_args());
         $rows = pg_fetch_all($result);
-        if(!is_array($rows)) {
+        if (!is_array($rows)) {
             return [];
         }
         return $rows;
@@ -35,7 +107,7 @@ class PgsqlAdapter extends AbstractAdapter
         }
         $numRows = pg_num_rows($result);
         $numFields = pg_num_fields($result);
-        if ($numRows === 0 ) {
+        if ($numRows === 0) {
             return null;
         }
         if ($numFields === 1) {
@@ -68,30 +140,7 @@ class PgsqlAdapter extends AbstractAdapter
     public function selectCell($query)
     {
         $result = call_user_func_array([$this, 'query'], func_get_args());
-        return pg_fetch_result($result, 0,0);
-    }
-
-    public function query($query)
-    {
-        $connection = $this->getConnection();
-        if (func_num_args() === 1) {
-            $result = pg_query($connection, $query);
-        } else {
-            $params = func_get_args();
-            array_shift($params);
-            $result = $this->queryParams($query, $params);
-        }
-        return $result;
-    }
-
-    public function queryParams($query, $params)
-    {
-        return pg_query_params($query, $params);
-    }
-
-    public function getError()
-    {
-        return pg_last_error($this->getConnection());
+        return pg_fetch_result($result, 0, 0);
     }
 
     /**
@@ -102,57 +151,22 @@ class PgsqlAdapter extends AbstractAdapter
         $this->isTransaction = $isTransaction;
     }
 
-    /**
-     * @return int
-     */
-    public function isTransaction()
-    {
-        return $this->isTransaction;
-    }
-
-    public function begin()
-    {
-        if ($this->isTransaction()) {
-            throw new \LogicException('Transaction already started');
-        }
-        $this->setTransaction(true);
-        pg_query('BEGIN');
-    }
-
-    public function commit()
-    {
-        if (!$this->isTransaction()) {
-            throw new \LogicException('Transaction not started');
-        }
-        pg_query('COMMIT');
-        $this->setTransaction(false);
-    }
-
-    public function rollBack()
-    {
-        if (!$this->isTransaction()) {
-            throw new \LogicException('Transaction not started');
-        }
-        pg_query('ROLLBACK');
-        $this->setTransaction(false);
-    }
-
     public function insert($table, $fields, $idName = null, $rawFields = null)
     {
         $rawFields = array_flip((array)$rawFields);
         $fieldsList = array_keys($fields);
         $fieldsNames = $fieldsList;
-        foreach($fieldsList as $key => $value) {
+        foreach ($fieldsList as $key => $value) {
             $nameParts = explode(".", $value);
-            foreach($nameParts as $keyPart => $keyValue) {
-                $nameParts[$keyPart] = pg_escape_identifier($keyValue);
+            foreach ($nameParts as $keyPart => $keyValue) {
+                $nameParts[$keyPart] = pg_escape_identifier($this->getConnection(), $keyValue);
             }
             $fieldsList[$key] = implode(".", $nameParts);
         }
         $fieldsList = implode(', ', $fieldsList);
         $num = 0;
         $fieldsQuery = [];
-        foreach($fieldsNames as $fieldName) {
+        foreach ($fieldsNames as $fieldName) {
             if (!isset($rawFields[$fieldName])) {
                 $num++;
                 $fieldsQuery[] = '$' . $num;
@@ -172,7 +186,7 @@ class PgsqlAdapter extends AbstractAdapter
             return false;
         }
         if (is_null($idName)) {
-            return (pg_affected_rows($result) >0);
+            return (pg_affected_rows($result) > 0);
         } else {
             return pg_fetch_result($result, 0, 0);
         }
@@ -181,15 +195,15 @@ class PgsqlAdapter extends AbstractAdapter
     public function escapeIdentifier($identifier)
     {
         if (strpos($identifier, ".") === false) {
-            return pg_escape_identifier($identifier);
+            return pg_escape_identifier($this->getConnection(), $identifier);
         }
         $fieldArr = explode(".", $identifier);
-        return pg_escape_identifier($fieldArr[0]) . "." . pg_escape_identifier($fieldArr[1]);
+        return pg_escape_identifier($this->getConnection(), $fieldArr[0]) . "." . pg_escape_identifier($this->getConnection(), $fieldArr[1]);
     }
 
     public function escape($value)
     {
-        return pg_escape_literal($value);
+        return pg_escape_literal($this->getConnection(), $value);
     }
 
     public function getWhere(array $criteria, $num = 0)
@@ -201,47 +215,51 @@ class PgsqlAdapter extends AbstractAdapter
                 $field = substr($field, 1);
             }
             if (is_object($value)) {
-                $class = StringUtils::cutClassName(get_class($value));
-                switch($class) {
-                    case "Between":
-                        /** @var Between $value*/
+                switch (true) {
+                    case $value instanceof Between :
+                        /** @var Between $value */
                         $num++;
                         $num2 = $num + 1;
                         $where[] = $this->escapeIdentifier($field) . " between \${$num} and \${$num2}";
                         $num = $num2;
                         break;
-                    case "ILike":
-                        /** @var ILike $value*/
+                    case $value instanceof ILike:
+                        /** @var ILike $value */
                         $num++;
                         $where[] = $this->escapeIdentifier($field) . " ILIKE \${$num}";
                         break;
-                    case "PgPoint":
+                    case $value instanceof PgPoint:
                         $where[] = $this->escapeIdentifier($field) . "=" . $value->pgFormat();
                         break;
+                    case $value instanceof IntegerableInterface:
+                    case $value instanceof StringableInterface:
+                        $num++;
+                        $isNot = $isNot ? "!" : "";
+                        $where[] = $this->escapeIdentifier($field) . "{$isNot}=$" . $num;
+                        break;
                     default :
-                        throw new \InvalidArgumentException("where class $class not implement");
+                        throw new \InvalidArgumentException(sprintf('Where class "%s" not implement', get_class($value)));
                 }
-
             } elseif (is_array($value)) {
                 $inParams = [];
-                foreach($value as $valueItem){
+                foreach ($value as $valueItem) {
                     $num++;
                     $inParams[] = "\${$num}";
                 }
                 $inParams = implode(', ', $inParams);
-                $isNot =  $isNot ? "not" : "";
+                $isNot = $isNot ? "not" : "";
                 $where[] = $this->escapeIdentifier($field) . " {$isNot} in  ({$inParams})";
             } elseif (is_null($value)) {
-                $isNot =  $isNot ? "not" : "";
+                $isNot = $isNot ? "not" : "";
                 $where[] = $this->escapeIdentifier($field) . " is {$isNot} null";
             } else {
                 $num++;
-                $isNot =  $isNot ? "!" : "";
+                $isNot = $isNot ? "!" : "";
                 $where[] = $this->escapeIdentifier($field) . "{$isNot}=$" . $num;
             }
         }
         $where = implode(' and ', $where);
-        if (!empty($where)){
+        if (!empty($where)) {
             $where = ' where ' . $where;
         }
         return $where;
@@ -252,21 +270,26 @@ class PgsqlAdapter extends AbstractAdapter
         $whereParams = [];
         foreach ($criteria as $field => $value) {
             if (is_object($value)) {
-                $class = StringUtils::cutClassName(get_class($value));
-                switch ($class) {
-                    case "Between":
+                switch (true) {
+                    case $value instanceof Between :
                         /** @var Between $value */
                         $whereParams[] = $value->getStart();
                         $whereParams[] = $value->getEnd();
                         break;
-                    case "ILike":
+                    case $value instanceof ILike:
                         /** @var ILike $value */
                         $whereParams[] = $value->getQuery();
                         break;
-                    case "PgPoint":
+                    case $value instanceof PgPoint:
+                        break;
+                    case $value instanceof IntegerableInterface:
+                        $whereParams[] = $value->toInt();
+                        break;
+                    case $value instanceof StringableInterface:
+                        $whereParams[] = (string)$value;
                         break;
                     default :
-                        throw new \InvalidArgumentException("where class $class not implement");
+                        throw new \InvalidArgumentException(sprintf('Where class "%s" not implement', get_class($value)));
                 }
 
             } elseif (is_array($value)) {
@@ -292,7 +315,7 @@ class PgsqlAdapter extends AbstractAdapter
         $fieldsNames = array_keys($fields);
         $num = 0;
         $fieldsQuery = [];
-        foreach($fieldsNames as $fieldName) {
+        foreach ($fieldsNames as $fieldName) {
             if (!isset($rawFields[$fieldName])) {
                 $num++;
                 $fieldsQuery[] = $this->escapeIdentifier($fieldName) . '=$' . $num;
@@ -332,7 +355,7 @@ class PgsqlAdapter extends AbstractAdapter
             $sql .= " limit {$limit}";
         }
         if (!is_null($offset)) {
-            $offset = (integer) $offset;
+            $offset = (integer)$offset;
             $sql .= " offset {$offset}";
         }
         return $sql;
@@ -348,7 +371,7 @@ class PgsqlAdapter extends AbstractAdapter
         $query .= $limitSql;
         $whereParams = $this->getWhereParams($criteria);
         array_unshift($whereParams, $query);
-        return call_user_func_array([$this, 'select'],  $whereParams);
+        return call_user_func_array([$this, 'select'], $whereParams);
     }
 
     public function count($table, array $criteria = [])

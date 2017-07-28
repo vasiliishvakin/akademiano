@@ -20,6 +20,8 @@ abstract class AbstractAdapter implements AdapterInterface
         }
     }
 
+    abstract public function connect();
+
     /**
      * @param mixed $dsn
      */
@@ -31,6 +33,12 @@ abstract class AbstractAdapter implements AdapterInterface
     public function getDsn()
     {
         return $this->dsn;
+    }
+
+    public function getDsnSafe()
+    {
+        $dsn = $this->getDsn();
+        return preg_replace('/(password\s*=\s*)(\S+)/', "$1=*******", $dsn);
     }
 
     /**
@@ -51,15 +59,7 @@ abstract class AbstractAdapter implements AdapterInterface
 
     public function isConnect()
     {
-        return !is_null($this->connection);
-    }
-
-    /**
-     * @param mixed $connection
-     */
-    public function setConnection($connection)
-    {
-        $this->connection = $connection;
+        return null === $this->connection;
     }
 
     /**
@@ -67,6 +67,9 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     public function getConnection()
     {
+        if (null === $this->connection) {
+            $this->connect();
+        }
         return $this->connection;
     }
 
