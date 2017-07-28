@@ -9,8 +9,12 @@ use Akademiano\Utils\ArrayTools;
 class SubCommand extends Command implements SubCommandInterface
 {
     const PREFIX_COMMAND_SUB = "sub.";
+
+    const COMMAND_NAME = null;
+
     /** @var  CommandInterface */
     protected $command;
+
 
     public function getPrefix()
     {

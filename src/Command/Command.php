@@ -21,11 +21,11 @@ class Command implements CommandInterface
      * @param $class
      * @param array $params
      */
-    public function __construct(array $params = [], $class = null, $name = null)
+    public function __construct(array $params = null, $class = null, $name = null)
     {
-        $this->name = $name ?  $name : static::COMMAND_NAME;
-        if ($class) $this->class = $class;
-        $this->setParams($params);
+        $this->name = $name ? $name : static::COMMAND_NAME;
+        if (null !== $class) $this->class = $class;
+        if (null !== $params) $this->setParams($params);
     }
 
     /**
@@ -62,6 +62,9 @@ class Command implements CommandInterface
 
     public function hasParam($path)
     {
+        if (null === $this->params) {
+            return false;
+        }
         return ArrayTools::issetByPath($this->params, $path);
     }
 
@@ -70,6 +73,9 @@ class Command implements CommandInterface
      */
     public function getParams($path = null, $default = null)
     {
+        if (null === $this->params) {
+            return $default;
+        }
         if (null !== $path) {
             return ArrayTools::get($this->params, $path, $default);
         }
@@ -80,9 +86,12 @@ class Command implements CommandInterface
      * @param array $params
      * @param array|null $path
      */
-    public function setParams($params, $path = null)
+    public function setParams(array $params, $path = null)
     {
         if (null !== $path) {
+            if (null === $this->params) {
+                $this->params = [];
+            }
             $this->params = ArrayTools::set($this->params, $path, $params);
         } else {
             $this->params = $params;

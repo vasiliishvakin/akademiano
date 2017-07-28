@@ -43,6 +43,9 @@ trait WorkerMetaMapPropertiesTrait
             }
         } else {
             $mapping = (string)$mapping;
+            if (!class_exists($mapping)) {
+                throw new \InvalidArgumentException(sprintf('Class "%s" not exist for map actions worker "%s".', $mapping, get_called_class()));
+            }
             $newMapping = [];
             foreach ($oldMapping as $action => $class) {
                 $newMapping[$action] = $mapping;

@@ -14,7 +14,7 @@ interface CommandInterface
 
     public function getParams($path = null, $default = null);
 
-    public function setParams($params, $path = null);
+    public function setParams(array $params, $path = null);
 
     public function addParams($params, $path = null);
 
