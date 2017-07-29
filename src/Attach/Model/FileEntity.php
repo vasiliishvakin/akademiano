@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Attach\Model;
+namespace Akademiano\Attach\Model;
 
 
 use DeltaPhp\Operator\Entity\EntityInterface;

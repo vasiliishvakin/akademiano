@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Attach\Model\Worker;
+namespace Akademiano\Attach\Model\Worker;
 
 
 use Attach\Model\FileEntity;

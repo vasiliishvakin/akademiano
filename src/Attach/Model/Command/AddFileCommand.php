@@ -1,7 +1,6 @@
 <?php
 
-
-namespace Attach\Model\Command;
+namespace Akademiano\Attach\Model\Command;
 
 
 use Attach\Model\FileEntity;
@@ -19,6 +18,4 @@ class AddFileCommand extends Command implements CommandInterface
         $params["entity"] = $entity;
         parent::__construct($params, $relationClass, self::COMMAND_ADD_FILE);
     }
-
-
 }

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Attach\Model\Command;
+namespace Akademiano\Attach\Model\Command;
 
 use DeltaPhp\Operator\Command\Command;
 use DeltaPhp\Operator\Command\CommandInterface;
@@ -18,6 +18,4 @@ class DeleteFileCommand extends Command implements CommandInterface
         $params["entity"] = $entity;
         parent::__construct($params, $relationClass, self::COMMAND_DELETE_FILE);
     }
-
-
 }

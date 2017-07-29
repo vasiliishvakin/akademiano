@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Attach\Model\Command;
+namespace Akademiano\Attach\Model\Command;
 
 use DeltaPhp\Operator\Command\Command;
 use DeltaPhp\Operator\Command\CommandInterface;
@@ -15,6 +15,4 @@ class UpdateFileCommand extends Command implements CommandInterface
         $params["file"] = $file;
         parent::__construct($params, null, self::COMMAND_UPDATE_FILE);
     }
-
-
 }

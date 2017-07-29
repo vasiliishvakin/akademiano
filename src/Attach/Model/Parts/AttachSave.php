@@ -1,9 +1,6 @@
 <?php
-/**
- * User: Vasiliy Shvakin (orbisnull) zen4dev@gmail.com
- */
 
-namespace Attach\Model\Parts;
+namespace Akademiano\Attach\Model\Parts;
 
 
 use Attach\Model\FileManager;

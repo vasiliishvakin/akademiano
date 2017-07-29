@@ -1,7 +1,4 @@
 <?php
-/**
- * User: Vasiliy Shvakin (orbisnull) zen4dev@gmail.com
- */
 return [
     'fileManager' => function ($c) {
         /** @var \DeltaCore\Application $c */

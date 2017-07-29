@@ -1,12 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: orbisnull
- * Date: 17.01.16
- * Time: 2:36
- */
 
-namespace Attach\Model\Parts;
+namespace Akademiano\Attach\Model\Parts;
 
 
 use Attach\Model\EntityImageRelation;

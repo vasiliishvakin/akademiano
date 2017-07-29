@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Attach\Model;
+namespace Akademiano\Attach\Model;
 
 
 class EntityImageRelation extends EntityFileRelation

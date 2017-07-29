@@ -1,9 +1,6 @@
 <?php
-/**
- * User: Vasiliy Shvakin (orbisnull) zen4dev@gmail.com
- */
 
-namespace Attach\Model;
+namespace Akademiano\Attach\Model;
 
 
 use DeltaCore\Config;

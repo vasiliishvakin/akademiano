@@ -1,23 +1,24 @@
 {
-  "name": "deltaphp/attach",
-  "description": "Attach files to othe objects",
-  "license": "MIT",
+  "name": "akademiano/attach",
+  "description": "Attach files to other objects",
+  "license": "Apache-2.0",
   "minimum-stability": "dev",
   "prefer-stable": true,
   "authors": [
     {
-      "name": "orbisnull",
-      "email": "zen4dev@gmail.com"
+      "name": "Vasiliy Shvakin",
+      "email": "mrdatamapper@gmail.com"
     }
   ],
   "autoload": {
-    "psr-0": {
-      "Attach": "src/"
+    "psr-4": {
+      "Akademiano\\Attach\\": "src/"
     }
   },
   "require": {
-    "deltaphp/deltadb": "~1.3",
-    "deltaphp/sequence": "~1.1",
-    "deltaphp/httpwarp": "~1.0"
+    "php": "^5.6 || ^7.1",
+    "akademiano/utils": "^1.0.0-beta.6",
+    "akademiano/entity": "^1.0.0-beta.1",
+    "akademiano/entity-operator": "^1.0.0-beta.1"
   }
 }

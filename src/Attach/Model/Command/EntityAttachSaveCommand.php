@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Attach\Model\Command;
+namespace Akademiano\Attach\Model\Command;
 
 
 use DeltaPhp\Operator\Command\Command;
