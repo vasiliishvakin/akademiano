@@ -2,7 +2,7 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class EntityOperatorText extends AbstractMigration
+class EntityOperatorContent extends AbstractMigration
 {
     public function up()
     {

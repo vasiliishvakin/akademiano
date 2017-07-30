@@ -35,11 +35,12 @@ CREATE TABLE entities
   created timestamp without time zone,
   changed timestamp without time zone,
   active boolean DEFAULT true,
+  owner bigint,
   CONSTRAINT entities_pkey PRIMARY KEY (id)
 );
 SQL;
         $this->execute($sql);
-        
+
         $sql = "CREATE SEQUENCE uuid_complex_short_tables_1";
         $this->execute($sql);
     }

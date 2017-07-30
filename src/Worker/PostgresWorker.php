@@ -39,10 +39,20 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
     use ConfigurableTrait;
     use WorkerMetaMapPropertiesTrait;
 
+    const TABLE_ID = 1;
+    const TABLE_NAME = "entities";
+    const EXPAND_FIELDS = [];
+    const EXPAND_UNMERGED_FIELDS = [];
+
     /** @var  PgsqlAdapter */
     protected $adapter;
 
-    protected $table = "entities";
+    protected $table;
+
+    protected $tableId;
+
+
+
     /** @var array */
     protected $fields = [
         "id",
@@ -56,6 +66,17 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
         "created",
         "owner",
     ];
+
+    /**
+     * PostgresWorker constructor.
+     */
+    public function __construct()
+    {
+        $this->table = static::TABLE_NAME;
+        $this->tableId = static::TABLE_ID;
+        $this->addFields(static::EXPAND_FIELDS);
+        $this->addUnmergedFields(static::EXPAND_UNMERGED_FIELDS);
+    }
 
     protected static function getDefaultMapping()
     {
@@ -107,6 +128,22 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
     public function setTable($table)
     {
         $this->table = $table;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTableId()
+    {
+        return $this->tableId;
+    }
+
+    /**
+     * @param int $tableId
+     */
+    public function setTableId($tableId)
+    {
+        $this->tableId = $tableId;
     }
 
     /**
@@ -410,7 +447,7 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
 
     public function genId()
     {
-        $tableIdRaw = $this->getConfig(WorkerInterface::PARAM_TABLEID);
+        $tableIdRaw = $this->getTableId();
         $tableId = filter_var($tableIdRaw, FILTER_VALIDATE_INT, ["options" => ["min_range" => 1, "max_range" => 255]]);
         if (false === $tableId) {
             throw  new \InvalidArgumentException("Table id {$tableIdRaw} not in range");

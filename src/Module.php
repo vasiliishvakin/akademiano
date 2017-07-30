@@ -3,16 +3,16 @@
 namespace Akademiano\EntityOperator;
 
 
+use Akademiano\Core\ModuleInterface;
 use Akademiano\EntityOperator\Worker\WorkerInterface;
-use Akademiano\Core\Application;
 use Akademiano\Core\ModuleManager;
 use Pimple\Container;
 
-class Module
+class Module implements ModuleInterface
 {
-    public static function init(ModuleManager $moduleManager, Application $application)
+    public function init(ModuleManager $moduleManager, Container $container)
     {
-        $application->extend("Operator", function (EntityOperator $operator, Container $c) use ($moduleManager) {
+        $container->extend("operator", function (EntityOperator $operator, Container $c) use ($moduleManager) {
             $workers = $moduleManager->getListArrayConfigs("workers");
             foreach ($workers as $workerName => $data) {
                 $workerParams = [];
@@ -31,12 +31,14 @@ class Module
                                         break;
                                     }
                                     case WorkerInterface::PARAM_ACTIONS_MAP: {
-                                        foreach ($row as $action => $actionParam) {
-                                            if (!is_array($actionParam)) {
-                                                $operator->addAction($action, $workerName, $actionParam);
-                                            } else {
-                                                foreach ($actionParam as $class => $order) {
-                                                    $operator->addAction($action, $workerName, $class, $order);
+                                        if (is_array($row)) {
+                                            foreach ($row as $action => $actionParam) {
+                                                if (!is_array($actionParam)) {
+                                                    $operator->addAction($action, $workerName, $actionParam);
+                                                } else {
+                                                    foreach ($actionParam as $class => $order) {
+                                                        $operator->addAction($action, $workerName, $class, $order);
+                                                    }
                                                 }
                                             }
                                         }
@@ -58,7 +60,12 @@ class Module
                                         }
                                     }
                                     if (method_exists($row, "getMapping")) {
-                                        $mapping = call_user_func([$row, "getMapping"]);
+                                        if (isset($data[WorkerInterface::PARAM_ACTIONS_MAP])) {
+                                            $newMapping  = $data[WorkerInterface::PARAM_ACTIONS_MAP];
+                                            $mapping = call_user_func_array([$row, "getMapping"],  [$newMapping]);
+                                        } else {
+                                            $mapping = call_user_func([$row, "getMapping"]);
+                                        }
                                         foreach ($mapping as $action => $actionParam) {
                                             if (!is_array($actionParam)) {
                                                 $operator->addAction($action, $workerName, $actionParam);
