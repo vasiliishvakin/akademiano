@@ -27,7 +27,7 @@ class SimpleCustodianTest extends \Codeception\Test\Unit
     {
         $this->tester->assertNull($this->custodian->authenticate("user", "password"));
         $this->assertInstanceOf(\Akademiano\User\GuestUserInterface::class, $this->custodian->getCurrentUser());
-        $this->assertFalse($this->custodian->isAuth());
+        $this->assertFalse($this->custodian->isAuthenticate());
         $this->assertTrue($this->custodian->sessionClose());
     }
 }
