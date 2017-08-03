@@ -5,5 +5,5 @@ namespace Akademiano\Utils\Object\Prototype;
 
 interface IntegerableInterface
 {
-    public function toInt();
+    public function getInt();
 }

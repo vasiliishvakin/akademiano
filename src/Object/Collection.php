@@ -3,6 +3,7 @@
 namespace Akademiano\Utils\Object;
 
 
+use Akademiano\Utils\Exception;
 use Akademiano\Utils\Object\Prototype\ArrayableInterface;
 use Akademiano\Utils\Exception\EmptyException;
 
@@ -36,10 +37,14 @@ class Collection extends ArrayObject implements ArrayableInterface, \JsonSeriali
         return $this->current();
     }
 
-    public function firstOrFail()
+    public function firstOrFail(\Exception $exception = null)
     {
         if ($this->count() <= 0) {
-            throw new EmptyException();
+            if (null !== $exception) {
+                throw $exception;
+            } else {
+                throw new EmptyException();
+            }
         }
         return $this->first();
     }
