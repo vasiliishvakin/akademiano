@@ -283,7 +283,7 @@ class PgsqlAdapter extends AbstractAdapter
                     case $value instanceof PgPoint:
                         break;
                     case $value instanceof IntegerableInterface:
-                        $whereParams[] = $value->toInt();
+                        $whereParams[] = $value->getInt();
                         break;
                     case $value instanceof StringableInterface:
                         $whereParams[] = (string)$value;
