@@ -16,7 +16,7 @@ SQL;
         $this->execute($sql);
 
 
-        $sql = "CREATE SEQUENCE uuid_complex_short_tables_3";
+        $sql = "CREATE SEQUENCE uuid_complex_short_tables_5";
         $this->execute($sql);
     }
 }
