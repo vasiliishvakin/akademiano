@@ -366,7 +366,7 @@ class Router implements EnvironmentIncludeInterface
     {
         $routes = $this->getRoutes();
         if (!isset($routes[$id])) {
-            throw new \InvalidArgumentException("Not found router with id $id");
+            throw new \InvalidArgumentException(sprintf('Not found route with id "%s"', $id));
         }
         $route = $routes[$id];
 
