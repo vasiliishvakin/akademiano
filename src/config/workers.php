@@ -93,7 +93,7 @@ return [
 
     "RelationEntitiesWorker" => [
         function (WorkersContainerInterface $s) {
-            $w = new \Akademiano\EntityOperator\Worker\PostgresWorker();
+            $w = new \Akademiano\EntityOperator\Worker\RelationsWorker();
             $adapter = $s->getOperator()->getDependency("dbAdapter");
             $w->setAdapter($adapter);
             $w->setTable("relations");
