@@ -8,7 +8,7 @@ use Akademiano\Utils\ArrayTools;
 use Akademiano\Entity\GroupInterface;
 use Akademiano\Entity\UserInterface;
 
-class XAclAdapterInterface implements AdapterInterface, FileBasedAdapterInterface
+class XAclAdapter implements AdapterInterface, FileBasedAdapterInterface
 {
     const DATA_DIR_NAME = "acl";
     const DATA_ROOT_DIR_NAME = "data";
@@ -98,7 +98,7 @@ class XAclAdapterInterface implements AdapterInterface, FileBasedAdapterInterfac
     {
         $fileName = "";
         foreach ($files as $file) {
-            $file = (string) $file;
+            $file = (string)$file;
             if (is_readable($file)) {
                 $fileName .= $file . "-" . filemtime($file);
             }
@@ -129,10 +129,13 @@ class XAclAdapterInterface implements AdapterInterface, FileBasedAdapterInterfac
         return $this->aclFile;
     }
 
-    public function prepareResource($resource)
+    public static function prepareResource($resource)
     {
         $resource = trim(trim($resource, "/"));
+        $resource = strtr($resource, "\\", "/");
         $resource = strtr($resource, "/", ":");
+        $resource = strtolower($resource);
+
         if ($resource === "") {
             $resource = self::ROOT_RESOURCE_PATH;
         }
@@ -142,10 +145,10 @@ class XAclAdapterInterface implements AdapterInterface, FileBasedAdapterInterfac
 
     public function accessCheck($resource, UserInterface $owner = null, GroupInterface $group, UserInterface $user = null)
     {
-        $resource = $this->prepareResource($resource);
+        $resource = static::prepareResource($resource);
         $params = [
             "-c" => $this->getAclFile(),
-            "-g" => $group->getId(),
+            "-g" => $group->getTitle(),
             "-r" => $resource,
             "-u" => ($user instanceof UserInterface) ? $user->getId() : null,
             "-o" => ($owner instanceof UserInterface) ? $owner->getId() : null,

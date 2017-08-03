@@ -12,9 +12,6 @@ return [
         $adapterName = $config->get(["acl", "adapter"], "Akademiano\\Acl\\Adapter\\AllowAdapter");
         /** @var \Akademiano\Acl\Adapter\AdapterInterface $adapter */
         $adapter = new $adapterName;
-        if ($adapter instanceof \Akademiano\Config\ConfigurableInterface) {
-            $adapter->setConfig($config);
-        }
 
         if ($adapter instanceof \Akademiano\Acl\Adapter\FileBasedAdapterInterface) {
             /** @var \Akademiano\Config\ConfigLoader $configLoader */

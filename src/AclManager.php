@@ -4,6 +4,7 @@ namespace Akademiano\Acl;
 
 use Akademiano\Acl\Adapter\AdapterInterface;
 use Akademiano\Acl\Adapter\DenyAdapter;
+use Akademiano\Acl\Adapter\XAclAdapter;
 use Akademiano\HttpWarp\Request;
 use Akademiano\User\AuthInterface;
 use Akademiano\Entity\UserInterface;
@@ -74,12 +75,15 @@ class AclManager implements AccessCheckInterface
 
     public function getResource()
     {
-        $resource = (string)$this->getRequest()->getUrl()->getPath();
+        $resource = XAclAdapter::prepareResource((string)$this->getRequest()->getUrl()->getPath());
         return $resource;
     }
 
     public function accessCheck($resource = null, UserInterface $owner = null, GroupInterface $group = null, UserInterface $user = null)
     {
+        if (php_sapi_name() === "cli" && getenv("AKADEMIANO_NO_ACL_CHECK", true) == 1) {
+            return true;
+        }
         if (null === $resource) {
             $resource = $this->getResource();
         }

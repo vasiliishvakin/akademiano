@@ -8,7 +8,7 @@ use Akademiano\Entity\GroupInterface;
 use Akademiano\Entity\UserInterface;
 
 
-class RegisteredAdapter extends XAclAdapterInterface implements AdapterInterface
+class RegisteredAdapter extends XAclAdapter implements AdapterInterface
 {
     protected $patches;
 
@@ -39,7 +39,7 @@ class RegisteredAdapter extends XAclAdapterInterface implements AdapterInterface
 
     public function accessCheck($resource, UserInterface $owner = null, GroupInterface $group, UserInterface $user = null)
     {
-        $resource = $this->prepareResource($resource);
+        $resource = static::prepareResource($resource);
         $char = mb_strcut($resource, 0, 1);
         $resource = explode(":", $resource);
         $patches = $this->getPatches();
