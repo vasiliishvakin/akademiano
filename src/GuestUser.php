@@ -7,7 +7,7 @@ use Akademiano\Entity\NamedEntity;
 
 class GuestUser extends NamedEntity implements GuestUserInterface
 {
-    protected $id = null;
+    protected $id = 0;
     protected $group = null;
     protected $title = "guest";
 
