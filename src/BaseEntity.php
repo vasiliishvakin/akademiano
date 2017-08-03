@@ -26,9 +26,9 @@ abstract class BaseEntity implements BaseEntityInterface
         return $this->getId();
     }
 
-    public function toInt()
+    public function getInt()
     {
-        return $this->getId()->toInt();
+        return $this->getId()->getInt();
     }
 
     public function __toString()

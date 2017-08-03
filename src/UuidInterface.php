@@ -8,10 +8,6 @@ use Akademiano\Utils\Object\Prototype\StringableInterface;
 
 interface UuidInterface extends StringableInterface, IntegerableInterface
 {
-
-    public function __construct($value = null);
-
-
     /**
      * @return integer
      */

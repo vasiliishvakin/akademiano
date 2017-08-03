@@ -32,10 +32,10 @@ class Uuid implements UuidInterface
 
     public function getHex()
     {
-        return dechex($this->getValue());
+        return dechex($this->getInt());
     }
 
-    public function toInt()
+    public function getInt()
     {
         return (integer) $this->value;
     }
