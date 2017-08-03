@@ -52,7 +52,7 @@ class Application implements ConfigInterface, DIContainerIncludeInterface, Restr
     private function getDiContainerRaw()
     {
         if (null === $this->diContainer) {
-            $this->diContainer = new DI();
+            $this->diContainer = new ApplicationDiContainer();
         }
         return $this->diContainer;
     }
@@ -264,7 +264,7 @@ class Application implements ConfigInterface, DIContainerIncludeInterface, Restr
         $errorCode = $e->getCode();
         $closure = $this->getErrorFunction($errorCode);
         if (is_array($closure)) {
-            return $this->action($closure[0], $closure[1]);
+            return $this->action($closure[0], $closure[1], ["exception" => $e]);
         } elseif (is_callable($closure)) {
             return call_user_func($closure);
         } elseif ($errorCode === 404) {
@@ -412,7 +412,14 @@ class Application implements ConfigInterface, DIContainerIncludeInterface, Restr
                 throw new AccessDeniedException();
             }
         } elseif (!$this->accessCheck()) {
-            throw new AccessDeniedException();
+            $di = $this->getDiContainer();
+            if (isset($di["aclManager"])) {
+                /** @var AclManager $aclManager */
+                $aclManager = $di['aclManager'];
+                $resource = $aclManager->getResource();
+            }
+            throw new AccessDeniedException(sprintf('Access Denied to "%s"', $resource),
+                403, null, $resource, $this->getRequest()->getUrl());
         }
 
         $controller->init();
