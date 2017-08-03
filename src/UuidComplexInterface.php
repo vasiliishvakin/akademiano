@@ -3,15 +3,11 @@
 namespace Akademiano\UUID;
 
 
+use Akademiano\Entity\UuidInterface;
 use Akademiano\Utils\Object\Prototype\StringableInterface;
 
-interface UuidComplexInterface extends StringableInterface
+interface UuidComplexInterface extends UuidInterface
 {
-    /**
-     * @return integer
-     */
-    public function getValue();
-
     /**
      * @return \DateTime
      */
@@ -26,10 +22,5 @@ interface UuidComplexInterface extends StringableInterface
      * @return integer
      */
     public function getId();
-
-    /**
-     * @return string
-     */
-    public function toHex();
 
 }

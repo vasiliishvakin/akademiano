@@ -97,9 +97,14 @@ class UuidComplexShort implements UuidComplexInterface
         return $this->id;
     }
 
-    public function toHex()
+    public function getInt()
     {
-        return dechex($this->getValue());
+        return $this->getValue();
+    }
+
+    public function getHex()
+    {
+        return dechex($this->getInt());
     }
 
     public function __toString()

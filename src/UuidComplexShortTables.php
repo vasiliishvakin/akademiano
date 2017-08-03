@@ -4,7 +4,7 @@ namespace Akademiano\UUID;
 
 use Carbon\Carbon;
 
-class UuidComplexShortTables implements UuidComplexInterface
+class UuidComplexShortTables extends UuidComplexShort
 {
     protected $epoch = 1451317149374;
 
@@ -15,16 +15,6 @@ class UuidComplexShortTables implements UuidComplexInterface
     protected $table;
     protected $id;
 
-
-    public function __construct($value = null, $epoch = null)
-    {
-        if (null !== $value) {
-            $this->setValue($value);
-        }
-        if (null !== $epoch) {
-            $this->setEpoch($epoch);
-        }
-    }
 
     /**
      * @return integer
@@ -71,7 +61,7 @@ class UuidComplexShortTables implements UuidComplexInterface
             $epoch = $this->getEpoch();
             $uuid = $this->getValue();
             $timestamp = $uuid >> 23;
-            $timestamp = ($timestamp + $epoch) / 1000;
+            $timestamp = round(($timestamp + $epoch) / 1000);
             $date = Carbon::createFromTimestampUTC($timestamp);
             $this->date = $date;
         }
@@ -108,7 +98,7 @@ class UuidComplexShortTables implements UuidComplexInterface
         return $this->id;
     }
 
-    public function toHex()
+    public function getHex()
     {
         return dechex($this->getValue());
     }

@@ -10,25 +10,11 @@ class UuidComplexShortTables extends AbstractMigration
     
     public function up()
     {
-        if (!defined("ROOT_DIR")) {
-            define('ROOT_DIR', realpath(__DIR__ . '/..'));
-        }
-        if (!defined("PUBLIC_DIR")) {
-            define('PUBLIC_DIR', ROOT_DIR . '/public');
-        }
-        if (!defined("VENDOR_DIR")) {
-            define('VENDOR_DIR', ROOT_DIR . '/vendor');
-        }
-        if (!defined("DATA_DIR")) {
-            define('DATA_DIR', ROOT_DIR . '/data');
-        }
-
-
-        $loader = include ROOT_DIR . "/vendor/autoload.php";
-
-        $app = new Application();
-        $app->setLoader($loader);
-
+        /** @var \Akademiano\Core\Application $app */
+        $app = include __DIR__ . "/../../vendor/akademiano/core/src/bootstrap.php";
+        /** @var \Akademiano\Config\ConfigLoader $configLoader */
+        $configLoader = $app->getDiContainer()["baseConfigLoader"];
+        $configLoader->addConfigDir(__DIR__ . '/../../src/config', PHP_INT_MAX);
         $app->init();
 
         $epoch = $app->getConfig()->get(["UUID", "complexShort", "epoch"], self::OUR_EPOCH_DEFAULT);
