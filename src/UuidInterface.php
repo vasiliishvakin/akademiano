@@ -17,4 +17,6 @@ interface UuidInterface extends StringableInterface, IntegerableInterface
      * @return string
      */
     public function getHex();
+
+    public function getInt();
 }
