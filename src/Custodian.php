@@ -80,7 +80,7 @@ class Custodian extends SimpleCustodian implements DelegatingInterface
     {
         $rdt = $this->getRdt();
         if ($rdt instanceof HttpSessionDataTool) {
-            $rdt->setCurrentUserId($user->getId()->toInt());
+            $rdt->setCurrentUserId($user->getId()->getInt());
         }
     }
 }

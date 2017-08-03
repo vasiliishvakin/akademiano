@@ -6,7 +6,7 @@
 
     <div class="card">
         <div class="card-header">
-            Пользователи <a href="{{ url("tasks_add") }}" class="btn btn-success btn-sm" role="button">Добавить</a>
+            Пользователи <a href="{{ url(item_add_route) }}" class="btn btn-success btn-sm" role="button">Добавить</a>
         </div>
         <div class="card-block">
             <table class="table table-responsive table-hover table-outline mb-0">
@@ -39,10 +39,10 @@
                             {{ item.group.title ?: item.group.id.hex }}
                         </td>
                         <td>
-                            <a href="{{ url("tasks_edit", {"id": item.id.hex}) }}" rel="tooltip" title="Edit Task" class="btn btn-warning btn-simple btn-sm">
+                            <a href="{{ url(item_edit_route, {"id": item.id.hex}) }}" rel="tooltip" title="Edit Task" class="btn btn-warning btn-simple btn-sm">
                                 <i class="fa fa-edit"></i>
                             </a>
-                            <a href="{{ url("tasks_delete", {"id": item.id.hex}) }}" rel="tooltip" title="Delete" class="btn btn-danger btn-simple btn-sm">
+                            <a href="{{ url(item_delete_route, {"id": item.id.hex}) }}" rel="tooltip" title="Delete" class="btn btn-danger btn-simple btn-sm">
                                 <i class="fa fa-trash"></i>
                             </a>
                         </td>

@@ -6,7 +6,7 @@
 
     <div class="card">
         <div class="card-header">
-            Пользователи <a href="{{ url("tasks_add") }}" class="btn btn-success btn-sm" role="button">Добавить</a>
+            Группы <a href="{{ url(item_add_route) }}" class="btn btn-success btn-sm" role="button">Добавить</a>
         </div>
         <div class="card-block">
             <table class="table table-responsive table-hover table-outline mb-0">
@@ -14,8 +14,6 @@
                 <tr>
                     <th>id</th>
                     <th>title</th>
-                    <th>created</th>
-                    <th>users</th>
                     <th>actions</th>
                 </tr>
                 </thead>
@@ -23,21 +21,16 @@
                 {% for item in items %}
                     <tr>
                         <td>
-                            {{ item.id.hex}}
-                        </td><td>
-                            {{ item.title ?: "N/A"}}
+                            {{ item.id.hex }}
                         </td>
                         <td>
-                            {{ item.created |date("d.m.Y") }}
+                            {{ item.title }}
                         </td>
                         <td>
-                            {{ item.group.users }}
-                        </td>
-                        <td>
-                            <a href="{{ url("tasks_edit", {"id": item.id.hex}) }}" rel="tooltip" title="Edit Task" class="btn btn-warning btn-simple btn-sm">
+                            <a href="{{ url(item_edit_route, {"id": item.id.hex}) }}" rel="tooltip" title="Edit Task" class="btn btn-warning btn-simple btn-sm">
                                 <i class="fa fa-edit"></i>
                             </a>
-                            <a href="{{ url("tasks_delete", {"id": item.id.hex}) }}" rel="tooltip" title="Delete" class="btn btn-danger btn-simple btn-sm">
+                            <a href="{{ url(item_delete_route, {"id": item.id.hex}) }}" rel="tooltip" title="Delete" class="btn btn-danger btn-simple btn-sm">
                                 <i class="fa fa-trash"></i>
                             </a>
                         </td>

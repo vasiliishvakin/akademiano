@@ -13,6 +13,11 @@ trait OwneredTrait
 
     abstract public function getOperator();
 
+    protected function getOwnerClass()
+    {
+        return User::class;
+    }
+
     public function setOwner($owner)
     {
         $this->owner = $owner;
@@ -23,7 +28,7 @@ trait OwneredTrait
         if (null !== $this->owner && !$this->owner instanceof UserInterface) {
             /** @var EntityOperator $operator */
             $operator = $this->getOperator();
-            $this->owner = $operator->get(User::class, $this->owner);
+            $this->owner = $operator->get($this->getOwnerClass(), $this->owner);
         }
         return $this->owner;
     }
