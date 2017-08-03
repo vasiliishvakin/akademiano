@@ -135,6 +135,9 @@ class SitesManager implements EnvironmentIncludeInterface
 
     public static function filterSiteName($name)
     {
+        if (null === $name) {
+            return null;
+        }
         if (strtok($name, " /\\ ? * :") !== $name) {
             throw new InvalidSiteNameException(sprintf('Invalid site name %s', $name));
         }
@@ -149,6 +152,9 @@ class SitesManager implements EnvironmentIncludeInterface
 
     public function getSite($name)
     {
+        if (null === $name) {
+            return null;
+        }
         $name = self::filterSiteName($name);
         if (!array_key_exists($name, $this->sites)) {
             $siteClass = "Sites\\" . $name . "\\Site";
