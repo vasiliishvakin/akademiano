@@ -1,29 +1,51 @@
 <?php
 
-
 namespace Akademiano\Attach\Model;
 
+use Akademiano\Entity\NamedEntity;
+use Akademiano\HttpWarp\File\Parts\FileProperties;
+use Akademiano\Operator\DelegatingInterface;
+use Akademiano\Operator\DelegatingTrait;
+use Akademiano\UserEO\Model\Utils\OwneredTrait;
+use Akademiano\Utils\FileSystem;
+use Akademiano\HttpWarp\File\UploadFile;
 
-use DeltaPhp\Operator\Entity\EntityInterface;
-use DeltaPhp\Operator\Entity\NamedEntity;
-use HttpWarp\File\Parts\FileProperties;
-use HttpWarp\File\UploadFile;
-use DeltaUtils\FileSystem;
-
-class FileEntity extends NamedEntity implements EntityInterface
+class File extends NamedEntity implements DelegatingInterface
 {
     use FileProperties;
 
     protected $type;
     protected $subType;
     protected $path;
-    protected $fieldId;
+    protected $position;
     protected $size;
     protected $mimeType;
+    /** @var  bool */
+    protected $moved = false;
+
     /**
      * @var UploadFile
      */
     protected $uploadedFile;
+
+    use DelegatingTrait;
+    use OwneredTrait;
+
+    /**
+     * @return bool
+     */
+    protected function isMoved()
+    {
+        return $this->moved;
+    }
+
+    /**
+     * @param bool $moved
+     */
+    protected function setMoved($moved)
+    {
+        $this->moved = $moved;
+    }
 
     /**
      * @param mixed $type
@@ -66,6 +88,22 @@ class FileEntity extends NamedEntity implements EntityInterface
         $this->path = $path;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * @param mixed $position
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
+    }
+
     public function getRootDir()
     {
         return ROOT_DIR;
@@ -84,22 +122,6 @@ class FileEntity extends NamedEntity implements EntityInterface
     public function getFileDirectory()
     {
         return pathinfo($this->getPath(), PATHINFO_DIRNAME);
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getFieldId()
-    {
-        return $this->fieldId;
-    }
-
-    /**
-     * @param mixed $fieldId
-     */
-    public function setFieldId($fieldId)
-    {
-        $this->fieldId = $fieldId;
     }
 
     public function setUploadFile(UploadFile $file)
@@ -172,7 +194,7 @@ class FileEntity extends NamedEntity implements EntityInterface
         if (!$this->isMoved()) {
             $file = $this->getFullPath();
             $result = move_uploaded_file($file, $path);
-            $this->isMoved = $result;
+            $this->setMoved($result);
         } else {
             $result = rename($this->getPath(), $path);
         }
