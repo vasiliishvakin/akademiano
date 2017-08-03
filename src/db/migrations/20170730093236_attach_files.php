@@ -2,14 +2,10 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class FilesWithOperator extends AbstractMigration
+class AttachFiles extends AbstractMigration
 {
     public function up()
     {
-        $table = $this->table("files");
-        $table->rename("files_old");
-        $table->save();
-
         $sql = <<<SQL
 CREATE TABLE files
 (
@@ -19,16 +15,20 @@ CREATE TABLE files
 -- Унаследована from table named:  active boolean DEFAULT true,
 -- Унаследована from table named:  title text,
 -- Унаследована from table named:  description text,
-  type text,
-  sub_type text,
-  path text,
-  CONSTRAINT files_eo_pkey PRIMARY KEY (id)
+  type text, 
+  sub_type text, 
+  path text, 
+  position text, 
+  size integer, 
+  mime_type text,
+  PRIMARY KEY (id)
 )
 INHERITS (named);
 SQL;
         $this->execute($sql);
-        
-        $sql = "CREATE SEQUENCE uuid_complex_short_tables_12";
+
+
+        $sql = sprintf('CREATE SEQUENCE uuid_complex_short_tables_%d', \Akademiano\Attach\Model\FilesWorker::TABLE_ID);
         $this->execute($sql);
     }
 }
