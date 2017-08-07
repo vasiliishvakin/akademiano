@@ -2,12 +2,12 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class EntityOperatorEntries extends AbstractMigration
+class Countries extends AbstractMigration
 {
     public function up()
     {
         $sql = <<<SQL
-CREATE TABLE entries
+CREATE TABLE countries
 (
   PRIMARY KEY (id)
 )
@@ -16,7 +16,8 @@ SQL;
         $this->execute($sql);
 
 
-        $sql = "CREATE SEQUENCE uuid_complex_short_tables_5";
+        $sql = sprintf('CREATE SEQUENCE uuid_complex_short_tables_%d', \Akademiano\Content\Countries\Model\CountriesWorker::TABLE_ID);
         $this->execute($sql);
+
     }
 }

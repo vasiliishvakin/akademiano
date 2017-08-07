@@ -3,11 +3,11 @@ use Akademiano\EntityOperator\Worker\WorkerInterface;
 use Akademiano\Operator\WorkersContainerInterface;
 
 return [
-    "entriesWorker" => [
-        \Akademiano\Content\Entries\Model\EntriesWorker::class,
-        WorkerInterface::PARAM_ACTIONS_MAP => \Akademiano\Content\Entries\Model\Entry::class,
+    "countriesWorker" => [
+        \Akademiano\Content\Countries\Model\CountriesWorker::class,
+        WorkerInterface::PARAM_ACTIONS_MAP => \Akademiano\Content\Countries\Model\Country::class,
         function (WorkersContainerInterface $s) {
-            $w = new  \Akademiano\Content\Entries\Model\EntriesWorker();
+            $w = new  \Akademiano\Content\Countries\Model\CountriesWorker();
             $adapter = $s->getOperator()->getDependency("dbAdapter");
             $w->setAdapter($adapter);
             return $w;
