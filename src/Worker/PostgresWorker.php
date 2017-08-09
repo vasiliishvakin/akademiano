@@ -380,7 +380,6 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
             if ($value) {
                 $method = "set" . ucfirst($objectAttribute);
                 if (method_exists($entity, $method)) {
-                    $value = $data[$field];
                     $entity->{$method}($value);
                 }
             }
@@ -393,13 +392,14 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
         $fields = $this->getFields();
         $data = [];
         foreach ($fields as $field) {
-            $getMethod = "get" . ucfirst($field);
+            $objectField = StringUtils::lowDashToCamelCase($field);
+            $getMethod = "get" . ucfirst($objectField);
             if (method_exists($entity, $getMethod) && is_callable([$entity, $getMethod])) {
                 $fieldValue = $entity->$getMethod();
                 $fieldValue = $this->filterFieldToPostgresType($fieldValue, $field, $entity);
                 $data[$field] = $fieldValue;
             } else {
-                $isMethod = "is" . ucfirst($field);
+                $isMethod = "is" . ucfirst($objectField);
                 if (method_exists($entity, $isMethod) && is_callable([$entity, $isMethod])) {
                     $fieldValue = $entity->$isMethod();
                     $fieldValue = $this->filterFieldToPostgresType($fieldValue, $field, $entity);

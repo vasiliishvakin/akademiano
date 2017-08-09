@@ -4,6 +4,7 @@
 namespace Akademiano\EntityOperator\Worker;
 
 
+use Akademiano\Entity\EntityInterface;
 use Akademiano\EntityOperator\Command\CreateCommand;
 use Akademiano\Operator\Worker\WorkerInterface;
 use Akademiano\EntityOperator\CreatorInterface;
@@ -12,6 +13,7 @@ use Akademiano\Operator\Worker\WorkerMetaMapPropertiesTrait;
 use Akademiano\Operator\IncludeOperatorTrait;
 use Akademiano\Operator\Command\CommandInterface;
 use Akademiano\Entity\Entity;
+use Carbon\Carbon;
 
 
 class EntityCreatorWorker implements WorkerInterface, CreatorInterface, IncludeOperatorInterface
@@ -38,6 +40,9 @@ class EntityCreatorWorker implements WorkerInterface, CreatorInterface, IncludeO
         $entity = new $class();
         if ($entity instanceof IncludeOperatorInterface) {
             $entity->setOperator($this->getOperator());
+        }
+        if ($entity instanceof EntityInterface) {
+            $entity->setCreated(new Carbon());
         }
         return $entity;
     }
