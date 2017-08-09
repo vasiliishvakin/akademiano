@@ -1,6 +1,6 @@
 <?php
 
-namespace Visa\Tasks\Countries\Controller;
+namespace Akademiano\Content\Countries\Controller;
 
 
 use Akademiano\Content\Countries\Api\v1\CountriesApi;

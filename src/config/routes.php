@@ -9,21 +9,21 @@ return [
             "type" => \Akademiano\Router\RoutePattern::TYPE_REGEXP,
             "value" => "/admin/countries/id(?P<id>\w+)/edit",
         ],
-        "action" => ["index", "form"],
+        "action" => ["adminCountries", "form"],
     ],
     RoutesStore::DELETE_ROUTE => [
         "patterns" => [
             "type" => \Akademiano\Router\RoutePattern::TYPE_REGEXP,
             "value" => "/admin/countries/(?P<id>\w+)/delete",
         ],
-        "action" => ["index", "delete"],
+        "action" => ["adminCountries", "delete"],
     ],
     RoutesStore::VIEW_ROUTE => [
         "patterns" => [
             "type" => \Akademiano\Router\RoutePattern::TYPE_REGEXP,
             "value" => "^/admin/countries/id(?P<id>\w+)",
         ],
-        "action" => ["index", "view"],
+        "action" => ["adminCountries", "view"],
     ],
 
     RoutesStore::LIST_ROUTE => [
@@ -31,20 +31,20 @@ return [
             "type" => \Akademiano\Router\RoutePattern::TYPE_FULL,
             "value" => "/admin/countries",
         ],
-        "action" => ["index", "list"],
+        "action" => ["adminCountries", "list"],
     ],
     RoutesStore::ADD_ROUTE => [
         "patterns" => [
             "type" => \Akademiano\Router\RoutePattern::TYPE_FULL,
             "value" => "/admin/countries/add",
         ],
-        "action" => ["index", "form"],
+        "action" => ["adminCountries", "form"],
     ],
     RoutesStore::SAVE_ROUTE => [
         "patterns" => [
             "type" => \Akademiano\Router\RoutePattern::TYPE_FULL,
             "value" => "/admin/countries/save",
         ],
-        "action" => ["index", "save"],
+        "action" => ["adminCountries", "save"],
     ],
 ];
