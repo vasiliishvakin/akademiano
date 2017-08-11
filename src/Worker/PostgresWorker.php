@@ -448,7 +448,7 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
     public function genId()
     {
         $tableIdRaw = $this->getTableId();
-        $tableId = filter_var($tableIdRaw, FILTER_VALIDATE_INT, ["options" => ["min_range" => 1, "max_range" => 255]]);
+        $tableId = filter_var($tableIdRaw, FILTER_VALIDATE_INT, ["options" => ["min_range" => 1, "max_range" => 512]]);
         if (false === $tableId) {
             throw  new \InvalidArgumentException("Table id {$tableIdRaw} not in range");
         }
