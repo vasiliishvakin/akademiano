@@ -7,6 +7,9 @@ use Akademiano\EntityOperator\Ext\EntityOpsRoutesStore;
 
 class UsersOpsRoutesStore extends EntityOpsRoutesStore
 {
+    const LOGIN_ROUTE_NAME = "login_route";
+    const LOGOUT_ROUTE_NAME = "logout_route";
+
     const LIST_ROUTE = "admin_users_list";
     const VIEW_ROUTE = "admin_users_view";
     const ADD_ROUTE = "admin_users_add";
@@ -29,9 +32,16 @@ class UsersOpsRoutesStore extends EntityOpsRoutesStore
 
     public function toArray()
     {
-        $result = parent::toArray();
-        $result["login_route"] = $this->getLoginRoute();
-        $result["logout_route"] = $this->getLogoutRoute();
-        return $result;
+        if (null === $this->array) {
+            $array = parent::toArray();
+            if (null !== $this->getLoginRoute()) {
+                $array[self::LOGIN_ROUTE_NAME] = $this->getLoginRoute();
+            }
+            if (null !== $this->getLogoutRoute()) {
+                $array[self::LOGOUT_ROUTE_NAME] = $this->getLogoutRoute();
+            }
+            $this->array = $array;
+        }
+        return $this->array;
     }
 }
