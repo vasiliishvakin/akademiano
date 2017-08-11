@@ -7,12 +7,21 @@ use Akademiano\Utils\ArrayTools;
 
 class EntityOpsRoutesStore
 {
+    const LIST_ROUTE_NAME = "items_list_route";
+    const VIEW_ROUTE_NAME = "item_view_route";
+    const ADD_ROUTE_NAME = "item_add_route";
+    const EDIT_ROUTE_NAME = "item_edit_route";
+    const SAVE_ROUTE_NAME = "item_save_route";
+    const DELETE_ROUTE_NAME = "item_delete_route";
+
     const LIST_ROUTE = null;
     const VIEW_ROUTE = null;
     const ADD_ROUTE = null;
     const EDIT_ROUTE = null;
     const SAVE_ROUTE = null;
     const DELETE_ROUTE = null;
+
+    protected $array;
 
     /**
      * @return mixed
@@ -64,14 +73,17 @@ class EntityOpsRoutesStore
 
     public function toArray()
     {
-        $result =  [
-            "item_list_route" => $this->getListRoute(),
-            "item_view_route" => $this->getViewRoute(),
-            "item_add_route" => $this->getAddRoute(),
-            "item_edit_route" => $this->getEditRoute(),
-            "item_save_route" => $this->getSaveRoute(),
-            "item_delete_route" => $this->getDeleteRoute(),
-        ];
-        return ArrayTools::filterNulls($result);
+        if (null === $this->array) {
+            $array = [
+                self::LIST_ROUTE_NAME => $this->getListRoute(),
+                self::VIEW_ROUTE_NAME => $this->getViewRoute(),
+                self::ADD_ROUTE_NAME => $this->getAddRoute(),
+                self::EDIT_ROUTE_NAME => $this->getEditRoute(),
+                self::SAVE_ROUTE_NAME => $this->getSaveRoute(),
+                self::DELETE_ROUTE_NAME => $this->getDeleteRoute(),
+            ];
+            $this->array = ArrayTools::filterNulls($array);
+        }
+        return $this->array;
     }
 }
