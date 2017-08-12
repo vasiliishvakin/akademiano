@@ -1,4 +1,4 @@
-{% extends "Visa/Tasks/layout.twig" %}
+{% extends "Akademiano/UserEO/adminLayout.twig" %}
 
 {% block mainContainerContent %}
     <div class="row">
@@ -17,13 +17,13 @@
                             <input type="text" class="form-control" id="title" name="title" value="{{ item.title }}">
                         </div>
                         <div class="form-group">
-                            <label for="category">Группа</label>
+                            <label for="category">Группа {{ item.group.id.int }}</label>
                             <select class="form-control" id="group" name="group" required>
                                 {% if not item.id %}
                                     <option disabled selected value style="display: none"> -- select an option --</option>
                                 {% endif %}
                                 {% for group in groups %}
-                                    <option value="{{ group.id }}" {{ group.id == item.group.id ?  selected}}>{{ group.title }}</option>
+                                    <option value="{{ group.id }}" {{ group.id == item.group.id ?  "selected"}}>{{ group.title }}</option>
                                 {% endfor %}
                             </select>
                         </div>

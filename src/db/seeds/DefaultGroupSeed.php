@@ -24,7 +24,7 @@ class DefaultGroupSeed extends AbstractSeed
         $app->init();
         /** @var \Akademiano\UserEO\Api\v1\GroupsApi $groupsApi */
         $groupsApi = $app->getDiContainer()["groupsApi"];
-        $groupsApi->save(["title" => "users"]);
-        $groupsApi->save(["title" => "admins"]);
+        $groupsApi->save(["title" => self::DEFAULT_ADMIN_GROUP_TITLE]);
+        $groupsApi->save(["title" => self::DEFAULT_USER_GROUP_TITLE]);
     }
 }

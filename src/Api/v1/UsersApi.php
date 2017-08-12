@@ -25,9 +25,6 @@ class UsersApi extends EntityApi
             $item = $this->get($id)->getOrThrow(
                 new NotFoundException("Exist entity with is {$id} not found")
             );
-            if (!$this->accessCheck(sprintf('%s/save/%s', static::ENTITY_CLASS, $item->getId()), $item->getOwner())) {
-                throw new AccessDeniedException();
-            }
         } else {
             /** @var User $item */
             $item = $this->getOperator()->create(static::ENTITY_CLASS);
@@ -53,7 +50,7 @@ class UsersApi extends EntityApi
             $item->setOwner($this->getCustodian()->getCurrentUser());
         }
 
-        $this->getOperator()->save($item);
+        $this->saveEntity($item);
 
         return $item;
     }

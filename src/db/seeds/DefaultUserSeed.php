@@ -30,7 +30,7 @@ class DefaultUserSeed extends AbstractSeed
         /** @var \Akademiano\UserEO\Api\v1\UsersApi $usersApi */
         $usersApi = $app->getDiContainer()["usersApi"];
         $usersApi->save([
-            "title" => "Admin",
+            "title" => "admin",
             "email" => "admin@example.com",
             "newPassword" => "admin",
             "group" => $group,
@@ -45,7 +45,7 @@ class DefaultUserSeed extends AbstractSeed
         /** @var \Akademiano\UserEO\Api\v1\UsersApi $usersApi */
         $usersApi = $app->getDiContainer()["usersApi"];
         $usersApi->save([
-            "title" => "User",
+            "title" => "user",
             "email" => "user@example.com",
             "newPassword" => "user",
             "group" => $group,
