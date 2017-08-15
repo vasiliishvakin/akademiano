@@ -1,10 +1,10 @@
 <?php
 
-namespace Akademiano\Attach\Api\v1;
+namespace Akademiano\Content\Files\Api\v1;
 
 use Akademiano\Api\v1\Entities\EntityApi;
-use Akademiano\Attach\Model\File;
-use Akademiano\Attach\Module;
+use Akademiano\Content\Files\Model\File;
+use Akademiano\Content\Files\Module;
 use Akademiano\Config\Config;
 use Akademiano\Config\ConfigLoader;
 use Akademiano\Core\Exception\AccessDeniedException;
@@ -22,8 +22,6 @@ class FilesApi extends EntityApi
     const API_ID = "filesApi";
     const ENTITY_CLASS = File::class;
 
-    const RELATION_API_ID = EntityFileRelationsApi::API_ID;
-
     const DEFAULT_CONFIG = [
         Module::MODULE_ID => [
             "filesPath" => [
@@ -40,24 +38,6 @@ class FilesApi extends EntityApi
 
     protected $rootDir;
 
-    /** @var  EntityFileRelationsApi */
-    protected $relationsApi;
-
-    /**
-     * @return EntityFileRelationsApi
-     */
-    public function getRelationsApi()
-    {
-        return $this->relationsApi;
-    }
-
-    /**
-     * @param EntityFileRelationsApi $relationsApi
-     */
-    public function setRelationsApi(EntityFileRelationsApi $relationsApi)
-    {
-        $this->relationsApi = $relationsApi;
-    }
 
     /**
      * @param null $path
@@ -169,16 +149,16 @@ class FilesApi extends EntityApi
     {
         $firstDirsLevelCount = $this->getConfig([Module::MODULE_ID, "firstDirsLevelCount"], 16);
         $secondDirsLevelCount = $this->getConfig([Module::MODULE_ID, "secondDirsLevelCount"], 16);
-        $dir1 = ($uuid->getId() + $uuid->getDate()->format("B")) % $firstDirsLevelCount;
+        $dir1 = ($uuid->getId() + (integer) $uuid->getDate()->format("B")) % $firstDirsLevelCount;
         $dir1 = $this->hash($dir1);
         $dir2 = $uuid->getId() % $secondDirsLevelCount;
         $dir2 = $this->hash($dir2);
-        $subdirs = $dir1 . "/" . $dir2;
+        $subDirs = $dir1 . "/" . $dir2;
 
         if (1 !== strpos($fileExt, ".")) {
             $fileExt = "." . $fileExt;
         }
-        $name = "{$subdirs}/{$uuid->getHex()}{$fileExt}";
+        $name = "{$subDirs}/{$uuid->getHex()}{$fileExt}";
         return $name;
     }
 
@@ -209,8 +189,6 @@ class FilesApi extends EntityApi
         if (!$this->accessCheck($resource, $entity->getOwner())) {
             throw new AccessDeniedException(sprintf('Access Denied to "%s"', $resource), null, null, $resource);
         }
-
-        $this->getRelationsApi()->deleteByRelated($entity);
 
         if ($entity instanceof File) {
             $filePath = realpath($this->getRootDir() . DIRECTORY_SEPARATOR . $entity->getPath());

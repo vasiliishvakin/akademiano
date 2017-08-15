@@ -1,8 +1,8 @@
 <?php
 
-namespace Akademiano\Attach;
+namespace Akademiano\Content\Files;
 
 class Module
 {
-    const MODULE_ID = 'attach';
+    const MODULE_ID = 'akademianoContentFiles';
 }

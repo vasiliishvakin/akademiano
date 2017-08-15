@@ -1,0 +1,5 @@
+vendor
+local.config.php
+tests/_output/*
+composer.lock
+

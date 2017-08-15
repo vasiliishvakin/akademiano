@@ -1,6 +1,6 @@
 {
-  "name": "akademiano/attach",
-  "description": "Attach files to other objects",
+  "name": "akademiano/content-files",
+  "description": "Attach files",
   "license": "Apache-2.0",
   "minimum-stability": "dev",
   "prefer-stable": true,
@@ -12,7 +12,7 @@
   ],
   "autoload": {
     "psr-4": {
-      "Akademiano\\Attach\\": "src/"
+      "Akademiano\\Content\\Files\\": "src/"
     }
   },
   "require": {
@@ -21,6 +21,7 @@
     "akademiano/entity": "^1.0.0-beta.1",
     "akademiano/entity-operator": "^1.0.0-beta.1",
     "akademiano/api": "^1.0.0-beta.1",
-    "hashids/hashids": "^2.0"
+    "hashids/hashids": "^2.0",
+    "akademiano/user-eo": "^1.0-beta.5"
   }
 }

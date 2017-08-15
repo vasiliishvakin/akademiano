@@ -1,9 +1,9 @@
 <?php
 
-namespace Akademiano\Attach\Controller;
+namespace Akademiano\Content\Files\Controller;
 
-use Akademiano\Attach\Api\v1\FilesApi;
-use Akademiano\Attach\Model\File;
+use Akademiano\Content\Files\Api\v1\FilesApi;
+use Akademiano\Content\Files\Model\File;
 use Akademiano\Core\Controller\AkademianoController;
 use Akademiano\HttpWarp\Exception\NotFoundException;
 use Akademiano\HttpWarp\Header;

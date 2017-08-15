@@ -2,7 +2,7 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class AttachFiles extends AbstractMigration
+class Files extends AbstractMigration
 {
     public function up()
     {
@@ -28,7 +28,7 @@ SQL;
         $this->execute($sql);
 
 
-        $sql = sprintf('CREATE SEQUENCE uuid_complex_short_tables_%d', \Akademiano\Attach\Model\FilesWorker::TABLE_ID);
+        $sql = sprintf('CREATE SEQUENCE uuid_complex_short_tables_%d', \Akademiano\Content\Files\Model\FilesWorker::TABLE_ID);
         $this->execute($sql);
     }
 }

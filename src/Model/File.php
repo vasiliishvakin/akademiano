@@ -1,6 +1,6 @@
 <?php
 
-namespace Akademiano\Attach\Model;
+namespace Akademiano\Content\Files\Model;
 
 use Akademiano\Entity\NamedEntity;
 use Akademiano\HttpWarp\File\Parts\FileProperties;
