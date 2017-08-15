@@ -21,6 +21,6 @@
     "akademiano/entity": "^1.0.0-beta.1",
     "akademiano/entity-operator": "^1.0.0-beta.1",
     "akademiano/api": "^1.0.0-beta.1",
-    "hashids/hashids": "^2.0"
+    "akademiano/content-files": "dev-master"
   }
 }

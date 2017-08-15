@@ -6,10 +6,9 @@ namespace Akademiano\Attach\Api\v1;
 
 use Akademiano\Api\v1\Entities\EntityApi;
 use Akademiano\Attach\Model\EntityFileRelation;
-use Akademiano\Attach\Model\File;
+use Akademiano\Attach\Model\LinkedFile;
 use Akademiano\Entity\Entity;
 use Akademiano\Entity\EntityInterface;
-use Akademiano\Entity\RelationsBetweenClassesTrait;
 use Akademiano\EntityOperator\Entity\RelationEntity;
 use Akademiano\EntityOperator\Worker\RelationsBetweenTrait;
 use Akademiano\EntityOperator\Worker\RelationsWorker;
@@ -48,7 +47,7 @@ class EntityFileRelationsApi extends EntityApi
         return static::FIELD_SECOND;
     }
 
-    public function saveRelation(Entity $task, File $file)
+    public function saveRelation(Entity $task, LinkedFile $file)
     {
         return $this->save([
             $this->getFirstField() => $task,

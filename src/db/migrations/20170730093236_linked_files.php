@@ -2,12 +2,12 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class AttachFiles extends AbstractMigration
+class RelatedFiles extends AbstractMigration
 {
     public function up()
     {
         $sql = <<<SQL
-CREATE TABLE files
+CREATE TABLE linked_files
 (
 -- Унаследована from table named:  id bigint NOT NULL,
 -- Унаследована from table named:  created timestamp without time zone,
@@ -21,14 +21,16 @@ CREATE TABLE files
   position text, 
   size integer, 
   mime_type text,
+  entity bigint,
   PRIMARY KEY (id)
+  FOREIGN KEY (entity) REFERENCES entities (id) ON UPDATE RESTRICT ON DELETE RESTRICT
 )
-INHERITS (named);
+INHERITS (files);
 SQL;
         $this->execute($sql);
 
 
-        $sql = sprintf('CREATE SEQUENCE uuid_complex_short_tables_%d', \Akademiano\Attach\Model\FilesWorker::TABLE_ID);
+        $sql = sprintf('CREATE SEQUENCE uuid_complex_short_tables_%d', \Akademiano\Attach\Model\LinkedFilesWorker::TABLE_ID);
         $this->execute($sql);
     }
 }

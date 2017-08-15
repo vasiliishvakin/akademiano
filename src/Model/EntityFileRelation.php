@@ -2,6 +2,7 @@
 
 namespace Akademiano\Attach\Model;
 
+use Akademiano\Content\Files\Model\File;
 use Akademiano\Entity\Entity;
 use Akademiano\EntityOperator\Entity\RelationEntity;
 
