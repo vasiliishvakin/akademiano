@@ -2,7 +2,7 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class RelatedFiles extends AbstractMigration
+class LinkedFiles extends AbstractMigration
 {
     public function up()
     {
@@ -22,7 +22,7 @@ CREATE TABLE linked_files
   size integer, 
   mime_type text,
   entity bigint,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id),
   FOREIGN KEY (entity) REFERENCES entities (id) ON UPDATE RESTRICT ON DELETE RESTRICT
 )
 INHERITS (files);
