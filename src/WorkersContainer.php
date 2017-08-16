@@ -4,8 +4,8 @@
 namespace Akademiano\Operator;
 
 
+use Akademiano\DI\Container;
 use Akademiano\Operator\Worker\ConfigurableInterface;
-use Pimple\Container;
 
 class WorkersContainer extends Container implements WorkersContainerInterface
 {
