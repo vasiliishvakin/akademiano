@@ -5,23 +5,22 @@ namespace Akademiano\Core;
 
 
 use Akademiano\Acl\AccessCheckIncludeInterface;
+use Akademiano\DI\Container;
 use Akademiano\User\CustodianIncludeInterface;
 use Pimple\Exception\UnknownIdentifierException;
 
-class ApplicationDiContainer extends DI
+class ApplicationDiContainer extends Container
 {
     protected $values = [];
 
     protected function prepare($value)
     {
+        $value = parent::prepare($value);
         if ($value instanceof AccessCheckIncludeInterface) {
             $value->setAclManager($this["aclManager"]);
         }
         if ($value instanceof CustodianIncludeInterface) {
             $value->setCustodian($this["custodian"]);
-        }
-        if ($value instanceof \Akademiano\Config\ConfigurableInterface) {
-            $value->setConfig($this["config"]);
         }
         return $value;
     }

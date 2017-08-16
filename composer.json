@@ -29,7 +29,7 @@
     "akademiano/user": "^1.0.0-beta.1",
     "akademiano/twig-extensions": "^1.0.0-beta.2",
     "akademiano/acl": "^1.0.0-beta.2",
-    "pimple/pimple": "^3.0"
+    "akademiano/di": "^1.0.0-beta.1"
   },
   "require-dev": {
     "codeception/codeception": "^2.2.10",
