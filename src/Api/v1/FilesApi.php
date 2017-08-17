@@ -88,7 +88,7 @@ class FilesApi extends EntityApi
         $this->config = $config;
     }
 
-    public function saveUploaded(FileInterface $file)
+    public function saveUploaded(FileInterface $file, array $attributes = null)
     {
         $fileExt = $file->getExt();
         $tmpPath = $file->getPath();
@@ -109,6 +109,10 @@ class FilesApi extends EntityApi
         $createCommand = new CreateCommand(static::ENTITY_CLASS);
         /** @var File $newFile */
         $newFile = $this->getOperator()->execute($createCommand);
+
+        if (!empty($attributes)) {
+            $this->getOperator()->load($newFile, $attributes);
+        }
 
         $newFile->setId($id);
         $newFile->setPath($path);
@@ -149,7 +153,7 @@ class FilesApi extends EntityApi
     {
         $firstDirsLevelCount = $this->getConfig([Module::MODULE_ID, "firstDirsLevelCount"], 16);
         $secondDirsLevelCount = $this->getConfig([Module::MODULE_ID, "secondDirsLevelCount"], 16);
-        $dir1 = ($uuid->getId() + (integer) $uuid->getDate()->format("B")) % $firstDirsLevelCount;
+        $dir1 = ($uuid->getId() + (integer)$uuid->getDate()->format("B")) % $firstDirsLevelCount;
         $dir1 = $this->hash($dir1);
         $dir2 = $uuid->getId() % $secondDirsLevelCount;
         $dir2 = $this->hash($dir2);
