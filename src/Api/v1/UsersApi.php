@@ -25,6 +25,10 @@ class UsersApi extends EntityApi
             $item = $this->get($id)->getOrThrow(
                 new NotFoundException("Exist entity with is {$id} not found")
             );
+            $resource = sprintf('%s/save/%s', static::ENTITY_CLASS, $item->getId());
+            if (!$this->accessCheck($resource)) {
+                throw new AccessDeniedException("AccessDenied to save user", 0, null, $resource);
+            }
         } else {
             /** @var User $item */
             $item = $this->getOperator()->create(static::ENTITY_CLASS);

@@ -1,4 +1,4 @@
-{% extends "Akademiano/UserEO/adminLayout.twig" %}
+{% extends "Visa/Tasks/layout.twig" %}
 
 {% block mainContainerContent %}
     <div class="row">
@@ -17,7 +17,7 @@
                             <input type="text" class="form-control" id="title" name="title" value="{{ item.title }}">
                         </div>
                         <div class="form-group">
-                            <label for="category">Группа {{ item.group.id.int }}</label>
+                            <label for="group">Группа</label>
                             <select class="form-control" id="group" name="group" required>
                                 {% if not item.id %}
                                     <option disabled selected value style="display: none"> -- select an option --</option>
