@@ -23,7 +23,7 @@
                                     <option disabled selected value style="display: none"> -- select an option --</option>
                                 {% endif %}
                                 {% for group in groups %}
-                                    <option value="{{ group.id }}" {{ group.id == item.group.id ?  selected}}>{{ group.title }}</option>
+                                    <option value="{{ group.id }}" {{ group.id.int == item.group.id.int ?  "selected"}}>{{ group.title }}</option>
                                 {% endfor %}
                             </select>
                         </div>
