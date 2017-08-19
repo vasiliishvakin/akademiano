@@ -1,0 +1,32 @@
+{
+  "name": "akademiano/messages",
+  "description": "message system",
+  "license": "Apache-2.0",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "authors": [
+    {
+      "name": "Vasiliy Shvakin",
+      "email": "mrdatamapper@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Akademiano\\Messages\\": "src/"
+    }
+  },
+  "require": {
+    "php": "^5.6 || ^7.0",
+    "akademiano/entity": "^1.0.0-beta.1",
+    "akademiano/user-eo": "^1.0.0-beta.6",
+    "akademiano/entity-operator": "^1.0.0-beta.1",
+    "nesbot/carbon": "^1.22",
+    "twig/twig": "^1.33.0",
+    "akademiano/entity-operator-ext": "^1.0.0-beta.1"
+  },
+  "require-dev": {
+    "codeception/codeception": "^2.2.10",
+    "satooshi/php-coveralls": "^1.0.1",
+    "mockery/mockery": "^0.9.9"
+  }
+}
