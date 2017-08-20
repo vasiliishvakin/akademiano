@@ -133,8 +133,8 @@ class FilesApi extends EntityApi
         $newFile->setId($id);
         $newFile->setPath($path);
         $newFile->setPosition($newFilePatch);
+        $this->saveEntity($newFile);
 
-        $this->getOperator()->save($newFile);
         return $newFile;
     }
 
