@@ -5,17 +5,13 @@ namespace Akademiano\Utils\Object;
 
 use Akademiano\Utils\Object\Prototype\IntegerableInterface;
 use Akademiano\Utils\Object\Prototype\StringableInterface;
+use MyCLabs\Enum\Enum;
 
-abstract class IntegerEnum extends \SplEnum implements StringableInterface, IntegerableInterface, \Serializable, \JsonSerializable
+abstract class IntegerEnum extends Enum implements StringableInterface, IntegerableInterface, \Serializable, \JsonSerializable
 {
     public function getInt()
     {
         return (integer)$this;
-    }
-
-    public function __toString()
-    {
-        return (string)$this->getInt();
     }
 
     public function serialize()
