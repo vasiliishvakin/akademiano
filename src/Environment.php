@@ -185,7 +185,7 @@ class Environment
     public function getVar($varName, $local_only = false, $default = null)
     {
         $value = getenv($varName, $local_only);
-        return  (false !== $value) ? $value : null;
+        return  (false !== $value) ? $value : $default;
     }
 
     public function getVarMayby($varName, $local_only = false)

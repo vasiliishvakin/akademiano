@@ -3,7 +3,6 @@
 [![Coverage Status](https://coveralls.io/repos/github/mrdatamapper/akademiano-httpwarp/badge.svg)](https://coveralls.io/github/mrdatamapper/akademiano-httpwarp)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/35099984-c074-4dad-8bf5-c339584f92a3/mini.png)](https://insight.sensiolabs.com/projects/35099984-c074-4dad-8bf5-c339584f92a3)
 [![Libraries.io ](https://img.shields.io/librariesio/github/mrdatamapper/akademiano-httpwarp.svg)](https://libraries.io/github/mrdatamapper/akademiano-httpwarp)
-[![GitHub release](https://img.shields.io/github/release/mrdatamapper/akademiano-httpwarp.svg)]()
 
 Request, response, session and other tools for base web development
 
