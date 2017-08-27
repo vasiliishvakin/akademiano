@@ -15,6 +15,7 @@ use Akademiano\Router\Router;
 use Akademiano\SimplaView\AbstractView;
 use Akademiano\SimplaView\ViewInterface;
 use Akademiano\User\AuthInterface;
+use Akademiano\Utils\DIContainerIncludeInterface;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Akademiano\Sites\SitesManager;
@@ -250,6 +251,11 @@ class ApplicationComponentsProvider implements ServiceProviderInterface
                 }
             }
         }
+
+        if ($view instanceof DIContainerIncludeInterface) {
+            $view->setDiContainer($pimple);
+        }
+
         $viewVars = $viewConfig->get(["vars"]);
         if ($viewVars instanceof Config) {
             $viewVars = $viewVars->toArray();
