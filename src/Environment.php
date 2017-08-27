@@ -3,6 +3,9 @@
 namespace Akademiano\HttpWarp;
 
 
+use PhpOption\None;
+use PhpOption\Some;
+
 class Environment
 {
     protected $serverName;
@@ -179,5 +182,15 @@ class Environment
         $this->queryString = $queryString;
     }
 
+    public function getVar($varName, $local_only = false, $default = null)
+    {
+        $value = getenv($varName, $local_only);
+        return  (false !== $value) ? $value : null;
+    }
 
+    public function getVarMayby($varName, $local_only = false)
+    {
+        $value = $this->getVar($varName, $local_only);
+        return (null !== $value) ? new Some($value) : None::create();
+    }
 }
