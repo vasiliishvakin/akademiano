@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Akademiano\Mesages;
+namespace Akademiano\Messages;
 
 use Akademiano\EntityOperator\Ext\EntityOpsRoutesStore;
 

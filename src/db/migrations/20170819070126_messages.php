@@ -19,14 +19,14 @@ CREATE TABLE messages
 -- Унаследована from table content:  title text,
 -- Унаследована from table content:  description text,
 -- Унаследована from table content:  content text,
-  from bigint,
-  to bigint,
-  type smallint,
+  "from" bigint,
+  "to" bigint,
+  "transport" smallint,
   params jsonb,
   status smallint,
   PRIMARY KEY (id),
-  FOREIGN KEY (from) REFERENCES users (id) ON UPDATE RESTRICT ON DELETE RESTRICT,
-  FOREIGN KEY (to) REFERENCES users (id) ON UPDATE RESTRICT ON DELETE RESTRICT,
+  FOREIGN KEY ("from") REFERENCES users (id) ON UPDATE RESTRICT ON DELETE RESTRICT,
+  FOREIGN KEY ("to") REFERENCES users (id) ON UPDATE RESTRICT ON DELETE RESTRICT
 )
 INHERITS (content)
 SQL;

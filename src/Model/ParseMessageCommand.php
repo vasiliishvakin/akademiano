@@ -19,6 +19,6 @@ class ParseMessageCommand extends Command
         if (null !== $template) {
             $params[self::PARAM_TEMPLATE] = $template;
         }
-        parent::__construct($params);
+        parent::__construct($params, get_class($message));
     }
 }

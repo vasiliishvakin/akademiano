@@ -4,7 +4,7 @@ namespace Akademiano\Messages\Controller;
 
 
 use Akademiano\EntityOperator\Ext\Controller\AkademianoEntityController;
-use Akademiano\Mesages\MessagesOpsRoutesStore;
+use Akademiano\Messages\MessagesOpsRoutesStore;
 use Akademiano\Messages\Api\v1\MessagesApi;
 use Akademiano\UserEO\Api\v1\UsersApi;
 

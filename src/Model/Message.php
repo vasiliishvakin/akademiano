@@ -54,7 +54,7 @@ class Message extends ContentEntity implements DelegatingInterface
     }
 
     /**
-     * @return User
+     * @return UserInterface
      */
     public function getFrom()
     {
@@ -65,7 +65,7 @@ class Message extends ContentEntity implements DelegatingInterface
     }
 
     /**
-     * @param User $from
+     * @param UserInterface $from
      */
     public function setFrom($from)
     {
