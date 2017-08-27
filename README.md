@@ -3,7 +3,6 @@
 [![Coverage Status](https://coveralls.io/repos/github/mrdatamapper/akademiano-utils/badge.svg)](https://coveralls.io/github/mrdatamapper/akademiano-utils)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/e5d15682-92e7-46e6-9394-af93fce7637c/mini.png)](https://insight.sensiolabs.com/projects/e5d15682-92e7-46e6-9394-af93fce7637c)
 [![Libraries.io ](https://img.shields.io/librariesio/github/mrdatamapper/akademiano-utils.svg)](https://libraries.io/github/mrdatamapper/akademiano-utils)
-[![GitHub release](https://img.shields.io/github/release/mrdatamapper/akademiano-utils.svg)]()
 
 A library of various functions for the basic operations.
 
