@@ -413,15 +413,16 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
     public function filterFieldToPostgresType($value, $fieldName = null, EntityInterface $entity = null)
     {
         if ($value instanceof EntityInterface) {
-            $value = (string)$value->getId();
+            return (string)$value->getId();
         } elseif ($value instanceof \DateTime) {
-            $value = $value->format("Y-m-d H:i:s");
+            return $value->format("Y-m-d H:i:s");
         } elseif (is_bool($value)) {
-            $value = $value ? 't' : 'f';
+            return $value ? 't' : 'f';
         } elseif ($value instanceof StringableInterface) {
-            $value = (string)$value;
+            return $value->__toString();
+        } else {
+            return $value;
         }
-        return $value;
     }
 
     public function merge(EntityInterface $entityA, EntityInterface $entityB)
