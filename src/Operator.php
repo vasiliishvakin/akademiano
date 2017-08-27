@@ -200,7 +200,7 @@ class Operator implements OperatorInterface
             }
         }
         if (!$command instanceof PreAfterCommandInterface && $workersCount === 0) {
-            throw  new \LogicException("Empty workers for command \"{$command->getName()}\" and class \"{$command->getClass()}\"");
+            throw  new \LogicException(sprintf('Empty workers for command "%s" and class "%s"', $command->getName(), $command->getClass()));
         }
         //after execute
         if (!$command instanceof PreAfterCommandInterface) {
