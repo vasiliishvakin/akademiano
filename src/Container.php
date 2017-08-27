@@ -17,10 +17,15 @@ class Container extends \Pimple\Container
         };
     }
 
+    public function getConfig()
+    {
+        return $this["config"];
+    }
+
     protected function prepare($value)
     {
         if ($value instanceof ConfigurableInterface) {
-            $value->setConfig($this["config"]);
+            $value->setConfig($this->getConfig());
         }
         return $value;
     }
