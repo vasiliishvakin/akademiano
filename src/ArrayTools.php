@@ -32,6 +32,7 @@ class ArrayTools
      * @param array
      * @param array
      * @return array
+     * @deprecated Please for config merge use method ConfigTools::merge() from module Config
      */
     public static function mergeRecursiveDisabled()
     {
@@ -101,8 +102,8 @@ class ArrayTools
     public static function add(array $array, $path = null, $value)
     {
         if (is_null($path)) {
-                $array[] = $value;
-                return $array;
+            $array[] = $value;
+            return $array;
         }
         $path = (array)$path;
         $current = &$array;
