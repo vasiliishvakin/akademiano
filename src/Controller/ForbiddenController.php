@@ -28,22 +28,25 @@ class ForbiddenController extends AkademianoController implements RestrictedAcce
             $this->getView()->setTemplate("Akademiano/UserEO/user/login");
             $this->getView()->assign("redirectUrl", (string)$this->getRequest()->getUrl());
         } else {
-            if (isset($params["exception"]) && $params["exception"] instanceof AccessDeniedException) {
-                /** @var AccessDeniedException $exception */
+            if (isset($params["exception"])) {
+                /** @var \Exception $exception */
                 $exception = $params["exception"];
-                $resource = $exception->getResource();
-                $resource = XAclAdapter::prepareResource($resource);
-                if (empty($resource)) {
-                    $resource = null;
+                $exceptionInfo = [];
+                if ($exception instanceof AccessDeniedException) {
+                    $resource = $exception->getResource();
+                    $resource = XAclAdapter::prepareResource($resource);
+                    if (!empty($resource)) {
+                        $exceptionInfo["resource"] = $resource;
+                    }
+                    $url = $exception->getUrl();
+                    if (!empty($url)) {
+                        $exceptionInfo["url"] = $url;
+                    }
                 }
-                $url = $exception->getUrl();
-                if (empty($url)) {
-                    $url = null;
-                }
-                $this->getView()->assign("exception", [
-                    "resource" => $resource,
-                    "url" => $url,
-                ]);
+                $exceptionInfo["message"] = $exception->getMessage();
+                $exceptionInfo["code"] = $exception->getCode();
+
+                $this->getView()->assign("exception", $exceptionInfo);
             }
             $this->getView()->assign("user", $custodian->getCurrentUser());
             $this->getView()->assignArray((new UsersOpsRoutesStore())->toArray());
