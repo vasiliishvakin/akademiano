@@ -29,7 +29,7 @@ class ConfigLoaderTest extends \Codeception\Test\Unit
         $configDefaultLocal = include $configDir . DIRECTORY_SEPARATOR . "local.config.php";
 
         $this->configDefault = new Akademiano\Config\Config(
-            \Akademiano\Utils\ArrayTools::mergeRecursiveDisabled(
+            \Akademiano\Config\ConfigTools::merge(
                 $configDefaultGlobal,
                 $configDefaultLocal
             )

@@ -206,7 +206,7 @@ class ConfigLoader implements DIContainerIncludeInterface
         foreach ($dirs as $dir) {
             $dirContent = $dir->getContent($name);
             $dirContent = $this->postProcess($dirContent, $dir, $name, $level);
-            $config = ArrayTools::mergeRecursiveDisabled($config, $dirContent);
+            $config = ConfigTools::merge($config, $dirContent);
         }
         return $config;
     }
@@ -217,7 +217,7 @@ class ConfigLoader implements DIContainerIncludeInterface
             $levels = $this->getLevels();
             $config = [];
             foreach ($levels as $level) {
-                $config = ArrayTools::mergeRecursiveDisabled($config, $this->read($level, $name));
+                $config = ConfigTools::merge($config, $this->read($level, $name));
             }
             $this->config[$name] = new Config($config, $this->getDiContainer());
         }

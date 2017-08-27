@@ -8,6 +8,7 @@ use Akademiano\Config\Exception\ConfigDirectoryNotReadException;
 use Akademiano\Config\Exception\ConfigFileInvalidTypeException;
 use Akademiano\Utils\ArrayTools;
 use Akademiano\Utils\FileSystem;
+use Akademiano\Config\ConfigTools;
 
 class ConfigDir
 {
@@ -174,7 +175,7 @@ class ConfigDir
         $files = $this->getFiles($configName);
         $content = [];
         foreach ($files as $file) {
-            $content = ArrayTools::mergeRecursiveDisabled($content, $file->getContent());
+            $content = ConfigTools::merge($content, $file->getContent());
         }
         return $content;
     }
