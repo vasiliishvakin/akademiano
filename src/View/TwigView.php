@@ -9,18 +9,22 @@ use Akademiano\User\Twig\UserExtension;
 use Akademiano\Config\Config;
 use Akademiano\Core\Exception\InvalidConfigurationException;
 use Akademiano\Router\Router;
+use Akademiano\Utils\DIContainerIncludeInterface;
+use Akademiano\Utils\Parts\DIContainerTrait;
 use Akademiano\Utils\StringUtils;
 use Akademiano\SimplaView\AbstractView;
 use Akademiano\SimplaView\ViewInterface;
 use Akademiano\Utils\ArrayTools;
 
-class TwigView extends AbstractView implements ViewInterface
+class TwigView extends AbstractView implements ViewInterface, DIContainerIncludeInterface
 {
     protected $templateExtension = 'twig';
 
     protected $formCsrfProvider;
     protected $formValidator;
     protected $formFactory;
+
+    use DIContainerTrait;
 
     public function reset()
     {
@@ -82,6 +86,9 @@ class TwigView extends AbstractView implements ViewInterface
                 if (method_exists($extension, "setConfig")) {
                     $extConfig = ArrayTools::get($config, [lcfirst(StringUtils::cutClassName($extName))], []);
                     $extension->setConfig($extConfig);
+                }
+                if ($extension instanceof DIContainerIncludeInterface) {
+                    $extension->setDiContainer($this->getDiContainer());
                 }
         }
         return $extension;

@@ -5,10 +5,11 @@ namespace Akademiano\Core;
 
 
 use Akademiano\Acl\AccessCheckIncludeInterface;
+use Akademiano\DI\Container;
 use Akademiano\User\CustodianIncludeInterface;
 use Pimple\Exception\UnknownIdentifierException;
 
-class ApplicationDiContainer extends DI
+class ApplicationDiContainer extends Container
 {
     protected $values = [];
 
