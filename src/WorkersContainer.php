@@ -11,13 +11,37 @@ class WorkersContainer extends Container implements WorkersContainerInterface
 {
     use IncludeOperatorTrait;
 
+    /** @var  Container */
+    protected $dependencies;
+
+    /**
+     * @return Container
+     */
+    public function getDependencies(): Container
+    {
+        return $this->dependencies;
+    }
+
+    /**
+     * @param Container $dependencies
+     */
+    public function setDependencies(Container $dependencies)
+    {
+        $this->dependencies = $dependencies;
+    }
+
+    public function getConfig()
+    {
+        return $this->getDependencies()["config"];
+    }
+
     public function offsetSet($id, $value)
     {
         if (!is_object($value) || !method_exists($value, '__invoke')) {
             throw new \InvalidArgumentException(sprintf('Identifier "%s" does not contain an object definition.', $id));
         }
 
-        $value = function ($c) use ($value,$id) {
+        $value = function ($c) use ($value, $id) {
             if (is_callable($value)) {
                 $result = $value($c);
                 if (is_object($result)) {

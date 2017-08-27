@@ -35,6 +35,7 @@ class Operator implements OperatorInterface
     {
         if (null === $this->workers) {
             $this->workers = new WorkersContainer();
+            $this->workers->setDependencies($this->getDependencies());
             $this->workers->setOperator($this);
         }
         return $this->workers;
