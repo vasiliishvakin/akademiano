@@ -23,6 +23,9 @@ install:
   - composer install --prefer-dist
   - ulimit -c unlimited || true
 
+before_script:
+  - pecl install xdebug
+
 script:
   - php vendor/bin/codecept run unit  --coverage --coverage-xml
 
