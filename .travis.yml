@@ -24,8 +24,8 @@ install:
   - ulimit -c unlimited || true
 
 script:
-  - sh -c 'if [ "$TRAVIS_PHP_VERSION" != "7.2" ]; then php vendor/bin/codecept run unit  --coverage --coverage-xml'
-  - sh -c 'if [ "$TRAVIS_PHP_VERSION" = "7.2" ]; then php vendor/bin/codecept run unit'
+  - sh -c 'if [ "$TRAVIS_PHP_VERSION" != "7.2" ]; then php vendor/bin/codecept run unit  --coverage --coverage-xml; fi;'
+  - sh -c 'if [ "$TRAVIS_PHP_VERSION" = "7.2" ]; then php vendor/bin/codecept run unit; fi;'
 
 after_success:
   - sh -c 'if [ "$TRAVIS_PHP_VERSION" != "7.2" ]; then php vendor/bin/coveralls -v; fi;'
