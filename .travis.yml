@@ -4,13 +4,11 @@ php:
   - 5.6
   - 7.0
   - 7.1
-  - 7.2
 
 matrix:
   allow_failures:
     - php: 5.6
     - php: 7.0
-    - php: 7.2
 
 cache:
   directories:
@@ -22,9 +20,6 @@ install:
   - composer self-update
   - composer install --prefer-dist
   - ulimit -c unlimited || true
-
-before_script:
-  - pecl install xdebug
 
 script:
   - php vendor/bin/codecept run unit  --coverage --coverage-xml
