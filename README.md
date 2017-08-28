@@ -3,7 +3,6 @@
 [![Coverage Status](https://coveralls.io/repos/github/mrdatamapper/akademiano-core/badge.svg)](https://coveralls.io/github/mrdatamapper/akademiano-core)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/9c37fe01-7f5c-4ded-b44a-2319bdd1a918/mini.png)](https://insight.sensiolabs.com/projects/9c37fe01-7f5c-4ded-b44a-2319bdd1a918)
 [![Libraries.io ](https://img.shields.io/librariesio/github/mrdatamapper/akademiano-core.svg)](https://libraries.io/github/mrdatamapper/akademiano-core)
-[![GitHub release](https://img.shields.io/github/release/mrdatamapper/akademiano-core.svg)]()
 
 Akademiano main (core) library
 
