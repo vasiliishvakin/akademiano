@@ -11,7 +11,7 @@ abstract class IntegerEnum extends Enum implements StringableInterface, Integera
 {
     public function getInt()
     {
-        return (integer)$this;
+        return (integer)$this->getValue();
     }
 
     public function serialize()
