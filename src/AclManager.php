@@ -5,14 +5,20 @@ namespace Akademiano\Acl;
 use Akademiano\Acl\Adapter\AdapterInterface;
 use Akademiano\Acl\Adapter\DenyAdapter;
 use Akademiano\Acl\Adapter\XAclAdapter;
+use Akademiano\HttpWarp\EnvironmentIncludeInterface;
+use Akademiano\HttpWarp\Parts\EnvironmentIncludeTrait;
 use Akademiano\HttpWarp\Request;
 use Akademiano\User\AuthInterface;
 use Akademiano\Entity\UserInterface;
 use Akademiano\Entity\GroupInterface;
 
 
-class AclManager implements AccessCheckInterface
+class AclManager implements AccessCheckInterface, EnvironmentIncludeInterface
 {
+    const ENV_VAR_DISABLE_CHECK_NAME = "AKADEMIANO_NO_ACL_CHECK";
+
+    use EnvironmentIncludeTrait;
+
     /** @var  AuthInterface */
     protected $custodian;
 
@@ -21,6 +27,9 @@ class AclManager implements AccessCheckInterface
 
     /** @var  Request */
     protected $request;
+
+    /** @var bool */
+    protected $disabledAccessCheck = false;
 
     /**
      * @param AuthInterface $custodian
@@ -79,11 +88,41 @@ class AclManager implements AccessCheckInterface
         return $resource;
     }
 
-    public function accessCheck($resource = null, UserInterface $owner = null, GroupInterface $group = null, UserInterface $user = null)
+    /**
+     * @return bool
+     */
+    public function isDisabledAccessCheck()
     {
-        if (php_sapi_name() === "cli" && getenv("AKADEMIANO_NO_ACL_CHECK", true) == 1) {
+        if ($this->getEnvironment()->isCli() && $this->getEnvironment()->getVar(self::ENV_VAR_DISABLE_CHECK_NAME, false) == 1) {
             return true;
         }
+        return $this->disabledAccessCheck;
+    }
+
+    /**
+     * @param bool $disableAccessCheck
+     */
+    public function setDisableAccessCheck($disableAccessCheck)
+    {
+        $this->disabledAccessCheck = $disableAccessCheck;
+    }
+
+    public function disableAccessCheck()
+    {
+        $this->setDisableAccessCheck(true);
+    }
+
+    public function enableAccessCheck()
+    {
+        $this->setDisableAccessCheck(false);
+    }
+
+    public function accessCheck($resource = null, UserInterface $owner = null, GroupInterface $group = null, UserInterface $user = null)
+    {
+        if ($this->isDisabledAccessCheck()) {
+            return true;
+        }
+
         if (null === $resource) {
             $resource = $this->getResource();
         }
