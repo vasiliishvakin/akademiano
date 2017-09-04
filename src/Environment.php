@@ -145,7 +145,7 @@ class Environment
      */
     public function getRequestUri()
     {
-        if (null ===$this->requestUri) {
+        if (null === $this->requestUri) {
             if (isset($_SERVER["REQUEST_URI"])) {
                 $this->requestUri = $_SERVER["REQUEST_URI"];
             }
@@ -185,12 +185,22 @@ class Environment
     public function getVar($varName, $local_only = false, $default = null)
     {
         $value = getenv($varName, $local_only);
-        return  (false !== $value) ? $value : $default;
+        return (false !== $value) ? $value : $default;
     }
 
     public function getVarMayby($varName, $local_only = false)
     {
         $value = $this->getVar($varName, $local_only);
         return (null !== $value) ? new Some($value) : None::create();
+    }
+
+    public function getSapiName()
+    {
+        return php_sapi_name();
+    }
+
+    public function isCli()
+    {
+        return $this->getSapiName() === "cli";
     }
 }
