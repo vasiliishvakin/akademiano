@@ -8,7 +8,7 @@ use Akademiano\Utils\Object\Collection;
 use Akademiano\Utils\Parts\DIContainerTrait;
 use Pimple\Container;
 
-class Config implements  \ArrayAccess, \IteratorAggregate, DIContainerIncludeInterface
+class Config implements \ArrayAccess, \IteratorAggregate, DIContainerIncludeInterface
 {
     use DIContainerTrait;
 
@@ -41,7 +41,7 @@ class Config implements  \ArrayAccess, \IteratorAggregate, DIContainerIncludeInt
         $this->childConfig = [];
 
         if (is_null($path)) {
-            $this->configRaw = (array) $data;
+            $this->configRaw = (array)$data;
             return;
         }
         $this->configRaw = ArrayTools::set($this->configRaw, $path, $data);
@@ -52,7 +52,7 @@ class Config implements  \ArrayAccess, \IteratorAggregate, DIContainerIncludeInt
         if ($data instanceof Config) {
             $data = $data->toArray();
         } else {
-            $data = (array) $data;
+            $data = (array)$data;
         }
         $this->configRaw = ArrayTools::mergeRecursive($data, $this->configRaw);
         $this->childConfig = [];
@@ -64,7 +64,7 @@ class Config implements  \ArrayAccess, \IteratorAggregate, DIContainerIncludeInt
         if ($data instanceof Config) {
             $data = $data->toArray();
         } else {
-            $data = (array) $data;
+            $data = (array)$data;
         }
         $this->configRaw = ArrayTools::mergeRecursive($this->configRaw, $data);
         $this->childConfig = [];
@@ -81,7 +81,7 @@ class Config implements  \ArrayAccess, \IteratorAggregate, DIContainerIncludeInt
         if (is_null($path)) {
             return $this;
         }
-        $pathKey = implode('|', (array) $path);
+        $pathKey = implode('|', (array)$path);
         if (!isset($this->childConfig[$pathKey])) {
             if (!ArrayTools::issetByPath($this->configRaw, $path)) {
                 return is_array($default) && !is_callable($default) ? new Config($default, $this->getDiContainer()) : $default;
@@ -108,19 +108,25 @@ class Config implements  \ArrayAccess, \IteratorAggregate, DIContainerIncludeInt
             $value = $this->get($path);
             if (null !== $arguments) {
                 array_unshift($arguments, $value);
-            }
-            else {
+            } else {
                 $arguments = [$value];
             }
             return call_user_func_array($callback, $arguments);
         }
+        throw new \Exception(sprintf(
+            'In config not found path \'%s\'',
+            is_scalar($path) ? $path : json_encode($path, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK)
+        ));
     }
 
     public function getOrThrow($path)
     {
         $data = $this->get($path);
         if (null === $data) {
-            throw new \Exception("$path not found in config");
+            throw new \Exception(sprintf(
+                'In config not found path \'%s\'',
+                is_scalar($path) ? $path : json_encode($path, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK)
+            ));
         }
         return $data;
     }
