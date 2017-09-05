@@ -28,9 +28,9 @@ class UserController extends AkademianoController
         }
         /** @var UsersApi $usersApi */
         $usersApi = $this->getDiContainer()["usersApi"];
-        $usersApi->disabledAccessCheck();
+        $usersApi->getAclManager()->disableAccessCheck();
         $user = $usersApi->findOne(["email" => $email, "active" => true]);
-        $usersApi->enableAcessCheck();
+        $usersApi->getAclManager()->enableAccessCheck();
         if ($user->isEmpty()) {
             return false;
         }
