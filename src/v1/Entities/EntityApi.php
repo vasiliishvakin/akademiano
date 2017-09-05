@@ -4,6 +4,7 @@
 namespace Akademiano\Api\v1\Entities;
 
 
+use Akademiano\Acl\AccessCheckInterface;
 use Akademiano\Api\v1\AbstractApi;
 use Akademiano\Entity\Entity;
 use Akademiano\Entity\EntityInterface;
