@@ -16,13 +16,12 @@
     }
   },
   "require": {
-    "php": "^5.6 || ^7.1",
-    "akademiano/utils": "^1.0.0-beta.6",
-    "akademiano/config": "^1.0.0-beta.6",
-    "akademiano/operator": "^1.0.0-beta.2",
-    "akademiano/entity": "^1.0.0-beta.1",
-    "akademiano/db-adapter": "^1.0.0-beta.1",
-    "akademiano/core": "^1.0.0-beta.8",
+    "akademiano/utils": "^1.1@dev",
+    "akademiano/config": "^1.1@dev",
+    "akademiano/operator": "^1.1@dev",
+    "akademiano/entity": "^1.1@dev",
+    "akademiano/db-adapter": "^1.1@dev",
+    "akademiano/core": "^1.1@dev",
     "robmorgan/phinx": "^0.8.1"
   },
   "require-dev": {
