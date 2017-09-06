@@ -10,5 +10,5 @@ class TransportType extends IntegerEnum
 {
     const __default = 1;
     const EMAIL = 1;
-    const SITE = 2;
+    const WEB = 2;
 }

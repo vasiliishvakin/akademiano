@@ -54,7 +54,7 @@ class Message extends ContentEntity implements DelegatingInterface
     }
 
     /**
-     * @return UserInterface
+     * @return User
      */
     public function getFrom()
     {
@@ -78,7 +78,7 @@ class Message extends ContentEntity implements DelegatingInterface
     public function getStatus()
     {
         if (null !== $this->status && !$this->status instanceof Status) {
-            $this->status = new Status($this->status);
+            $this->status = new Status((integer)$this->status);
         }
         return $this->status;
     }
@@ -113,7 +113,7 @@ class Message extends ContentEntity implements DelegatingInterface
     public function getTransport()
     {
         if (!$this->transport instanceof TransportType) {
-            $this->transport = new TransportType($this->transport);
+            $this->transport = new TransportType((integer)$this->transport);
         }
         return $this->transport;
     }

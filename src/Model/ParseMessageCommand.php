@@ -11,7 +11,7 @@ class ParseMessageCommand extends Command
     const COMMAND_NAME = "parse.message.template";
 
     const PARAM_MESSAGE = "message";
-    const PARAM_TEMPLATE = "message";
+    const PARAM_TEMPLATE = "template";
 
     public function __construct(Message $message, $template = null)
     {

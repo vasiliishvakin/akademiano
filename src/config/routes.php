@@ -47,4 +47,12 @@ return [
         ],
         "action" => ["adminIndex", "view"],
     ],
+
+    "sendEmails" => [
+        "patterns" => [
+            "type" => \Akademiano\Router\RoutePattern::TYPE_FULL,
+            "value" => "/messages/send",
+        ],
+        "action" => ["sender", "sendEmails"],
+    ],
 ];

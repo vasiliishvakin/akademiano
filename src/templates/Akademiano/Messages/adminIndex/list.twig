@@ -6,7 +6,7 @@
 
     <div class="card">
         <div class="card-header">
-            Сообщения <a href="{{ url(item_add_route) }}" class="btn btn-success btn-sm" role="button">Добавить</a>
+            Сообщения {#<a href="{{ url(item_add_route) }}" class="btn btn-success btn-sm" role="button">Добавить</a>#}
         </div>
         <div class="card-block">
             <table class="table table-responsive table-hover table-outline mb-0">
@@ -23,7 +23,7 @@
                 </thead>
                 <tbody>
                 {% for item in items %}
-                    <tr class="{{ not item.open ? 'table-success' }}">
+                    <tr>
                         <td>
                             {{ item.to.title }}
                         </td>
@@ -35,20 +35,20 @@
                             {{ item.title }}
                         </td>
                         <td>
-                            {% if item.status == constant("Akademiano\\Messages\\Model\\Status::STATUS_NEW") %}
+                            {% if item.transport.int == constant("Akademiano\\Messages\\Model\\TransportType::EMAIL") %}
                                 <i class="fa fa-envelope-o" aria-hidden="true"></i>
                             {% else %}
                                 <i class="fa fa-question" aria-hidden="true"></i>
                             {% endif %}
                         </td>
                         <td>
-                            {% if item.status == constant("Akademiano\\Messages\\Model\\Status::STATUS_NEW") %}
+                            {% if item.status.int == constant("Akademiano\\Messages\\Model\\Status::STATUS_NEW") %}
                                 <i class="fa fa-file-o" aria-hidden="true"></i>
-                            {% elseif item.status == constant("Akademiano\\Messages\\Model\\Status::STATUS_DONE") %}
+                            {% elseif item.status.int == constant("Akademiano\\Messages\\Model\\Status::STATUS_DONE") %}
                                 <i class="fa fa-check-square-o"></i>
-                            {% elseif item.status == constant("Akademiano\\Messages\\Model\\Status::STATUS_DO") %}
+                            {% elseif item.status.int == constant("Akademiano\\Messages\\Model\\Status::STATUS_DO") %}
                                 <i class="fa fa-hourglass-start" aria-hidden="true"></i>
-                            {% elseif item.status == constant("Akademiano\\Messages\\Model\\Status::STATUS_ERROR") %}
+                            {% elseif item.status.int == constant("Akademiano\\Messages\\Model\\Status::STATUS_ERROR") %}
                                 <i class="fa fa-exclamation" aria-hidden="true"></i>
                             {% else %}
                                 <i class="fa fa-question" aria-hidden="true"></i>
@@ -56,13 +56,13 @@
                         </td>
                         <td>
                             <a href="{{ url(item_delete_route, {"id": item.id.hex}) }}" rel="tooltip" title="Delete"
-                               class="btn btn-danger btn-simple btn-sm">
+                               class="btn btn-outline-danger btn-simple btn-sm">
                                 <i class="fa fa-trash"></i>
                             </a>
                         </td>
                         <td>
                             <a href="{{ url(item_view_route, {"id": item.id.hex}) }}" rel="tooltip" title="View"
-                               class="btn btn-success btn-simple btn-sm">
+                               class="btn btn-outline-success btn-simple btn-sm">
                                 <i class="fa fa-folder-open "></i>
                                 View
                             </a>

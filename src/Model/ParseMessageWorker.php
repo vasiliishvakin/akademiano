@@ -8,6 +8,7 @@ use Akademiano\Operator\Command\CommandInterface;
 use Akademiano\Operator\Worker\WorkerInterface;
 use Akademiano\Operator\Worker\WorkerMetaMapPropertiesTrait;
 use Akademiano\SimplaView\ViewInterface;
+use Akademiano\Utils\StringUtils;
 
 class ParseMessageWorker implements WorkerInterface
 {
@@ -54,10 +55,44 @@ class ParseMessageWorker implements WorkerInterface
 
     public function parse(Message $message, $template = null)
     {
-        $params = $message->getParams();
-        if (null !== $template) {
+        if (null === $template) {
             $messageTransport = $message->getTransport();
+            $possibleTemplates = [];
+            switch ($messageTransport->getInt()) {
+                case TransportType::EMAIL:
+                    $transportName = "email";
+                    break;
+                case TransportType::WEB:
+                    $transportName = "web";
+                    break;
+                default:
+                    $transportName = "default";
+            }
+            $params = $message->getParams();
+            if (isset($params["class"])) {
+                $class = strtolower($params["class"]);
+                $classLong = str_replace("\\", "_", strtolower($class));
+                $possibleTemplates[] = "Akademiano\\Messages\\MessageTemplates\\" . $transportName . "\\" . $classLong;
+
+                $classShort = StringUtils::cutClassName($class);
+                $possibleTemplates[] = "Akademiano\\Messages\\MessageTemplates\\" . $transportName . "\\" . $classShort;
+
+                if ($transportName !== "default") {
+                    $possibleTemplates[] = "Akademiano\\Messages\\MessageTemplates\\default" . "\\" . $classLong;
+                    $possibleTemplates[] = "Akademiano\\Messages\\MessageTemplates\\default" . "\\" . $classShort;
+                }
+            }
+            foreach ($possibleTemplates as $templateRow) {
+                if ($this->getView()->exist($templateRow)) {
+                    $template = $templateRow;
+                    break;
+                }
+            }
         }
-        return json_encode($params, JSON_PRETTY_PRINT || JSON_UNESCAPED_UNICODE);
+        if (empty($template)) {
+            $template = "Akademiano\\Messages\\MessageTemplates\\default\\default";
+        }
+
+        return $this->getView()->render(["message" => $message, "params" => $message->getParams()], $template);
     }
 }

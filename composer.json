@@ -22,7 +22,8 @@
     "akademiano/entity-operator": "^1.0.0-beta.1",
     "nesbot/carbon": "^1.22",
     "twig/twig": "^1.33.0",
-    "akademiano/entity-operator-ext": "^1.0.0-beta.1"
+    "akademiano/entity-operator-ext": "^1.0.0-beta.1",
+    "swiftmailer/swiftmailer": "^6.0"
   },
   "require-dev": {
     "codeception/codeception": "^2.2.10",
