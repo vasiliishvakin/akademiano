@@ -13,6 +13,24 @@ use Akademiano\HttpWarp\Exception\NotFoundException;
 
 class CommentsApi extends EntityApi
 {
+    /** @var  CommentFilesApi */
+    protected $filesApi;
+
+    /**
+     * @return CommentFilesApi
+     */
+    public function getFilesApi(): CommentFilesApi
+    {
+        return $this->filesApi;
+    }
+
+    /**
+     * @param CommentFilesApi $filesApi
+     */
+    public function setFilesApi(CommentFilesApi $filesApi)
+    {
+        $this->filesApi = $filesApi;
+    }
 
     public function saveBound(EntityInterface $entity, array $data)
     {
@@ -70,5 +88,15 @@ class CommentsApi extends EntityApi
         }
 
         return $this->saveBound($entity, $data);
+    }
+
+    public function deleteEntity(EntityInterface $entity)
+    {
+        if ($entity instanceof Comment) {
+            foreach ($entity->getFiles() as $file) {
+                $this->getFilesApi()->deleteEntity($file);
+            }
+        }
+        return parent::deleteEntity($entity);
     }
 }
