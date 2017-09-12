@@ -108,6 +108,8 @@ class SendMessageEmailWorker implements WorkerInterface, DelegatingInterface
         return (new \Swift_Message($message->getTitle()))
             ->setFrom($this->getFrom())
             ->setTo($message->getTo()->getEmail(), $message->getTo()->getTitle())
-            ->setBody($message->getContent());
+            ->setBody(strip_tags($message->getContent()))
+            ->addPart($message->getContent(), 'text/html')
+            ;
     }
 }
