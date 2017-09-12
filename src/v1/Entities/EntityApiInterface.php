@@ -15,6 +15,8 @@ interface EntityApiInterface extends ApiInterface
 
     public function count($criteria);
 
+    public function getDefaultOrder();
+
     /**
      * @param null $criteria
      * @param int $page

@@ -67,10 +67,19 @@ class EntityApi extends AbstractApi implements EntityApiInterface, CustodianIncl
         return $this->getOperator()->count(static::ENTITY_CLASS, $criteria);
     }
 
-    public function find($criteria = null, $page = 1, $orderBy = "id", $itemsPerPage = 10)
+    public function getDefaultOrder()
+    {
+        return static::DEFAULT_ORDER;
+    }
+
+    public function find($criteria = null, $page = 1, $orderBy = null, $itemsPerPage = 10)
     {
         if (null === $criteria) {
             $criteria = ["owner" => $this->getCurrentUser()];
+        }
+
+        if (null === $orderBy) {
+            $orderBy = $this->getDefaultOrder();
         }
 
         $resource = sprintf('entityapi:list:%s', static::ENTITY_CLASS);
