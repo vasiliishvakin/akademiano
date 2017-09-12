@@ -2,6 +2,7 @@
 
 namespace Akademiano\EntityOperator\Ext\Controller;
 
+use Akademiano\Api\v1\Entities\EntityApi;
 use Akademiano\Api\v1\Entities\EntityApiInterface;
 use Akademiano\Core\Controller\AkademianoController;
 use Akademiano\Utils\ArrayTools;
@@ -19,7 +20,7 @@ abstract class AkademianoEntityController extends AkademianoController
     const ENTITY_API_ID = "entityApi";
     const DEFAULT_ITEMS_PER_PAGE = 20;
     const DEFAULT_LIST_CRITERIA = null;
-    const DEFAULT_ORDER = null;
+    const DEFAULT_ORDER = EntityApi::DEFAULT_ORDER;
 
     /** @var  EntityOpsRoutesStore */
     protected $entityOpsRoutesStore;
