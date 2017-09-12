@@ -20,14 +20,15 @@ abstract class AkademianoEntityController extends AkademianoController
     const ENTITY_API_ID = "entityApi";
     const DEFAULT_ITEMS_PER_PAGE = 20;
     const DEFAULT_LIST_CRITERIA = null;
-    const DEFAULT_ORDER = EntityApi::DEFAULT_ORDER;
 
     /** @var  EntityOpsRoutesStore */
     protected $entityOpsRoutesStore;
+
     /**
      * @return EntityOpsRoutesStore
      */
-    public function getEntityOpsRoutesStore(){
+    public function getEntityOpsRoutesStore()
+    {
         if (null === $this->entityOpsRoutesStore) {
             $class = static::ENTITY_OPSR_STORE_CLASS;
             $this->entityOpsRoutesStore = new $class();
@@ -63,12 +64,13 @@ abstract class AkademianoEntityController extends AkademianoController
 
     public function getListOrder()
     {
-        return static::DEFAULT_ORDER;
+        return $this->getEntityApi()->getDefaultOrder();
     }
 
     public function listAction()
     {
-        $items = $this->getEntityApi()->find($this->getListCriteria(),
+        $items = $this->getEntityApi()->find(
+            $this->getListCriteria(),
             $this->getPage(),
             $this->getListOrder(),
             $this->getItemsPerPage()
