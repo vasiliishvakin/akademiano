@@ -5,10 +5,13 @@ namespace Akademiano\Api\v1\Entities;
 
 
 use Akademiano\Api\ApiInterface;
+use Akademiano\Db\Adapter\AdapterInterface;
 use Akademiano\Entity\EntityInterface;
 
 interface EntityApiInterface extends ApiInterface
 {
+
+    const DEFAULT_ORDER = "id";
 
     public function count($criteria);
 
@@ -19,7 +22,7 @@ interface EntityApiInterface extends ApiInterface
      * @param string $orderBy
      * @return \Akademiano\Api\v1\Items\ItemsPage
      */
-    public function find($criteria = null, $page = 1, $orderBy = "id", $itemsPerPage = 10);
+    public function find($criteria = null, $page = 1, $orderBy = self::DEFAULT_ORDER, $itemsPerPage = 10);
 
     /**
      * @param $id
