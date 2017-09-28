@@ -6,8 +6,10 @@ namespace Akademiano\Utils\Paging;
 
 use Akademiano\Utils\Exception\ReadOnlyAttemptChange;
 use Akademiano\Utils\Object\Prototype\ArrayableInterface;
+use Akademiano\Utils\Object\Prototype\IntegerableInterface;
+use Akademiano\Utils\Object\Prototype\StringableInterface;
 
-class Page implements \ArrayAccess, \JsonSerializable, ArrayableInterface
+class Page implements \ArrayAccess, \JsonSerializable, ArrayableInterface, StringableInterface, IntegerableInterface
 {
     protected $num;
     /** @var  bool */
@@ -79,5 +81,15 @@ class Page implements \ArrayAccess, \JsonSerializable, ArrayableInterface
     public function jsonSerialize()
     {
         return $this->toArray();
+    }
+
+    public function __toString()
+    {
+        return (string)$this->getNum();
+    }
+
+    public function getInt()
+    {
+        return (integer) $this->getNum();
     }
 }

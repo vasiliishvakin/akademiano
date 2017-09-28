@@ -114,7 +114,11 @@ class PagingMetadata implements \ArrayAccess, \Iterator, \Countable, \JsonSerial
     public function getPages()
     {
         if (null === $this->pages) {
-            $count = ceil($this->getItemsCount() / $this->getSliceSize());
+            if (null !== $this->getSliceSize()) {
+                $count = ceil($this->getItemsCount() / $this->getSliceSize());
+            } else {
+                $count = 1;
+            }
             $pages = [];
             for ($i = 1; $i <= $count; $i++) {
                 $pages[$i] = new Page($i, $this->getCurrentPage() === $i);
