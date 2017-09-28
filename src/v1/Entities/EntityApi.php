@@ -72,7 +72,7 @@ class EntityApi extends AbstractApi implements EntityApiInterface, CustodianIncl
         return static::DEFAULT_ORDER;
     }
 
-    public function find($criteria = null, $page = 1, $orderBy = null, $itemsPerPage = 10)
+    public function find($criteria = null, $page = 1, $orderBy = null, $itemsPerPage = null)
     {
         if (null === $criteria) {
             $criteria = ["owner" => $this->getCurrentUser()];
