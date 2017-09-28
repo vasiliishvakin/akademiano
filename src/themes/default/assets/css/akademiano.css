@@ -1,0 +1,12 @@
+.card-footer ul.pagination {
+    display: flex;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.card-footer ul.pagination li {
+    display: table-cell;
+    padding: 0 0.25rem;
+    text-align: center;
+}
