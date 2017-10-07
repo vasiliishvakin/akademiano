@@ -1,6 +1,6 @@
 {
-  "name": "datamapper/site-default",
-  "description": "datamapper site default",
+  "name": "akademiano/site-default",
+  "description": "akademiano site default",
   "license": "Apache-2.0",
   "minimum-stability": "dev",
   "prefer-stable": true,
@@ -18,15 +18,9 @@
   "provide": {
         "akademiano/site-default-implementation": "1.0.0"
   },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "git@gitlab.com:mrdatamapper/datamapper-site-all.git"
-    }
-  ],
   "require": {
-    "akademiano/core": "^1.0.0-beta.6",
-    "datamapper/site-all": "dev-master as 1.0.x-dev"
+    "akademiano/core": "^1.1@dev",
+    "akademiano/site-all": "dev-master as 1.0.x-dev"
   },
   "require-dev": {
     "codeception/codeception": "^2.2.10",
