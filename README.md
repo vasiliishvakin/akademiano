@@ -7,6 +7,9 @@
 
 Akademiano site all
 
+## Third-party software component
+In template used [core.ui](http://core.ui) - great open source project with MIT license. 
+
 
 ## Contributing
 

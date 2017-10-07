@@ -1,6 +1,6 @@
 {
-  "name": "datamapper/site-all",
-  "description": "datamap shared sites data",
+  "name": "akademiano/site-all",
+  "description": "akademiano shared sites data",
   "license": "Apache-2.0",
   "minimum-stability": "dev",
   "prefer-stable": true,
@@ -19,7 +19,7 @@
     "akademiano/site-all-implementation": "1.0.0"
   },
   "require": {
-    "akademiano/core": "^1.0.0-beta.7",
+    "akademiano/core": "^1.1@dev",
     "bower-asset/bootstrap": "^3.3.5",
     "bower-asset/jquery": "^2.1.4",
     "bower-asset/html5shiv": "^3.7.3",
@@ -28,7 +28,8 @@
     "bower-asset/simple-line-icons": "^2.4",
     "bower-asset/tether": "^1.4",
     "bower-asset/pace": "^1.0",
-    "bower-asset/chart.js": "^2.6"
+    "bower-asset/chart.js": "^2.6",
+    "npm-asset/coreui.io": "^1.0.0"
   },
   "require-dev": {
     "codeception/codeception": "^2.2.10",
