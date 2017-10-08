@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Akademiano\Messages\Model;
+namespace Akademiano\HeraldMessages\Model;
 
 
 use Akademiano\Operator\Command\Command;

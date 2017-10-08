@@ -2,14 +2,14 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class Messages extends AbstractMigration
+class HeraldMessages extends AbstractMigration
 {
 
     public function up()
     {
         $sql = <<<SQL
         
-CREATE TABLE messages
+CREATE TABLE herald_messages
 (
 -- Унаследована from table content:  id bigint NOT NULL,
 -- Унаследована from table content:  created timestamp without time zone,
@@ -22,17 +22,16 @@ CREATE TABLE messages
   "from" text,
   "to" text,
   "transport" smallint,
-  params jsonb,
-  status smallint,
-  PRIMARY KEY (id),
-  FOREIGN KEY ("from") REFERENCES users (id) ON UPDATE RESTRICT ON DELETE RESTRICT,
-  FOREIGN KEY ("to") REFERENCES users (id) ON UPDATE RESTRICT ON DELETE RESTRICT
+  "data" jsonb,
+  "params" jsonb,
+  "status" smallint,  
+  PRIMARY KEY (id)
 )
 INHERITS (content)
 SQL;
         $this->execute($sql);
 
-        $sql = sprintf('CREATE SEQUENCE uuid_complex_short_tables_%s', \Akademiano\Messages\Model\MessagesWorker::TABLE_ID);
+        $sql = sprintf('CREATE SEQUENCE uuid_complex_short_tables_%s', \Akademiano\HeraldMessages\Model\MessagesWorker::TABLE_ID);
         $this->execute($sql);
     }
 }

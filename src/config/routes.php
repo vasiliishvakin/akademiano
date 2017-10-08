@@ -1,6 +1,6 @@
 <?php
 
-use Akademiano\Messages\MessagesOpsRoutesStore as MessagesRoutes;
+use Akademiano\HeraldMessages\MessagesOpsRoutesStore as MessagesRoutes;
 
 return [
 //    messages admin

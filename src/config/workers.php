@@ -5,32 +5,22 @@ use Akademiano\Operator\WorkersContainerInterface;
 
 return [
     "messagesWorker" => [
-        \Akademiano\Messages\Model\MessagesWorker::class,
-        WorkerInterface::PARAM_ACTIONS_MAP => \Akademiano\Messages\Model\Message::class,
+        \Akademiano\HeraldMessages\Model\MessagesWorker::class,
+        WorkerInterface::PARAM_ACTIONS_MAP => \Akademiano\HeraldMessages\Model\Message::class,
         function (WorkersContainerInterface $s) {
-            $w = new \Akademiano\Messages\Model\MessagesWorker();
+            $w = new \Akademiano\HeraldMessages\Model\MessagesWorker();
             $adapter = $s->getOperator()->getDependency("dbAdapter");
             $w->setAdapter($adapter);
             return $w;
         },
     ],
-    "parseMessagesWorker" => [
-        \Akademiano\Messages\Model\ParseMessageWorker::class,
-        WorkerInterface::PARAM_ACTIONS_MAP => \Akademiano\Messages\Model\Message::class,
-        function (WorkersContainerInterface $s) {
-            $w = new \Akademiano\Messages\Model\ParseMessageWorker();
-            $view = $s->getOperator()->getDependency("view");
-            $w->setView($view);
-            return $w;
-        },
-    ],
     "sendMessageEmailWorker" => [
-        \Akademiano\Messages\Model\SendMessageEmailWorker::class,
-        WorkerInterface::PARAM_ACTIONS_MAP => \Akademiano\Messages\Model\Message::class,
+        \Akademiano\HeraldMessages\Model\SendMessageEmailWorker::class,
+        WorkerInterface::PARAM_ACTIONS_MAP => \Akademiano\HeraldMessages\Model\Message::class,
         function (WorkersContainerInterface $s) {
             /** @var \Akademiano\Config\Config $config */
             $config = $s->getOperator()->getDependency("config");
-            $w = new \Akademiano\Messages\Model\SendMessageEmailWorker();
+            $w = new \Akademiano\HeraldMessages\Model\SendMessageEmailWorker();
             $w->setMailer($s->getOperator()->getDependency("mailer"));
             $from = $config->getOrThrow(["email", "smtp", "from"]);
             $from = ($from instanceof \Akademiano\Config\Config) ? $from->toArray() : $from;

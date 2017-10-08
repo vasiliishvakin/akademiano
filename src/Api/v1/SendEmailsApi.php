@@ -1,14 +1,14 @@
 <?php
 
 
-namespace Akademiano\Messages\Api\v1;
+namespace Akademiano\HeraldMessages\Api\v1;
 
 
 use Akademiano\Api\v1\AbstractApi;
 use Akademiano\EntityOperator\EntityOperator;
-use Akademiano\Messages\Model\SendEmailCommand;
-use Akademiano\Messages\Model\Status;
-use Akademiano\Messages\Model\TransportType;
+use Akademiano\HeraldMessages\Model\SendEmailCommand;
+use Akademiano\HeraldMessages\Model\Status;
+use Akademiano\HeraldMessages\Model\TransportType;
 use Akademiano\Operator\IncludeOperatorInterface;
 use Akademiano\Operator\IncludeOperatorTrait;
 use Akademiano\User\CustodianIncludeInterface;

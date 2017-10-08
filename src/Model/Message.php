@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Akademiano\Messages\Model;
+namespace Akademiano\HeraldMessages\Model;
 
 
 use Akademiano\Entity\ContentEntity;
@@ -12,11 +12,9 @@ use Akademiano\Operator\DelegatingTrait;
 use Akademiano\UserEO\Model\User;
 
 /**
- * Class Message
- * @package Akademiano\Messages\Model
  * @method EntityOperator getOperator()
  */
-class HeraldMessage extends ContentEntity implements DelegatingInterface
+class Message extends ContentEntity implements DelegatingInterface
 {
     use DelegatingTrait;
 

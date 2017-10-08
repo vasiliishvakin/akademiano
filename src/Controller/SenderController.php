@@ -1,11 +1,11 @@
 <?php
 
 
-namespace Akademiano\Messages\Controller;
+namespace Akademiano\HeraldMessages\Controller;
 
 
 use Akademiano\Core\ApplicationController;
-use Akademiano\Messages\Api\v1\SendEmailsApi;
+use Akademiano\HeraldMessages\Api\v1\SendEmailsApi;
 
 class SenderController extends ApplicationController
 {

@@ -1,11 +1,11 @@
 <?php
 
-namespace Akademiano\Messages\Controller;
+namespace Akademiano\HeraldMessages\Controller;
 
 
 use Akademiano\EntityOperator\Ext\Controller\AkademianoEntityController;
-use Akademiano\Messages\MessagesOpsRoutesStore;
-use Akademiano\Messages\Api\v1\MessagesApi;
+use Akademiano\HeraldMessages\MessagesOpsRoutesStore;
+use Akademiano\HeraldMessages\Api\v1\MessagesApi;
 use Akademiano\UserEO\Api\v1\UsersApi;
 
 class AdminIndexController extends AkademianoEntityController
