@@ -16,7 +16,7 @@ use Akademiano\UserEO\Model\User;
  * @package Akademiano\Messages\Model
  * @method EntityOperator getOperator()
  */
-class Message extends ContentEntity implements DelegatingInterface
+class HeraldMessage extends ContentEntity implements DelegatingInterface
 {
     use DelegatingTrait;
 
