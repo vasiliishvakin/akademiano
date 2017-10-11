@@ -13,6 +13,7 @@ class EntityOpsRoutesStore
     const EDIT_ROUTE_NAME = "item_edit_route";
     const SAVE_ROUTE_NAME = "item_save_route";
     const DELETE_ROUTE_NAME = "item_delete_route";
+    const CHANGE_ROUTE_NAME = "item_change_route";
 
     const LIST_ROUTE = null;
     const VIEW_ROUTE = null;
@@ -20,6 +21,7 @@ class EntityOpsRoutesStore
     const EDIT_ROUTE = null;
     const SAVE_ROUTE = null;
     const DELETE_ROUTE = null;
+    const CHANGE_ROUTE = null;
 
     protected $array;
 
@@ -71,6 +73,12 @@ class EntityOpsRoutesStore
         return static::DELETE_ROUTE;
     }
 
+    public function getChangeRoute()
+    {
+        return static::CHANGE_ROUTE;
+    }
+
+
     public function toArray()
     {
         if (null === $this->array) {
@@ -81,6 +89,7 @@ class EntityOpsRoutesStore
                 self::EDIT_ROUTE_NAME => $this->getEditRoute(),
                 self::SAVE_ROUTE_NAME => $this->getSaveRoute(),
                 self::DELETE_ROUTE_NAME => $this->getDeleteRoute(),
+                self::CHANGE_ROUTE_NAME => $this->getChangeRoute(),
             ];
             $this->array = ArrayTools::filterNulls($array);
         }
