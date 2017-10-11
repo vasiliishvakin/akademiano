@@ -16,12 +16,11 @@
     }
   },
   "require": {
-    "php": "^5.6 || ^7.1",
-    "akademiano/utils": "^1.0.0-beta.7",
-    "akademiano/entity-operator": "^1.0.0-beta.4",
-    "akademiano/entity": "^1.0.0-beta.3",
-    "akademiano/core-controller": "^1.0.0-beta.4",
-    "akademiano/api": "^1.0.0-beta.2"
+    "akademiano/utils": "^1.1@dev",
+    "akademiano/entity-operator": "^1.1@dev",
+    "akademiano/entity": "^1.1@dev",
+    "akademiano/core-controller": "^1.1@dev",
+    "akademiano/api": "^1.1@dev"
   },
   "require-dev": {
     "codeception/codeception": "^2.2.10",
