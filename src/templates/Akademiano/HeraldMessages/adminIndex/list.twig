@@ -35,20 +35,20 @@
                             {{ item.title }}
                         </td>
                         <td>
-                            {% if item.transport.int == constant("Akademiano\\Messages\\Model\\TransportType::EMAIL") %}
+                            {% if item.transport.int == constant("Akademiano\\HeraldMessages\\Model\\TransportType::EMAIL") %}
                                 <i class="fa fa-envelope-o" aria-hidden="true"></i>
                             {% else %}
                                 <i class="fa fa-question" aria-hidden="true"></i>
                             {% endif %}
                         </td>
                         <td>
-                            {% if item.status.int == constant("Akademiano\\Messages\\Model\\Status::STATUS_NEW") %}
+                            {% if item.status.int == constant("Akademiano\\HeraldMessages\\Model\\Status::STATUS_NEW") %}
                                 <i class="fa fa-file-o" aria-hidden="true"></i>
-                            {% elseif item.status.int == constant("Akademiano\\Messages\\Model\\Status::STATUS_DONE") %}
+                            {% elseif item.status.int == constant("Akademiano\\HeraldMessages\\Model\\Status::STATUS_DONE") %}
                                 <i class="fa fa-check-square-o"></i>
-                            {% elseif item.status.int == constant("Akademiano\\Messages\\Model\\Status::STATUS_DO") %}
+                            {% elseif item.status.int == constant("Akademiano\\HeraldMessages\\Model\\Status::STATUS_DO") %}
                                 <i class="fa fa-hourglass-start" aria-hidden="true"></i>
-                            {% elseif item.status.int == constant("Akademiano\\Messages\\Model\\Status::STATUS_ERROR") %}
+                            {% elseif item.status.int == constant("Akademiano\\HeraldMessages\\Model\\Status::STATUS_ERROR") %}
                                 <i class="fa fa-exclamation" aria-hidden="true"></i>
                             {% else %}
                                 <i class="fa fa-question" aria-hidden="true"></i>

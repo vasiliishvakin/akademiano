@@ -10,8 +10,8 @@ use Akademiano\EntityOperator\Worker\PostgresWorker;
 class MessagesWorker extends PostgresWorker
 {
     const TABLE_ID = 17;
-    const TABLE_NAME = "messages";
-    const EXPAND_FIELDS = ["title", "description", "content", "to", "from", "status", "data", "transport", "params"];
+    const TABLE_NAME = "herald_messages";
+    const EXPAND_FIELDS = ["title", "description", "content", "to", "from" , "replayTo", "status", "data", "transport", "params"];
 
     public function filterFieldToPostgresType($value, $fieldName = null, EntityInterface $entity = null)
     {

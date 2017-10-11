@@ -6,17 +6,18 @@ namespace Akademiano\HeraldMessages\Api\v1;
 
 use Akademiano\Api\v1\AbstractApi;
 use Akademiano\EntityOperator\EntityOperator;
+use Akademiano\HeraldMessages\Model\Message;
 use Akademiano\HeraldMessages\Model\SendEmailCommand;
-use Akademiano\HeraldMessages\Model\Status;
 use Akademiano\HeraldMessages\Model\TransportType;
+use Akademiano\HttpWarp\Exception\NotFoundException;
 use Akademiano\Operator\IncludeOperatorInterface;
 use Akademiano\Operator\IncludeOperatorTrait;
 use Akademiano\User\CustodianIncludeInterface;
 use Akademiano\User\CustodianIncludeTrait;
 
-class SendEmailsApi extends AbstractApi implements IncludeOperatorInterface, CustodianIncludeInterface
+class SendApi extends AbstractApi implements IncludeOperatorInterface, CustodianIncludeInterface
 {
-    const API_ID = "sendEmailApi";
+    const API_ID = "heraldSendEmailApi";
 
     use CustodianIncludeTrait;
     use IncludeOperatorTrait;
@@ -52,28 +53,21 @@ class SendEmailsApi extends AbstractApi implements IncludeOperatorInterface, Cus
         $this->messagesApi = $messagesApi;
     }
 
-    public function processQueue($count = 10)
+    public function send($id):int
     {
         $this->getAclManager()->disableAccessCheck();
-        $messages = $this->getMessagesApi()->find(
-            [
-                "transport" => new TransportType(TransportType::EMAIL),
-                "status" => new Status(Status::STATUS_NEW)
-            ],
-            1, "id", $count
-        );
 
-        $resultList = [];
-        foreach ($messages as $message) {
-            $sendCommand = new SendEmailCommand($message);
-            $result = $this->getOperator()->execute($sendCommand);
-            if ($result) {
-                $resultList[Status::STATUS_DONE] [] = $message;
-            } else {
-                $resultList[Status::STATUS_ERROR][] = $message;
-            }
+        /** @var Message $message */
+        $message = $this->getMessagesApi()->get($id)->getOrThrow(new NotFoundException(sprintf('Message with id %s not found.', dechex($id))));
+
+        switch ($message->getTransport()->getValue()) {
+            case TransportType::EMAIL:
+                $sendCommand = new SendEmailCommand($message);
+                break;
+            default:
+                throw new \RuntimeException(sprintf('Message with id %s transport type %s, need transport type %s', $message->getId(), $message->getTransport(), TransportType::EMAIL));
         }
-        $this->getAclManager()->enableAccessCheck();
-        return $resultList;
+        $result = $this->getOperator()->execute($sendCommand);
+        return $result;
     }
 }

@@ -22,32 +22,32 @@
                                                         <div class="card-block">
                                                             <ul>
                                                                 <li>
-                                                                    Обработано: {{ items[constant("\\Akademiano\\Messages\\Model\\Status::STATUS_ERROR")]|length + items[constant("\\Akademiano\\Messages\\Model\\Status::STATUS_DONE")]|length }}</li>
+                                                                    Обработано: {{ items[constant("\\Akademiano\\HeraldMessages\\Model\\Status::STATUS_ERROR")]|length + items[constant("\\Akademiano\\HeraldMessages\\Model\\Status::STATUS_DONE")]|length }}</li>
                                                                 <li>С
-                                                                    ошибками: {{ items[constant("\\Akademiano\\Messages\\Model\\Status::STATUS_ERROR")]|length }}</li>
+                                                                    ошибками: {{ items[constant("\\Akademiano\\HeraldMessages\\Model\\Status::STATUS_ERROR")]|length }}</li>
                                                                 <li>
-                                                                    Успешно: {{ items[constant("\\Akademiano\\Messages\\Model\\Status::STATUS_DONE")]|length }}</li>
+                                                                    Успешно: {{ items[constant("\\Akademiano\\HeraldMessages\\Model\\Status::STATUS_DONE")]|length }}</li>
                                                             </ul>
                                                         </div>
                                                     </div>
 
-                                                    {% if items[constant("\\Akademiano\\Messages\\Model\\Status::STATUS_ERROR")]|length>0 %}
+                                                    {% if items[constant("\\Akademiano\\HeraldMessages\\Model\\Status::STATUS_ERROR")]|length>0 %}
                                                         <div class="card">
                                                             <div class="card-header card-header-danger">
                                                                 Сообщения с ошибками
                                                             </div>
                                                             <div class="card-block">
-                                                                {% include "Akademiano/Messages/sender/emails-list.twig" with {"items": items[constant("\\Akademiano\\Messages\\Model\\Status::STATUS_ERROR")]} %}
+                                                                {% include "Akademiano/Messages/sender/emails-list.twig" with {"items": items[constant("\\Akademiano\\HeraldMessages\\Model\\Status::STATUS_ERROR")]} %}
                                                             </div>
                                                         </div>
                                                     {% endif %}
-                                                    {% if items[constant("\\Akademiano\\Messages\\Model\\Status::STATUS_DONE")]|length>0 %}
+                                                    {% if items[constant("\\Akademiano\\HeraldMessages\\Model\\Status::STATUS_DONE")]|length>0 %}
                                                         <div class="card">
                                                             <div class="card-header card-header-success">
                                                                 Сообщения отправлены
                                                             </div>
                                                             <div class="card-block">
-                                                                {% include "Akademiano/Messages/sender/emails-list.twig" with {"items": items[constant("\\Akademiano\\Messages\\Model\\Status::STATUS_DONE")]} %}
+                                                                {% include "Akademiano/Messages/sender/emails-list.twig" with {"items": items[constant("\\Akademiano\\HeraldMessages\\Model\\Status::STATUS_DONE")]} %}
                                                             </div>
                                                         </div>
                                                     {% endif %}

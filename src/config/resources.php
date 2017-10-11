@@ -1,8 +1,8 @@
 <?php
 
 return [
-    \Akademiano\Messages\Api\v1\MessagesApi::API_ID => function (\Akademiano\DI\Container $c) {
-        return new \Akademiano\Messages\Api\v1\MessagesApi($c["operator"]);
+    \Akademiano\HeraldMessages\Api\v1\MessagesApi::API_ID => function (\Akademiano\DI\Container $c) {
+        return new \Akademiano\HeraldMessages\Api\v1\MessagesApi($c["operator"]);
     },
     "mailerTransport" => function (\Akademiano\DI\Container $c) {
         /** @var \Akademiano\Config\Config $config */
@@ -19,9 +19,9 @@ return [
     "mailer" => function (\Akademiano\DI\Container $c) {
         return new Swift_Mailer($c["mailerTransport"]);
     },
-    \Akademiano\Messages\Api\v1\SendEmailsApi::API_ID => function (\Akademiano\DI\Container $c) {
-        $api = new \Akademiano\Messages\Api\v1\SendEmailsApi($c["operator"]);
-        $api->setMessagesApi($c[\Akademiano\Messages\Api\v1\MessagesApi::API_ID]);
+    \Akademiano\HeraldMessages\Api\v1\SendApi::API_ID => function (\Akademiano\DI\Container $c) {
+        $api = new \Akademiano\HeraldMessages\Api\v1\SendApi($c["operator"]);
+        $api->setMessagesApi($c[\Akademiano\HeraldMessages\Api\v1\MessagesApi::API_ID]);
         return $api;
     },
 ];

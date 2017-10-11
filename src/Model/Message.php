@@ -19,12 +19,16 @@ class Message extends ContentEntity implements DelegatingInterface
     use DelegatingTrait;
 
 
-    /** @var  User */
+    /** @var  string */
     protected $to;
-    /** @var  User */
+    /** @var  string */
     protected $from;
+
+    /** @var  string */
+    protected $replayTo;
+
     /** @var  Status */
-    protected $status;
+    protected $status = Status::STATUS_NEW;
 
     /** @var array */
     protected $params = [];
@@ -35,11 +39,8 @@ class Message extends ContentEntity implements DelegatingInterface
     /**
      * @return User
      */
-    public function getTo()
+    public function getTo(): string
     {
-        if (null !== $this->to && !$this->to instanceof UserInterface) {
-            $this->to = $this->getOperator()->get(User::class, $this->to);
-        }
         return $this->to;
     }
 
@@ -54,11 +55,8 @@ class Message extends ContentEntity implements DelegatingInterface
     /**
      * @return User
      */
-    public function getFrom()
+    public function getFrom(): string
     {
-        if (null !== $this->from && !$this->from instanceof UserInterface) {
-            $this->from = $this->getOperator()->get(User::class, $this->from);
-        }
         return $this->from;
     }
 
@@ -71,9 +69,25 @@ class Message extends ContentEntity implements DelegatingInterface
     }
 
     /**
+     * @return string
+     */
+    public function getReplayTo(): string
+    {
+        return $this->replayTo;
+    }
+
+    /**
+     * @param string $replayTo
+     */
+    public function setReplayTo(string $replayTo)
+    {
+        $this->replayTo = $replayTo;
+    }
+
+    /**
      * @return Status
      */
-    public function getStatus()
+    public function getStatus():Status
     {
         if (null !== $this->status && !$this->status instanceof Status) {
             $this->status = new Status((integer)$this->status);
@@ -92,7 +106,7 @@ class Message extends ContentEntity implements DelegatingInterface
     /**
      * @return array
      */
-    public function getParams()
+    public function getParams():array
     {
         return $this->params;
     }
@@ -108,7 +122,7 @@ class Message extends ContentEntity implements DelegatingInterface
     /**
      * @return TransportType
      */
-    public function getTransport()
+    public function getTransport():TransportType
     {
         if (!$this->transport instanceof TransportType) {
             $this->transport = new TransportType((integer)$this->transport);
@@ -124,13 +138,21 @@ class Message extends ContentEntity implements DelegatingInterface
         $this->transport = $transport;
     }
 
-    public function getContent()
+    public function toArray()
     {
-        if (null === $this->content) {
-            $command = new ParseMessageCommand($this);
-            $this->content = $this->getOperator()->execute($command);
-        }
-        return $this->content;
+        $data = parent::toArray();
+        $data['to'] = $this->getTo();
+        $data['from'] = $this->getFrom();
+        $data['status'] = $this->getStatus();
+        $data['transport'] = $this->getTransport();
+        $data['params'] = $this->getParams();
+        return $data;
     }
+
+    public function getOwner()
+    {
+        return null;
+    }
+
 
 }

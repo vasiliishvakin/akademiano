@@ -21,6 +21,7 @@ CREATE TABLE herald_messages
 -- Унаследована from table content:  content text,
   "from" text,
   "to" text,
+  "replay_to" text,
   "transport" smallint,
   "data" jsonb,
   "params" jsonb,

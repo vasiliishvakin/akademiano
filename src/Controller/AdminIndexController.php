@@ -4,13 +4,13 @@ namespace Akademiano\HeraldMessages\Controller;
 
 
 use Akademiano\EntityOperator\Ext\Controller\AkademianoEntityController;
-use Akademiano\HeraldMessages\MessagesOpsRoutesStore;
+use Akademiano\HeraldMessages\AdminRoutes;
 use Akademiano\HeraldMessages\Api\v1\MessagesApi;
 use Akademiano\UserEO\Api\v1\UsersApi;
 
 class AdminIndexController extends AkademianoEntityController
 {
-    const ENTITY_OPSR_STORE_CLASS = MessagesOpsRoutesStore::class;
+    const ENTITY_OPSR_STORE_CLASS = AdminRoutes::class;
     const ENTITY_API_ID = MessagesApi::API_ID;
     const DEFAULT_LIST_CRITERIA = [];
 

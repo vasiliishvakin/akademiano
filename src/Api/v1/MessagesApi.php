@@ -9,6 +9,6 @@ use Akademiano\HeraldMessages\Model\Message;
 
 class MessagesApi extends EntityApi
 {
-    const ENTITY_CLASS = HeraldMessages::class;
+    const ENTITY_CLASS = Message::class;
     const API_ID = "messagesApi";
 }

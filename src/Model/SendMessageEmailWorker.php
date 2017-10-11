@@ -5,6 +5,7 @@ namespace Akademiano\HeraldMessages\Model;
 
 
 use Akademiano\EntityOperator\EntityOperator;
+use Akademiano\HeraldMessages\Model\Exception\SendException;
 use Akademiano\Operator\Command\CommandInterface;
 use Akademiano\Operator\DelegatingInterface;
 use Akademiano\Operator\DelegatingTrait;
@@ -37,7 +38,7 @@ class SendMessageEmailWorker implements WorkerInterface, DelegatingInterface
     {
         switch ($command->getName()) {
             case SendEmailCommand::COMMAND_NAME : {
-                $message = $command->getParams(ParseMessageCommand::PARAM_MESSAGE);
+                $message = $command->getParams(SendEmailCommand::PARAM_MESSAGE);
                 return $this->send($message);
             }
             default:
@@ -77,10 +78,8 @@ class SendMessageEmailWorker implements WorkerInterface, DelegatingInterface
         $this->from = $from;
     }
 
-    public function send(Message $message)
+    public function send(Message $message):int
     {
-        $message->setStatus(new Status(Status::STATUS_DO));
-        $this->getOperator()->save($message);
         try {
             $swiftMessage = $this->prepareMessage($message);
             $mailer = $this->getMailer();
@@ -91,11 +90,11 @@ class SendMessageEmailWorker implements WorkerInterface, DelegatingInterface
             }
             $message->setStatus(new Status(Status::STATUS_DONE));
             $this->getOperator()->save($message);
-            return true;
+            return $result;
         } catch (\Exception $e) {
             $message->setStatus(new Status(Status::STATUS_ERROR));
             $this->getOperator()->save($message);
-            return false;
+            throw new SendException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -106,8 +105,9 @@ class SendMessageEmailWorker implements WorkerInterface, DelegatingInterface
     public function prepareMessage(Message $message)
     {
         return (new \Swift_Message($message->getTitle()))
-            ->setFrom($this->getFrom())
-            ->setTo($message->getTo()->getEmail(), $message->getTo()->getTitle())
+            ->setFrom($message->getFrom())
+            ->setReplyTo($message->getFrom())
+            ->setTo($message->getTo())
             ->setBody($message->getContent());
     }
 }
