@@ -13,6 +13,8 @@ class Environment
     /** @var  boolean */
     protected $https;
 
+    protected $accept;
+
     protected $isEqualServerEnv;
 
     protected $requestMethod;
@@ -202,5 +204,38 @@ class Environment
     public function isCli()
     {
         return $this->getSapiName() === "cli";
+    }
+
+    public function setAccept(string $accept)
+    {
+        $this->accept = $accept;
+    }
+
+    public function getAccept(): array
+    {
+        if (null === $this->accept) {
+            if (isset($_SERVER["HTTP_ACCEPT"])) {
+                $this->accept = $_SERVER["HTTP_ACCEPT"];
+            }
+        }
+        if (is_string($this->accept)) {
+            $accept = explode(',', $this->accept);
+            $AcceptTypes = [];
+            foreach ($accept as $a) {
+                // the default quality is 1.
+                $q = 1;
+                // check if there is a different quality
+                if (strpos($a, ';q=')) {
+                    // divide "mime/type;q=X" into two parts: "mime/type" i "X"
+                    list($a, $q) = explode(';q=', $a);
+                }
+                // mime-type $a is accepted with the quality $q
+                // WARNING: $q == 0 means, that mime-type isn’t supported!
+                $AcceptTypes[$a] = $q;
+            }
+            arsort($AcceptTypes);
+            $this->accept=array_keys($AcceptTypes);
+        }
+        return $this->accept;
     }
 }

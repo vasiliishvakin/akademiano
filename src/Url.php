@@ -63,7 +63,8 @@ class Url implements EnvironmentIncludeInterface
     public function getDomain()
     {
         if (is_null($this->domain)) {
-            $this->domain = $this->getEnvironment()->getServerName();
+            //TODO Dirty hack
+            $this->domain = $this->getEnvironment()->getSrvServerName();
         }
 
         return $this->domain;

@@ -53,17 +53,15 @@ class Request implements EnvironmentIncludeInterface
                 case self::METHOD_GET:
                 case self::METHOD_HEAD :
                     $this->params = $_GET;
-                    break;
                 case self::METHOD_POST:
                     $this->params = $_POST;
                     break;
-                case self::METHOD_PUT:
-                case self::METHOD_DELETE:
-                    parse_str(file_get_contents('php://input'), $this->params);
-                    break;
                 default:
-                    throw new \Exception('Method ' . $this->getMethod() . 'not supported');
+                    $stParams = [];
+                    parse_str(file_get_contents('php://input'), $stParams);
+                    $this->params = array_merge($_GET, $stParams);
             }
+
             if ($emptyStringNull) {
                 foreach ($this->params as $key => $value) {
                     if ($value === "") {

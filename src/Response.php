@@ -14,6 +14,8 @@ class Response
     protected $modified;
     protected $timeToCache;
     protected $etag;
+    protected $redirectUrl;
+    protected $goRedirect = true;
 
     /**
      * @param array $config
@@ -26,7 +28,7 @@ class Response
 
     public function setDefaults(array $params)
     {
-        foreach ($params as $name=>$value) {
+        foreach ($params as $name => $value) {
             $method = "set" . ucfirst($name);
             if (method_exists($this, $method)) {
                 $this->$method($value);
@@ -105,10 +107,10 @@ class Response
      */
     public function setModified($modified, $onlyBigger = false)
     {
-        if($modified instanceof \DateTime) {
+        if ($modified instanceof \DateTime) {
             $modified = $modified->getTimestamp();
         }
-        $modified = (int) $modified;
+        $modified = (int)$modified;
         $this->modified = (!$onlyBigger) ? $modified : ($modified > $this->modified) ? $modified : $this->modified;
     }
 
@@ -207,22 +209,31 @@ class Response
         header("HTTP/1.1 {$this->getHttpCode()}");
         header("Content-Type:{$this->getContentType()}; charset={$this->getCharset()}");
         header("Content-Language: {$this->getLanguage()}");
-        header("X-Response-Date: ". Header::toGmtDate());
+        header("X-Response-Date: " . Header::toGmtDate());
 
         $modified = $this->getModified();
         Header::modified($modified);
 
         $cacheTime = $this->getTimeToCache();
-        if ($cacheTime>0) {
+        if ($cacheTime > 0) {
             Header::cache($cacheTime);
-        } elseif ($cacheTime<0) {
+        } elseif ($cacheTime < 0) {
             Header::noCache();
         }
         header("ETag: {$this->getEtag()}");
     }
 
-    public function sendReplay()
+    public function sendReplay($goRedirect = null)
     {
+        if (null === $goRedirect) {
+            $goRedirect = $this->isGoRedirect();
+        }
+
+        if ($goRedirect && null !== $this->getRedirectUrl()) {
+            $this->redirect();
+            return;
+        }
+
         if (isset($_SERVER['HTTP_IF_NONE_MATCH'])) {
             $etagRequest = $_SERVER['HTTP_IF_NONE_MATCH'];
             $etag = $this->getEtag();
@@ -232,6 +243,7 @@ class Response
                 return;
             }
         }
+
         if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
             $modifiedRequest = $_SERVER['HTTP_IF_MODIFIED_SINCE'];
             $modifiedRequest = strtotime($modifiedRequest);
@@ -246,10 +258,42 @@ class Response
         echo $this->getBody();
     }
 
-    public function redirect($url)
+    public function setRedirectUrl($url)
     {
-        header("Location: $url");
-        exit();
+        $this->redirectUrl = $url;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRedirectUrl()
+    {
+        return $this->redirectUrl;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isGoRedirect(): bool
+    {
+        return $this->goRedirect;
+    }
+
+    /**
+     * @param bool $goRedirect
+     */
+    public function setGoRedirect(bool $goRedirect)
+    {
+        $this->goRedirect = $goRedirect;
+    }
+
+    public function redirect()
+    {
+        if (empty($this->redirectUrl)) {
+            throw new \LogicException('Try to redirect empty url');
+        }
+        $url = (string)$this->getRedirectUrl();
+        header(sprintf('Location: %s', $url));
     }
 
     public function error404()
