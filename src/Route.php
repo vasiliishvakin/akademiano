@@ -68,7 +68,7 @@ class Route implements EnvironmentIncludeInterface
     /**
      * @return array
      */
-    public function getMethods()
+    public function getMethods():array
     {
         return $this->methods;
     }
@@ -78,14 +78,14 @@ class Route implements EnvironmentIncludeInterface
      */
     public function setMethods($methods)
     {
-        $this->methods = $methods;
+        $this->methods =(array) $methods;
     }
 
 
     /**
      * @return RoutePattern[]|Collection
      */
-    public function getPatterns()
+    public function getPatterns():Collection
     {
         return $this->patterns;
     }
