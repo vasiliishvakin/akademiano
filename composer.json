@@ -16,12 +16,11 @@
     }
   },
   "require": {
-    "akademiano/entity": "^1.0.0-beta.1",
-    "akademiano/user-eo": "^1.0.0-beta.6",
-    "akademiano/entity-operator": "^1.0.0-beta.1",
+    "akademiano/entity": "^1.1@dev",
+    "akademiano/user-eo": "^1.1@dev",
+    "akademiano/entity-operator": "^1.1@dev",
+    "akademiano/entity-operator-ext": "^1.1@dev",
     "nesbot/carbon": "^1.22",
-    "twig/twig": "^1.33.0",
-    "akademiano/entity-operator-ext": "^1.0.0-beta.1",
     "swiftmailer/swiftmailer": "^6.0"
   },
   "require-dev": {
