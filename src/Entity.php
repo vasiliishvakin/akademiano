@@ -112,4 +112,16 @@ class Entity extends BaseEntity implements EntityInterface
     {
         $this->owner = $owner;
     }
+
+    public function toArray()
+    {
+        $data = parent::toArray();
+        $data['created'] = $this->getCreated();
+        $data['changed'] = $this->getChanged();
+        $data['active'] = $this->isActive();
+        $data['owner'] = $this->getOwner();
+        return $data;
+    }
+
+
 }

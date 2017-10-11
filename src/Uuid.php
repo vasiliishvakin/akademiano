@@ -22,7 +22,7 @@ class Uuid implements UuidInterface
      */
     public function setValue($value)
     {
-        $this->value = (integer) $value;
+        $this->value = (integer)$value;
     }
 
     public function getValue()
@@ -37,13 +37,32 @@ class Uuid implements UuidInterface
 
     public function getInt()
     {
-        return (integer) $this->value;
+        return (integer)$this->value;
     }
 
 
     public function __toString()
     {
-        return (string) $this->getValue();
+        return (string)$this->getValue();
     }
 
+    public function serialize()
+    {
+        return serialize([
+            'value' => $this->getValue(),
+        ]);
+    }
+
+    public function unserialize($serialized)
+    {
+        $data = $this->unserialize($serialized);
+        $this->value = $data['value'];
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'value' => $this->getHex(),
+        ];
+    }
 }

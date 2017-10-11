@@ -6,7 +6,7 @@ namespace Akademiano\Entity;
 use Akademiano\Utils\Object\Prototype\IntegerableInterface;
 use Akademiano\Utils\Object\Prototype\StringableInterface;
 
-interface UuidInterface extends StringableInterface, IntegerableInterface
+interface UuidInterface extends StringableInterface, IntegerableInterface, \JsonSerializable, \Serializable
 {
     /**
      * @return integer

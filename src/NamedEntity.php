@@ -39,4 +39,14 @@ class NamedEntity extends Entity implements NamedEntityInterface
     {
         $this->description = $description;
     }
+
+    public function toArray()
+    {
+        $data = parent::toArray();
+        $data['title'] = $this->getTitle();
+        $data['description'] = $this->getDescription();
+        return $data;
+    }
+
+
 }

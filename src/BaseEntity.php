@@ -36,5 +36,11 @@ abstract class BaseEntity implements BaseEntityInterface
         return $this->getId()->__toString();
     }
 
+    public function toArray()
+    {
+        return [
+            "id"=> $this->getId(),
+        ];
+    }
 
 }
