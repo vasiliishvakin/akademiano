@@ -147,7 +147,7 @@ class ConfigDir
      * @param string $ext
      * @return ConfigFile[]|array
      */
-    public function getFiles($configName, $ext = ConfigFile::EXT)
+    public function getFiles($configName, $ext = ConfigFile::EXT):array
     {
         if (!isset($this->files[$configName])) {
             $types = $this->getTypes();
@@ -159,9 +159,6 @@ class ConfigDir
                 }
             }
             $this->files[$configName] = $files;
-        }
-        if (empty($this->files[$configName])) {
-            return [];
         }
         return $this->files[$configName];
     }
