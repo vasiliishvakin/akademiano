@@ -17,13 +17,12 @@
     }
   },
   "require": {
-    "php": "^5.6 || ^7.0",
-    "akademiano/utils": "^1.0.0-beta.6",
-    "akademiano/httpwarp": "^1.0.0-beta.5",
-    "akademiano/core-controller": "^1.0.0-beta.2",
-    "akademiano/simplaview": "^1.0.0-beta.2",
-    "akademiano/config": "^1.0.0-beta.7",
-    "akademiano/router": "^1.0.0-beta.4"
+    "akademiano/utils": "^1.1@dev",
+    "akademiano/httpwarp": "^1.1@dev",
+    "akademiano/core-controller": "^1.1@dev",
+    "akademiano/simplaview": "^1.1@dev",
+    "akademiano/config": "^1.1@dev",
+    "akademiano/router": "^1.1@dev"
   },
   "require-dev": {
     "codeception/codeception": "^2.2.10",
