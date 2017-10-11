@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Akademiano\Daemon;
 
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use Pheanstalk\Job;
 use Pheanstalk\Pheanstalk;
 use Pheanstalk\PheanstalkInterface;
@@ -25,6 +27,9 @@ abstract class BeanstalkedDaemon
     protected $tickTimeout = 50;
 
     protected $concurrency = 2;
+
+    /** @var  Logger */
+    protected $logger;
 
 
     /**
@@ -86,7 +91,7 @@ abstract class BeanstalkedDaemon
         if (null === $this->beanstalk) {
             $dsn = $this->getBeanstalkDsn();
             $this->beanstalk = new Pheanstalk($dsn['host'], $dsn['port'], $dsn['connectTimeout'], $dsn['connectPersistent']);
-            $this->beanstalk->watch(self::BEANSTALK_TUBE)
+            $this->beanstalk->watch(static::BEANSTALK_TUBE)
                 ->ignore('default');
         }
         return $this->beanstalk;
@@ -99,7 +104,6 @@ abstract class BeanstalkedDaemon
     {
         $this->beanstalk = $beanstalk;
     }
-
 
     /**
      * @return bool
@@ -137,19 +141,57 @@ abstract class BeanstalkedDaemon
     {
         switch ($sigNum) {
             case SIGTERM:
-                echo "Получен сигнал SIGTERM...\n";
+                $this->log(Logger::INFO, 'Get SIGTERM', ['siginfo'=>$sigInfo]);
                 $this->setIsRun(false);
                 break;
             case SIGHUP:
-                echo "Получен сигнал SIGHUP...\n";
+                $this->log(Logger::INFO, 'Get SIGHUP', ['siginfo'=>$sigInfo]);
                 break;
             case SIGUSR1:
-                echo "Получен сигнал SIGUSR1...\n";
+                $this->log(Logger::INFO, 'Get SIGUSR1', ['siginfo'=>$sigInfo]);
                 break;
             default:
-                echo "Получен сигнал $sigNum...\n";
+                $this->log(Logger::INFO, sprintf('Get %s', $sigNum), ['siginfo'=>$sigInfo]);
         }
     }
+
+    public function getLogDir()
+    {
+        $logDir = ROOT_DIR . '/data/log';
+        if (!is_dir($logDir)) {
+            if (!mkdir($logDir, 0770, true)) {
+                throw new \RuntimeException(sprintf('Could not create log directory "%s"', $logDir));
+            }
+        }
+        return $logDir;
+    }
+
+    /**
+     * @return Logger
+     */
+    public function getLogger(): Logger
+    {
+        if (null === $this->logger) {
+            $this->logger = new Logger('abdlog');
+            $this->logger->pushHandler(new StreamHandler($this->getLogDir(). '/daemon.log', Logger::DEBUG));
+            $this->logger->pushHandler(new StreamHandler('php://stderr', Logger::DEBUG));
+        }
+        return $this->logger;
+    }
+
+    /**
+     * @param Logger $logger
+     */
+    public function setLogger(Logger $logger)
+    {
+        $this->logger = $logger;
+    }
+
+    public function log($level, $message, array $context = []):bool
+    {
+        return $this->getLogger()->log($level, $message, $context);
+    }
+
 
     abstract public function processNextJobs(): void;
 
@@ -159,7 +201,7 @@ abstract class BeanstalkedDaemon
         pcntl_signal(SIGHUP, [$this, "sigHandler"]);
         pcntl_signal(SIGUSR1, [$this, "sigHandler"]);
 
-        echo sprintf('Started, pid: %s' . PHP_EOL, posix_getpid());
+        $this->log(Logger::INFO, sprintf('Started'), ['pid'=>posix_getpid()]);
 
         while ($this->isRun()) {
             $this->processNextJobs();
@@ -170,6 +212,6 @@ abstract class BeanstalkedDaemon
                 sleep($this->getTickTimeout());
             }
         }
-        echo 'Terminate' . PHP_EOL;
+        $this->log(Logger::INFO, 'Shutdown');
     }
 }
