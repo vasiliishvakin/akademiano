@@ -9,6 +9,9 @@ use Akademiano\Api\v1\AbstractApi;
 use Akademiano\Entity\Entity;
 use Akademiano\Entity\EntityInterface;
 use Akademiano\EntityOperator\EntityOperator;
+use Akademiano\EntityOperator\Worker\KeeperInterface;
+use Akademiano\HeraldMessages\Model\Message;
+use Akademiano\Operator\Command\WorkerInfoCommand;
 use Akademiano\User\CustodianIncludeInterface;
 use Akademiano\User\CustodianIncludeTrait;
 use Akademiano\UUID\UuidComplexShortTables;
@@ -226,6 +229,13 @@ class EntityApi extends AbstractApi implements EntityApiInterface, CustodianIncl
 
         return $this->getOperator()->delete($entity);
 
+    }
+
+    public function getFields()
+    {
+        $command = new WorkerInfoCommand(KeeperInterface::WORKER_INFO_FIELDS, Message::class);
+        $fields = $this->getOperator()->execute($command);
+        return $fields;
     }
 
 }
