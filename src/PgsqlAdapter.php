@@ -4,6 +4,8 @@ namespace Akademiano\Db\Adapter;
 
 
 use Akademiano\Db\Adapter\Exception\ConnectionErrorException;
+use Akademiano\Db\Adapter\Exception\QueryException;
+use Akademiano\Db\Adapter\Exception\TransactionException;
 use Akademiano\Db\Adapter\Type\PgPoint;
 use Akademiano\Db\Adapter\WhereParams\Between;
 use Akademiano\Db\Adapter\WhereParams\ILike;
@@ -36,6 +38,9 @@ class PgsqlAdapter extends AbstractAdapter
     {
         if (func_num_args() === 1) {
             $result = pg_query($this->getConnection(), $query);
+            if ($error = $this->getError()) {
+                throw new QueryException($error);
+            }
         } else {
             $params = func_get_args();
             array_shift($params);
@@ -55,7 +60,7 @@ class PgsqlAdapter extends AbstractAdapter
     public function begin()
     {
         if ($this->isTransaction()) {
-            throw new \LogicException('Transaction already started');
+            throw new TransactionException('Transaction already started');
         }
         $this->setTransaction(true);
         $this->query('BEGIN');
@@ -64,7 +69,7 @@ class PgsqlAdapter extends AbstractAdapter
     public function commit()
     {
         if (!$this->isTransaction()) {
-            throw new \LogicException('Transaction not started');
+            throw new TransactionException('Transaction not started');
         }
         $this->query('COMMIT');
         $this->setTransaction(false);
@@ -73,7 +78,7 @@ class PgsqlAdapter extends AbstractAdapter
     public function rollBack()
     {
         if (!$this->isTransaction()) {
-            throw new \LogicException('Transaction not started');
+            throw new TransactionException('Transaction not started');
         }
         $this->query('ROLLBACK');
         $this->setTransaction(false);
@@ -81,7 +86,12 @@ class PgsqlAdapter extends AbstractAdapter
 
     public function queryParams($query, $params)
     {
-        return pg_query_params($this->getConnection(), $query, $params);
+        $result = pg_query_params($this->getConnection(), $query, $params);
+
+        if ($error = $this->getError()) {
+            throw new QueryException($error);
+        }
+        return $result;
     }
 
     public function getError()
@@ -102,9 +112,6 @@ class PgsqlAdapter extends AbstractAdapter
     public function selectAndSmartFetch($query)
     {
         $result = call_user_func_array([$this, 'query'], func_get_args());
-        if (!$result) {
-            throw new \RuntimeException("Bad query: \"$query\"");
-        }
         $numRows = pg_num_rows($result);
         $numFields = pg_num_fields($result);
         if ($numRows === 0) {
