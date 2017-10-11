@@ -2,9 +2,10 @@
 
 namespace Akademiano\UUID;
 
+use Akademiano\Entity\Uuid;
 use Carbon\Carbon;
 
-class UuidComplexShort implements UuidComplexInterface
+class UuidComplexShort extends Uuid implements UuidComplexInterface
 {
     protected $value;
     /** @var  \DateTime */
@@ -16,12 +17,11 @@ class UuidComplexShort implements UuidComplexInterface
 
     public function __construct($value = null, $epoch = null)
     {
-        if (null !== $value) {
-            $this->setValue($value);
-        }
         if (null !== $epoch) {
             $this->setEpoch($epoch);
         }
+
+        parent::__construct($value);
     }
 
     /**
@@ -110,5 +110,28 @@ class UuidComplexShort implements UuidComplexInterface
     public function __toString()
     {
         return (string)$this->getValue();
+    }
+
+    public function serialize()
+    {
+        return serialize([
+            'value' => $this->getValue(),
+            'epoch' => $this->getEpoch(),
+        ]);
+    }
+
+    public function unserialize($serialized)
+    {
+        $data = unserialize($serialized);
+        $this->setEpoch($data['epoch']);
+        $this->setValue($data['value']);
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'value' => $this->getHex(),
+            'epoch' => $this->getEpoch(),
+        ];
     }
 }
