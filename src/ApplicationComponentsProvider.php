@@ -36,7 +36,7 @@ class ApplicationComponentsProvider implements ServiceProviderInterface
 
         if (!isset($pimple['request'])) {
             $pimple['request'] = function (Container $pimple) {
-                return new Request();
+                return new Request($pimple['environment']);
             };
         }
 

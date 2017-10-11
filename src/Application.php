@@ -259,16 +259,16 @@ class Application implements ConfigInterface, DIContainerIncludeInterface, Restr
         return $closure;
     }
 
-    public function catchRunException(\Exception $e)
+    public function catchRunException(\Exception $e): void
     {
         $errorCode = $e->getCode();
         $closure = $this->getErrorFunction($errorCode);
         if (is_array($closure)) {
-            return $this->action($closure[0], $closure[1], ["exception" => $e]);
+            $this->action($closure[0], $closure[1], ["exception" => $e]);
         } elseif (is_callable($closure)) {
-            return call_user_func($closure);
+            call_user_func($closure);
         } elseif ($errorCode === 404) {
-            return $this->getResponse()->error404();
+            $this->getResponse()->error404();
         } else {
             throw $e;
         }
@@ -370,7 +370,7 @@ class Application implements ConfigInterface, DIContainerIncludeInterface, Restr
                 json_encode($controllerInfo, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)));
         }
 
-        $request=$this->getRequest();
+        $request = $this->getRequest();
         $response = $this->getResponse();
 
         if (!empty($httpCachePath)) {
@@ -432,17 +432,41 @@ class Application implements ConfigInterface, DIContainerIncludeInterface, Restr
         $result = $controller->$action($arguments);
         $controller->finalize();
 
-        if (is_array($result)) {
-            $controller->getView()->assignArray($result);
-        }
-
-        if ($controller->isAutoRender()) {
-            $html = $controller->getView()->render();
-            $response = $controller->getResponse();
-            $response->setBody($html);
+        if ($controller->isAutoSend()) {
+            $response = $this->prepareResponse($controller, $result);
             $response->sendReplay();
         }
     }
+
+    public function prepareResponse(ControllerInterface $controller, array $result = null): Response
+    {
+        $acceptTypes = $this->getEnvironment()->getAccept();
+        $response = $controller->getResponse();
+        foreach ($acceptTypes as $type) {
+            switch ($type) {
+                case "application/json":
+                    $response->setContentType("application/json");
+                    $response->setGoRedirect(false);
+                    if ($controller->isAutoRender()) {
+                        $body = json_encode($result, JSON_UNESCAPED_UNICODE);
+                        $response->setBody($body);
+                    }
+                    break 2;
+                case "text/html":
+                    //case "text/html":
+                    if ($controller->isAutoRender()) {
+                        if (!empty($result)) {
+                            $controller->getView()->assignArray($result);
+                        }
+                        $body = $controller->getView()->render();
+                        $response->setBody($body);
+                    }
+                    break 2;
+            }
+        }
+        return $response;
+    }
+
 
     public function accessCheck()
     {

@@ -24,6 +24,9 @@ class TwigView extends AbstractView implements ViewInterface, DIContainerInclude
     protected $formValidator;
     protected $formFactory;
 
+    protected $dataDir;
+    protected $rootDir;
+
     use DIContainerTrait;
 
     public function reset()
@@ -36,6 +39,46 @@ class TwigView extends AbstractView implements ViewInterface, DIContainerInclude
         $this->arrayTemplates = [];
         $this->templateDirs = [];
     }
+
+    /**
+     * @return mixed
+     */
+    public function getDataDir()
+    {
+        if (null == $this->dataDir) {
+            $this->dataDir = DATA_DIR;
+        }
+        return $this->dataDir;
+    }
+
+    /**
+     * @param mixed $dataDir
+     */
+    public function setDataDir($dataDir)
+    {
+        $this->dataDir = $dataDir;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRootDir()
+    {
+        if (null == $this->rootDir) {
+            $this->rootDir = ROOT_DIR;
+        }
+        return $this->rootDir;
+    }
+
+    /**
+     * @param mixed $rootDir
+     */
+    public function setRootDir($rootDir)
+    {
+        $this->rootDir = $rootDir;
+    }
+
+
 
     public function initExtension($extension, \Twig_Environment $render, \Twig_Loader_Filesystem $fileSystemLoader)
     {
@@ -113,7 +156,10 @@ class TwigView extends AbstractView implements ViewInterface, DIContainerInclude
                 $options = $options->toArray();
             }
             if (isset($options['cache']) && $options['cache']) {
-                $cache = realpath($this->getRootDir() . '/' . $options['cache']);
+                if (is_bool($options['cache'])) {
+                    $options['cache'] = 'cache/twig';
+                }
+                $cache = realpath($this->getDataDir() . '/' . $options['cache']);
                 if ($cache) {
                     $options['cache'] = $cache;
                 } else {

@@ -5,7 +5,7 @@ namespace Akademiano\Core\Exception;
 
 use Akademiano\HttpWarp\Exception\HttpUsableException;
 
-class AccessDeniedException extends HttpUsableException
+class AccessDeniedException extends \Akademiano\HttpWarp\Exception\AccessDeniedException
 {
     protected $resource;
     protected $url;
