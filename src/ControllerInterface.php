@@ -56,6 +56,12 @@ interface ControllerInterface extends DIContainerIncludeInterface, ConfigurableI
 
     public function isAutoRender();
 
+    public function autoSendOff();
+
+    public function autoSendOn();
+
+    public function isAutoSend();
+
     public function getControllerName();
 
     public function getModuleName();

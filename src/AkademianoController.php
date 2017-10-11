@@ -27,6 +27,7 @@ class AkademianoController implements ControllerInterface
     private $router;
 
     private $autoRender = true;
+    private $autoSend = true;
 
     public function __construct(Request $request, Response $response, ViewInterface $view, Router $router)
     {
@@ -115,6 +116,21 @@ class AkademianoController implements ControllerInterface
         return $this->autoRender;
     }
 
+    public function autoSendOff()
+    {
+        $this->autoSend = false;
+    }
+
+    public function autoSendOn()
+    {
+        $this->autoSend = true;
+    }
+
+    public function isAutoSend()
+    {
+        return $this->autoSend;
+    }
+
     public function getControllerName()
     {
         $class = get_class($this);
@@ -152,12 +168,12 @@ class AkademianoController implements ControllerInterface
     {
         $url = $this->getRouteUrl($routeId, $params);
 
-        $this->getResponse()->redirect($url);
+        $this->getResponse()->setRedirectUrl($url);
     }
 
     public function redirectToUrl($url)
     {
-        $this->getResponse()->redirect($url);
+        $this->getResponse()->setRedirectUrl($url);
     }
 
     public function init() {return;}
