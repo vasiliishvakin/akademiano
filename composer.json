@@ -19,7 +19,7 @@
     "akademiano/utils": "^1.1@dev",
     "akademiano/config": "^1.1@dev",
     "akademiano/operator": "^1.1@dev",
-    "akademiano/entity-operator": "^1.1@dev"
+    "akademiano/entity-operator": "^1.1@dev",
     "nesbot/carbon": "^1.22"
   },
   "require-dev": {
