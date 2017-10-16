@@ -23,6 +23,7 @@
     "font-awesome/css/font-awesome.min.css",
     "simple-line-icons/css/simple-line-icons.css",
     "coreui.io/Static_Full_Project_GULP/css/style.css",
+    "assets/css/coreui-fix.css",
     "assets/css/akademiano.css",
     ], default, true) }}
 
@@ -80,22 +81,28 @@
                 <li class="nav-item d-md-down-none">
                     <a class="nav-link" href="#"><i class="icon-location-pin"></i></a>
                 </li>
+
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                        <img src="img/avatars/6.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-                        <span class="d-md-down-none">admin</span>
+                    <a class="nav-link dropdown-toggle nav-link" data-toggle="dropdown" href="#" role="button"
+                       aria-haspopup="true" aria-expanded="false">
+                        {#<img src="img/avatars/6.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">#}
+                        <span class="d-md-down-none">{{ current_user().title | default("Account") }}</span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right">
 
                         <div class="dropdown-header text-center">
                             <strong>Account</strong>
                         </div>
-                        <a class="dropdown-item" href="#"><i class="fa fa-lock"></i> Logout</a>
+                        <a class="dropdown-item"
+                           href="{{ url(constant("Akademiano\\UserEO\\UsersOpsRoutesStore::LOGOUT_ROUTE")) }}"><i
+                                    class="fa fa-lock"></i> Logout</a>
                     </div>
                 </li>
+
                 <li class="nav-item d-md-down-none">
                     <a class="nav-link navbar-toggler aside-menu-toggler" href="#">☰</a>
                 </li>
+
 
             </ul>
         </header>
@@ -123,8 +130,6 @@
                     {% block breadcrumb %}
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item">Home</li>
-                            <li class="breadcrumb-item"><a href="#">Admin</a>
-                            </li>
                             <li class="breadcrumb-item active">Dashboard</li>
                         </ol>
                     {% endblock breadcrumb %}
