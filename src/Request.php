@@ -122,9 +122,6 @@ class Request implements EnvironmentIncludeInterface
     {
         if (is_null($this->url)) {
             $url = new Url(null, $this->getEnvironment());
-            $url->setScheme($this->getEnvironment()->getScheme());
-            $url->setDomain($this->getEnvironment()->getServerName());
-            $url->setPort($this->getEnvironment()->getPort());
             $url->setPath($this->getEnvironment()->getRequestUri());
             if (null !== $this->getEnvironment()->getQueryString()) {
                 $url->setQuery($this->getEnvironment()->getQueryString());
