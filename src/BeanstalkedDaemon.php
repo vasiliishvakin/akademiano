@@ -175,7 +175,6 @@ abstract class BeanstalkedDaemon
             $this->logger = new Logger('herald');
             $this->logger->pushHandler(new StreamHandler($this->getLogDir(). '/daemon.log', Logger::INFO));
             $this->logger->pushHandler(new StreamHandler('php://stderr', Logger::ERROR));
-            $this->logger->pushHandler(new StreamHandler('php://stdout', Logger::DEBUG));
         }
         return $this->logger;
     }
