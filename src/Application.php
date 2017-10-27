@@ -447,10 +447,8 @@ class Application implements ConfigInterface, DIContainerIncludeInterface, Restr
                 case "application/json":
                     $response->setContentType("application/json");
                     $response->setGoRedirect(false);
-                    if ($controller->isAutoRender()) {
-                        $body = json_encode($result, JSON_UNESCAPED_UNICODE);
-                        $response->setBody($body);
-                    }
+                    $body = json_encode($result, JSON_UNESCAPED_UNICODE);
+                    $response->setBody($body);
                     break 2;
                 case "text/html":
                     //case "text/html":
