@@ -54,7 +54,7 @@ class Request implements EnvironmentIncludeInterface
                 case self::METHOD_HEAD :
                     $this->params = $_GET;
                 case self::METHOD_POST:
-                    $this->params = $_POST;
+                    $this->params = array_merge($_GET, $_POST);
                     break;
                 default:
                     $stParams = [];
