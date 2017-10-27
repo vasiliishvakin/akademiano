@@ -103,9 +103,16 @@ abstract class AkademianoEntityController extends AkademianoController
         $this->autoRenderOff();
         //save item
         $data = $this->getRequest()->getParams();
-        $this->getEntityApi()->save($data);
+        $result = $this->getEntityApi()->save($data);
+
+        $info = [
+            'id' => $result->getId()->getInt(),
+            'status' => $result ? 'OK' : 'ERROR',
+        ];
 
         $this->redirect($this->getEntityOpsRoutesStore()->getListRoute());
+
+        return $info;
     }
 
     public function deleteAction(array $params = [])
