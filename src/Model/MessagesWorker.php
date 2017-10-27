@@ -11,7 +11,7 @@ class MessagesWorker extends PostgresWorker
 {
     const TABLE_ID = 17;
     const TABLE_NAME = "herald_messages";
-    const EXPAND_FIELDS = ["title", "description", "content", "to", "from" , "replayTo", "status", "data", "transport", "params"];
+    const EXPAND_FIELDS = ["title", "description", "content", "to", "from" , "replay_to", "status", "data", "transport", "params"];
 
     public function filterFieldToPostgresType($value, $fieldName = null, EntityInterface $entity = null)
     {

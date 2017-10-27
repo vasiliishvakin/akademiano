@@ -11,6 +11,11 @@ use Akademiano\Operator\DelegatingInterface;
 use Akademiano\Operator\DelegatingTrait;
 use Akademiano\Operator\Worker\WorkerInterface;
 use Akademiano\Operator\Worker\WorkerMetaMapPropertiesTrait;
+use Akademiano\Utils\ArrayTools;
+use GuzzleHttp\Client;
+use GuzzleHttp\Pool;
+use function GuzzleHttp\Promise\settle;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class SendMessageEmailWorker
@@ -27,6 +32,9 @@ class SendMessageEmailWorker implements WorkerInterface, DelegatingInterface
 
     protected $from;
 
+    /** @var Client */
+    protected $httpClient;
+
     protected static function getDefaultMapping()
     {
         return [
@@ -37,10 +45,11 @@ class SendMessageEmailWorker implements WorkerInterface, DelegatingInterface
     public function execute(CommandInterface $command)
     {
         switch ($command->getName()) {
-            case SendEmailCommand::COMMAND_NAME : {
-                $message = $command->getParams(SendEmailCommand::PARAM_MESSAGE);
-                return $this->send($message);
-            }
+            case SendEmailCommand::COMMAND_NAME :
+                {
+                    $message = $command->getParams(SendEmailCommand::PARAM_MESSAGE);
+                    return $this->send($message);
+                }
             default:
                 throw new \InvalidArgumentException(sprintf('Command type "%s" ("%s") not supported in worker "%s"', $command->getName(), get_class($command), get_class($this)));
         }
@@ -78,7 +87,26 @@ class SendMessageEmailWorker implements WorkerInterface, DelegatingInterface
         $this->from = $from;
     }
 
-    public function send(Message $message):int
+    /**
+     * @return Client
+     */
+    public function getHttpClient(): Client
+    {
+        if (null === $this->httpClient) {
+            $this->httpClient = new Client();
+        }
+        return $this->httpClient;
+    }
+
+    /**
+     * @param mixed $httpClient
+     */
+    public function setHttpClient(Client $httpClient)
+    {
+        $this->httpClient = $httpClient;
+    }
+
+    public function send(Message $message): int
     {
         try {
             $swiftMessage = $this->prepareMessage($message);
@@ -104,10 +132,45 @@ class SendMessageEmailWorker implements WorkerInterface, DelegatingInterface
      */
     public function prepareMessage(Message $message)
     {
-        return (new \Swift_Message($message->getTitle()))
+        $type = ArrayTools::get($message->getParams(), 'type', 'text/html');
+        $emailMessage = (new \Swift_Message($message->getTitle()))
             ->setFrom($message->getFrom())
             ->setReplyTo($message->getFrom())
             ->setTo($message->getTo())
-            ->setBody($message->getContent());
+            ->setBody($message->getContent(), $type);
+        if ($type === 'text/html') {
+            $emailMessage->addPart(strip_tags($message->getContent()), 'text/plain');
+        }
+        //add files
+        $files = ArrayTools::lists($message->getParams(), 'file');
+        $promises = [];
+        foreach ($files as $file) {
+            $scheme = parse_url($file, PHP_URL_SCHEME);
+            if (null === $scheme) {
+                if (!file_exists($file)) {
+                    $file = null;
+                }
+                $attach = \Swift_Attachment::fromPath($file);
+                $emailMessage->attach($attach);
+            } else {
+                //check by guzzle
+                $httpClient = $this->getHttpClient();
+                $promise = $httpClient->requestAsync('HEAD', $file);
+                $promise->then(
+                    function (ResponseInterface $res) use ($file, $emailMessage) {
+                        $code = $res->getStatusCode();
+                        if ($code === 200) {
+                            $attach = \Swift_Attachment::fromPath($file);
+                            $emailMessage->attach($attach);
+                        }
+                    }
+                );
+                $promises[] = $promise;
+            }
+        }
+        if (!empty($promises)) {
+            settle($promises)->wait();
+        }
+        return $emailMessage;
     }
 }
