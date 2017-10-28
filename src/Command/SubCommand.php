@@ -5,6 +5,8 @@ namespace Akademiano\Operator\Command;
 
 
 use Akademiano\Utils\ArrayTools;
+use Akademiano\Delegating\Command\Command;
+use Akademiano\Delegating\Command\CommandInterface;
 
 class SubCommand extends Command implements SubCommandInterface
 {

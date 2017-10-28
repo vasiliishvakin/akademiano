@@ -3,22 +3,13 @@
 
 namespace Akademiano\Operator;
 
-
+/**
+ * Trait IncludeOperatorTrait
+ * @package Akademiano\Operator
+ * @deprecated
+ */
 trait IncludeOperatorTrait
 {
-    protected $operator;
-
-    public function setOperator(OperatorInterface $operator)
-    {
-        $this->operator = $operator;
-    }
-
-    /**
-     * @return Operator
-     */
-    public function getOperator()
-    {
-        return $this->operator;
-    }
+    use \Akademiano\Delegating\IncludeOperatorTrait;
 
 }

@@ -18,7 +18,8 @@
   "require": {
     "akademiano/utils": "^1.1@dev",
     "akademiano/config": "^1.1@dev",
-    "akademiano/di": "^1.1@dev"
+    "akademiano/di": "^1.1@dev",
+    "akademiano/delegating": "dev-master"
   },
   "require-dev": {
     "codeception/codeception": "^2.2.10",

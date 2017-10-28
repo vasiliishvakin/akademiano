@@ -4,7 +4,7 @@
 namespace Akademiano\Operator\Worker;
 
 
-use Akademiano\Operator\Command\CommandInterface;
+use Akademiano\Delegating\Command\CommandInterface;
 
 interface WorkerInterface
 {

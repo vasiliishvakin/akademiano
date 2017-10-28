@@ -45,7 +45,7 @@ class WorkersContainer extends Container implements WorkersContainerInterface
             if (is_callable($value)) {
                 $result = $value($c);
                 if (is_object($result)) {
-                    if ($result instanceof IncludeOperatorInterface) {
+                    if ($result instanceof \Akademiano\Delegating\IncludeOperatorInterface) {
                         $result->setOperator($this->getOperator());
                     }
                     if ($result instanceof ConfigurableInterface) {

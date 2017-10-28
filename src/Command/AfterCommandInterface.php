@@ -3,6 +3,7 @@
 
 namespace Akademiano\Operator\Command;
 
+use Akademiano\Delegating\Command\CommandInterface;
 
 interface AfterCommandInterface extends PreAfterCommandInterface
 {

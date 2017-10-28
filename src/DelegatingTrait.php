@@ -4,14 +4,12 @@
 namespace Akademiano\Operator;
 
 
-use Akademiano\Operator\Command\CommandInterface;
-
+/**
+ * Trait DelegatingTrait
+ * @package Akademiano\Operator
+ * @deprecated
+ */
 trait DelegatingTrait
 {
-    use IncludeOperatorTrait;
-
-    public function delegate(CommandInterface $command)
-    {
-        return $this->getOperator()->execute($command);
-    }
+    use \Akademiano\Delegating\DelegatingTrait;
 }

@@ -3,10 +3,12 @@
 
 namespace Akademiano\Operator;
 
-
-use Akademiano\Operator\Command\CommandInterface;
-
-interface DelegatingInterface extends IncludeOperatorInterface
+/**
+ * Interface DelegatingInterface
+ * @package Akademiano\Operator
+ * @deprecated
+ */
+interface DelegatingInterface extends \Akademiano\Delegating\DelegatingInterface
 {
-    public function delegate(CommandInterface $command);
+
 }

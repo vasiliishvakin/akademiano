@@ -4,6 +4,8 @@
 namespace Akademiano\Operator\Command;
 
 
+use Akademiano\Delegating\Command\CommandInterface;
+
 class AfterCommand extends SubCommand implements AfterCommandInterface
 {
     /** @var  \SplStack */

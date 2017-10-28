@@ -3,12 +3,8 @@
 
 namespace Akademiano\Operator;
 
-use Akademiano\Operator\Command\CommandInterface;
-
-interface OperatorInterface
+interface OperatorInterface extends \Akademiano\Delegating\OperatorInterface
 {
-    public function execute(CommandInterface $command);
-
     public function addWorker($name, Callable $worker);
 
     public function addAction($action, $workerName, $class = null);

@@ -3,14 +3,12 @@
 
 namespace Akademiano\Operator;
 
-
-interface IncludeOperatorInterface
+/**
+ * Interface IncludeOperatorInterface
+ * @package Akademiano\Operator
+ * @deprecated
+ */
+interface IncludeOperatorInterface extends \Akademiano\Delegating\IncludeOperatorInterface
 {
-    public function setOperator(OperatorInterface $operator);
-
-    /**
-     * @return OperatorInterface
-     */
-    public function getOperator();
 
 }

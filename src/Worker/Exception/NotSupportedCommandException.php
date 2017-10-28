@@ -4,7 +4,7 @@
 namespace Akademiano\Operator\Worker\Exception;
 
 
-use Akademiano\Operator\Command\CommandInterface;
+use Akademiano\Delegating\Command\CommandInterface;
 use Exception;
 
 class NotSupportedCommandException extends \InvalidArgumentException

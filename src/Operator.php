@@ -3,7 +3,7 @@
 
 namespace Akademiano\Operator;
 
-
+use Akademiano\Config\Config;
 use Akademiano\Utils\ArrayTools;
 use Akademiano\Operator\Command\AfterCommand;
 use Akademiano\Operator\Command\CommandChainElementInterface;
@@ -12,13 +12,15 @@ use Akademiano\Operator\Command\PreAfterCommandInterface;
 use Akademiano\Operator\Command\PreCommand;
 use Akademiano\Operator\Worker\Exception\BreakException;
 use Akademiano\Operator\Worker\WorkerInterface;
-use Akademiano\Operator\Command\CommandInterface;
+use Akademiano\Delegating\Command\CommandInterface;
 use Akademiano\Operator\Worker\Exception\TryNextException;
 use Pimple\Container;
 
 
 class Operator implements OperatorInterface
 {
+    const CLAS_MAP_FILE_NAME = 'operator.class.map';
+
     /** @var  Container */
     protected $workers;
     protected $actionMap = [];
@@ -27,6 +29,9 @@ class Operator implements OperatorInterface
 
     /** @var  Container */
     protected $dependencies;
+
+    /** @var  Config */
+    protected $classMap;
 
     /**
      * @return Container
@@ -176,11 +181,33 @@ class Operator implements OperatorInterface
         return $result;
     }
 
+    public function getClassMap(): Config
+    {
+        return $this->classMap;
+    }
 
-    public function execute(CommandInterface $command)
+    public function setClassMap(Config $classMap)
+    {
+        $this->classMap = $classMap;
+    }
+
+    public function mapCommandParamClass(string $class):string
+    {
+        $classMap = $this->getClassMap();
+        if (isset($classMap[$class])) {
+            return $classMap[$class];
+        } else {
+            return $class;
+        }
+    }
+
+
+    public function execute(\Akademiano\Delegating\Command\CommandInterface $command)
     {
         //prepare action
         if (!$command instanceof PreAfterCommandInterface) {
+            $command->setClass($this->mapCommandParamClass($command->getClass()));
+
             $command = $this->preExecute($command);
         }
 
