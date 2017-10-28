@@ -243,6 +243,35 @@ class ArrayTools
         return $array;
     }
 
+    public static function lists($array, $valuePath, $keyPath = null)
+    {
+        $data = [];
+        foreach ($array as $row) {
+            if (is_array($row)) {
+                $value = ArrayTools::get($row, $valuePath);
+                if (null !== $value) {
+                    $key = null;
+                    if (null !== $keyPath) {
+                        $key = ArrayTools::get($row, $keyPath);
+                    }
+                    if ($key) {
+                        $data[$key] = $value;
+                    } else {
+                        $data[] = $value;
+                    }
+                }
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * @param $array
+     * @param $path
+     * @param null $default
+     * @return array
+     * @deprecated
+     */
     public static function getSlice($array, $path, $default = null)
     {
         $valArray = [];
