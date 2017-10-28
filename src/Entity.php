@@ -4,10 +4,14 @@
 namespace Akademiano\Entity;
 
 
+use Akademiano\Delegating\Command\GetCommand;
+use Akademiano\Delegating\DelegatingTrait;
 use Carbon\Carbon;
 
 class Entity extends BaseEntity implements EntityInterface
 {
+    use DelegatingTrait;
+
     /** @var  \DateTime */
     protected $created;
     /** @var  \DateTime */
@@ -23,7 +27,7 @@ class Entity extends BaseEntity implements EntityInterface
     /**
      * @return \DateTime
      */
-    public function getCreated()
+    public function getCreated(): \DateTime
     {
         if (null !== $this->created && !$this->created instanceof Carbon) {
             if ($this->created instanceof \DateTime) {
@@ -46,7 +50,7 @@ class Entity extends BaseEntity implements EntityInterface
     /**
      * @return \DateTime
      */
-    public function getChanged()
+    public function getChanged(): \DateTime
     {
         if (null !== $this->changed && !$this->changed instanceof Carbon) {
             if ($this->changed instanceof \DateTime) {
@@ -69,7 +73,7 @@ class Entity extends BaseEntity implements EntityInterface
     /**
      * @return boolean
      */
-    public function isActive()
+    public function isActive(): bool
     {
         return $this->active;
     }
@@ -87,7 +91,7 @@ class Entity extends BaseEntity implements EntityInterface
         $this->active = (boolean)$active;
     }
 
-    public function isExistingEntity()
+    public function isExistingEntity(): bool
     {
         return $this->existingEntity;
     }
@@ -100,8 +104,15 @@ class Entity extends BaseEntity implements EntityInterface
     /**
      * @return UserInterface
      */
-    public function getOwner()
+    public function getOwner():?UserInterface
     {
+        if (null === $this->owner) {
+            return null;
+        }
+        if (!$this->owner instanceof UserInterface) {
+            $command = new GetCommand($this->owner, UserInterface::class);
+            $this->owner = $this->delegate($command);
+        }
         return $this->owner;
     }
 
@@ -122,6 +133,4 @@ class Entity extends BaseEntity implements EntityInterface
         $data['owner'] = $this->getOwner();
         return $data;
     }
-
-
 }

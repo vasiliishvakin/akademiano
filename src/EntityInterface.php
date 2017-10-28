@@ -4,14 +4,16 @@
 namespace Akademiano\Entity;
 
 
-interface EntityInterface extends BaseEntityInterface
+use Akademiano\Delegating\DelegatingInterface;
+
+interface EntityInterface extends BaseEntityInterface, DelegatingInterface
 {
     public function setCreated($date);
 
     /**
      * @return \DateTime
      */
-    public function getCreated();
+    public function getCreated():\DateTime;
 
     /**
      * @param \DateTime|string $date
@@ -21,9 +23,9 @@ interface EntityInterface extends BaseEntityInterface
     /**
      * @return \DateTime
      */
-    public function getChanged();
+    public function getChanged():\DateTime;
 
-    public function isExistingEntity();
+    public function isExistingEntity():bool ;
 
     /**
      * @param boolean $existing
@@ -33,9 +35,9 @@ interface EntityInterface extends BaseEntityInterface
     /**
      * @return bool
      */
-    public function isActive();
+    public function isActive():bool;
 
-    public function getOwner();
+    public function getOwner():?UserInterface;
 
     public function setOwner($owner);
 }
