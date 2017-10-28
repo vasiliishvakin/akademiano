@@ -6,6 +6,8 @@ namespace Akademiano\Utils\Object;
 use Akademiano\Utils\Exception;
 use Akademiano\Utils\Object\Prototype\ArrayableInterface;
 use Akademiano\Utils\Exception\EmptyException;
+use Akademiano\Utils\Object\Prototype\IntegerableInterface;
+use Akademiano\Utils\Object\Prototype\StringableInterface;
 
 class Collection extends ArrayObject implements ArrayableInterface, \JsonSerializable
 {
@@ -68,20 +70,40 @@ class Collection extends ArrayObject implements ArrayableInterface, \JsonSeriali
         $method = 'get' . ucfirst($field);
         $keyMethod = !is_null($keyField) ? 'get' . ucfirst($keyField) : null;
         foreach ($this as $item) {
+            $value = null;
+            $key = null;
             if (is_callable([$item, $method])) {
                 $value = $item->{$method}();
             }
             if (!empty($keyMethod) && is_callable([$item, $keyMethod])) {
+
                 $key = $item->{$keyMethod}();
+                if (is_object($key)) {
+                    if ($key instanceof IntegerableInterface) {
+                        $key = $key->getInt();
+                    } elseif ($key instanceof StringableInterface) {
+                        $key = $key->__toString();
+                    } else {
+                        throw new \LogicException(sprintf('Could not use object for array key'));
+                    }
+                } elseif (!is_scalar($key)) {
+                    throw new \LogicException(sprintf('Could not use not scalar value for array key'));
+                }
             }
             if ($value) {
                 if ($keyField) {
-                    $data[$key] = $value;
+                    if ($key) {
+                        $data[$key] = $value;
+                    } else {
+                        $data[] = $value;
+                    }
+
                 } else {
                     $data[] = $value;
                 }
             }
         }
+
         return $data;
     }
 
