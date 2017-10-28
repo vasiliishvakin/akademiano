@@ -3,6 +3,7 @@
 namespace Akademiano\UserEO\Model;
 
 
+use Akademiano\Delegating\Command\GetCommand;
 use Akademiano\Entity\GroupInterface;
 use Akademiano\Entity\NamedEntity;
 use Akademiano\Entity\UserInterface;
@@ -60,8 +61,8 @@ class User extends NamedEntity implements UserInterface, DelegatingInterface
     {
         if (!$this->group instanceof GroupInterface) {
             /** @var EntityOperator $operator */
-            $operator = $this->getOperator();
-            $this->group = $operator->get(Group::class, $this->group);
+            $command = new GetCommand($this->group, Group::class);
+            $this->group = $this->delegate($command, true);
         }
         return $this->group;
     }
@@ -92,7 +93,7 @@ class User extends NamedEntity implements UserInterface, DelegatingInterface
         return password_verify($password, $this->getPassword());
     }
 
-    public function getOwner()
+    public function getOwner():?UserInterface
     {
         return $this;
     }
