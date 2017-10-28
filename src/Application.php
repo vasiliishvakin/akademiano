@@ -448,7 +448,7 @@ class Application implements ConfigInterface, DIContainerIncludeInterface, Restr
                     $response->setContentType("application/json");
                     $response->setGoRedirect(false);
                     if ($controller->isAutoRender()) {
-                        $body = json_encode($result, JSON_UNESCAPED_UNICODE);
+                        $body = json_encode($result, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
                         $response->setBody($body);
                     }
                     break 2;
