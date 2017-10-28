@@ -4,7 +4,7 @@
 namespace Akademiano\UUID\Worker;
 
 use Akademiano\EntityOperator\Command\CreateCommand;
-use Akademiano\Operator\Command\CommandInterface;
+use Akademiano\Delegating\Command\CommandInterface;
 use Akademiano\Operator\Worker\Exception\NotSupportedCommandException;
 use Akademiano\Operator\Worker\WorkerInterface;
 use Akademiano\Operator\Worker\WorkerMetaMapPropertiesTrait;
