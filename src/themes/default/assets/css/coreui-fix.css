@@ -1,3 +1,7 @@
 .open > .dropdown-menu {
     display: block;
 }
+
+.button-form {
+    display: inline-block;
+}
