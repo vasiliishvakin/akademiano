@@ -5,7 +5,7 @@ namespace Akademiano\EntityOperator\Worker;
 
 use Akademiano\EntityOperator\Command\FindCommand;
 use Akademiano\EntityOperator\Command\GetCommand;
-use Akademiano\Operator\Command\CommandInterface;
+use Akademiano\Delegating\Command\CommandInterface;
 use Akademiano\Operator\Worker\WorkerMetaMapPropertiesTrait;
 use Akademiano\Operator\Command\AfterCommandInterface;
 use Akademiano\Entity\EntityInterface;

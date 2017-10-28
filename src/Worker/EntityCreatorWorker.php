@@ -4,14 +4,14 @@
 namespace Akademiano\EntityOperator\Worker;
 
 
+use Akademiano\Delegating\IncludeOperatorInterface;
+use Akademiano\Delegating\IncludeOperatorTrait;
 use Akademiano\Entity\EntityInterface;
 use Akademiano\EntityOperator\Command\CreateCommand;
 use Akademiano\Operator\Worker\WorkerInterface;
 use Akademiano\EntityOperator\CreatorInterface;
-use Akademiano\Operator\IncludeOperatorInterface;
 use Akademiano\Operator\Worker\WorkerMetaMapPropertiesTrait;
-use Akademiano\Operator\IncludeOperatorTrait;
-use Akademiano\Operator\Command\CommandInterface;
+use Akademiano\Delegating\Command\CommandInterface;
 use Akademiano\Entity\Entity;
 use Carbon\Carbon;
 

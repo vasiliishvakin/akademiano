@@ -8,9 +8,9 @@ use Akademiano\EntityOperator\Command\SaveCommand;
 use Akademiano\Operator\Command\PreCommandInterface;
 use Akademiano\EntityOperator\Command\ReserveCommand;
 use Akademiano\Entity\EntityInterface;
-use Akademiano\Operator\DelegatingTrait;
-use Akademiano\Operator\Command\CommandInterface;
-use Akademiano\Operator\DelegatingInterface;
+use Akademiano\Delegating\DelegatingTrait;
+use Akademiano\Delegating\Command\CommandInterface;
+use Akademiano\Delegating\DelegatingInterface;
 use Akademiano\Operator\Worker\Exception\NotSupportedCommandException;
 use Akademiano\Operator\Worker\WorkerMetaMapPropertiesTrait;
 

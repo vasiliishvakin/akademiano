@@ -9,13 +9,13 @@ use Akademiano\EntityOperator\Command\FindCommand;
 use Akademiano\EntityOperator\Command\GetCommand;
 use Akademiano\Utils\Object\Collection;
 use Akademiano\Operator\Command\AfterCommandInterface;
-use Akademiano\Operator\Command\CommandInterface;
+use Akademiano\Delegating\Command\CommandInterface;
 use Akademiano\EntityOperator\Command\CreateCommand;
 use Akademiano\EntityOperator\Command\EntityOperatedCommandInterface;
 use Akademiano\EntityOperator\Command\LoadCommand;
 use Akademiano\Operator\Worker\Exception\NotSupportedCommandException;
-use Akademiano\Operator\DelegatingInterface;
-use Akademiano\Operator\DelegatingTrait;
+use Akademiano\Delegating\DelegatingInterface;
+use Akademiano\Delegating\DelegatingTrait;
 use Akademiano\Operator\Worker\WorkerMetaMapPropertiesTrait;
 
 class TranslatorDataToObjectWorker implements WorkerInterface, DelegatingInterface
@@ -65,7 +65,8 @@ class TranslatorDataToObjectWorker implements WorkerInterface, DelegatingInterfa
             return null;
         }
         $createCommand = new CreateCommand($entityClass);
-        $entity = $this->getOperator()->execute($createCommand);
+
+        $entity = $this->delegate($createCommand, true);
 
         $loadCommand = new LoadCommand($entity, $entityData);
         $entity = $this->getOperator()->execute($loadCommand);

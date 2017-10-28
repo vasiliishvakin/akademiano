@@ -24,7 +24,7 @@ use Akademiano\EntityOperator\Command\SelectCommand;
 use Akademiano\Operator\Command\WorkerInfoCommand;
 use Akademiano\Utils\Object\Collection;
 use Akademiano\Utils\Object\Prototype\StringableInterface;
-use Akademiano\Operator\Command\CommandInterface;
+use Akademiano\Delegating\Command\CommandInterface;
 use Akademiano\Entity\EntityInterface;
 use Akademiano\EntityOperator\LoaderInterface;
 use Akademiano\Utils\StringUtils;

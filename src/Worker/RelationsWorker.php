@@ -8,9 +8,9 @@ use Akademiano\EntityOperator\Worker\RelationsBetweenTrait;
 use Akademiano\EntityOperator\Command\FindRelatedCommand;
 use Akademiano\EntityOperator\Entity\RelationEntity;
 use Akademiano\EntityOperator\EntityOperator;
-use Akademiano\Operator\Command\CommandInterface;
-use Akademiano\Operator\DelegatingInterface;
-use Akademiano\Operator\DelegatingTrait;
+use Akademiano\Delegating\Command\CommandInterface;
+use Akademiano\Delegating\DelegatingInterface;
+use Akademiano\Delegating\DelegatingTrait;
 
 class RelationsWorker extends PostgresWorker implements DelegatingInterface
 {
