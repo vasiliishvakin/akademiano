@@ -118,4 +118,21 @@ abstract class AkademianoEntityController extends AkademianoController
         $this->getEntityApi()->delete($id);
         $this->redirect($this->getEntityOpsRoutesStore()->getListRoute());
     }
+
+    public function changeAction(array $params = [])
+    {
+        if ($this->getRequest()->getMethod() === 'POST') {
+            $method = strtolower($this->getRequest()->getParam('X-HTTP_REAL_METHOD'));
+        } else {
+            $method = strtolower($this->getRequest()->getMethod());
+        }
+        switch ($method) {
+            case "delete":
+                return $this->deleteAction($params);
+                break;
+            default:
+                $this->saveAction();
+                break;
+        }
+    }
 }
