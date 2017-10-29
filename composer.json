@@ -16,7 +16,9 @@
     }
   },
   "require": {
-    "akademiano/utils": "^1.1@dev"
+    "akademiano/utils": "^1.1@dev",
+    "psr/log": "~1.0",
+    "guzzlehttp/guzzle": "~6.0"
   },
   "require-dev": {
     "codeception/codeception": "^2.2.10",
