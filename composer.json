@@ -20,7 +20,8 @@
     "akademiano/entity-operator": "^1.1@dev",
     "akademiano/entity": "^1.1@dev",
     "akademiano/core-controller": "^1.1@dev",
-    "akademiano/api": "^1.1@dev"
+    "akademiano/api": "^1.1@dev",
+    "akademiano/httpwarp": "^1.1@dev"
   },
   "require-dev": {
     "codeception/codeception": "^2.2.10",
