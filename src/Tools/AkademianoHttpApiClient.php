@@ -9,6 +9,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Promise\PromiseInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LogLevel;
+use Akademiano\Utils\ArrayTools;
 
 class AkademianoHttpApiClient
 {
@@ -69,7 +70,7 @@ class AkademianoHttpApiClient
             if (!isset($config[self::CONFIG_API_ENDPOINT_NAME])) {
                 $this->sendApiEndpoint = $default;
             } else {
-                $this->sendApiEndpoint = array_merge_recursive($config[self::CONFIG_API_ENDPOINT_NAME], $default);
+                $this->sendApiEndpoint = ArrayTools::mergeRecursive($default, $config[self::CONFIG_API_ENDPOINT_NAME]);
             }
         }
         return $this->sendApiEndpoint;
@@ -80,6 +81,10 @@ class AkademianoHttpApiClient
      */
     protected function getApiKey():?string
     {
+        if (!isset($this->apiKey)) {
+            $config = $this->getConfig();
+            $this->apiKey = (string) ($config['apiKey'] ?? '');
+        }
         return $this->apiKey;
     }
 
