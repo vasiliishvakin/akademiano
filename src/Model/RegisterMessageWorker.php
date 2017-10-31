@@ -7,7 +7,7 @@ use Akademiano\EntityOperator\Command\SaveCommand;
 use Akademiano\EntityOperator\EntityOperator;
 use Akademiano\Operator\Command\AfterCommand;
 use Akademiano\Operator\Command\AfterCommandInterface;
-use Akademiano\Operator\Command\CommandInterface;
+use Akademiano\Delegating\Command\CommandInterface;
 use Akademiano\Operator\Worker\WorkerInterface;
 use Akademiano\Operator\Worker\WorkerMetaMapPropertiesTrait;
 use Pheanstalk\Pheanstalk;

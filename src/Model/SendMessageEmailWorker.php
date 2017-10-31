@@ -6,14 +6,13 @@ namespace Akademiano\HeraldMessages\Model;
 
 use Akademiano\EntityOperator\EntityOperator;
 use Akademiano\HeraldMessages\Model\Exception\SendException;
-use Akademiano\Operator\Command\CommandInterface;
-use Akademiano\Operator\DelegatingInterface;
-use Akademiano\Operator\DelegatingTrait;
+use Akademiano\Delegating\Command\CommandInterface;
+use Akademiano\Delegating\DelegatingInterface;
+use Akademiano\Delegating\DelegatingTrait;
 use Akademiano\Operator\Worker\WorkerInterface;
 use Akademiano\Operator\Worker\WorkerMetaMapPropertiesTrait;
 use Akademiano\Utils\ArrayTools;
 use GuzzleHttp\Client;
-use GuzzleHttp\Pool;
 use function GuzzleHttp\Promise\settle;
 use Psr\Http\Message\ResponseInterface;
 
