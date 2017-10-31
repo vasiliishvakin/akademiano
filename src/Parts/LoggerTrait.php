@@ -11,7 +11,7 @@ trait LoggerTrait
     /** @var  LoggerInterface */
     protected $logger;
 
-    public function getLogger(): LoggerInterface
+    public function getLogger(): ?LoggerInterface
     {
         return $this->logger;
     }
@@ -26,6 +26,9 @@ trait LoggerTrait
 
     public function log($level, $message, array $context = []):void
     {
-        $this->getLogger()->log($level, $message, $context);
+        $logger = $this->getLogger();
+        if ($logger instanceof LoggerInterface) {
+            $this->getLogger()->log($level, $message, $context);
+        }
     }
 }
