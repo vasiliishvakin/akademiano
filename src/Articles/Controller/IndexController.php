@@ -62,7 +62,7 @@ class IndexController extends AbstractController
         //get articles
         $count = $operator->count(Article::class, $criteria);
         $pageInfo = $this->getPageInfo($count, $itemsPerPage);
-        $items = $operator->find(Article::class, $criteria, $pageInfo["perPage"], $pageInfo["offsetForPage"], "created");
+        $items = $operator->find(Article::class, $criteria, $pageInfo["perPage"], $pageInfo["offsetForPage"], ["created" => 'DESC']);
 
         $defaultMetaEnd = $pageInfo["page"] == 1 ? "" : " страница " . $pageInfo["page"];
         $defaultMetaStart = "Статьи";
