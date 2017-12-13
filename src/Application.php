@@ -445,7 +445,7 @@ class Application implements ConfigInterface, DIContainerIncludeInterface, Restr
         foreach ($acceptTypes as $type) {
             switch ($type) {
                 case "application/json":
-                    $response->setContentType("application/json");
+                    $response->setContentJson();
                     $response->setGoRedirect(false);
                     $body = json_encode($result, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
                     $response->setBody($body);
