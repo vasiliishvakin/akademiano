@@ -4,22 +4,20 @@ namespace Akademiano\UserEO\Model;
 
 
 use Akademiano\Delegating\Command\GetCommand;
+use Akademiano\Delegating\DelegatingTrait;
 use Akademiano\Entity\GroupInterface;
 use Akademiano\Entity\NamedEntity;
 use Akademiano\Entity\UserInterface;
 use Akademiano\EntityOperator\EntityOperator;
-use Akademiano\Operator\DelegatingInterface;
-use Akademiano\Operator\DelegatingTrait;
-use Akademiano\Utils\Object\Prototype\IntegerableInterface;
-use Akademiano\Utils\Object\Prototype\StringableInterface;
 use Akademiano\Utils\StringUtils;
-use Akademiano\UUID\UuidableInterface;
 
-class User extends NamedEntity implements UserInterface, DelegatingInterface
+class User extends NamedEntity implements UserInterface
 {
     use DelegatingTrait;
 
     protected $email;
+
+    protected $phone;
 
     protected $group;
 
@@ -28,7 +26,7 @@ class User extends NamedEntity implements UserInterface, DelegatingInterface
     public function getTitle()
     {
         if (empty($this->title)) {
-            $this->title = StringUtils::obfuscateEmailV1($this->getEmail());
+            $this->title = $this->getEmail() ? StringUtils::obfuscateEmailV1($this->getEmail()) : null;
         }
         return $this->title;
     }
@@ -90,11 +88,30 @@ class User extends NamedEntity implements UserInterface, DelegatingInterface
 
     public function verifyPassword($password)
     {
+        if (empty($this->getPassword())) {
+            return false;
+        }
         return password_verify($password, $this->getPassword());
     }
 
     public function getOwner():?UserInterface
     {
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+    /**
+     * @param mixed $phone
+     */
+    public function setPhone($phone): void
+    {
+        $this->phone = $phone;
     }
 }
