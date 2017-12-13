@@ -93,6 +93,11 @@ class Response
         $this->contentType = $contentType;
     }
 
+    public function setContentJson()
+    {
+        $this->setContentType('application/json');
+    }
+
     /**
      * @return string
      */
