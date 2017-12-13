@@ -104,7 +104,7 @@ class EntityApi extends AbstractApi implements EntityApiInterface, CustodianIncl
         }
 
         /** @var EntityInterface $item */
-        $item = $this->getOperator()->find(static::ENTITY_CLASS, $criteria, 1)->firstOrFail();
+        $item = $this->getOperator()->find(static::ENTITY_CLASS, $criteria, 1)->firstOrFalse();
 
         if (!$item) {
             return None::create();
