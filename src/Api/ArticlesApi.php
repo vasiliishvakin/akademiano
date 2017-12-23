@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Akademiano\Content\Articles\Articles\Api;
+namespace Akademiano\Content\Articles\Api;
 
 
 use Akademiano\Api\v1\Entities\EntityApi;

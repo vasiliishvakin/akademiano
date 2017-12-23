@@ -3,7 +3,7 @@
 namespace Akademiano\Content\Articles\Controller;
 
 
-use Akademiano\Content\Articles\Articles\Api\ArticlesApi;
+use Akademiano\Content\Articles\Api\ArticlesApi;
 use Akademiano\Content\Articles\RoutesStore;
 use Akademiano\EntityOperator\Ext\Controller\AkademianoEntityController;
 
