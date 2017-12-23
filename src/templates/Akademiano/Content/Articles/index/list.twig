@@ -1,0 +1,54 @@
+{% extends "layout.twig" %}
+
+{% set mainContainerAnimated = true %}
+
+{% block mainContainerContent %}
+
+    <div class="card">
+        <div class="card-header">
+            Задачи <a href="{{ url(item_add_route) }}" class="btn btn-success btn-sm" role="button">Добавить</a>
+        </div>
+        <div class="card-block">
+            <table class="table table-responsive table-hover table-outline mb-0">
+                <thead class="thead-default">
+                <tr>
+                    <th>title</th>
+                    <th>info</th>
+                    <th>actions</th>
+                    <th>view</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in items %}
+                    <tr class="{{ not item.open ? 'table-success' }}">
+                        <td>
+                            {{ item.title }}
+                        </td>
+                        <td>
+                            <p>{{ item.created |date("d.m.Y H:i") }} </p>
+                        </td>
+                        <td>
+                            <a href="{{ url(item_edit_route, {"id": item.id.hex}) }}" rel="tooltip" title="Edit Task" class="btn btn-warning btn-simple btn-sm">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                            <a href="{{ url(item_delete_route, {"id": item.id.hex}) }}" rel="tooltip" title="Delete" class="btn btn-danger btn-simple btn-sm">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="{{ url(item_view_route, {"id": item.id.hex}) }}" rel="tooltip" title="View" class="btn btn-success btn-simple btn-sm">
+                                <i class="fa fa-folder-open "></i>
+                                View
+                            </a>
+                        </td>
+
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer">
+            {% include "utils/pagination.twig" %}
+        </div>
+    </div>
+{% endblock mainContainerContent %}

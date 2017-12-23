@@ -1,2 +1,4 @@
 /vendor/
-/migrations/
+composer.lock
+public/assets/vendor
+
