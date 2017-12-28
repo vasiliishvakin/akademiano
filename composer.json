@@ -21,7 +21,7 @@
     "akademiano/sites": "^1.1@dev",
     "akademiano/utils": "^1.1@dev",
     "akademiano/config": "^1.1@dev",
-    "akademiano/router": "^1.1@dev",
+    "akademiano/router": "^1.2@dev",
     "akademiano/entity": "^1.1@dev",
     "akademiano/httpwarp": "^1.1@dev",
     "akademiano/simplaview": "^1.1@dev",

@@ -27,7 +27,7 @@ use Akademiano\Core\Controller\ControllerInterface;
 use Pimple\Container;
 
 
-class Application implements ConfigInterface, DIContainerIncludeInterface, RestrictedAccessInterface
+class Application implements ConfigInterface, DIContainerIncludeInterface
 {
     const CONFIG_NAME_RESOURCES = "resources";
 
@@ -264,7 +264,7 @@ class Application implements ConfigInterface, DIContainerIncludeInterface, Restr
         $errorCode = $e->getCode();
         $closure = $this->getErrorFunction($errorCode);
         if (is_array($closure)) {
-            $this->action($closure[0], $closure[1], ["exception" => $e]);
+            $this->action('error_catch', $closure[0], $closure[1], ["exception" => $e]);
         } elseif (is_callable($closure)) {
             call_user_func($closure);
         } elseif ($errorCode === 404) {
@@ -316,7 +316,16 @@ class Application implements ConfigInterface, DIContainerIncludeInterface, Restr
         }
     }
 
-    public function action($controllerInfo, $action, ...$arguments)
+    /**
+     * @param $routeId
+     * @param $controllerInfo
+     * @param $action
+     * @param array ...$arguments
+     * @throws AccessDeniedException
+     * @throws NotFoundException
+     * @throws \ErrorException
+     */
+    public function action($routeId, $controllerInfo, $action, ...$arguments)
     {
         $actionName = lcfirst($action);
         $action = $actionName . 'Action';
@@ -411,15 +420,34 @@ class Application implements ConfigInterface, DIContainerIncludeInterface, Restr
             if (!$controller->accessCheck()) {
                 throw new AccessDeniedException();
             }
-        } elseif (!$this->accessCheck()) {
+        } else {
             $di = $this->getDiContainer();
             if (isset($di["aclManager"])) {
                 /** @var AclManager $aclManager */
                 $aclManager = $di['aclManager'];
                 $resource = $aclManager->getResource();
+
+                switch ($action) {
+                    case 'listAction':
+                        $resourceArray = explode(':', $resource);
+                        if (count($resourceArray) === 1) {
+                            $resourceArray[] = 'list';
+                            $resource = implode(':', $resourceArray);
+                        }
+                        break;
+                    case 'viewAction':
+                        $resourceArray = explode(':', $resource);
+                        if (count($resourceArray) === 2) {
+                            $resourceArray = [$resourceArray[0], 'view', $resourceArray[1]];
+                            $resource = implode(':', $resourceArray);
+                        }
+                        break;
+                }
+                if (!$aclManager->accessCheck($resource)) {
+                    throw new AccessDeniedException(sprintf('Access Denied to "%s"', $resource),
+                        403, null, $resource, $this->getRequest()->getUrl());
+                }
             }
-            throw new AccessDeniedException(sprintf('Access Denied to "%s"', $resource),
-                403, null, $resource, $this->getRequest()->getUrl());
         }
 
         $controller->init();
@@ -463,17 +491,5 @@ class Application implements ConfigInterface, DIContainerIncludeInterface, Restr
             }
         }
         return $response;
-    }
-
-
-    public function accessCheck()
-    {
-        $di = $this->getDiContainer();
-        if (isset($di["aclManager"])) {
-            /** @var AclManager $aclManager */
-            $aclManager = $di['aclManager'];
-            return $aclManager->accessCheck();
-        }
-        return true;
     }
 }
