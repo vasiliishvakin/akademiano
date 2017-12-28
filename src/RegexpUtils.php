@@ -45,7 +45,8 @@ class RegexpUtils
             $link = preg_replace('~\(\?P<(\w+)>.+\)~U', "", $regexp);
         }
         $link = preg_replace(['~(\/)(\?+)~', '~\?+$~'], ["$1"], $link);
-
+        //clear double slashes, escaped chars
+        $link = preg_replace(['#/+#', '#\\\+#'], ['/', ''], $link);
         return $link;
     }
 }
