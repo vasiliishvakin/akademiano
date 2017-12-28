@@ -14,17 +14,17 @@ class UserController extends AkademianoController
         $email = $this->getRequest()->getParam("email");
         $password = $this->getRequest()->getParam("password");
         if (empty($email) || empty($password)) {
-            return false;
+            return null;
         }
         /** @var Custodian $custodian */
         $custodian = $this->getDiContainer()["custodian"];
         try {
             $auth = $custodian->authenticate($email, $password);
         } catch (EmptyException $e) {
-            return false;
+            return null;
         }
         if (!$auth) {
-            return false;
+            return null;
         }
         /** @var UsersApi $usersApi */
         $usersApi = $this->getDiContainer()["usersApi"];
@@ -32,7 +32,7 @@ class UserController extends AkademianoController
         $user = $usersApi->findOne(["email" => $email, "active" => true]);
         $usersApi->getAclManager()->enableAccessCheck();
         if ($user->isEmpty()) {
-            return false;
+            return null;
         }
         $custodian->sessionStart($user->get());
         $redirectUrl = $this->getRequest()->getParam("r", $this->getRouteUrl("root"));
