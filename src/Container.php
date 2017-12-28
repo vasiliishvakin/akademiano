@@ -3,16 +3,17 @@
 namespace Akademiano\DI;
 
 
+use Akademiano\Utils\Object\Prototype\ArrayableInterface;
 use Pimple\Exception\UnknownIdentifierException;
 use Akademiano\Config\ConfigurableInterface;
 
-class Container extends \Pimple\Container
+class Container extends \Pimple\Container implements ArrayableInterface
 {
     protected $values = [];
 
     public function lazyGet($id)
     {
-        return function() use ($id) {
+        return function () use ($id) {
             return $this[$id];
         };
     }
@@ -46,4 +47,16 @@ class Container extends \Pimple\Container
         unset($this->values[$id]);
         parent::offsetUnset($id);;
     }
+
+    public function toArray()
+    {
+        $keys = $this->keys();
+        $values = [];
+        foreach ($keys as $key) {
+            $values[$key] = $this[$key];
+        }
+        return $values;
+    }
+
+
 }
