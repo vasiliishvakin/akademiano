@@ -446,7 +446,8 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
         return $entityA;
     }
 
-    public function genId()
+    //TODO Check use tableId
+    public function genId($tableId = null)
     {
         $tableIdRaw = $this->getTableId();
         $tableId = filter_var($tableIdRaw, FILTER_VALIDATE_INT, ["options" => ["min_range" => 1, "max_range" => 512]]);
