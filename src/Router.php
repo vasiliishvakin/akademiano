@@ -1,4 +1,5 @@
 <?php
+
 namespace Akademiano\Router;
 
 use Akademiano\HttpWarp\Environment;
@@ -173,20 +174,21 @@ class Router implements EnvironmentIncludeInterface
                 switch ($type) {
                     case RoutePattern::TYPE_FULL:
                     case RoutePattern::TYPE_FIRST_PREFIX :
-                    case RoutePattern::TYPE_PREFIX: {
-                        usort($routes, function (Route $a, Route $b) {
-                            /** @var Route $a */
-                            /** @var Route $b */
-                            $la = $a->getMaxLength();
-                            $lb = $b->getMaxLength();
-                            if ($la === $lb) {
-                                return 0;
-                            }
+                    case RoutePattern::TYPE_PREFIX:
+                        {
+                            usort($routes, function (Route $a, Route $b) {
+                                /** @var Route $a */
+                                /** @var Route $b */
+                                $la = $a->getMaxLength();
+                                $lb = $b->getMaxLength();
+                                if ($la === $lb) {
+                                    return 0;
+                                }
 
-                            return ($la > $lb) ? -1 : 1;
-                        });
-                        break;
-                    }
+                                return ($la > $lb) ? -1 : 1;
+                            });
+                            break;
+                        }
                 }
             }
         }
@@ -220,23 +222,24 @@ class Router implements EnvironmentIncludeInterface
 
                 return $compare;
                 break;
-            case RoutePattern::TYPE_PARAMS: {
-                if (!$value instanceof Url\Query && !$pattern instanceof Url\Query) {
-                    throw new \InvalidArgumentException("Value and pattern mast be type Query for pattern type " . RoutePattern::TYPE_PARAMS);
-                }
-                if ($pattern->count() > $value->count()) {
-                    return false;
-                }
-                $compare = false;
-                foreach ($pattern as $name => $valueParam) {
-                    if (!isset($value[$name]) || (string)$value[$name] !== (string)$valueParam) {
+            case RoutePattern::TYPE_PARAMS:
+                {
+                    if (!$value instanceof Url\Query && !$pattern instanceof Url\Query) {
+                        throw new \InvalidArgumentException("Value and pattern mast be type Query for pattern type " . RoutePattern::TYPE_PARAMS);
+                    }
+                    if ($pattern->count() > $value->count()) {
                         return false;
                     }
-                    $compare = true;
-                }
+                    $compare = false;
+                    foreach ($pattern as $name => $valueParam) {
+                        if (!isset($value[$name]) || (string)$value[$name] !== (string)$valueParam) {
+                            return false;
+                        }
+                        $compare = true;
+                    }
 
-                return $compare;
-            }
+                    return $compare;
+                }
             default:
                 throw new \InvalidArgumentException("This type compare not realised");
         }
@@ -275,12 +278,8 @@ class Router implements EnvironmentIncludeInterface
         if (!empty($params)) {
             $args[] = $params;
         }
-        if (!empty($args)) {
-            return call_user_func_array($route->getAction(), $args);
-        } else {
-            return call_user_func($route->getAction());
-        }
-
+        array_unshift($args, $route->getId());
+        return call_user_func_array($route->getAction(), $args);
     }
 
     public function getCurrentUrl()
