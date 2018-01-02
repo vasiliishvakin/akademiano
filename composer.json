@@ -1,22 +1,23 @@
 {
-  "name": "deltaphp/image",
+  "name": "akademiano/content-files-images",
   "description": "Resize and othe operations on images by request",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "minimum-stability": "dev",
   "prefer-stable": true,
   "authors": [
     {
-      "name": "orbisnull",
-      "email": "zen4dev@gmail.com"
+      "name": "Vasiliy Shvakin",
+      "email": "mrdatamapper@gmail.com"
     }
   ],
   "autoload": {
-    "psr-0": {
-      "Image": "src/"
+    "psr-4": {
+      "Akademiano\\Content\\Files\\Images\\": "src/"
     }
   },
   "require": {
-    "deltaphp/deltacore": "~2.0",
-    "ext-imagick": "*"
+    "phpixie/image": "~3.0",
+    "akademiano/content-files": "v1.1"
+
   }
 }
