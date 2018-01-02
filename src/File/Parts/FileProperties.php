@@ -15,7 +15,7 @@ trait FileProperties
 
     public function checkType($type)
     {
-        return FileSystem::checkType($this->getPath(), $type);
+        return FileSystem::checkType($this->getFullPath(), $type);
     }
 
     public function isImage()

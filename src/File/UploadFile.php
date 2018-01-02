@@ -51,6 +51,11 @@ class UploadFile implements FileInterface
         return $this->path;
     }
 
+    public function getFullPath()
+    {
+        return $this->getPath();
+    }
+
     /**
      * @return mixed
      */

@@ -49,4 +49,9 @@ class Header
         $ts = self::toGmtDate($time);
         header("Last-Modified: " . $ts);
     }
+
+    public static function isSent()
+    {
+        return headers_sent();
+    }
 }
