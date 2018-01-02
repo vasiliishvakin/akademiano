@@ -5,6 +5,7 @@ namespace Akademiano\Core;
 
 
 use Akademiano\Acl\AccessCheckIncludeInterface;
+use Akademiano\Config\ConfigurableInterface;
 use Akademiano\DI\Container;
 use Akademiano\User\CustodianIncludeInterface;
 use Pimple\Exception\UnknownIdentifierException;
@@ -21,6 +22,9 @@ class ApplicationDiContainer extends Container
         }
         if ($value instanceof CustodianIncludeInterface) {
             $value->setCustodian($this["custodian"]);
+        }
+        if ($value instanceof ConfigurableInterface) {
+            $value->setConfig($this['config']);
         }
         return $value;
     }
