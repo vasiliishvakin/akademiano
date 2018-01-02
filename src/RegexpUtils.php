@@ -38,8 +38,15 @@ class RegexpUtils
         $regexp = ltrim($regexp, "^");
         $regexp = rtrim($regexp, "$");
         if (!empty($params)) {
-            $link = preg_replace_callback('~\(\?P<(\w+)>.+\)~U', function ($match) use (&$params) {
-                return ArrayTools::extract($params, $match[1], $match[0]);
+            $link = preg_replace_callback('~\(\?P<(\w+)>.+\)~U', function ($match) use (&$params, $regexp) {
+                $value = ArrayTools::extract($params, $match[1], $match[0]);
+                if (is_object($value)) {
+                    $value = (string) $value;
+                }
+                if (!is_scalar($value)) {
+                    throw new \LogicException('In regexp "%s" param "%s" is not scalar: "%s"', $regexp, $match[1], json_encode($value));
+                }
+                return $value;
             }, $regexp);
         } else {
             $link = preg_replace('~\(\?P<(\w+)>.+\)~U', "", $regexp);

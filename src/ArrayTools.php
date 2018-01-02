@@ -138,6 +138,9 @@ class ArrayTools
         $path = (array)$path;
         $current = $array;
         foreach ($path as $item) {
+            if (!is_array($current)) {
+                return $default;
+            }
             if (!array_key_exists($item, $current)) {
                 return $default;
             }
@@ -196,6 +199,9 @@ class ArrayTools
 
         $current = $array;
         foreach ($path as $item) {
+            if (!is_array($current)) {
+                return false;
+            }
             if (!array_key_exists($item, $current)) {
                 return false;
             }
