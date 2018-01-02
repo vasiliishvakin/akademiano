@@ -89,7 +89,7 @@ class SitesManager implements EnvironmentIncludeInterface
             "_sites_published_default_route" => [
                 "patterns" => [
                     "type" =>\Akademiano\Router\RoutePattern::TYPE_REGEXP,
-                    "value" => "\/(?P<filePath>.+)",
+                    "value" => "\/(?P<filePath>\w+\.\w+)$",
                 ],
                 "action" => [
                     [
