@@ -17,7 +17,7 @@
   },
   "require": {
     "phpixie/image": "~3.0",
-    "akademiano/content-files": "v1.1"
+    "akademiano/content-files": "^v1.1"
 
   }
 }
