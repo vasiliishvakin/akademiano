@@ -8,6 +8,7 @@ return [
         ],
         "extensions" => [
             "Twig_Extension_Debug",
+            "Twig_Extension_StringLoader",
             "Akademiano\\Twig\\Extensions\\AssetExtension",
             "Akademiano\\Twig\\Extensions\\UrlExtension",
             "Akademiano\\User\\Twig\\UserExtension",
