@@ -43,7 +43,7 @@ class Uuid implements UuidInterface
 
     public function __toString()
     {
-        return (string)$this->getValue();
+        return (string)$this->getHex();
     }
 
     public function serialize()
