@@ -4,6 +4,7 @@
 namespace Akademiano\Operator;
 
 use Akademiano\Config\Config;
+use Akademiano\Operator\Exception\NotFoundSuitableWorkerException;
 use Akademiano\Utils\ArrayTools;
 use Akademiano\Operator\Command\AfterCommand;
 use Akademiano\Operator\Command\CommandChainElementInterface;
@@ -228,7 +229,7 @@ class Operator implements OperatorInterface
             }
         }
         if (!$command instanceof PreAfterCommandInterface && $workersCount === 0) {
-            throw  new \LogicException(sprintf('Empty workers for command "%s" and class "%s"', $command->getName(), $command->getClass()));
+            throw  new NotFoundSuitableWorkerException(sprintf('Empty workers for command "%s" and class "%s"', $command->getName(), $command->getClass()));
         }
         //after execute
         if (!$command instanceof PreAfterCommandInterface) {
