@@ -18,7 +18,7 @@ INHERITS (content)
 SQL;
         $this->execute($sql);
 
-        $tableId = \Akademiano\Content\Articles\Model\ArticleWorker::TABLE_ID;
+        $tableId = \Akademiano\Content\Articles\Model\ArticlesWorker::TABLE_ID;
 
         $sql = "CREATE SEQUENCE uuid_complex_short_tables_{$tableId}";
         $this->execute($sql);

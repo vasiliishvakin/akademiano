@@ -8,11 +8,33 @@ use Akademiano\EntityOperator\Ext\EntityOpsRoutesStore;
 
 class RoutesStore extends EntityOpsRoutesStore
 {
-    const LIST_ROUTE_NAME = "articles_list_route";
-    const VIEW_ROUTE_NAME = "article_view_route";
-    const ADD_ROUTE_NAME = "article_add_route";
-    const EDIT_ROUTE_NAME = "article_edit_route";
-    const SAVE_ROUTE_NAME = "article_save_route";
-    const DELETE_ROUTE_NAME = "article_delete_route";
-    const CHANGE_ROUTE_NAME = "article_change_route";
+    const FILE_VIEW_ROUTE_NAME = "item_file_view_route";
+
+
+    const LIST_ROUTE = "articles_list";
+    const VIEW_ROUTE = "articles_view";
+    const ADD_ROUTE = "articles_add";
+    const EDIT_ROUTE = "articles_edit";
+    const SAVE_ROUTE = "articles_save";
+    const DELETE_ROUTE = "articles_delete";
+
+    const FILE_VIEW_ROUTE = "articles_file";
+
+
+    public function getFileViewRoute()
+    {
+        return static::FILE_VIEW_ROUTE;
+    }
+
+    public function toArray()
+    {
+        if (null === $this->array) {
+            $array = parent::toArray();
+            if (null !== $this->getFileViewRoute()) {
+                $array[static::FILE_VIEW_ROUTE_NAME] = $this->getFileViewRoute();
+            }
+            $this->array = $array;
+        }
+        return $this->array;
+    }
 }

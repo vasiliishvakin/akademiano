@@ -1,54 +1,59 @@
 {% extends "layout.twig" %}
 
-{% set mainContainerAnimated = true %}
+{% block mainContainer %}
+    <div class="container-fluid">
 
-{% block mainContainerContent %}
+        <div class="{{ mainContainerAnimated ? "animated fadeIn" }}">
 
-    <div class="card">
-        <div class="card-header">
-            Задачи <a href="{{ url(item_add_route) }}" class="btn btn-success btn-sm" role="button">Добавить</a>
-        </div>
-        <div class="card-block">
-            <table class="table table-responsive table-hover table-outline mb-0">
-                <thead class="thead-default">
-                <tr>
-                    <th>title</th>
-                    <th>info</th>
-                    <th>actions</th>
-                    <th>view</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for item in items %}
-                    <tr class="{{ not item.open ? 'table-success' }}">
-                        <td>
-                            {{ item.title }}
-                        </td>
-                        <td>
-                            <p>{{ item.created |date("d.m.Y H:i") }} </p>
-                        </td>
-                        <td>
-                            <a href="{{ url(item_edit_route, {"id": item.id.hex}) }}" rel="tooltip" title="Edit Task" class="btn btn-warning btn-simple btn-sm">
-                                <i class="fa fa-edit"></i>
-                            </a>
-                            <a href="{{ url(item_delete_route, {"id": item.id.hex}) }}" rel="tooltip" title="Delete" class="btn btn-danger btn-simple btn-sm">
-                                <i class="fa fa-trash"></i>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="{{ url(item_view_route, {"id": item.id.hex}) }}" rel="tooltip" title="View" class="btn btn-success btn-simple btn-sm">
-                                <i class="fa fa-folder-open "></i>
-                                View
-                            </a>
-                        </td>
+            <div class="row">
+                <div class="col-md-7 mr-md-auto">
+                    {% block mainContainerContent %}
 
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                        {% for item in items %}
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3>{{ item.title }}</h3>
+                                </div>
+                                <div class="card-block">
+                                    {% if item.firstImage %}
+                                        <img src="{{ object_url(item_file_view_route, item.firstImage, {'template': 'square150'}) }}"
+                                             alt="">
+                                    {% endif %}
+                                    {{ item.description }}
+                                </div>
+
+                                <div class="card-footer">
+                                    <a href="{{ url(item_view_route, {"id": item.id.hex}) }}" rel="tooltip" title="View"
+                                       class="btn btn-success btn-simple btn-sm">
+                                        <i class="fa fa-folder-open "></i>
+                                        Читать
+                                    </a>
+                                </div>
+
+                            </div>
+                        {% endfor %}
+
+                        {% if items.PageMetadata|length >1 %}
+                            <div class="card">
+                                <div class="card-block">
+                                    {% include "utils/pagination.twig" %}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <div class="card">
+                            <div class="card-block">
+                                <a href="{{ url(item_add_route) }}" class="btn btn-success btn-sm" role="button">Добавить</a>
+                            </div>
+                        </div>
+                    {% endblock mainContainerContent %}
+                </div>
+                <!--/.col-->
+            </div>
+            <!--/.row-->
         </div>
-        <div class="card-footer">
-            {% include "utils/pagination.twig" %}
-        </div>
+
+
     </div>
-{% endblock mainContainerContent %}
+{% endblock mainContainer %}
