@@ -3,7 +3,10 @@
 namespace Akademiano\Content\Files\Api\v1;
 
 use Akademiano\Api\v1\Entities\EntityApi;
+use Akademiano\Config\ConfigurableInterface;
+use Akademiano\Config\ConfigurableTrait;
 use Akademiano\Content\Files\Model\File;
+use Akademiano\Content\Files\Model\FileFormatCommand;
 use Akademiano\Content\Files\Module;
 use Akademiano\Config\Config;
 use Akademiano\Config\ConfigLoader;
@@ -12,45 +15,25 @@ use Akademiano\Entity\EntityInterface;
 use Akademiano\EntityOperator\Command\CreateCommand;
 use Akademiano\EntityOperator\Command\GenerateIdCommand;
 use Akademiano\HttpWarp\File\FileInterface;
+use Akademiano\Operator\Exception\NotFoundSuitableWorkerException;
 use Akademiano\Utils\FileSystem;
 use Akademiano\UUID\UuidComplexInterface;
 use Akademiano\UUID\UuidComplexShortTables;
 use Hashids\Hashids;
 
-class FilesApi extends EntityApi
+class FilesApi extends EntityApi implements ConfigurableInterface
 {
     const API_ID = "filesApi";
     const ENTITY_CLASS = File::class;
+    const MODULE_ID = Module::MODULE_ID;
+    const IS_PUBLIC = false;
 
-    const DEFAULT_CONFIG = [
-        Module::MODULE_ID => [
-            "filesPath" => [
-                "default" => "data/files"
-            ],
-        ],
-    ];
-
-    /** @var  ConfigLoader */
-    protected $config;
+    use ConfigurableTrait;
 
     /** @var  Hashids */
     protected $hashids;
 
     protected $rootDir;
-
-
-    /**
-     * @param null $path
-     * @param null $default
-     * @return Config|mixed|null
-     */
-    public function getConfig($path = null, $default = null)
-    {
-        if (null === $this->config) {
-            $this->config = new Config(static::DEFAULT_CONFIG);
-        }
-        return $this->config->get($path, $default);
-    }
 
     /**
      * @return mixed
@@ -80,21 +63,14 @@ class FilesApi extends EntityApi
         $this->rootDir = $rootDir;
     }
 
-    /**
-     * @param ConfigLoader $config
-     */
-    public function setConfig($config)
-    {
-        $this->config = $config;
-    }
-
     public function saveUploaded(FileInterface $file, array $attributes = null)
     {
         $fileExt = $file->getExt();
         $tmpPath = $file->getPath();
         $id = $this->generateUuid();
 
-        $newFilePatch = $this->getNewFilePath($fileExt, $id);
+        $position = $this->getNewPosition($id);
+        $newFilePatch = $this->getNewFilePath($position, $fileExt, $id);
         $savedPath = $this->getSavePath($fileExt, $tmpPath);
         $path = $savedPath . DIRECTORY_SEPARATOR . $newFilePatch;
         $fullNewPath = $this->getRootDir() . DIRECTORY_SEPARATOR . $path;
@@ -116,7 +92,7 @@ class FilesApi extends EntityApi
 
         $newFile->setId($id);
         $newFile->setPath($path);
-        $newFile->setPosition($newFilePatch);
+        $newFile->setPosition($position);
         $this->saveEntity($newFile);
 
         return $newFile;
@@ -149,7 +125,7 @@ class FilesApi extends EntityApi
         return $this->getHahids()->encode($value);
     }
 
-    public function getNewFilePath($fileExt, UuidComplexInterface $uuid)
+    public function getNewPosition(UuidComplexInterface $uuid)
     {
         $firstDirsLevelCount = $this->getConfig([Module::MODULE_ID, "firstDirsLevelCount"], 16);
         $secondDirsLevelCount = $this->getConfig([Module::MODULE_ID, "secondDirsLevelCount"], 16);
@@ -157,18 +133,28 @@ class FilesApi extends EntityApi
         $dir1 = $this->hash($dir1);
         $dir2 = $uuid->getId() % $secondDirsLevelCount;
         $dir2 = $this->hash($dir2);
-        $subDirs = $dir1 . "/" . $dir2;
+        $subDirs = $dir1 . DIRECTORY_SEPARATOR . $dir2;
+        return $subDirs;
+    }
 
+    public function getNewFilePath($subDirs, $fileExt, UuidComplexInterface $uuid)
+    {
         if (1 !== strpos($fileExt, ".")) {
             $fileExt = "." . $fileExt;
         }
-        $name = "{$subDirs}/{$uuid->getHex()}{$fileExt}";
+        $name = $subDirs . DIRECTORY_SEPARATOR . $uuid->getHex() . $fileExt;
         return $name;
     }
 
     public function getSavePath($ext = null, $currentPath = null)
     {
         $configPaths = [];
+        if (static::MODULE_ID !== Module::MODULE_ID) {
+            $configPaths = [
+                [static::MODULE_ID, "filesPath", "default"],
+                [static::MODULE_ID, "filesPath"],
+            ];
+        }
         if ($ext) {
             $configPaths[] = ["filesPath", $ext];
         }
@@ -202,5 +188,22 @@ class FilesApi extends EntityApi
         }
 
         return $this->getOperator()->delete($entity);
+    }
+
+    public function isPublic()
+    {
+        return static::IS_PUBLIC;
+    }
+
+    public function formatFile(File $file, string $extension, string $template)
+    {
+        $savePath = $this->getSavePath();
+        $command = new FileFormatCommand($file, $savePath, $extension, $template, $this->isPublic());
+        try {
+            $formattedFile = $this->getOperator()->execute($command);
+        } catch (NotFoundSuitableWorkerException $e) {
+            return null;
+        }
+        return $formattedFile;
     }
 }

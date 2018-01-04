@@ -2,10 +2,10 @@
 
 namespace Akademiano\Content\Files\Model;
 
+use Akademiano\Delegating\DelegatingInterface;
+use Akademiano\Delegating\DelegatingTrait;
 use Akademiano\Entity\NamedEntity;
 use Akademiano\HttpWarp\File\Parts\FileProperties;
-use Akademiano\Operator\DelegatingInterface;
-use Akademiano\Operator\DelegatingTrait;
 use Akademiano\UserEO\Model\Utils\OwneredTrait;
 use Akademiano\Utils\FileSystem;
 use Akademiano\HttpWarp\File\UploadFile;
@@ -22,6 +22,7 @@ class File extends NamedEntity implements DelegatingInterface
     protected $mimeType;
     /** @var  bool */
     protected $moved = false;
+    protected $extension;
 
     /**
      * @var UploadFile
@@ -215,6 +216,7 @@ class File extends NamedEntity implements DelegatingInterface
         return $this->getUrl($template);
     }
 
+    /** @deprecated  */
     public function getUrl($template = null)
     {
         $fileDir = $this->getFileDirectory();
@@ -234,4 +236,23 @@ class File extends NamedEntity implements DelegatingInterface
 
         return "/" . $fileDir . "/" . $this->getFileName();
     }
+
+    public function getExtension()
+    {
+        if (null === $this->extension) {
+            $command = new MimeyExtensionCommand($this);
+            $this->extension = $this->getOperator()->execute($command);
+        }
+        return $this->extension;
+    }
+
+    public function toArray()
+    {
+        $data = parent::toArray();
+        $data['extension'] = $this->getExtension();
+        $data['position'] = $this->getPosition();
+        return $data;
+    }
+
+
 }
