@@ -23,6 +23,7 @@ use Akademiano\Operator\Command\PreCommandInterface;
 use Akademiano\EntityOperator\Command\SelectCommand;
 use Akademiano\Operator\Command\WorkerInfoCommand;
 use Akademiano\Utils\Object\Collection;
+use Akademiano\Utils\Object\Prototype\IntegerableInterface;
 use Akademiano\Utils\Object\Prototype\StringableInterface;
 use Akademiano\Delegating\Command\CommandInterface;
 use Akademiano\Entity\EntityInterface;
@@ -50,7 +51,6 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
     protected $table;
 
     protected $tableId;
-
 
 
     /** @var array */
@@ -206,70 +206,84 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
     public function execute(CommandInterface $command)
     {
         switch ($command->getName()) {
-            case FindCommand::COMMAND_NAME : {
-                $criteria = $command->getParams("criteria", []);
-                $limit = $command->getParams("limit", null);
-                $offset = $command->getParams("offset", null);
-                $orderBy = $command->getParams("orderBy", null);
-                return $this->find($criteria, $limit, $offset, $orderBy);
-            }
-            case GetCommand::COMMAND_NAME: {
-                $id = $command->getParams("id");
-                return $this->get($id);
-            }
-            case CountCommand::COMMAND_NAME: {
-                $criteria = $command->getParams("criteria", []);
-                return $this->count($criteria);
-            }
-            case SaveCommand::COMMAND_NAME: {
-                /** @var EntityInterface $entity */
-                $entity = $command->getParams("entity");
-                $isExisting = $entity->isExistingEntity();
-                $data = $command->getParams("data");
-                return $this->save($data, $isExisting);
-            }
-            case DeleteCommand::COMMAND_NAME: {
-                $id = $command->getParams("id");
-                return $this->delete($id);
-            }
-            case LoadCommand::COMMAND_NAME: {
-                return $this->load($command->getParams("entity"), $command->getParams("data"));
-            }
-            case ReserveCommand::COMMAND_NAME: {
-                return $this->reserve($command->getParams("entity"));
-            }
-            case MergeCommand::COMMAND_NAME: {
-                $entityA = $command->getParams("entityA");
-                $entityB = $command->getParams("entityB");
-                return $this->merge($entityA, $entityB);
-            }
-
-            case GenerateIdCommand::COMMAND_NAME : {
-                return $this->genId($command->getParams("tableId"));
-            }
-            case PreCommandInterface::PREFIX_COMMAND_PRE . FindCommand::COMMAND_NAME: {
-                /** @var PreCommand $command */
-                $criteria = $command->getParams("criteria");
-                if (null !== $criteria && (!$criteria instanceof Criteria)) {
-                    $criteria = $this->filterCriteria($command->getParams("criteria", []));
-                    $command->addParams($criteria, "criteria");
+            case FindCommand::COMMAND_NAME :
+                {
+                    $criteria = $command->getParams("criteria", []);
+                    $limit = $command->getParams("limit", null);
+                    $offset = $command->getParams("offset", null);
+                    $orderBy = $command->getParams("orderBy", null);
+                    return $this->find($criteria, $limit, $offset, $orderBy);
                 }
-                break;
-            }
-            case WorkerInfoCommand::COMMAND_NAME: {
-                $attribute = $command->getParams("attribute");
-                return $this->getAttribute($attribute, $command->getParams());
-                break;
-            }
-            case CreateCriteriaCommand::COMMAND_NAME: {
-                return $this->createCriteria();
-            }
-            case CreateSelectCommand::COMMAND_NAME: {
-                return $this->createSelect();
-            }
-            case SelectCommand::COMMAND_NAME : {
-                return $this->select($command->getParams("select"));
-            }
+            case GetCommand::COMMAND_NAME:
+                {
+                    $id = $command->getParams("id");
+                    return $this->get($id);
+                }
+            case CountCommand::COMMAND_NAME:
+                {
+                    $criteria = $command->getParams("criteria", []);
+                    return $this->count($criteria);
+                }
+            case SaveCommand::COMMAND_NAME:
+                {
+                    /** @var EntityInterface $entity */
+                    $entity = $command->getParams("entity");
+                    $isExisting = $entity->isExistingEntity();
+                    $data = $command->getParams("data");
+                    return $this->save($data, $isExisting);
+                }
+            case DeleteCommand::COMMAND_NAME:
+                {
+                    $id = $command->getParams("id");
+                    return $this->delete($id);
+                }
+            case LoadCommand::COMMAND_NAME:
+                {
+                    return $this->load($command->getParams("entity"), $command->getParams("data"));
+                }
+            case ReserveCommand::COMMAND_NAME:
+                {
+                    return $this->reserve($command->getParams("entity"));
+                }
+            case MergeCommand::COMMAND_NAME:
+                {
+                    $entityA = $command->getParams("entityA");
+                    $entityB = $command->getParams("entityB");
+                    return $this->merge($entityA, $entityB);
+                }
+
+            case GenerateIdCommand::COMMAND_NAME :
+                {
+                    return $this->genId($command->getParams("tableId"));
+                }
+            case PreCommandInterface::PREFIX_COMMAND_PRE . FindCommand::COMMAND_NAME:
+                {
+                    /** @var PreCommand $command */
+                    $criteria = $command->getParams("criteria");
+                    if (null !== $criteria && (!$criteria instanceof Criteria)) {
+                        $criteria = $this->filterCriteria($command->getParams("criteria", []));
+                        $command->addParams($criteria, "criteria");
+                    }
+                    break;
+                }
+            case WorkerInfoCommand::COMMAND_NAME:
+                {
+                    $attribute = $command->getParams("attribute");
+                    return $this->getAttribute($attribute, $command->getParams());
+                    break;
+                }
+            case CreateCriteriaCommand::COMMAND_NAME:
+                {
+                    return $this->createCriteria();
+                }
+            case CreateSelectCommand::COMMAND_NAME:
+                {
+                    return $this->createSelect();
+                }
+            case SelectCommand::COMMAND_NAME :
+                {
+                    return $this->select($command->getParams("select"));
+                }
             default:
                 throw new \InvalidArgumentException("Command type \" {$command->getName()} not supported");
         }
@@ -413,11 +427,13 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
     public function filterFieldToPostgresType($value, $fieldName = null, EntityInterface $entity = null)
     {
         if ($value instanceof EntityInterface) {
-            return (string)$value->getId();
+            return $value->getId()->getInt();
         } elseif ($value instanceof \DateTime) {
             return $value->format("Y-m-d H:i:s");
         } elseif (is_bool($value)) {
             return $value ? 't' : 'f';
+        } elseif ($value instanceof IntegerableInterface) {
+            return $value->getInt();
         } elseif ($value instanceof StringableInterface) {
             return $value->__toString();
         } else {
@@ -471,14 +487,16 @@ class PostgresWorker implements WorkerInterface, ConfigurableInterface, KeeperIn
     public function getAttribute($attribute, array $params = [])
     {
         switch ($attribute) {
-            case "table" : {
-                return $this->getTable();
-                break;
-            }
-            case "fields" : {
-                return $this->getFields();
-                break;
-            }
+            case "table" :
+                {
+                    return $this->getTable();
+                    break;
+                }
+            case "fields" :
+                {
+                    return $this->getFields();
+                    break;
+                }
         }
     }
 

@@ -57,7 +57,7 @@ class TranslatorObjectToDataWorker implements WorkerInterface, DelegatingInterfa
         $entity = $command->getParams("entity");
         if (is_object($entity)) {
             if ($entity instanceof EntityInterface) {
-                return $entity->getId();
+                return $entity->getId()->getInt();
             } else {
                 throw new \InvalidArgumentException("entity object not instance of EntityInterface");
             }
