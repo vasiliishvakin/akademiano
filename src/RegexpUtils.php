@@ -44,7 +44,7 @@ class RegexpUtils
                     $value = (string) $value;
                 }
                 if (!is_scalar($value)) {
-                    throw new \LogicException('In regexp "%s" param "%s" is not scalar: "%s"', $regexp, $match[1], json_encode($value));
+                    throw new \LogicException(sprintf('In regexp "%s" param "%s" is not scalar: "%s"', $regexp, $match[1], json_encode($value)));
                 }
                 return $value;
             }, $regexp);

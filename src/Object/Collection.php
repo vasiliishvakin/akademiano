@@ -64,20 +64,45 @@ class Collection extends ArrayObject implements ArrayableInterface, \JsonSeriali
         return end($this->items);
     }
 
+    protected function itemFieldNameToCallable($fieldName): callable
+    {
+        if (is_string($fieldName)) {
+            $method = function ($item) use ($fieldName) {
+                if (is_object($item)) {
+                    $method = 'get' . ucfirst($fieldName);
+                    if (is_callable([$item, $method])) {
+                        return $item->{$method}();
+                    }
+                } elseif (is_array($item)) {
+                    if (isset($item[$fieldName])) {
+                        return $item[$fieldName];
+                    }
+                } else {
+                    throw new \LogicException(sprintf('Item type must be a object or array, but it is "%s"', gettype($item)));
+                }
+            };
+        } elseif (is_integer($fieldName)) {
+            $method = function ($item) use ($fieldName) {
+                if (is_array($item) && isset($item[$fieldName])) {
+                    return $item[$fieldName];
+                } else {
+                    throw new \LogicException(sprintf('Item type must be array, but it is "%s"', gettype($item)));
+                }
+            };
+        } elseif (is_callable($fieldName)) {
+            $method = $fieldName;
+        }
+        return $method;
+    }
+
     public function lists($field, $keyField = null)
     {
-        $data = [];
-        $method = 'get' . ucfirst($field);
-        $keyMethod = !is_null($keyField) ? 'get' . ucfirst($keyField) : null;
-        foreach ($this as $item) {
-            $value = null;
-            $key = null;
-            if (is_callable([$item, $method])) {
-                $value = $item->{$method}();
-            }
-            if (!empty($keyMethod) && is_callable([$item, $keyMethod])) {
+        $method = $this->itemFieldNameToCallable($field);
 
-                $key = $item->{$keyMethod}();
+        $keyMethod = !is_null($keyField)
+            ? function ($item) use ($keyField) {
+                $method = $this->itemFieldNameToCallable($keyField);
+                $key = call_user_func($method, $item);
                 if (is_object($key)) {
                     if ($key instanceof IntegerableInterface) {
                         $key = $key->getInt();
@@ -89,49 +114,34 @@ class Collection extends ArrayObject implements ArrayableInterface, \JsonSeriali
                 } elseif (!is_scalar($key)) {
                     throw new \LogicException(sprintf('Could not use not scalar value for array key'));
                 }
+                return $key;
             }
-            if ($value) {
-                if ($keyField) {
-                    if ($key) {
-                        $data[$key] = $value;
-                    } else {
-                        $data[] = $value;
-                    }
+            : null;
 
+        $data = [];
+        foreach ($this as $item) {
+            $value = null;
+            $key = null;
+
+            $value = call_user_func($method, $item);
+            $key = ($keyMethod) ? call_user_func($keyMethod, $item) : null;
+
+            if ($value) {
+                if ($key) {
+                    $data[$key] = $value;
                 } else {
                     $data[] = $value;
                 }
             }
         }
-
-        return $data;
+        return new Collection($data);
     }
 
     public function filter($field, $needValue, $operator = "===")
     {
+        $method = $this->itemFieldNameToCallable($field);
+
         $data = [];
-        if (is_string($field)) {
-            $method = function ($item) use ($field) {
-                if (is_object($item)) {
-                    $method = 'get' . ucfirst($field);
-                    if (is_callable([$item, $method])) {
-                        return $item->{$method}();
-                    }
-                } elseif (is_array($item)) {
-                    if (isset($item[$field])) {
-                        return $item[$field];
-                    }
-                }
-            };
-        } elseif (is_integer($field)) {
-            $method = function ($item) use ($field) {
-                if (is_array($item) && isset($item[$field])) {
-                    return $item[$field];
-                }
-            };
-        } elseif (is_callable($field)) {
-            $method = $field;
-        }
         foreach ($this as $item) {
             $value = call_user_func($method, $item);
             switch ($operator) {
@@ -190,11 +200,13 @@ class Collection extends ArrayObject implements ArrayableInterface, \JsonSeriali
                 $this[] = $value;
             }
         }
+        return $this;
     }
 
     public function usort(Callable $function)
     {
-        return usort($this->items, $function);
+        usort($this->items, $function);
+        return $this;
     }
 
     protected function minMax($direction, $field, Callable $function = null)

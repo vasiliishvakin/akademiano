@@ -2,7 +2,7 @@
 
 namespace Akademiano\Utils;
 
-class ArrayTools
+final class ArrayTools
 {
     const FIRST_IN_ARRAY = '____first';
     const LAST_IN_ARRAY = '____last';
@@ -413,5 +413,24 @@ class ArrayTools
         }
         return implode($glue, $data);
 
+    }
+
+    public static function filter(array $array, array $structuredFilters): bool
+    {
+        foreach ($structuredFilters as $key => $item) {
+            if (!array_key_exists($key, $array)) {
+                return false;
+            }
+            $value = $array[$key];
+            if (is_array($item)) {
+                if (!is_array($value)) {
+                    return false;
+                }
+                $result = self::filter($value, $item);
+            }
+            else {
+
+            }
+        }
     }
 }

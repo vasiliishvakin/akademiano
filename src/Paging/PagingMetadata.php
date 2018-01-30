@@ -65,10 +65,10 @@ class PagingMetadata implements \ArrayAccess, \Iterator, \Countable, \JsonSerial
     /**
      * @return mixed
      */
-    public function getItemsOffset()
+    public function getItemsOffset(): ?int
     {
         if (empty($this->itemsOffset)) {
-            if (null === $this->getSliceSize() ) {
+            if (null === $this->getSliceSize()) {
                 return null;
             }
             $this->itemsOffset = ($this->getCurrentPage() - 1) * $this->getSliceSize();
