@@ -141,7 +141,7 @@ class Route implements EnvironmentIncludeInterface
 
     public function getType()
     {
-        $patternsIds = $this->getPatterns()->lists("type");
+        $patternsIds = $this->getPatterns()->lists("type")->toArray();
 
         return min($patternsIds);
     }
