@@ -20,7 +20,7 @@ class Config implements \ArrayAccess, \IteratorAggregate, DIContainerIncludeInte
 
     protected $environment;
 
-    public function __construct(array $config, Container $diContainer = null)
+    public function __construct(array $config = [], Container $diContainer = null)
     {
         $this->set($config);
         if (null !== $diContainer) {
