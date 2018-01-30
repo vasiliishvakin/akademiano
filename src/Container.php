@@ -18,16 +18,9 @@ class Container extends \Pimple\Container implements ArrayableInterface
         };
     }
 
-    public function getConfig()
-    {
-        return $this["config"];
-    }
-
+    //rewrite in child
     protected function prepare($value)
     {
-        if ($value instanceof ConfigurableInterface) {
-            $value->setConfig($this->getConfig());
-        }
         return $value;
     }
 
