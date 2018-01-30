@@ -1,6 +1,6 @@
 <?php
 return [
-    "dbAdapter" => function ($c) {
+    \Akademiano\Db\Adapter\PgsqlAdapter::RESOURCE_ID => function ($c) {
         /** @var \Akademiano\Config\Config $config */
         $config = $c["config"];
         $dbAdapter = new \Akademiano\Db\Adapter\PgsqlAdapter();

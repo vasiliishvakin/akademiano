@@ -7,6 +7,8 @@ use Akademiano\Utils\ArrayTools;
 
 abstract class AbstractAdapter implements AdapterInterface
 {
+    const RESOURCE_ID = 'dbAdapter';
+
     protected $connection;
     protected $dsn;
     protected $params = [];
