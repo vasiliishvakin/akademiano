@@ -65,4 +65,9 @@ class Uuid implements UuidInterface
             'value' => $this->getHex(),
         ];
     }
+
+    public static function isHexUuid(string $string)
+    {
+        return !is_numeric($string) && ctype_xdigit($string);
+    }
 }
