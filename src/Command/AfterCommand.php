@@ -11,22 +11,24 @@ class AfterCommand extends SubCommand implements AfterCommandInterface
     /** @var  \SplStack */
     protected $results;
 
-    public function __construct(CommandInterface $command, \SplStack $results)
+    public function __construct(CommandInterface $command, $results)
     {
         parent::__construct($command);
+        if ($results instanceof \SplStack) {
             $this->results = $results;
-    }
-
-    public function getPrefix()
-    {
-        return self::PREFIX_COMMAND_AFTER;
+        } else {
+            $this->getResults()->push($results);
+        }
     }
 
     /**
      * @return \SplStack
      */
-    public function getResults()
+    public function getResults(): \SplStack
     {
+        if (null === $this->results) {
+            $this->results = new \SplStack();
+        }
         return $this->results;
     }
 

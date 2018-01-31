@@ -1,8 +1,10 @@
 <?php
 
+
 namespace Akademiano\Operator\Worker\Exception;
 
-class TryNextException extends WorkerControlException
+
+class WorkerControlException extends WorkerException
 {
 
 }

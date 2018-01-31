@@ -7,5 +7,7 @@ use \Akademiano\Delegating\Command\CommandInterface;
 
 interface SubCommandInterface extends CommandInterface
 {
-    public function getPrefix();
+    const PARAM_PARENT_COMMAND = 'parentCommand';
+
+    public function getParentCommand():CommandInterface;
 }

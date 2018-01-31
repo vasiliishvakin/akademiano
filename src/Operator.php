@@ -4,7 +4,17 @@
 namespace Akademiano\Operator;
 
 use Akademiano\Config\Config;
+use Akademiano\Delegating\OperatorInterface;
+use Akademiano\Operator\Command\OperatorSpecialCommandInterface;
+use Akademiano\Operator\Command\PreCommandInterface;
+use Akademiano\Operator\Command\SubCommand;
+use Akademiano\Operator\Command\SubCommandInterface;
+use Akademiano\Operator\Command\WorkerInfoCommand;
 use Akademiano\Operator\Exception\NotFoundSuitableWorkerException;
+use Akademiano\Operator\Exception\OperatorException;
+use Akademiano\Operator\Worker\WorkerSelfInstancedInterface;
+use Akademiano\Operator\Worker\WorkerSelfMapCommandsInterface;
+use Akademiano\Operator\WorkersMap\WorkersMap;
 use Akademiano\Utils\ArrayTools;
 use Akademiano\Operator\Command\AfterCommand;
 use Akademiano\Operator\Command\CommandChainElementInterface;
@@ -20,29 +30,36 @@ use Pimple\Container;
 
 class Operator implements OperatorInterface
 {
-    const CLAS_MAP_FILE_NAME = 'operator.class.map';
+    const WORKERS_FILE = 'workers';
+    const WORKERS_MAP_FILE = 'workers.map';
 
-    /** @var  Container */
+
+    /** @var  WorkersContainer */
     protected $workers;
-    protected $actionMap = [];
-    protected $workersParams = [];
-    protected $workerTables = [];
 
     /** @var  Container */
     protected $dependencies;
 
-    /** @var  Config */
-    protected $classMap;
+
+    /** @var  WorkersMap */
+    protected $workersMap;
 
     /**
-     * @return Container
+     * Operator constructor.
+     * @param Container $dependencies
      */
-    public function getWorkers()
+    public function __construct(Container $dependencies = null)
+    {
+        if (null !== $dependencies) {
+            $this->setDependencies($dependencies);
+        }
+    }
+
+    public function getWorkers(): WorkersContainer
     {
         if (null === $this->workers) {
             $this->workers = new WorkersContainer();
             $this->workers->setDependencies($this->getDependencies());
-            $this->workers->setOperator($this);
         }
         return $this->workers;
     }
@@ -52,10 +69,43 @@ class Operator implements OperatorInterface
         $this->getWorkers()[$name] = $worker;
     }
 
+    public function setWorkers(iterable $workers)
+    {
+        $this->workers = null;
+        foreach ($workers as $name => $callable) {
+            if (!is_callable($callable)) {
+                if (!is_string($callable)) {
+                    throw new OperatorException(sprintf('Worker mast be callable ortring class name, "%s" done', gettype($callable)));
+                }
+                if (!class_exists($callable)) {
+                    throw new OperatorException(sprintf('Worker class "%s" not exist', $callable));
+                }
+                if (!is_subclass_of($callable, WorkerSelfInstancedInterface::class)) {
+                    throw new OperatorException(sprintf('Worker class "%s" not implements "%s"', $callable, WorkerSelfInstancedInterface::class));
+                }
+                $name = constant($callable . '::WORKER_ID');
+                //create mapping
+                if (is_subclass_of($callable, WorkerSelfMapCommandsInterface::class)) {
+                    $commandsMapping = call_user_func([$callable, WorkerSelfMapCommandsInterface::SELF_MAP_COMMAND_NAME]);
+                    if (!empty($commandsMapping)) {
+                        $relations = [
+                            $name => $commandsMapping,
+                        ];
+                        $this->getWorkersMap()->addRelations($relations);
+                    }
+                }
+                $name = constant($callable . '::WORKER_ID');
+                $callable = \Closure::fromCallable([$callable, WorkerSelfInstancedInterface::SELF_INSTANCE_COMMAND_NAME]);
+            }
+            $this->addWorker($name, $callable);
+        }
+        return $this;
+    }
+
     /**
      * @return Container
      */
-    public function getDependencies()
+    public function getDependencies(): Container
     {
         return $this->dependencies;
     }
@@ -68,104 +118,45 @@ class Operator implements OperatorInterface
         $this->dependencies = $dependencies;
     }
 
-    public function getDependency($name)
+    public function getWorker($workerId): WorkerInterface
     {
-        return $this->getDependencies()[$name];
+        return $this->getWorkers()[$workerId];
     }
 
-    /**
-     * @return array
-     */
-    public function getActionMap()
+    public function hasWorker($workerId)
     {
-        return $this->actionMap;
+        return isset($this->getWorkers()[$workerId]);
     }
 
-    public function addAction($action, $workerName, $class = null, $order = 0)
+    public function getWorkersMap(): WorkersMap
     {
-        $path = $class !== null ? [$action, $class] : [$action, ""];
-        $this->actionMap = ArrayTools::add($this->actionMap, $path, ["name" => $workerName, "order" => $order]);
-    }
-
-    public function setWorkerTable($tableId, $workerName)
-    {
-        $this->workerTables[$tableId] = $workerName;
-    }
-
-    public function getWorkerByTable($tableId)
-    {
-        if (!isset($this->workerTables[$tableId])) {
-            return null;
+        if (null === $this->workersMap) {
+            $this->workersMap = new WorkersMap();
         }
-        $workerName = $this->workerTables[$tableId];
-        return $this->getWorker($workerName);
-    }
-
-    public function getTableIdByWorker($worker)
-    {
-        $workers = array_flip($this->workerTables);
-        if (!isset($workers[$worker])) {
-            return null;
-        }
-        return $workers[$worker];
-    }
-
-    public function getWorkerParams($workerName = null, $paramName = null)
-    {
-        if (null === $workerName) {
-            return $this->workersParams;
-        }
-        $params = isset($this->workersParams[$workerName]) ? $this->workersParams[$workerName] : [];
-        if (null === $paramName) {
-            return $params;
-        }
-        $value = isset($params[$paramName]) ? $params[$paramName] : null;
-        return $value;
-    }
-
-    public function setWorkerParams($workerName, array $workersParams)
-    {
-        $this->workersParams[$workerName] = $workersParams;
-    }
-
-    public function getWorker($workerName)
-    {
-        return $this->getWorkers()[$workerName];
+        return $this->workersMap;
     }
 
     /**
      * @param CommandInterface $command
-     * @return WorkerInterface[]
+     * @return \Generator|WorkerInterface
      */
-    public function getCommandWorkers(CommandInterface $command)
+    public function getCommandWorkers(CommandInterface $command): \Generator
     {
-        $class = (string)$command->getClass();
-        $action = $command->getName();
-
+        $class = get_class($command);
         do {
-            if (false === $class) {
-                $class = "";
+            $workersIds = $this->getWorkersMap()->getWorkersIds($class, $command);
+            foreach ($workersIds as $workerId) {
+                yield $this->getWorker($workerId);
             }
-            $path = [$action, $class];
-            if (ArrayTools::issetByPath($this->actionMap, $path)) {
-                $workers = ArrayTools::get($this->actionMap, $path);
-                $workers = ArrayTools::sortByKey($workers);
-                //may be cache like: $this->actionMap = ArrayUtils::set($this->actionMap, $path, $workers);
-                foreach ($workers as $worker) {
-                    yield $this->getWorker($worker["name"]);
-                }
-            }
-            if ("" !== $class) {
-                $class = get_parent_class($class);
-            }
-        } while ("" !== $class);
+            $class = get_parent_class($class);
+        } while ($class && ($class !== SubCommand::class));
     }
 
     public function preExecute(CommandInterface $command)
     {
         $preCommand = new PreCommand($command);
         $this->execute($preCommand);
-        $command = $preCommand->extractParentCommand();
+        $command = $preCommand->getParentCommand();
         return $command;
     }
 
@@ -182,42 +173,25 @@ class Operator implements OperatorInterface
         return $result;
     }
 
-    public function getClassMap(): Config
-    {
-        return $this->classMap;
-    }
-
-    public function setClassMap(Config $classMap)
-    {
-        $this->classMap = $classMap;
-    }
-
-    public function mapCommandParamClass(string $class):string
-    {
-        $classMap = $this->getClassMap();
-        if (isset($classMap[$class])) {
-            return $classMap[$class];
-        } else {
-            return $class;
-        }
-    }
-
-
     public function execute(\Akademiano\Delegating\Command\CommandInterface $command)
     {
-        //prepare action
-        if (!$command instanceof PreAfterCommandInterface) {
-            $command->setClass($this->mapCommandParamClass($command->getClass()));
+        //self commands
+        if ($command instanceof OperatorSpecialCommandInterface) {
+            return $this->internalExecute($command);
+        }
 
+        //prepare action
+        if (!$command instanceof SubCommandInterface) {
             $command = $this->preExecute($command);
         }
 
+        //main work
         $result = null;
-        $break = !($command instanceof CommandChainElementInterface) || ($command instanceof CommandFinallyInterface);
-        $workersCount = 0;
+
+        $break = (!$command instanceof SubCommandInterface) && (!($command instanceof CommandChainElementInterface) || ($command instanceof CommandFinallyInterface));
+
         foreach ($this->getCommandWorkers($command) as $worker) {
             try {
-                $workersCount++;
                 $result = $worker->execute($command);
             } catch (TryNextException $e) {
                 $break = false;
@@ -228,13 +202,30 @@ class Operator implements OperatorInterface
                 break;
             }
         }
-        if (!$command instanceof PreAfterCommandInterface && $workersCount === 0) {
-            throw  new NotFoundSuitableWorkerException(sprintf('Empty workers for command "%s" and class "%s"', $command->getName(), $command->getClass()));
-        }
+
         //after execute
-        if (!$command instanceof PreAfterCommandInterface) {
+        if (!$command instanceof SubCommandInterface) {
             $result = $this->afterExecute($command, $result);
         }
         return $result;
     }
+
+    public function internalExecute(CommandInterface $command)
+    {
+        if ($command instanceof WorkerInfoCommand) {
+            $workerId = $command->getWorkerId();
+            /** @var WorkerInterface $worker */
+            $worker = $this->getWorker($workerId);
+            return $worker->execute($command);
+        } else {
+            throw new \InvalidArgumentException(sprintf('Special operator command "%s" not supported', get_class($command)));
+        }
+    }
+
+    public function __invoke(\Akademiano\Delegating\Command\CommandInterface $command)
+    {
+        return $this->execute($command);
+    }
+
+
 }

@@ -4,7 +4,7 @@
 namespace Akademiano\Operator\Worker\Exception;
 
 
-class BreakException extends \RuntimeException
+class BreakException extends WorkerControlException
 {
 
 }

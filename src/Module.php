@@ -1,6 +1,6 @@
 <?php
 
-namespace DeltaPhp\Operator;
+namespace Akademiano\Operator;
 
 
 class Module

@@ -4,12 +4,15 @@
 namespace Akademiano\Operator\Command;
 
 
+use Akademiano\Delegating\Command\CommandInterface;
+
+
 /**
  * Class Command
  * @package Akademiano\Operator\Command
  * @deprecated
  */
-class Command extends \Akademiano\Delegating\Command\Command implements CommandInterface
+class Command implements  CommandInterface
 {
 
 }

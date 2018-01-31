@@ -4,12 +4,34 @@
 namespace Akademiano\Operator;
 
 
-use Akademiano\DI\Container;
-use Akademiano\Operator\Worker\ConfigurableInterface;
+use Akademiano\Config\Config;
+use Akademiano\Config\ConfigInterface;
+use Akademiano\Config\ConfigurableInterface;
+use Akademiano\Config\ConfigurableTrait;
+use Akademiano\Delegating\DelegatingInterface;
+use Akademiano\Delegating\IncludeOperatorInterface;
+use Akademiano\Delegating\IncludeOperatorTrait;
+use Akademiano\Delegating\OperatorInterface;
+use Pimple\Container;
 
-class WorkersContainer extends Container implements WorkersContainerInterface
+class WorkersContainer extends \Akademiano\DI\Container implements ConfigurableInterface, IncludeOperatorInterface
 {
-    use IncludeOperatorTrait;
+    use ConfigurableTrait {
+        getConfig as private configurableGetConfig;
+    }
+
+    use IncludeOperatorTrait {
+        getOperator as private delegatingGetOperator;
+    }
+
+    public function __construct(array $values = [], Container $dependencies = null)
+    {
+        if (null !== $dependencies) {
+            $this->setDependencies($dependencies);
+        }
+        parent::__construct($values);
+    }
+
 
     /** @var  Container */
     protected $dependencies;
@@ -30,33 +52,33 @@ class WorkersContainer extends Container implements WorkersContainerInterface
         $this->dependencies = $dependencies;
     }
 
-    public function getConfig()
+    public function getConfig($path = null, $default = null)
     {
-        return $this->getDependencies()["config"];
+        if (null === $this->config) {
+            if (!isset($this->getDependencies()[ConfigInterface::RESOURCE_ID])) {
+                $this->config = new Config([], $this->getDependencies());
+            }
+            $this->config = $this->getDependencies()[ConfigInterface::RESOURCE_ID];
+        }
+        return $this->configurableGetConfig($path, $default);
     }
 
-    public function offsetSet($id, $value)
+    public function getOperator(): ?OperatorInterface
     {
-        if (!is_object($value) || !method_exists($value, '__invoke')) {
-            throw new \InvalidArgumentException(sprintf('Identifier "%s" does not contain an object definition.', $id));
+        if (null === $this->operator) {
+            $this->operator = $this->getDependencies()[OperatorInterface::RESOURCE_ID];
         }
+        return $this->operator;
+    }
 
-        $value = function ($c) use ($value, $id) {
-            if (is_callable($value)) {
-                $result = $value($c);
-                if (is_object($result)) {
-                    if ($result instanceof \Akademiano\Delegating\IncludeOperatorInterface) {
-                        $result->setOperator($this->getOperator());
-                    }
-                    if ($result instanceof ConfigurableInterface) {
-                        $result->addConfig($this->getOperator()->getWorkerParams($id));
-                    }
-                }
-                return $result;
-            } else {
-                return $value;
-            }
-        };
-        parent::offsetSet($id, $value);
+    public function prepare($value)
+    {
+        if ($value instanceof ConfigurableInterface) {
+            $value->setConfig($this->getConfig());
+        }
+        if ($value instanceof DelegatingInterface) {
+            $value->setOperator($this->getOperator());
+        }
+        return $value;
     }
 }

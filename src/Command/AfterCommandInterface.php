@@ -5,15 +5,9 @@ namespace Akademiano\Operator\Command;
 
 use Akademiano\Delegating\Command\CommandInterface;
 
-interface AfterCommandInterface extends PreAfterCommandInterface
+interface AfterCommandInterface extends SubCommandInterface
 {
-    const PREFIX_COMMAND_AFTER = "after.";
-    /**
-     * AfterCommandInterface constructor.
-     * @param CommandInterface $command
-     * @param mixed|\SplStack $result
-     */
-    public function __construct(CommandInterface $command, \SplStack $result);
+    public function __construct(CommandInterface $command, $result);
 
     public function addResult($result);
 

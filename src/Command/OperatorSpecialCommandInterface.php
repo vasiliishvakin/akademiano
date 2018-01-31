@@ -4,7 +4,7 @@
 namespace Akademiano\Operator\Command;
 
 
-interface CommandChainElementInterface
+interface OperatorSpecialCommandInterface
 {
 
 }

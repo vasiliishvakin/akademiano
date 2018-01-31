@@ -3,16 +3,7 @@
 
 namespace Akademiano\Operator\Command;
 
-use Akademiano\Delegating\Command\CommandInterface;
-
-interface PreCommandInterface extends CommandInterface, PreAfterCommandInterface
+interface PreCommandInterface extends SubCommandInterface
 {
-    const PREFIX_COMMAND_PRE = "pre.";
 
-    public function __construct(CommandInterface $command);
-
-    /**
-     * @return CommandInterface
-     */
-    public function extractParentCommand();
 }
