@@ -7,18 +7,22 @@ namespace Akademiano\Content\Files\Images\Model;
 use Akademiano\Content\Files\Model\File;
 use Akademiano\Content\Files\Model\FileFormatCommand;
 use Akademiano\Delegating\Command\CommandInterface;
-use Akademiano\DI\Container;
 use Akademiano\HttpWarp\Exception\NotFoundException;
 use Akademiano\Operator\Worker\Exception\TryNextException;
 use Akademiano\Operator\Worker\WorkerInterface;
-use Akademiano\Operator\Worker\WorkerMetaMapPropertiesTrait;
+use Akademiano\Operator\Worker\WorkerMappingTrait;
+use Akademiano\Operator\Worker\WorkerSelfInstancedInterface;
+use Akademiano\Operator\Worker\WorkerSelfMapCommandsInterface;
+use Akademiano\Operator\WorkersContainer;
 use PHPixie\Image;
 
-class ImageFormatWorker implements WorkerInterface
+class ImageFormatWorker implements WorkerInterface, WorkerSelfMapCommandsInterface, WorkerSelfInstancedInterface
 {
-    const WORKER_NAME = 'imageFormatWorker';
+    const WORKER_ID = 'imageFormatWorker';
+    const IMAGE_PROCESSOR_RESOURCE_ID = 'imageProcessor';
 
-    use WorkerMetaMapPropertiesTrait;
+    use WorkerMappingTrait;
+
 
     /** @var Image */
     protected $imageProcessor;
@@ -30,33 +34,44 @@ class ImageFormatWorker implements WorkerInterface
     /** @var string */
     protected $dataDir;
 
+    public static function getSelfInstance(WorkersContainer $container): WorkerInterface
+    {
+        $w = new static();
+        $w->setImageProcessor($container->getDependencies()[self::IMAGE_PROCESSOR_RESOURCE_ID]);
 
-    protected static function getDefaultMapping()
+        $config = $container->getDependencies()['config'];
+        $templates = $config->get(['content', 'files', 'image', 'templates'], [])->toArray();
+        $w->setTemplates($templates);
+        return $w;
+    }
+
+
+    public static function getSupportedCommands(): array
     {
         return [
-            FileFormatCommand::COMMAND_NAME => null,
-            ImageFormatCommand::COMMAND_NAME => null,
+            FileFormatCommand::class,
+            ImageFormatCommand::class,
         ];
     }
 
     public function execute(CommandInterface $command)
     {
-        switch ($command->getName()) {
-            case FileFormatCommand::COMMAND_NAME:
+        switch (true) {
+            case $command instanceof FileFormatCommand:
                 /** @var File $file */
-                $file = $command->getParams('file');
+                $file = $command->getFile();
                 if (!$file->isImage()) {
                     throw new TryNextException(sprintf('Worker "%s" not work with not image files', self::class));
                 }
-            case ImageFormatCommand::COMMAND_NAME:
+            case $command instanceof ImageFormatCommand:
                 if (!isset($file)) {
                     /** @var File $file */
-                    $file = $command->getParams('file');
+                    $file = $command->getFile();
                 }
-                $template = $command->getParams('template');
-                $extension = $command->getParams('extension');
-                $savePath = $command->getParams('savePath');
-                $isPublic = $command->getParams('isPublic');
+                $template = $command->getTemplate();
+                $extension = $command->getExtension();
+                $savePath = $command->getSavePath();
+                $isPublic = $command->isPublic();
                 return $this->prepareFile($file, $savePath, $extension, $template, $isPublic);
             default:
                 throw new \InvalidArgumentException("Command type \" {$command->getName()} not supported");
@@ -154,7 +169,7 @@ class ImageFormatWorker implements WorkerInterface
 
         $template = $this->getTemplate($templateName);
         if (null === $template) {
-            throw new NotFoundException(sprintf('Not found config for image template #"%s"', $templateName));
+            throw new NotFoundException(sprintf('Not found config for image template "%s"', $templateName));
         }
         if (!is_callable($template)) {
             throw new \LogicException(sprintf('Image template #"%s" is not callable', $templateName));
