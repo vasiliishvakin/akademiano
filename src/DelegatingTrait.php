@@ -11,6 +11,12 @@ trait DelegatingTrait
 {
     use IncludeOperatorTrait;
 
+    /**
+     * @param CommandInterface $command
+     * @param bool $throwOnEmptyOperator
+     * @return mixed|\Akademiano\Utils\Object\Collection|null
+     * @throws EmptyOperatorException;
+     */
     public function delegate(CommandInterface $command, bool $throwOnEmptyOperator = false)
     {
         $operator = $this->getOperator();
@@ -21,6 +27,6 @@ trait DelegatingTrait
                 return null;
             }
         }
-        return $this->getOperator()->execute($command);
+        return $operator->execute($command);
     }
 }
