@@ -21,7 +21,7 @@
   "require": {
     "akademiano/core": "^1.1@dev",
     "bower-asset/bootstrap": "^3.3.5",
-    "bower-asset/jquery": "^2.1.4",
+    "bower-asset/jquery": "^3.0",
     "bower-asset/html5shiv": "^3.7.3",
     "bower-asset/respond": "^1.4.2",
     "bower-asset/font-awesome": "^4.7",
