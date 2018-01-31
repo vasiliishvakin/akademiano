@@ -5,6 +5,8 @@ namespace Akademiano\UUID;
 
 class UuidFactory
 {
+    const RESOURCE_ID= 'uuidFactory';
+
     protected $epoch;
 
     /** @var UuidComplexInterface[] */
