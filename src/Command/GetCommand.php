@@ -3,17 +3,21 @@
 
 namespace Akademiano\EntityOperator\Command;
 
-use Akademiano\Operator\Command\Command;
-use Akademiano\Entity\Entity;
-
-class GetCommand extends Command
+class GetCommand extends EntityCommand
 {
-    const COMMAND_NAME = "get";
+    protected $id;
 
-    public function __construct($id, $class = Entity::class, $params = [])
+    /**
+     * @return mixed
+     */
+    public function getId()
     {
-        $params["id"] = $id;
-        parent::__construct($params, $class);
+        return $this->id;
     }
 
+    public function setId($id): GetCommand
+    {
+        $this->id = $id;
+        return $this;
+    }
 }

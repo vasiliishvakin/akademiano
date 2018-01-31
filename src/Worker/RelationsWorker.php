@@ -12,7 +12,7 @@ use Akademiano\Delegating\Command\CommandInterface;
 use Akademiano\Delegating\DelegatingInterface;
 use Akademiano\Delegating\DelegatingTrait;
 
-class RelationsWorker extends PostgresWorker implements DelegatingInterface
+class RelationsWorker extends PostgresEntityWorker implements DelegatingInterface
 {
     const FIELD_FIRST = "first";
     const FIELD_SECOND = "second";
@@ -23,7 +23,7 @@ class RelationsWorker extends PostgresWorker implements DelegatingInterface
     const TABLE_ID_INC = 1;
     const TABLE_ID = 4;
     const TABLE_NAME = "relations";
-    const EXPAND_FIELDS = ["first", "second"];
+    const FIELDS = ["first", "second"];
     const ENTITY_CLASS = RelationEntity::class;
 
     use DelegatingTrait;

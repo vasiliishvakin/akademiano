@@ -7,13 +7,7 @@ use Akademiano\Operator\Command\Command;
 
 use Akademiano\Entity\Entity;
 
-class GenerateIdCommand extends Command implements GenerateIdCommandInterface
+class GenerateIdCommand extends EntityCommand
 {
-    const COMMAND_NAME = "generate.id";
 
-    public function __construct($class = Entity::class)
-    {
-        $params = [];
-        parent::__construct($params, $class);
-    }
 }

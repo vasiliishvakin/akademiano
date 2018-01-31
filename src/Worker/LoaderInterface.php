@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Akademiano\EntityOperator;
+namespace Akademiano\EntityOperator\Worker;
 
 
 use Akademiano\Entity\EntityInterface;

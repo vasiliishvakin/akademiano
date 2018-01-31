@@ -4,31 +4,57 @@
 namespace Akademiano\EntityOperator\Worker;
 
 
-use Akademiano\Delegating\IncludeOperatorInterface;
-use Akademiano\Delegating\IncludeOperatorTrait;
+use Akademiano\Delegating\DelegatingInterface;
+use Akademiano\Delegating\DelegatingTrait;
 use Akademiano\Entity\EntityInterface;
 use Akademiano\EntityOperator\Command\CreateCommand;
-use Akademiano\Operator\Worker\WorkerInterface;
-use Akademiano\EntityOperator\CreatorInterface;
-use Akademiano\Operator\Worker\WorkerMetaMapPropertiesTrait;
+use Akademiano\EntityOperator\Command\EntityCommandInterface;
+use Akademiano\EntityOperator\WorkersMap\Filter\RelationCommandEntityClassValueExtractor;
+use Akademiano\Operator\Worker\Exception\NotSupportedCommandException;
 use Akademiano\Delegating\Command\CommandInterface;
 use Akademiano\Entity\Entity;
+use Akademiano\Operator\Worker\WorkerSelfInstancedInterface;
+use Akademiano\Operator\Worker\WorkerSelfMapCommandsInterface;
+use Akademiano\Operator\Worker\WorkerMappingTrait;
+use Akademiano\Operator\Worker\WorkerSelfInstanceTrait;
+use Akademiano\Operator\WorkersMap\Filter\FilterFieldInterface;
 use Carbon\Carbon;
 
 
-class EntityCreatorWorker implements WorkerInterface, CreatorInterface, IncludeOperatorInterface
+class EntityCreatorWorker implements EntityWorkerInterface, DelegatingInterface, WorkerSelfMapCommandsInterface, WorkerSelfInstancedInterface
 {
-    use WorkerMetaMapPropertiesTrait;
-    use IncludeOperatorTrait;
+    const WORKER_ID = 'entityCreatorWorker';
 
-    protected static function getDefaultMapping()
+    use DelegatingTrait;
+    use WorkerSelfInstanceTrait;
+    use WorkerMappingTrait {
+        getMapFieldFilters as private wmpGetFieldFilters;
+    }
+
+    public static function getSupportedCommands(): array
     {
         return [
-            CreateCommand::COMMAND_NAME => null,
+            CreateCommand::class,
         ];
     }
 
-    public function create($class = null, array $params = [])
+    public static function getMapFieldFilters(string $command): ?array
+    {
+        switch ($command) {
+            case CreateCommand::class:
+                return [
+                    EntityCommandInterface::FILTER_FIELD_ENTITY_CLASS => [
+                        FilterFieldInterface::PARAM_ASSERTION => Entity::class,
+                        FilterFieldInterface::PARAM_EXTRACTOR => RelationCommandEntityClassValueExtractor::class,
+                    ]
+                ];
+            default:
+                return self::wmpGetFieldFilters($command);
+        }
+    }
+
+
+    public function create(string  $class)
     {
         if (null === $class) {
             $class = Entity::class;
@@ -38,7 +64,7 @@ class EntityCreatorWorker implements WorkerInterface, CreatorInterface, IncludeO
             $class = "\\" . $class;
         }
         $entity = new $class();
-        if ($entity instanceof IncludeOperatorInterface) {
+        if ($entity instanceof DelegatingInterface) {
             $entity->setOperator($this->getOperator());
         }
         if ($entity instanceof EntityInterface) {
@@ -49,9 +75,11 @@ class EntityCreatorWorker implements WorkerInterface, CreatorInterface, IncludeO
 
     public function execute(CommandInterface $command)
     {
-        if ($command->getName() !== CreateCommand::COMMAND_NAME) {
-            throw new \InvalidArgumentException("Command type \" {$command->getName()} not supported");
+        switch (true) {
+            case $command instanceof CreateCommand:
+                return $this->create($command->getEntityClass());
+            default:
+                throw new NotSupportedCommandException($command);
         }
-        return $this->create($command->getClass(), $command->getParams());
     }
 }

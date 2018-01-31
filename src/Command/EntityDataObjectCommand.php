@@ -3,11 +3,8 @@
 
 namespace Akademiano\EntityOperator\Command;
 
-use Akademiano\Entity\Entity;
-use Akademiano\Operator\Command\Command;
-use Akademiano\Entity\EntityInterface;
 
-class LoadCommand extends EntityObjectCommand
+abstract class EntityDataObjectCommand extends EntityObjectCommand implements EntityDataCommandInterface
 {
     /** @var array */
     protected $data;
@@ -20,10 +17,7 @@ class LoadCommand extends EntityObjectCommand
         return $this->data;
     }
 
-    /**
-     * @param array $data
-     */
-    public function setData(array $data): LoadCommand
+    public function setData(array $data): self
     {
         $this->data = $data;
         return $this;

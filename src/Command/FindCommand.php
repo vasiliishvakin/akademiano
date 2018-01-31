@@ -3,20 +3,61 @@
 
 namespace Akademiano\EntityOperator\Command;
 
-use Akademiano\Operator\Command\Command;
-
-
-class FindCommand extends Command
+class FindCommand extends EntityCommand
 {
-    const COMMAND_NAME = "find";
+    /** @var array */
+    protected $criteria = [];
 
-    public function __construct($class = null, $criteria = [], $limit = null, $offset = null, $orderBy = null, $params = [])
+    /** @var integer */
+    protected $limit;
+
+    /** @var integer */
+    protected $offset;
+
+    /** @var string|array */
+    protected $orderBy;
+
+    public function getCriteria(): array
     {
-        $params["criteria"] = $criteria;
-        $params["limit"] = $limit;
-        $params["offset"] = $offset;
-        $params["orderBy"] = $orderBy;
-        parent::__construct($params, $class);
+        return $this->criteria;
     }
 
+    public function setCriteria(array $criteria): FindCommand
+    {
+        $this->criteria = $criteria;
+        return $this;
+    }
+
+    public function getLimit(): ?int
+    {
+        return $this->limit;
+    }
+
+    public function setLimit(?int $limit): FindCommand
+    {
+        $this->limit = $limit;
+        return $this;
+    }
+
+    public function getOffset(): ?int
+    {
+        return $this->offset;
+    }
+
+    public function setOffset(?int $offset): FindCommand
+    {
+        $this->offset = $offset;
+        return $this;
+    }
+
+    public function getOrderBy()
+    {
+        return $this->orderBy;
+    }
+
+    public function setOrderBy($orderBy = null): FindCommand
+    {
+        $this->orderBy = $orderBy;
+        return $this;
+    }
 }

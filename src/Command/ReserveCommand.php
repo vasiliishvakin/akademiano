@@ -3,17 +3,7 @@
 
 namespace Akademiano\EntityOperator\Command;
 
-use Akademiano\Operator\Command\Command;
-use Akademiano\Entity\EntityInterface;
-
-class ReserveCommand extends Command implements ReserveCommandInterface
+class ReserveCommand extends EntityObjectCommand
 {
-    const COMMAND_NAME = "reserve";
 
-    public function __construct(EntityInterface $entity)
-    {
-        $params["entity"] = $entity;
-        $class = get_class($entity);
-        parent::__construct($params, $class);
-    }
 }

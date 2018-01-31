@@ -3,7 +3,9 @@
 namespace Akademiano\EntityOperator\Exception;
 
 
-class BadRelatedFieldException extends \InvalidArgumentException
+use Akademiano\Operator\Exception\OperatorException;
+
+class BadRelatedFieldException extends OperatorException
 {
     public function __construct($message = null, $code = 0, \Exception $previous = null, $field = null)
     {

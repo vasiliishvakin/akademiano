@@ -6,8 +6,7 @@ namespace Akademiano\EntityOperator\Worker;
 
 interface KeeperInterface
 {
-    const WORKER_INFO_TABLE = 'table';
-    const WORKER_INFO_FIELDS = 'fields';
+    const PARAM_TABLEID = "tableId";
 
     public function get($id);
 

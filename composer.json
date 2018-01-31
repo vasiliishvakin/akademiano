@@ -1,6 +1,6 @@
 {
-  "name": "akademiano/entity-operator",
-  "description": "Entity Operator",
+  "name": "akademiano/operator-entities",
+  "description": "Operator Entities commands and workers",
   "license": "Apache-2.0",
   "minimum-stability": "dev",
   "prefer-stable": true,
@@ -12,13 +12,13 @@
   ],
   "autoload": {
     "psr-4": {
-      "Akademiano\\EntityOperator\\": "src/"
+      "Akademiano\\Operator\\Entities\\": "src/"
     }
   },
   "require": {
     "akademiano/utils": "^1.1@dev",
     "akademiano/config": "^1.1@dev",
-    "akademiano/operator": "^1.1@dev",
+    "akademiano/operator": "^2.0@dev",
     "akademiano/entity": "^1.1@dev",
     "akademiano/db-adapter": "^1.1@dev",
     "akademiano/core": "^1.1@dev",

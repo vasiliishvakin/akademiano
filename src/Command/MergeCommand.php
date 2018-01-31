@@ -6,15 +6,25 @@ namespace Akademiano\EntityOperator\Command;
 use Akademiano\Operator\Command\Command;
 use Akademiano\Entity\EntityInterface;
 
-class MergeCommand extends Command
+class MergeCommand extends EntityObjectCommand
 {
-    const COMMAND_NAME = "merge";
+    /** @var EntityInterface */
+    protected $entityMerged;
 
-    public function __construct(EntityInterface $entityA, EntityInterface $entityB, array $params = null)
+    /**
+     * @return EntityInterface
+     */
+    public function getEntityMerged(): EntityInterface
     {
-        $params["entityA"] = $entityA;
-        $params["entityB"] = $entityB;
-        $classA = get_class($entityA);
-        parent::__construct($params, $classA);
+        return $this->entityMerged;
+    }
+
+    /**
+     * @param EntityInterface $entityMerged
+     */
+    public function setEntityMerged(EntityInterface $entityMerged): MergeCommand
+    {
+        $this->entityMerged = $entityMerged;
+        return $this;
     }
 }

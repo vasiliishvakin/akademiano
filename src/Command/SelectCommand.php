@@ -3,16 +3,24 @@
 
 namespace Akademiano\EntityOperator\Command;
 
-use Akademiano\Operator\Command\Command;
 use Akademiano\Db\Adapter\D2QL\Select;
 
-class SelectCommand extends Command
+class SelectCommand extends EntityCommand
 {
-    const COMMAND_NAME = "select";
+    /** @var Select */
+    protected $select;
 
-    public function __construct($class, Select $select, array $params = [])
+    /**
+     * @return Select
+     */
+    public function getSelect(): Select
     {
-        $params["select"] = $select;
-        parent::__construct($params, $class);
+        return $this->select;
+    }
+
+    public function setSelect(Select $select): SelectCommand
+    {
+        $this->select = $select;
+        return $this;
     }
 }
