@@ -16,15 +16,15 @@
     }
   },
   "require": {
-    "akademiano/api": "^1.1",
-    "akademiano/core": "^1.1",
+    "akademiano/api": "^2.0",
+    "akademiano/core": "^1.2",
     "akademiano/entity": "^1.1",
-    "akademiano/entity-operator": "^1.1",
+    "akademiano/entity-operator": "^2.0",
     "akademiano/httpwarp": "^1.1",
-    "akademiano/router": "^1.1",
-    "akademiano/attach": "^1.1",
-    "akademiano/content-files": "^1.1",
-    "akademiano/content-files-images": "^1.1",
+    "akademiano/router": "^1.2",
+    "akademiano/attach": "^2.0",
+    "akademiano/content-files": "^2.0",
+    "akademiano/content-files-images": "^2.0",
 
     "bower-asset/ckeditor": "^4.5.4",
     "bower-asset/colorbox": "^1.6.3"

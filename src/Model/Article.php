@@ -4,6 +4,7 @@ namespace Akademiano\Content\Articles\Model;
 
 
 use Akademiano\Entity\ContentEntity;
+use Akademiano\EntityOperator\Command\FindCommand;
 use Akademiano\UserEO\Model\Utils\OwneredTrait;
 use Akademiano\Utils\Object\Collection;
 
@@ -31,7 +32,8 @@ class Article extends ContentEntity
             } else {
                 $criteria = ["entity" => $this];
             }
-            $this->files = $this->getOperator()->find(static::ENTITY_FILES_CLASS, $criteria);
+            $command = (new FindCommand(ArticleFile::class))->setCriteria($criteria);
+            $this->files = $this->delegate($command);
         }
         return $this->files;
     }

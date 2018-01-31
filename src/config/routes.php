@@ -30,16 +30,16 @@ return [
     RoutesStore::EDIT_ROUTE => [
         "patterns" => [
             "type" => \Akademiano\Router\RoutePattern::TYPE_REGEXP,
-            "value" => "/articles/id(?P<id>\w+)/edit",
+            "value" => "/admin/articles/id(?P<id>\w+)/edit",
         ],
-        "action" => ["index", "form"],
+        "action" => ["admin", "form"],
     ],
     RoutesStore::DELETE_ROUTE => [
         "patterns" => [
             "type" => \Akademiano\Router\RoutePattern::TYPE_REGEXP,
-            "value" => "/articles/(?P<id>\w+)/delete",
+            "value" => "/admin/articles/(?P<id>\w+)/delete",
         ],
-        "action" => ["index", "delete"],
+        "action" => ["admin", "delete"],
     ],
     RoutesStore::VIEW_ROUTE => [
         "patterns" => [
@@ -56,17 +56,24 @@ return [
         ],
         "action" => ["index", "list"],
     ],
+    \Akademiano\Content\Articles\AdminRoutesStore::LIST_ROUTE => [
+        "patterns" => [
+            "type" => \Akademiano\Router\RoutePattern::TYPE_FULL,
+            "value" => "/admin/articles",
+        ],
+        "action" => ["admin", "list"],
+    ],
     RoutesStore::ADD_ROUTE => [
         "patterns" => [
             "type" => \Akademiano\Router\RoutePattern::TYPE_FULL,
-            "value" => "/articles/add",
+            "value" => "/admin/articles/add",
         ],
-        "action" => ["index", "form"],
+        "action" => ["admin", "form"],
     ],
     RoutesStore::SAVE_ROUTE => [
         "patterns" => [
             "type" => \Akademiano\Router\RoutePattern::TYPE_FULL,
-            "value" => "/articles/save",
+            "value" => "/admin/articles/save",
         ],
         "action" => ["index", "save"],
     ],
