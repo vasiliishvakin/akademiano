@@ -17,8 +17,9 @@
   },
   "require": {
     "akademiano/utils": "^1.1@dev",
-    "akademiano/entity-operator": "^1.1@dev",
-    "akademiano/uuid": "^1.1@dev"
+    "akademiano/operator": "^2.0@dev",
+    "akademiano/entity-operator": "^2.0@dev",
+    "akademiano/uuid": "^2.0@dev"
   },
   "require-dev": {
     "codeception/codeception": "^2.2.10",

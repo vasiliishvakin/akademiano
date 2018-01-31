@@ -13,7 +13,7 @@ interface EntityApiInterface extends ApiInterface
 
     const DEFAULT_ORDER = "id";
 
-    public function count($criteria);
+    public function count($criteria = null);
 
     public function getDefaultOrder();
 

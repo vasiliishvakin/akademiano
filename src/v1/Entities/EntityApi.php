@@ -4,16 +4,25 @@
 namespace Akademiano\Api\v1\Entities;
 
 
-use Akademiano\Acl\AccessCheckInterface;
 use Akademiano\Api\v1\AbstractApi;
+use Akademiano\Delegating\DelegatingInterface;
+use Akademiano\Delegating\DelegatingTrait;
+use Akademiano\Delegating\OperatorInterface;
 use Akademiano\Entity\Entity;
 use Akademiano\Entity\EntityInterface;
-use Akademiano\EntityOperator\EntityOperator;
+use Akademiano\Entity\Uuid;
+use Akademiano\EntityOperator\Command\CountCommand;
+use Akademiano\EntityOperator\Command\CreateCommand;
+use Akademiano\EntityOperator\Command\DeleteCommand;
+use Akademiano\EntityOperator\Command\FindCommand;
+use Akademiano\EntityOperator\Command\GetCommand;
+use Akademiano\EntityOperator\Command\LoadCommand;
+use Akademiano\EntityOperator\Command\SaveCommand;
 use Akademiano\EntityOperator\Worker\KeeperInterface;
-use Akademiano\HeraldMessages\Model\Message;
 use Akademiano\Operator\Command\WorkerInfoCommand;
 use Akademiano\User\CustodianIncludeInterface;
 use Akademiano\User\CustodianIncludeTrait;
+use Akademiano\UUID\Command\UuidCreateCommand;
 use Akademiano\UUID\UuidComplexShortTables;
 use PhpOption\Some;
 use PhpOption\None;
@@ -22,52 +31,34 @@ use Akademiano\Api\v1\Items\ItemsPage;
 use Akademiano\Core\Exception\AccessDeniedException;
 use Akademiano\HttpWarp\Exception\NotFoundException;
 
-class EntityApi extends AbstractApi implements EntityApiInterface, CustodianIncludeInterface
+class EntityApi extends AbstractApi implements EntityApiInterface, CustodianIncludeInterface, DelegatingInterface
 {
     const ENTITY_CLASS = Entity::class;
     const API_ID = 'entityApi';
 
-    /** @var  EntityOperator */
-    protected $operator;
-
+    use DelegatingTrait;
     use CustodianIncludeTrait;
 
-    /**
-     * AbstractEntityApi constructor.
-     * @param EntityOperator $operator
-     */
-    public function __construct(EntityOperator $operator = null)
+    final public function __construct(OperatorInterface $operator)
     {
-        if (null !== $operator) {
-            $this->setOperator($operator);
-        }
+        $this->setOperator($operator);
     }
 
-    /**
-     * @return EntityOperator
-     */
-    public function getOperator()
+    public function intToUuidCST($value): UuidComplexShortTables
     {
-        return $this->operator;
-    }
-
-    /**
-     * @param EntityOperator $operator
-     */
-    public function setOperator(EntityOperator $operator)
-    {
-        $this->operator = $operator;
-    }
-
-    public function intToUuidCST($value)
-    {
-        return $this->getOperator()->create(UuidComplexShortTables::class, ["value" => $value]);
+        return $this->delegate(
+            (new UuidCreateCommand(UuidComplexShortTables::class))
+                ->setValue($value)
+        );
     }
 
 
-    public function count($criteria)
+    public function count($criteria = null)
     {
-        return $this->getOperator()->count(static::ENTITY_CLASS, $criteria);
+        return $this->delegate(
+            (new CountCommand(static::ENTITY_CLASS))
+                ->setCriteria($criteria ?? [])
+        );
     }
 
     public function getDefaultOrder()
@@ -92,8 +83,13 @@ class EntityApi extends AbstractApi implements EntityApiInterface, CustodianIncl
 
         $count = $this->count($criteria);
         $pagingMetadata = new PagingMetadata($count, $page, $itemsPerPage);
-        $items = $this->getOperator()->find(static::ENTITY_CLASS, $criteria, $itemsPerPage, $pagingMetadata->getItemsOffset(), $orderBy);
-
+        $items = $this->delegate(
+            (new FindCommand(static::ENTITY_CLASS))
+                ->setCriteria($criteria)
+                ->setLimit($itemsPerPage)
+                ->setOffset($pagingMetadata->getItemsOffset())
+                ->setOrderBy($orderBy)
+        );
         return new ItemsPage($items, $pagingMetadata);
     }
 
@@ -104,7 +100,11 @@ class EntityApi extends AbstractApi implements EntityApiInterface, CustodianIncl
         }
 
         /** @var EntityInterface $item */
-        $item = $this->getOperator()->find(static::ENTITY_CLASS, $criteria, 1)->firstOrFalse();
+        $item = $this->delegate(
+            (new FindCommand(static::ENTITY_CLASS))
+                ->setCriteria($criteria)
+                ->setLimit(1)
+        )->firstOrFalse();
 
         if (!$item) {
             return None::create();
@@ -135,14 +135,21 @@ class EntityApi extends AbstractApi implements EntityApiInterface, CustodianIncl
             throw new AccessDeniedException(sprintf('Access Denied to "%s"', $resource), null, null, $resource);
         }
 
-        $items = $this->getOperator()->find(static::ENTITY_CLASS, $criteria, $orderBy);
+        $items = $item = $this->delegate(
+            (new FindCommand(static::ENTITY_CLASS))
+                ->setCriteria($criteria)
+                ->setOrderBy($orderBy)
+        );
 
         return $items;
     }
 
     public function getRaw($id)
     {
-        $item = $this->getOperator()->get(static::ENTITY_CLASS, $id);
+        $item = $this->delegate(
+            (new GetCommand(static::ENTITY_CLASS))
+                ->setId($id)
+        );
 
         if (!$item) {
             return null;
@@ -181,10 +188,10 @@ class EntityApi extends AbstractApi implements EntityApiInterface, CustodianIncl
                 new NotFoundException("Exist entity with is {$id} not found")
             );
         } else {
-            $item = $this->getOperator()->create(static::ENTITY_CLASS);
+            $item = $this->delegate(new CreateCommand(static::ENTITY_CLASS));
         }
 
-        $this->getOperator()->load($item, $data);
+        $this->delegate((new LoadCommand($item))->setData($data));
         return $this->saveEntity($item);
     }
 
@@ -206,7 +213,7 @@ class EntityApi extends AbstractApi implements EntityApiInterface, CustodianIncl
             $entity->setOwner($this->getCustodian()->getCurrentUser());
         }
 
-        $this->getOperator()->save($entity);
+        $this->delegate(new SaveCommand($entity));
 
         return $entity;
     }
@@ -227,15 +234,14 @@ class EntityApi extends AbstractApi implements EntityApiInterface, CustodianIncl
             throw new AccessDeniedException(sprintf('Access Denied to "%s"', $resource), null, null, $resource);
         }
 
-        return $this->getOperator()->delete($entity);
+        return $this->delegate(new DeleteCommand($entity));
 
     }
 
     public function getFields()
     {
         $command = new WorkerInfoCommand(KeeperInterface::WORKER_INFO_FIELDS, Message::class);
-        $fields = $this->getOperator()->execute($command);
+        $fields = $this->delegate($command);
         return $fields;
     }
-
 }
