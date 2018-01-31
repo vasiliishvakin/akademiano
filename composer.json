@@ -18,9 +18,9 @@
   "require": {
     "akademiano/utils": "^1.1@dev",
     "akademiano/entity": "^1.1@dev",
-    "akademiano/entity-operator": "^1.1@dev",
-    "akademiano/api": "^1.1@dev",
-    "akademiano/content-files": "^1.1@dev"
+    "akademiano/entity-operator": "^2.0@dev",
+    "akademiano/api": "^2.0@dev",
+    "akademiano/content-files": "^2.0@dev"
   },
   "require-dev": {
     "codeception/codeception": "^2.3.5",

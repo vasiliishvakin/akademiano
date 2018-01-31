@@ -9,5 +9,5 @@ use Akademiano\Content\Files\Model\FilesWorker;
 class RelatedFilesWorker extends FilesWorker
 {
     const WORKER_NAME = "relatedFilesWorker";
-    const EXPAND_FIELDS = ["title", "type", "sub_type", "path", "position", "size", "mime_type"];
+    const FIELDS = ["title", "type", "sub_type", "path", "position", "size", "mime_type"];
 }
