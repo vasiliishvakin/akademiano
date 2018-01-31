@@ -215,12 +215,21 @@ class ApplicationComponentsProvider implements ServiceProviderInterface
         if ($view instanceof AbstractView) {
             //themes
             $theme = $viewConfig->get("theme", "default");
+            $adminTheme = $viewConfig->get("adminTheme");
+
             $themeContainedDirs = [];
             if ($theme !== "default") {
                 if ($pimple["currentSite"] && ($themeDir = $pimple["currentSite"]->getTheme($theme))) {
                     $themeContainedDirs[] = (string)$themeDir;
                 }
+                if ($adminTheme && $pimple["currentSite"] && ($themeDir = $pimple["currentSite"]->getTheme($adminTheme))) {
+                    $themeContainedDirs[] = (string)$themeDir;
+                }
+
                 if ($pimple["sharedSite"] && ($themeDir = $pimple["sharedSite"]->getTheme($theme))) {
+                    $themeContainedDirs[] = (string)$themeDir;
+                }
+                if ($adminTheme && $pimple["sharedSite"] && ($themeDir = $pimple["sharedSite"]->getTheme($adminTheme))) {
                     $themeContainedDirs[] = (string)$themeDir;
                 }
 

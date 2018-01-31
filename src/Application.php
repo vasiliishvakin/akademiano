@@ -428,7 +428,7 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
                 $resource = $aclManager->getResource();
 
                 switch ($action) {
-                    case 'listAction':
+                     case 'listAction':
                         $resourceArray = explode(':', $resource);
                         if (count($resourceArray) === 1) {
                             $resourceArray[] = 'list';
