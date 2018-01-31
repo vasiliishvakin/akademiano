@@ -3,13 +3,12 @@
 namespace Akademiano\UserEO\Model;
 
 
-use Akademiano\Delegating\Command\GetCommand;
 use Akademiano\Delegating\DelegatingTrait;
 use Akademiano\Entity\GroupInterface;
 use Akademiano\Entity\NamedEntity;
 use Akademiano\Entity\UserInterface;
-use Akademiano\EntityOperator\EntityOperator;
 use Akademiano\Utils\StringUtils;
+use Akademiano\EntityOperator\Command\GetCommand;
 
 class User extends NamedEntity implements UserInterface
 {
@@ -58,8 +57,7 @@ class User extends NamedEntity implements UserInterface
     public function getGroup()
     {
         if (!$this->group instanceof GroupInterface) {
-            /** @var EntityOperator $operator */
-            $command = new GetCommand($this->group, Group::class);
+            $command = (new GetCommand(Group::class))->setId($this->group);
             $this->group = $this->delegate($command, true);
         }
         return $this->group;

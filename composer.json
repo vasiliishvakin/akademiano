@@ -18,7 +18,7 @@
   "require": {
     "akademiano/entity": "^1.1@dev",
     "akademiano/user": "^1.1@dev",
-    "akademiano/entity-operator": "^1.1@dev",
+    "akademiano/entity-operator": "^2.0@dev",
     "akademiano/entity-operator-ext": "^1.1@dev",
     "fzaninotto/faker": "^1.6",
     "nesbot/carbon": "^1.22",

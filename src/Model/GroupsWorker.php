@@ -3,11 +3,16 @@
 namespace Akademiano\UserEO\Model;
 
 
-use Akademiano\EntityOperator\Worker\PostgresWorker;
+use Akademiano\EntityOperator\Worker\NamedEntitiesWorker;
 
-class GroupsWorker extends PostgresWorker
+class GroupsWorker extends NamedEntitiesWorker
 {
+    const WORKER_ID = 'groupsWorker';
     const TABLE_ID = 10;
-    const TABLE_NAME = "groups";
-    const EXPAND_FIELDS = ["title", "description"];
+    const TABLE_NAME = 'groups';
+
+    public static function getEntityClassForMapFilter()
+    {
+        return Group::class;
+    }
 }

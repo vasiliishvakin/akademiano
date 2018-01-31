@@ -4,11 +4,12 @@
 namespace Akademiano\UserEO;
 
 
+use Akademiano\Delegating\DelegatingInterface;
+use Akademiano\Delegating\DelegatingTrait;
 use Akademiano\Entity\UserInterface;
 use Akademiano\Entity\UuidInterface;
-use Akademiano\EntityOperator\EntityOperator;
-use Akademiano\Operator\DelegatingInterface;
-use Akademiano\Operator\DelegatingTrait;
+use Akademiano\EntityOperator\Command\FindCommand;
+use Akademiano\EntityOperator\Command\GetCommand;
 use Akademiano\User\GuestUser;
 use Akademiano\User\SimpleCustodian;
 use Akademiano\UserEO\Model\Request\HttpSessionDataTool;
@@ -19,7 +20,7 @@ class Custodian extends SimpleCustodian implements DelegatingInterface
 {
     use DelegatingTrait;
 
-    /** @var  RequestDataToolInterface*/
+    /** @var  RequestDataToolInterface */
     protected $rdt;
 
     /**
@@ -48,9 +49,7 @@ class Custodian extends SimpleCustodian implements DelegatingInterface
         if (!$this->currentUser) {
             $uid = $this->getRdt()->getCurrentUserId();
             if ($uid) {
-                /** @var EntityOperator $operator */
-                $operator = $this->getOperator();
-                $user = $operator->get(User::class, $uid);
+                $user = $this->delegate((new GetCommand(User::class))->setId($uid));
                 $this->currentUser = $user instanceof UserInterface ? $user : new GuestUser();
             } else {
                 $this->currentUser = new GuestUser();
@@ -59,12 +58,19 @@ class Custodian extends SimpleCustodian implements DelegatingInterface
         return $this->currentUser;
     }
 
+    /**
+     * @param $identifier
+     * @param $password
+     * @return UserInterface|bool|null
+     * @throws \Exception
+     */
     public function authenticate($identifier, $password)
     {
-        /** @var EntityOperator $operator */
-        $operator = $this->getOperator();
         /** @var User $user */
-        $user = $operator->find(User::class, ["email" => $identifier], 1)->firstOrFail();
+        $user = $this->delegate((new FindCommand(User::class))
+            ->setCriteria(["email" => $identifier])
+            ->setLimit(1)
+        )->firstOrFail();
         return $user->verifyPassword($password);
     }
 

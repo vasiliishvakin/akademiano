@@ -30,10 +30,10 @@ class UserController extends AkademianoController
         $usersApi = $this->getDiContainer()["usersApi"];
         $usersApi->getAclManager()->disableAccessCheck();
         $user = $usersApi->findOne(["email" => $email, "active" => true]);
-        $usersApi->getAclManager()->enableAccessCheck();
         if ($user->isEmpty()) {
             return null;
         }
+        $usersApi->getAclManager()->enableAccessCheck();
         $custodian->sessionStart($user->get());
         $redirectUrl = $this->getRequest()->getParam("r", $this->getRouteUrl("root"));
         $this->redirectToUrl($redirectUrl);

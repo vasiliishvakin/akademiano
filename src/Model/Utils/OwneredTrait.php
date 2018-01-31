@@ -2,9 +2,9 @@
 
 namespace Akademiano\UserEO\Model\Utils;
 
-use Akademiano\Delegating\OperatorInterface;
+use Akademiano\Delegating\Command\CommandInterface;
 use Akademiano\Entity\UserInterface;
-use Akademiano\EntityOperator\EntityOperator;
+use Akademiano\EntityOperator\Command\GetCommand;
 use Akademiano\UserEO\Model\User;
 
 trait OwneredTrait
@@ -12,7 +12,7 @@ trait OwneredTrait
     /** @var UserInterface */
     protected $owner;
 
-    abstract public function getOperator():?OperatorInterface;
+    abstract public function delegate(CommandInterface $command,  bool $throwOnEmptyOperator = false);
 
     protected function getOwnerClass()
     {
@@ -27,9 +27,8 @@ trait OwneredTrait
     public function getOwner():?UserInterface
     {
         if (null !== $this->owner && !$this->owner instanceof UserInterface) {
-            /** @var EntityOperator $operator */
-            $operator = $this->getOperator();
-            $this->owner = $operator->get($this->getOwnerClass(), $this->owner);
+            $command = (new GetCommand($this->getOwnerClass()))->setId($this->owner);
+            $this->owner = $this->delegate($command);
         }
         return $this->owner;
     }

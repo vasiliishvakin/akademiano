@@ -1,17 +1,26 @@
 {% extends "adminLayout.twig" %}
 
-{% block mainContainerContent %}
+{% block mainContainer %}
     <div class="row">
-        <div class="col-md-8 offset-1">
-            <div class="card">
-                <form action="{{ url(item_save_route) }}" method="POST" enctype="multipart/form-data">
-                    {% if item.id %}
-                        <input name="id" type="hidden" value="{{ item.id|dechex }}"/>
-                    {% endif %}
-                    <div class="card-header card-header-{{ item ? "primary" : "success" }}">
-                        {{ item ? "Редактирование" : "Добавление" }} пользователи {{ item ? "№ #{item.id.hex}" }}
-                    </div>
-                    <div class="card-block">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">{{ item ? "Редактирование" : "Добавление" }}
+                        пользователя {{ item ? "№ #{item.id.hex}" }}</h3>
+                    {#<div class="box-tools pull-right">
+                        <!-- Collapse Button -->
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                    </div>#}
+                    <!-- /.box-tools -->
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <form action="{{ url(item_save_route) }}" method="POST" enctype="multipart/form-data">
+                        {% if item.id %}
+                            <input name="id" type="hidden" value="{{ item.id|dechex }}"/>
+                        {% endif %}
                         <div class="form-group">
                             <label class="form-control-label" for="title">Логин</label>
                             <input type="text" class="form-control" id="title" name="title" value="{{ item.title }}">
@@ -20,35 +29,46 @@
                             <label for="group">Группа</label>
                             <select class="form-control" id="group" name="group" required>
                                 {% if not item.id %}
-                                    <option disabled selected value style="display: none"> -- select an option --</option>
+                                    <option disabled selected value style="display: none"> -- select an option --
+                                    </option>
                                 {% endif %}
                                 {% for group in groups %}
-                                    <option value="{{ group.id }}" {{ group.id == item.group.id ?  "selected"}}>{{ group.title }}</option>
+                                    <option value="{{ group.id }}" {{ group.id == item.group.id ?  "selected" }}>{{ group.title }}</option>
                                 {% endfor %}
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="content">Комментарий</label>
-                            <textarea class="form-control" id="content" name="content" rows="5">{{ item.content |raw }}</textarea>
+                            <textarea class="form-control" id="content" name="content"
+                                      rows="5">{{ item.content |raw }}</textarea>
                         </div>
                         <div class="form-group">
                             <label class="form-control-label" for="email">email</label>
-                            <input type="email" class="form-control" id="email" name="email" value="{{ item.email }}" required>
+                            <input type="email" class="form-control" id="email" name="email" value="{{ item.email }}"
+                                   required>
                         </div>
                         <div class="form-group">
                             <label class="form-control-label" for="password">пароль</label>
-                            <input type="password" class="form-control" id="password" name="newPassword" {{ item.id ?: "required" }}>
+                            <input type="password" class="form-control" id="password"
+                                   name="newPassword" {{ item.id ?: "required" }}>
                         </div>
 
                         <div class="form-group">
-                            <a href="{{ url(items_list_route) }}" role="button" class="btn btn-outline-primary">Отмена</a>
+                            <a href="{{ url(items_list_route) }}" role="button"
+                               class="btn btn-outline-primary">Отмена</a>
                             &nbsp;
                             &nbsp;
                             <button type="submit" class="btn btn-success">Сохранить</button>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
+                <!-- /.box-body -->
+                {#<div class="box-footer">
+
+                </div>#}
+                <!-- box-footer -->
             </div>
+            <!-- /.box -->
         </div>
     </div>
-{% endblock mainContainerContent %}
+{% endblock mainContainer %}
