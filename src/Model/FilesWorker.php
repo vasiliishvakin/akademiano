@@ -4,12 +4,11 @@
 namespace Akademiano\Content\Files\Model;
 
 
-use Akademiano\EntityOperator\Worker\PostgresWorker;
+use Akademiano\EntityOperator\Worker\NamedEntitiesWorker;
 
-class FilesWorker extends PostgresWorker
+class FilesWorker extends NamedEntitiesWorker
 {
-    const TABLE_ID_INC = 1;
-    const TABLE_ID = 13;
-    const TABLE_NAME = "files_linked";
-    const EXPAND_FIELDS = ["title", "type", "sub_type", "path", "position", "size", "mime_type"];
+    const TABLE_ID = 14;
+    const TABLE_NAME = "files";
+    const FIELDS = ["type", "sub_type", "path", "position", "size", "mime_type"];
 }

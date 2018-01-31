@@ -241,7 +241,7 @@ class File extends NamedEntity implements DelegatingInterface
     {
         if (null === $this->extension) {
             $command = new MimeyExtensionCommand($this);
-            $this->extension = $this->getOperator()->execute($command);
+            $this->extension = $this->delegate($command);
         }
         return $this->extension;
     }

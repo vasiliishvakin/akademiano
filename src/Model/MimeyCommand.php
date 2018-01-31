@@ -4,16 +4,24 @@
 namespace Akademiano\Content\Files\Model;
 
 
-use Akademiano\Delegating\Command\Command;
+use Akademiano\Delegating\Command\CommandInterface;
 
-abstract  class MimeyCommand extends Command
+abstract  class MimeyCommand implements CommandInterface
 {
-    const COMMAND_NAME = 'mimey';
+    /** @var File */
+    protected $file;
 
     public function __construct(File $file)
     {
-        $class = get_class($file);
-        $params['file'] = $file;
-        parent::__construct($params, $class);
+        $this->file = $file;
     }
+
+    /**
+     * @return File
+     */
+    public function getFile(): File
+    {
+        return $this->file;
+    }
+
 }

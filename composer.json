@@ -16,12 +16,12 @@
     }
   },
   "require": {
-    "akademiano/utils": "^1.0.0-beta.6",
-    "akademiano/entity": "^1.0.0-beta.1",
-    "akademiano/entity-operator": "^1.0.0-beta.1",
-    "akademiano/api": "^1.0.0-beta.1",
-    "hashids/hashids": "^2.0",
-    "akademiano/user-eo": "^1.0.0-beta.5",
+    "akademiano/utils": "^1.1@dev",
+    "akademiano/entity": "^1.1@dev",
+    "akademiano/entity-operator": "^2.0@dev",
+    "akademiano/api": "^2.0@dev",
+    "hashids/hashids": "^2.0@dev",
+    "akademiano/user-eo": "^2.0@dev",
     "ralouphie/mimey": "^1.0.8"
   }
 }

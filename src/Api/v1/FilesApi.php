@@ -13,7 +13,9 @@ use Akademiano\Config\ConfigLoader;
 use Akademiano\Core\Exception\AccessDeniedException;
 use Akademiano\Entity\EntityInterface;
 use Akademiano\EntityOperator\Command\CreateCommand;
+use Akademiano\EntityOperator\Command\DeleteCommand;
 use Akademiano\EntityOperator\Command\GenerateIdCommand;
+use Akademiano\EntityOperator\Command\LoadCommand;
 use Akademiano\HttpWarp\File\FileInterface;
 use Akademiano\Operator\Exception\NotFoundSuitableWorkerException;
 use Akademiano\Utils\FileSystem;
@@ -84,10 +86,10 @@ class FilesApi extends EntityApi implements ConfigurableInterface
 
         $createCommand = new CreateCommand(static::ENTITY_CLASS);
         /** @var File $newFile */
-        $newFile = $this->getOperator()->execute($createCommand);
+        $newFile = $this->delegate($createCommand);
 
         if (!empty($attributes)) {
-            $this->getOperator()->load($newFile, $attributes);
+            $this->delegate((new LoadCommand($newFile))->setData($attributes));
         }
 
         $newFile->setId($id);
@@ -104,7 +106,7 @@ class FilesApi extends EntityApi implements ConfigurableInterface
     public function generateUuid()
     {
         $idGenerateCommand = new GenerateIdCommand(static::ENTITY_CLASS);
-        $id = $this->getOperator()->execute($idGenerateCommand);
+        $id = $this->delegate($idGenerateCommand);
         return new UuidComplexShortTables($id);
     }
 
@@ -187,7 +189,7 @@ class FilesApi extends EntityApi implements ConfigurableInterface
             }
         }
 
-        return $this->getOperator()->delete($entity);
+        return $this->delegate(new DeleteCommand($entity));
     }
 
     public function isPublic()
@@ -198,12 +200,8 @@ class FilesApi extends EntityApi implements ConfigurableInterface
     public function formatFile(File $file, string $extension, string $template)
     {
         $savePath = $this->getSavePath();
-        $command = new FileFormatCommand($file, $savePath, $extension, $template, $this->isPublic());
-        try {
-            $formattedFile = $this->getOperator()->execute($command);
-        } catch (NotFoundSuitableWorkerException $e) {
-            return null;
-        }
+        $command = (new FileFormatCommand($file, $savePath, $extension))->setTemplate($template)->setPublic($this->isPublic());
+        $formattedFile = $this->delegate($command);
         return $formattedFile;
     }
 }
