@@ -13,6 +13,7 @@ use Akademiano\Utils\Exception\DIContainerAlreadyExistsServiceException;
 use Akademiano\HttpWarp\Environment;
 use Akademiano\HttpWarp\Exception\NotFoundException;
 use Akademiano\Entity\UserInterface;
+use Akademiano\Utils\Object\Prototype\ArrayableInterface;
 use Akademiano\Utils\Parts\DIContainerTrait;
 use Composer\Autoload\ClassLoader;
 use Akademiano\Core\Exception\AccessDeniedException;
@@ -466,7 +467,7 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
         }
     }
 
-    public function prepareResponse(ControllerInterface $controller, array $result = null): Response
+    public function prepareResponse(ControllerInterface $controller, $result = null): Response
     {
         $acceptTypes = $this->getEnvironment()->getAccept();
         $response = $controller->getResponse();
@@ -482,6 +483,9 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
                     //case "text/html":
                     if ($controller->isAutoRender()) {
                         if (!empty($result)) {
+                            if ($result instanceof ArrayableInterface) {
+                                $result = $result->toArray();
+                            }
                             $controller->getView()->assignArray($result);
                         }
                         $body = $controller->getView()->render();
