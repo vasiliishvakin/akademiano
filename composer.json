@@ -1,0 +1,31 @@
+{
+  "name": "akademiano/content-tags",
+  "description": "Tags module",
+  "license": "Apache-2.0",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "authors": [
+    {
+      "name": "Vasiliy Shvakin",
+      "email": "mrdatamapper@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Akademiano\\Content\\Tags\\": "src/"
+    }
+  },
+  "require": {
+    "akademiano/api": "^2.0",
+    "akademiano/core": "^1.2",
+    "akademiano/entity": "^1.1",
+    "akademiano/entity-operator": "^2.0",
+    "akademiano/httpwarp": "^1.1",
+    "akademiano/router": "^1.2"
+  },
+  "require-dev": {
+    "codeception/codeception": "^2.2.10",
+    "satooshi/php-coveralls": "^1.0.1",
+    "mockery/mockery": "^0.9.9"
+  }
+}
