@@ -73,6 +73,14 @@ class Request implements EnvironmentIncludeInterface
         return $this->params;
     }
 
+    public function setParam(string $name, $value)
+    {
+        if (is_null($this->params)) {
+            $this->getParams();
+        }
+        $this->params[$name] = $value;
+    }
+
     public function getParam($key, $default = null)
     {
         if (!isset($this->getParams()[$key])) {
@@ -93,7 +101,7 @@ class Request implements EnvironmentIncludeInterface
 
     public function hasParam($name)
     {
-        return isset($this->getParams()[$name]);
+        return array_key_exists($name, $this->getParams());
     }
 
     public function getDecodeJson($key, $default = null)
