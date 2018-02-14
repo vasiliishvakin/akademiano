@@ -141,46 +141,58 @@ class Collection extends ArrayObject implements ArrayableInterface, \JsonSeriali
     {
         $method = $this->itemFieldNameToCallable($field);
 
+        //prepare $needValue
+        if ($operator === 'in') {
+            $needValue = (array)$needValue;
+        }
+
         $data = [];
         foreach ($this as $item) {
             $value = call_user_func($method, $item);
             switch ($operator) {
-                case "===" :
+                case '===' :
                     if ($value === $needValue) {
                         $data[] = $item;
                     }
                     break;
-                case "!==" :
-                case "<>" :
+                case '!==' :
+                case '<>' :
                     if ($value !== $needValue) {
                         $data[] = $item;
                     }
                     break;
-                case "==" :
+                case '==' :
                     if ($value === $needValue) {
                         $data[] = $item;
                     }
                     break;
-                case "<":
+                case '<':
                     if ($value < $needValue) {
                         $data[] = $item;
                     }
                     break;
-                case ">":
+                case '>':
                     if ($value > $needValue) {
                         $data[] = $item;
                     }
                     break;
-                case "<=":
+                case '<=':
                     if ($value <= $needValue) {
                         $data[] = $item;
                     }
                     break;
-                case ">=":
+                case '>=':
                     if ($value >= $needValue) {
                         $data[] = $item;
                     }
                     break;
+                case 'in':
+                    if (in_array($value, $needValue)) {
+                        $data[] = $item;
+                    }
+                    break;
+                default:
+                    throw new \InvalidArgumentException(sprintf('%s method %s not support argument operator %s', __CLASS__, __METHOD__, $operator));
             }
         }
         return new Collection($data);
