@@ -4,11 +4,9 @@ namespace Akademiano\Content\Tags\Model;
 
 
 use Akademiano\Entity\NamedEntity;
-use Akademiano\Entity\UuidInterface;
 use Akademiano\EntityOperator\Command\FindCommand;
 use Akademiano\UserEO\Model\Utils\OwneredTrait;
 use Akademiano\Utils\Object\Collection;
-use function foo\func;
 
 class Tag extends NamedEntity
 {
@@ -34,7 +32,7 @@ class Tag extends NamedEntity
         return $this->dictionaries;
     }
 
-    public function setDictionaries(array $dictionaries): void
+    public function setDictionaries(iterable $dictionaries): void
     {
         if (count($dictionaries) === 0) {
             $this->dictionaries = new Collection([]);
