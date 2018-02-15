@@ -65,6 +65,8 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
     const FIELDS = [];
     const UNMERGED_FIELDS = [];
     const EXT_ENTITY_FIELDS = [];
+    const UNSAVED_FIELDS = [];
+
 
     protected $tableId;
 
@@ -74,9 +76,14 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
     /** @var array */
     private $fields;
 
-    private $unmergedFields = [];
+    /** @var array */
+    private $unmergedFields;
 
-    private $extEntityFields = [];
+    /** @var array */
+    private $extEntityFields;
+
+    /** @var array */
+    private $unsavedFields;
 
     private $workerId;
 
@@ -239,7 +246,7 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
     /**
      * @return array
      */
-    public function getFields()
+    public function getFields(): array
     {
         if (null === $this->fields) {
             $this->fields = ClassTools::getClassTreeArrayConstant(get_class($this), 'FIELDS');
@@ -250,7 +257,7 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
     /**
      * @return array
      */
-    public function getUnmergedFields()
+    public function getUnmergedFields(): array
     {
         if (null === $this->unmergedFields) {
             $this->unmergedFields = ClassTools::getClassTreeArrayConstant(get_class($this), 'UNMERGED_FIELDS');
@@ -258,12 +265,23 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
         return $this->unmergedFields;
     }
 
-    public function getExtEntityFields()
+    public function getExtEntityFields(): array
     {
         if (null === $this->extEntityFields) {
             $this->extEntityFields = ClassTools::getClassTreeArrayConstant(get_class($this), 'EXT_ENTITY_FIELDS');
         }
         return $this->extEntityFields;
+    }
+
+    /**
+     * @return array
+     */
+    public function getUnsavedFields(): array
+    {
+        if (null === $this->unsavedFields) {
+            $this->unsavedFields = ClassTools::getClassTreeArrayConstant(get_class($this), 'UNSAVED_FIELDS');
+        }
+        return $this->unsavedFields;
     }
 
     /**
@@ -427,6 +445,13 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
         $adapter = $this->getAdapter();
         $table = $this->getTable();
 
+        //try remove unsaved fields
+        $unsavedFields = $this->getUnsavedFields();
+        if ($unsavedFields) {
+            $unsavedFields = array_flip($unsavedFields);
+            $data = array_diff_key($data, $unsavedFields);
+        }
+
         if (!$isExisting) {
             return $adapter->insert($table, $data);
         } else {
@@ -436,20 +461,23 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
         }
     }
 
-    public function delete($id)
+    public
+    function delete($id)
     {
         $adapter = $this->getAdapter();
         $table = $this->getTable();
         return $adapter->delete($table, ["id" => $id]);
     }
 
-    public function load(EntityInterface $entity, array $data)
+    public
+    function load(EntityInterface $entity, array $data)
     {
         $fields = $this->getFields();
         foreach ($fields as $field) {
             $objectAttribute = StringUtils::lowDashToCamelCase($field);
-            $value = isset($data[$objectAttribute]) ? $data[$objectAttribute] : (isset($data[$field]) ? $data[$field] : null);
-            if ($value) {
+            $valueExist = array_key_exists($objectAttribute, $data) ? true : ((array_key_exists($field, $data) ? true : false));
+            if ($valueExist) {
+                $value = isset($data[$objectAttribute]) ? $data[$objectAttribute] : $data[$field];
                 if (is_string($value)) {
                     if (Uuid::isHexUuid($value)) {
                         $value = hexdec($value);
@@ -464,7 +492,8 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
         return $entity;
     }
 
-    public function reserve(EntityInterface $entity)
+    public
+    function reserve(EntityInterface $entity)
     {
         $fields = $this->getFields();
         $data = [];
@@ -487,7 +516,8 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
         return $data;
     }
 
-    public function filterFieldToPostgresType($value, $fieldName = null, EntityInterface $entity = null)
+    public
+    function filterFieldToPostgresType($value, $fieldName = null, EntityInterface $entity = null)
     {
         if ($value instanceof EntityInterface) {
             $id = $value->getId();
@@ -513,7 +543,8 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
         }
     }
 
-    public function merge(EntityInterface $entityA, EntityInterface $entityB)
+    public
+    function merge(EntityInterface $entityA, EntityInterface $entityB)
     {
         $fields = $this->getFields();
         $unmergedFields = $this->getUnmergedFields();
@@ -534,8 +565,9 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
         return $entityA;
     }
 
-    //TODO Check use tableId
-    public function genId()
+//TODO Check use tableId
+    public
+    function genId()
     {
         $tableIdRaw = $this->getTableId();
         $tableId = filter_var($tableIdRaw, FILTER_VALIDATE_INT, ["options" => ["min_range" => 1, "max_range" => 512]]);
@@ -548,7 +580,8 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
         return $result;
     }
 
-    public function filterCriteria(array $criteria)
+    public
+    function filterCriteria(array $criteria)
     {
         foreach ($criteria as $key => $value) {
             $criteria[$key] = $this->filterFieldToPostgresType($value, $key);
@@ -556,7 +589,8 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
         return $criteria;
     }
 
-    public function getAttribute($attribute, array $params = [])
+    public
+    function getAttribute($attribute, array $params = [])
     {
         switch ($attribute) {
             case KeeperWorkerInfoCommand::ATTRIBUTE_TABLE_ID :
@@ -579,14 +613,16 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
         }
     }
 
-    public function createCriteria()
+    public
+    function createCriteria()
     {
         $criteria = new Criteria();
         $criteria->setAdapter($this->getAdapter());
         return $criteria;
     }
 
-    public function createSelect()
+    public
+    function createSelect()
     {
         $select = new Select();
         $select->setAdapter($this->getAdapter());
@@ -594,7 +630,8 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
         return $select;
     }
 
-    public function select(Select $select)
+    public
+    function select(Select $select)
     {
         $select->addTable($this->getTable());
         $result = $this->getAdapter()->selectAndSmartFetch($select->toSql());

@@ -2,17 +2,13 @@
 
 namespace Akademiano\EntityOperator\Worker;
 
-use Akademiano\Entity\Entity;
 use Akademiano\Entity\EntityInterface;
-use Akademiano\EntityOperator\Worker\RelationsBetweenTrait;
+use Akademiano\Entity\RelationsBetweenTrait;
 use Akademiano\EntityOperator\Command\FindRelatedCommand;
-use Akademiano\EntityOperator\Entity\RelationEntity;
-use Akademiano\EntityOperator\EntityOperator;
 use Akademiano\Delegating\Command\CommandInterface;
-use Akademiano\Delegating\DelegatingInterface;
-use Akademiano\Delegating\DelegatingTrait;
+use Akademiano\Entity\RelationEntity;
 
-class RelationsWorker extends PostgresEntityWorker implements DelegatingInterface
+class RelationsWorker extends EntitiesWorker
 {
     const FIELD_FIRST = "first";
     const FIELD_SECOND = "second";
@@ -20,14 +16,26 @@ class RelationsWorker extends PostgresEntityWorker implements DelegatingInterfac
     const FIRST_CLASS = RelationEntity::FIRST_CLASS;
     const SECOND_CLASS = RelationEntity::SECOND_CLASS;
 
-    const TABLE_ID_INC = 1;
-    const TABLE_ID = 4;
-    const TABLE_NAME = "relations";
-    const FIELDS = ["first", "second"];
-    const ENTITY_CLASS = RelationEntity::class;
 
-    use DelegatingTrait;
+    const WORKER_ID = 'relationsWorker';
+    const TABLE_NAME = 'relations';
+    const FIELDS = [self::FIELD_FIRST, self::FIELD_SECOND];
+
+    const EXT_ENTITY_FIELDS = ['first', 'second'];
+
     use RelationsBetweenTrait;
+
+    public static function getSupportedCommands(): array
+    {
+        $commands = parent::getSupportedCommands();
+        $commands[] = FindRelatedCommand::class;
+        return $commands;
+    }
+
+    public static function getEntityClassForMapFilter()
+    {
+        return RelationEntity::class;
+    }
 
     public function getFirstField()
     {
@@ -44,7 +52,7 @@ class RelationsWorker extends PostgresEntityWorker implements DelegatingInterfac
      */
     public function getFirstClass()
     {
-        return static::ENTITY_CLASS;
+        return static::FIRST_CLASS;
     }
 
     /**
@@ -57,15 +65,9 @@ class RelationsWorker extends PostgresEntityWorker implements DelegatingInterfac
 
     public function execute(CommandInterface $command)
     {
-        switch ($command->getName()) {
-            case FindRelatedCommand::COMMAND_NAME : {
-                $entity = $command->getParams("entity");
-                return $this->findRelated($entity);
-                break;
-            }
-            default: {
+        switch (true) {
+            default:
                 return parent::execute($command);
-            }
         }
     }
 

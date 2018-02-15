@@ -6,4 +6,5 @@ return [
     \Akademiano\EntityOperator\Worker\TranslatorDataToObjectEntityWorker::class,
     \Akademiano\EntityOperator\Worker\TranslatorObjectToDataEntityWorker::class,
     \Akademiano\EntityOperator\Worker\SetEntityExistingEntityWorker::class,
+    \Akademiano\EntityOperator\Worker\RelationsWorker::class,
 ];
