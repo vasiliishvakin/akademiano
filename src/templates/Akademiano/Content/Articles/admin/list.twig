@@ -21,6 +21,7 @@
                     <th>photo</th>
                     <th>title</th>
                     <th>description</th>
+                    <th>tags</th>
                     <th>created</th>
                     <th>actions</th>
                 </tr>
@@ -42,6 +43,15 @@
                         </td>
                         <td>
                             {{ item.description }}
+                        </td>
+                        <td>
+                            {% if not item.tags.empty %}
+                                {% for tag in item.tags %}
+                                    {{ tag.title }}
+                                {% endfor %}
+                            {% else %}
+                                ---
+                            {% endif %}
                         </td>
                         <td>
                             {{ item.created |date("d.m.Y") }}

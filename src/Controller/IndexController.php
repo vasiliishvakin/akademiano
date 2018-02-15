@@ -3,15 +3,14 @@
 namespace Akademiano\Content\Articles\Controller;
 
 
-use Akademiano\Attach\Model\LinkedFilesWorker;
 use Akademiano\Content\Articles\Api\v1\ArticlesApi;
 use Akademiano\Content\Articles\RoutesStore;
-use Akademiano\EntityOperator\Ext\Controller\AkademianoEntityController;
+use Akademiano\EntityOperator\Ext\Controller\AkademianoCompositeEntityController;
 
 /**
  * @method ArticlesApi getEntityApi()
  */
-class IndexController extends AkademianoEntityController
+class IndexController extends AkademianoCompositeEntityController
 {
     const ENTITY_OPSR_STORE_CLASS = RoutesStore::class;
     const ENTITY_API_ID = ArticlesApi::API_ID;
@@ -20,20 +19,5 @@ class IndexController extends AkademianoEntityController
     public function getListCriteria()
     {
         return [];
-    }
-
-    public function saveAction()
-    {
-        $this->autoRenderOff();
-        //save item
-        $data = $this->getRequest()->getParams();
-        $entity = $this->getEntityApi()->save($data);
-
-        $files = $this->getRequest()->getFiles(static::FORM_FILES_FIELD);
-
-        foreach ($files as $file) {
-            $this->getEntityApi()->getFilesApi()->saveUploaded($file, [LinkedFilesWorker::LINKED_ENTITY_FIELD => $entity]);
-        }
-        $this->redirect($this->getEntityOpsRoutesStore()->getListRoute());
     }
 }

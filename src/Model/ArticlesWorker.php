@@ -22,6 +22,8 @@ class ArticlesWorker extends ContentEntitiesWorker implements DelegatingInterfac
     const WORKER_ID = 'articlesWorker';
     const TABLE_ID = 150;
     const TABLE_NAME = "articles";
+    const FIELDS = ['tags'];
+    const UNSAVED_FIELDS = ['tags'];
 
     public static function getEntityClassForMapFilter()
     {

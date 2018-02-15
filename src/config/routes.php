@@ -75,6 +75,6 @@ return [
             "type" => \Akademiano\Router\RoutePattern::TYPE_FULL,
             "value" => "/admin/articles/save",
         ],
-        "action" => ["index", "save"],
+        "action" => ["admin", "save"],
     ],
 ];
