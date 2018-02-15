@@ -56,7 +56,7 @@ class View extends AbstractView implements ViewInterface
         return $this->filterContent($content);
     }
 
-    public function render($templateName = null, $params = [])
+    public function render($params = [], $templateName = null)
     {
         if (!is_null($templateName)) {
             $this->setTemplate($templateName);
