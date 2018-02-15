@@ -25,6 +25,7 @@
     "akademiano/attach": "^2.0",
     "akademiano/content-files": "^2.0",
     "akademiano/content-files-images": "^2.0",
+    "akademiano/content-tags": "dev-master as 1.0.x-dev",
 
     "bower-asset/ckeditor": "^4.5.4",
     "bower-asset/colorbox": "^1.6.3"
