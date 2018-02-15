@@ -78,8 +78,8 @@ class CompositeEntityApi extends EntityApi
 
         foreach ($unrelatedItems as $item) {
             $relatedAttributeApi->save([
-                'first' => $entity,
-                'second' => $item,
+                $currentRelationEntityField => $entity,
+                $anotherRelationEntityField => $item,
             ]);
         }
     }
