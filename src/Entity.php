@@ -4,7 +4,6 @@
 namespace Akademiano\Entity;
 
 
-use Akademiano\Delegating\Command\GetCommand;
 use Akademiano\Delegating\DelegatingTrait;
 use Carbon\Carbon;
 
@@ -104,15 +103,8 @@ class Entity extends BaseEntity implements EntityInterface
     /**
      * @return UserInterface
      */
-    public function getOwner():?UserInterface
+    public function getOwner(): ?UserInterface
     {
-        if (null === $this->owner) {
-            return null;
-        }
-        if (!$this->owner instanceof UserInterface) {
-            $command = new GetCommand($this->owner, UserInterface::class);
-            $this->owner = $this->delegate($command);
-        }
         return $this->owner;
     }
 
@@ -124,7 +116,7 @@ class Entity extends BaseEntity implements EntityInterface
         $this->owner = $owner;
     }
 
-    public function toArray()
+    public function toArray():array
     {
         $data = parent::toArray();
         $data['created'] = $this->getCreated();

@@ -4,7 +4,7 @@
 namespace Akademiano\Entity;
 
 
-use Akademiano\Entity\Exception\BadRelatedClassException;
+use Akademiano\Entity\Exception\Relations\BadRelatedClassException;
 
 trait RelationsBetweenClassesTrait
 {

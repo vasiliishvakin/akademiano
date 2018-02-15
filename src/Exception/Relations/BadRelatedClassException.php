@@ -1,9 +1,11 @@
 <?php
 
-namespace Akademiano\Entity\Exception;
+namespace Akademiano\Entity\Exception\Relations;
 
 
-class BadRelatedClassException extends \InvalidArgumentException
+use Akademiano\Entity\Exception\EntityException;
+
+class BadRelatedClassException extends EntityException
 {
     public function __construct($message = null, $code = 0, \Exception $previous = null, $class = null)
     {

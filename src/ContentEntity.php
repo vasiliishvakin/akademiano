@@ -25,7 +25,7 @@ class ContentEntity extends NamedEntity implements ContentEntityInterface
         $this->content = $content;
     }
 
-    public function toArray()
+    public function toArray():array
     {
         $data = parent::toArray();
         $data['content'] = $this->getContent();

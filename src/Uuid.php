@@ -70,4 +70,23 @@ class Uuid implements UuidInterface
     {
         return !is_numeric($string) && ctype_xdigit($string);
     }
+
+    public static function normalize($value)
+    {
+        if (is_integer($value)) {
+            return $value;
+        } elseif (is_string($value)) {
+            if (self::isHexUuid($value)) {
+                return hexdec($value);
+            } elseif (is_numeric($value)) {
+                return (int)$value;
+            } elseif ($value === '') {
+                return null;
+            } else {
+                throw new \InvalidArgumentException(sprintf('Type "%s" value "%s" not supported', gettype($value), json_encode($value, JSON_UNESCAPED_UNICODE)));
+            }
+        } else {
+            throw new \InvalidArgumentException();
+        }
+    }
 }
