@@ -246,7 +246,7 @@ class File extends NamedEntity implements DelegatingInterface
         return $this->extension;
     }
 
-    public function toArray()
+    public function toArray():array
     {
         $data = parent::toArray();
         $data['extension'] = $this->getExtension();
