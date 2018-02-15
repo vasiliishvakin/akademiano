@@ -17,7 +17,7 @@ use Akademiano\EntityOperator\Ext\EntityOpsRoutesStore;
 abstract class AkademianoEntityController extends AkademianoController
 {
     const ENTITY_OPSR_STORE_CLASS = EntityOpsRoutesStore::class;
-    const ENTITY_API_ID = "entityApi";
+    const ENTITY_API_ID = EntityApi::API_ID;
     const DEFAULT_ITEMS_PER_PAGE = 20;
     const DEFAULT_LIST_CRITERIA = null;
 
