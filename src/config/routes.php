@@ -49,6 +49,14 @@ return [
         "action" => ["index", "view"],
     ],
 
+    RoutesStore::TAG_ROUTE => [
+        "patterns" => [
+            "type" => \Akademiano\Router\RoutePattern::TYPE_REGEXP,
+            "value" => "^/articles/tag/id(?P<id>\w+)",
+        ],
+        "action" => ["index", "tag"],
+    ],
+
     RoutesStore::LIST_ROUTE => [
         "patterns" => [
             "type" => \Akademiano\Router\RoutePattern::TYPE_FULL,
