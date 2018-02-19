@@ -7,5 +7,4 @@ use Akademiano\Content\Files\Model\FileFormatCommand;
 
 class ImageFormatCommand extends FileFormatCommand
 {
-    const COMMAND_NAME = FileFormatCommand::COMMAND_NAME .'.image';
 }
