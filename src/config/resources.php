@@ -1,5 +1,7 @@
 <?php
 
+return[];
+
 return [
     \Akademiano\Attach\Api\v1\LinkedFilesApi::API_ID => function (\Pimple\Container $c) {
         return new \Akademiano\Attach\Api\v1\LinkedFilesApi($c["operator"]);

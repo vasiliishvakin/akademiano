@@ -1,9 +1,10 @@
 <?php
 
-use Akademiano\EntityOperator\Worker\EntityWorkerInterface;
-use Akademiano\Operator\WorkersContainerInterface;
+return[
+    \Akademiano\Attach\Model\ParseRequestFilesWorker::class,
+];
 
-return [
+/*return [
     \Akademiano\Attach\Model\LinkedFilesWorker::WORKER_NAME => [
         \Akademiano\Attach\Model\LinkedFilesWorker::class,
         EntityWorkerInterface::PARAM_ACTIONS_MAP => \Akademiano\Attach\Model\LinkedFile::class,
@@ -34,4 +35,4 @@ return [
             return $w;
         },
     ],
-];
+];*/
