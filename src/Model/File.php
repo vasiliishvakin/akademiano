@@ -253,6 +253,4 @@ class File extends NamedEntity implements DelegatingInterface
         $data['position'] = $this->getPosition();
         return $data;
     }
-
-
 }

@@ -8,8 +8,6 @@ use Akademiano\Config\ConfigurableTrait;
 use Akademiano\Content\Files\Model\File;
 use Akademiano\Content\Files\Model\FileFormatCommand;
 use Akademiano\Content\Files\Module;
-use Akademiano\Config\Config;
-use Akademiano\Config\ConfigLoader;
 use Akademiano\Core\Exception\AccessDeniedException;
 use Akademiano\Entity\EntityInterface;
 use Akademiano\EntityOperator\Command\CreateCommand;
