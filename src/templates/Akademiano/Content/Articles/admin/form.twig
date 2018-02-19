@@ -57,12 +57,15 @@
                                 <textarea class="form-control ckeditor" id="content" name="content"
                                           rows=10">{{ item.content |raw }}</textarea>
                             </div>
-                            {% if item.files|length == 0 %}
-                                <div class="form-group">
-                                    <label for="files">Файл</label>
-                                    <input type="file" class="form-control" id="files" name="files[]" multiple>
-                                </div>
-                            {% endif %}
+                            {# {% if item.files|length == 0 %}
+                                 <div class="form-group">
+                                     <label for="files">Файл</label>
+                                     <input type="file" class="form-control" id="files" name="files[]" multiple>
+                                 </div>
+                             {% endif %}
+ #}
+                            {% include "attachImagesFields.twig" %}
+
                             {% if item %}
                                 <div class="row">
                                     <div class="col-md-12">
@@ -92,12 +95,14 @@
                                 </div>
                             {% endif %}
 
+
                             <div class="form-group">
                                 <a href="{{ url(items_list_route) }}" role="button" class="btn btn-outline-primary">Отмена</a>
                                 &nbsp;
                                 &nbsp;
                                 <button type="submit" class="btn btn-success">Сохранить</button>
                             </div>
+
                         </div>
                     </form>
                 </div>
@@ -112,6 +117,16 @@
 {% endblock mainContainer %}
 
 {% block js %}
+
+    {{ asset_js_once(["akademiano/content-files-images/src/assets/js/imajesUploader.js"], default, true) }}
+    {{ asset_js_once(["akademiano/content-files-images/src/assets/js/bootstrap.file-input.js"], default, true) }}
+    <script>
+        $(document).ready(function () {
+            $('.file-inputs').bootstrapFileInput();
+        });
+    </script>
+
+
     {{ asset_js([
         "ckeditor/ckeditor.js"
     ], default, true) }}
@@ -119,7 +134,10 @@
 
     <script>
         $(document).ready(function () {
-            CKEDITOR.replace('.ckeditor');
+            CKEDITOR.replace('content');
         });
     </script>
+
+
+
 {% endblock js %}

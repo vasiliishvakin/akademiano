@@ -17,19 +17,19 @@ class ArticlesApi extends CompositeEntityApi
         'tags' => TagsArticlesRelationsApi::API_ID,
     ];
 
-    /** @var  ArticleFilesApi */
+    /** @var  ArticleImagesApi */
     protected $filesApi;
 
     /** @var TagsArticlesRelationsApi */
     protected $tagsArticlesRelationsApi;
 
 
-    public function getFilesApi():ArticleFilesApi
+    public function getFilesApi(): ArticleImagesApi
     {
         return $this->filesApi;
     }
 
-    public function setFilesApi(ArticleFilesApi $filesApi)
+    public function setFilesApi(ArticleImagesApi $filesApi)
     {
         $this->filesApi = $filesApi;
     }
@@ -59,4 +59,5 @@ class ArticlesApi extends CompositeEntityApi
         }
         return parent::deleteEntity($entity);
     }
+
 }

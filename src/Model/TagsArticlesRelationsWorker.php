@@ -13,7 +13,7 @@ class TagsArticlesRelationsWorker extends TagsRelationsWorker
 
     const WORKER_ID = 'tagsArticlesRelationsWorker';
     const TABLE_NAME = 'article_tags_articles_relations';
-    const TABLE_ID = ArticleFilesWorker::TABLE_ID + 1;
+    const TABLE_ID = ArticleImagesWorker::TABLE_ID + 1;
 
     public static function getEntityClassForMapFilter()
     {

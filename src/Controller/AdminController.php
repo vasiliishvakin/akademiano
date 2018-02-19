@@ -23,11 +23,15 @@ class AdminController extends IndexController
         $data = $this->getRequest()->getParams();
         $entity = $this->getEntityApi()->save($data);
 
-        $files = $this->getRequest()->getFiles(static::FORM_FILES_FIELD);
+        $this->getEntityApi()->getFilesApi()->processHttpRequestFiles($this->getRequest(), $entity);
+
+
+
+        /*$files = $this->getRequest()->getFiles(static::FORM_FILES_FIELD);
 
         foreach ($files as $file) {
             $this->getEntityApi()->getFilesApi()->saveUploaded($file, [LinkedFilesWorker::LINKED_ENTITY_FIELD => $entity]);
-        }
+        }*/
         $this->redirect($this->getEntityOpsRoutesStore()->getListRoute());
     }
 }

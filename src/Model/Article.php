@@ -11,68 +11,71 @@ use Akademiano\Utils\Object\Collection;
 
 class Article extends ContentEntity
 {
-    const ENTITY_FILES_CLASS = ArticleFile::class;
+    const ENTITY_FILES_CLASS = ArticleImage::class;
 
     use OwneredTrait;
 
-    /** @var  ArticleFile[]|Collection */
-    protected $files;
-
-    /** @var  ArticleFile[]|Collection */
+    /** @var  ArticleImage[]|Collection */
     protected $images;
 
     /** @var Tag[]|Collection */
     protected $tags;
 
+    protected $mainImage;
 
     /**
-     * @return Collection|ArticleFile[]
+     * @return Collection|ArticleImage[]
      */
-    public function getFiles()
-    {
-        if (!$this->files instanceof Collection) {
-            if (is_array($this->files)) {
-                $criteria["id"] = $this->files;
-            } else {
-                $criteria = ["entity" => $this];
-            }
-            $command = (new FindCommand(ArticleFile::class))->setCriteria($criteria);
-            $this->files = $this->delegate($command);
-        }
-        return $this->files;
-    }
-
-
     public function getImages()
     {
         if (!$this->images instanceof Collection) {
-            $files = $this->getFiles();
-            $images = [];
-            foreach ($files as $file) {
-                if ($file->isImage()) {
-                    $images[$file->getId()->getInt()] = $file;
-                }
+            if (is_array($this->images)) {
+                $criteria["id"] = $this->images;
+            } else {
+                $criteria = ["entity" => $this];
             }
-            $this->images = new Collection($images);
+            $command = (new FindCommand(ArticleImage::class))
+                ->setCriteria($criteria)
+                ->setOrderBy(['main'=>'DESC', 'order' => 'ASC']);
+            $this->images = $this->delegate($command);
         }
         return $this->images;
     }
 
-    public function getFirstImage()
+    public function getMainImage(): ?ArticleImage
+    {
+        if (null === $this->mainImage) {
+            if ($this->getImages()->isEmpty()) {
+                return null;
+            }
+            $main = $this->getImages()->filter('main', true)->first();
+            if (!$main) {
+                $main = $this->getFirstImage();
+            }
+            $this->mainImage = $main;
+        }
+        return $this->mainImage;
+    }
+
+    protected function getFirstImage()
     {
         return $this->getImages()->first();
     }
 
-
     public function getOtherImages()
     {
-        return $this->getImages()->slice();
+        if ($this->getImages()->isEmpty()) {
+            return [];
+        }
+        return $this->getImages()->filter(function (ArticleImage $item) {
+            return $item->getInt();
+        }, $this->getMainImage()->getInt(), '!==');
     }
 
     /**
      * @return Tag[]|Collection
      */
-    public function getTags():Collection
+    public function getTags(): Collection
     {
         if (!$this->tags instanceof Collection) {
             if (null === $this->tags) {
