@@ -72,6 +72,11 @@ class Collection extends ArrayObject implements ArrayableInterface, \JsonSeriali
                     $method = 'get' . ucfirst($fieldName);
                     if (is_callable([$item, $method])) {
                         return $item->{$method}();
+                    } else {
+                        $method = 'is'.ucfirst($fieldName);
+                        if (is_callable([$item, $method])) {
+                            return $item->{$method}();
+                        }
                     }
                 } elseif (is_array($item)) {
                     if (isset($item[$fieldName])) {
