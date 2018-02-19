@@ -473,14 +473,15 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
     function load(EntityInterface $entity, array $data)
     {
         $fields = $this->getFields();
+        $extEntityFields = $this->getExtEntityFields();
         foreach ($fields as $field) {
             $objectAttribute = StringUtils::lowDashToCamelCase($field);
             $valueExist = array_key_exists($objectAttribute, $data) ? true : ((array_key_exists($field, $data) ? true : false));
             if ($valueExist) {
                 $value = isset($data[$objectAttribute]) ? $data[$objectAttribute] : $data[$field];
-                if (is_string($value)) {
-                    if (Uuid::isHexUuid($value)) {
-                        $value = hexdec($value);
+                if (in_array($field, $extEntityFields)) {
+                    if (is_string($value)) {
+                        $value = Uuid::normalize($value);
                     }
                 }
                 $method = "set" . ucfirst($objectAttribute);
