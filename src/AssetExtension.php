@@ -346,12 +346,14 @@ class AssetExtension extends \Twig_Extension
                 $filePath = $asset->getSourceDirectory();
                 if (false !== $subDir = FileSystem::getSubDir($this->getPublicDir(), $filePath)) {
                     $subDir = !empty($subDir) ? $subDir . DIRECTORY_SEPARATOR : "";
-                    $webPatches[] = $this->getWebPublic() . DIRECTORY_SEPARATOR . $subDir . basename($asset->getSourcePath());
+                    $version = md5(filemtime($asset->getSourceDirectory(). DIRECTORY_SEPARATOR . $asset->getSourcePath()));
+                    $webPatches[] = $this->getWebPublic() . DIRECTORY_SEPARATOR . $subDir . basename($asset->getSourcePath()) . '?v=' . $version;
                 } else {
                     $filePath = $this->writeAsset($asset);
                     $subDir = FileSystem::getSubDir($this->getOutputDir(), dirname($filePath));
                     $subDir = !empty($subDir) ? $subDir . DIRECTORY_SEPARATOR : "";
-                    $webPatches[] = $this->getWebOutput() . DIRECTORY_SEPARATOR . $subDir . basename($filePath);
+                    $version = md5(filemtime($filePath));
+                    $webPatches[] = $this->getWebOutput() . DIRECTORY_SEPARATOR . $subDir . basename($filePath) . '?v=' . $version;
                 }
             }
 
