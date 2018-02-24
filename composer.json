@@ -17,7 +17,7 @@
   },
   "require": {
     "akademiano/utils": "^1.1",
-    "akademiano/httpwarp": "^1.2",
+    "akademiano/httpwarp": "^1.1",
     "akademiano/config": "^1.1",
     "twig/twig": "^2.4.4",
     "kriswallsmith/assetic": "^1.4.0"
