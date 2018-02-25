@@ -16,13 +16,13 @@
     }
   },
   "require": {
-    "akademiano/utils": "^1.1@dev",
-    "akademiano/config": "^1.1@dev",
-    "akademiano/operator": "^2.0@dev",
-    "akademiano/entity": "^1.1@dev",
-    "akademiano/db-adapter": "^1.1@dev",
-    "akademiano/core": "^1.1@dev",
-    "robmorgan/phinx": "^0.8.1"
+    "akademiano/utils": "^1.1",
+    "akademiano/config": "^1.1",
+    "akademiano/operator": "^2.0",
+    "akademiano/entity": "^1.1",
+    "akademiano/db-adapter": "^1.1v",
+    "akademiano/core": "^1.1",
+    "robmorgan/phinx": "^0.9.2"
   },
   "require-dev": {
     "codeception/codeception": "^2.2.10",
