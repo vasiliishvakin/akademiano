@@ -16,19 +16,17 @@
     }
   },
   "require": {
-    "php": "^5.6 || ^7.1",
-    "akademiano/entity-operator": "^1.0.0-beta.3",
-    "robmorgan/phinx": "^0.8.1",
-    "akademiano/acl": "^1.0.0-beta.1",
-    "akademiano/api": "^1.0.0-beta.1",
-    "akademiano/entity": "^1.0.0-beta.1",
-    "akademiano/router": "^1.0.0-beta.4",
-    "akademiano/entity-operator-ext": "^1.0.0-beta.1",
-    "akademiano/core-controller": "^1.0.0-beta.1"
+    "akademiano/entity-operator": "^2.0",
+    "akademiano/acl": "^1.1",
+    "akademiano/api": "^2.0",
+    "akademiano/entity": "^1.1",
+    "akademiano/router": "^1.2",
+    "akademiano/entity-operator-ext": "^1.1",
+    "akademiano/core-controller": "^1.1"
   },
   "require-dev": {
-    "codeception/codeception": "^2.2.10",
-    "satooshi/php-coveralls": "^1.0.1",
-    "mockery/mockery": "^0.9.9"
+    "codeception/codeception": "^2.3.8",
+    "satooshi/php-coveralls": "^2.0",
+    "mockery/mockery": "^1.0"
   }
 }
