@@ -20,7 +20,7 @@
   },
   "require": {
     "akademiano/core": "^1.1",
-    "akademiano/site-all": "^1.0"
+    "akademiano/site-all": "^1.1"
   },
   "require-dev": {
     "codeception/codeception": "^2.2.10",
