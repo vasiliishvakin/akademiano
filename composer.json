@@ -19,8 +19,8 @@
         "akademiano/site-default-implementation": "1.0.0"
   },
   "require": {
-    "akademiano/core": "^1.1@dev",
-    "akademiano/site-all": "dev-master as 1.0.x-dev"
+    "akademiano/core": "^1.1",
+    "akademiano/site-all": "^1.0"
   },
   "require-dev": {
     "codeception/codeception": "^2.2.10",
