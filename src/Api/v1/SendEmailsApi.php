@@ -5,36 +5,31 @@ namespace Akademiano\Messages\Api\v1;
 
 
 use Akademiano\Api\v1\AbstractApi;
-use Akademiano\EntityOperator\EntityOperator;
+use Akademiano\Delegating\DelegatingInterface;
+use Akademiano\Delegating\DelegatingTrait;
 use Akademiano\Messages\Model\SendEmailCommand;
 use Akademiano\Messages\Model\Status;
 use Akademiano\Messages\Model\TransportType;
-use Akademiano\Operator\IncludeOperatorInterface;
-use Akademiano\Operator\IncludeOperatorTrait;
+use Akademiano\Operator\Operator;
 use Akademiano\User\CustodianIncludeInterface;
 use Akademiano\User\CustodianIncludeTrait;
 
-class SendEmailsApi extends AbstractApi implements IncludeOperatorInterface, CustodianIncludeInterface
+class SendEmailsApi extends AbstractApi implements DelegatingInterface, CustodianIncludeInterface
 {
     const API_ID = "sendEmailApi";
 
     use CustodianIncludeTrait;
-    use IncludeOperatorTrait;
+    use DelegatingTrait;
 
-    /**
-     * AbstractEntityApi constructor.
-     * @param EntityOperator $operator
-     */
-    public function __construct(EntityOperator $operator = null)
+    /** @var  MessagesApi */
+    protected $messagesApi;
+
+    public function __construct(Operator $operator = null)
     {
         if (null !== $operator) {
             $this->setOperator($operator);
         }
     }
-
-
-    /** @var  MessagesApi */
-    protected $messagesApi;
 
     /**
      * @return MessagesApi
