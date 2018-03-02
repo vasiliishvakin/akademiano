@@ -1,7 +1,7 @@
 <?php
 
 use Phinx\Migration\AbstractMigration;
-use DeltaCore\Application;
+
 
 class UuidComplexShortPg extends AbstractMigration
 {

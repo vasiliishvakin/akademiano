@@ -1,7 +1,6 @@
 <?php
 
 use Phinx\Migration\AbstractMigration;
-use DeltaCore\Application;
 
 
 class UuidComplexShortTables extends AbstractMigration
