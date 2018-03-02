@@ -6,14 +6,8 @@ use Akademiano\Content\Files\Model\File;
 use Akademiano\Entity\Entity;
 use Akademiano\Entity\EntityInterface;
 use Akademiano\EntityOperator\Command\GetCommand;
-use Akademiano\EntityOperator\EntityOperator;
 use Akademiano\HttpWarp\Exception\NotFoundException;
 
-/**
- * Class LinkedFile
- * @package Akademiano\Attach\Model
- * @method EntityOperator getOperator()
- */
 class LinkedFile extends File
 {
     const ENTITY_CLASS = Entity::class;
