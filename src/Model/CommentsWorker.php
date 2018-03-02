@@ -4,15 +4,15 @@
 namespace Akademiano\Content\Comments\Model;
 
 
-use Akademiano\Operator\DelegatingInterface;
-use Akademiano\Operator\DelegatingTrait;
-use Akademiano\EntityOperator\Worker\PostgresWorker;
+use Akademiano\EntityOperator\Worker\ContentEntitiesWorker;
 
-class CommentsWorker extends PostgresWorker implements DelegatingInterface
+class CommentsWorker extends ContentEntitiesWorker
 {
+    const LINKED_ENTITY_FIELD = 'entity';
+
+    const WORKER_NAME = "commentsWorker";
     const TABLE_ID = 18;
     const TABLE_NAME = "comments";
-    const EXPAND_FIELDS = ["title", "description", "content", "entity"];
-
-    use DelegatingTrait;
+    const FIELDS = [self::LINKED_ENTITY_FIELD];
+    const EXT_ENTITY_FIELDS = [self::LINKED_ENTITY_FIELD];
 }

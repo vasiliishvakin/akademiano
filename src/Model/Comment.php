@@ -5,35 +5,40 @@ namespace Akademiano\Content\Comments\Model;
 
 use Akademiano\Entity\ContentEntity;
 use Akademiano\Entity\Entity;
-use Akademiano\Entity\NamedEntityInterface;
-use Akademiano\Operator\DelegatingInterface;
-use Akademiano\Operator\DelegatingTrait;
+use Akademiano\Entity\EntityInterface;
+use Akademiano\EntityOperator\Command\FindCommand;
+use Akademiano\EntityOperator\Command\GetCommand;
+use Akademiano\HttpWarp\Exception\NotFoundException;
 use Akademiano\UserEO\Model\Utils\OwneredTrait;
 use Akademiano\Utils\Object\Collection;
 
-class Comment extends ContentEntity implements NamedEntityInterface, DelegatingInterface
+class Comment extends ContentEntity
 {
+    const ENTITY_CLASS = Entity::class;
     const ENTITY_FILES_CLASS = CommentFile::class;
 
-    use DelegatingTrait;
-    use OwneredTrait;
-
-    /** @var  Entity */
+    /** @var EntityInterface */
     protected $entity;
-
+    /** @var Collection|CommentFile[]|array */
     protected $files;
 
+    use OwneredTrait;
 
-    /**
-     * @return Entity
-     */
-    public function getEntity()
+
+    public function getEntity():EntityInterface
     {
+        if (null !== $this->entity && !$this->entity instanceof EntityInterface) {
+            $entity = $this->delegate((new GetCommand(static::ENTITY_CLASS))->setId($this->entity));
+            if (!$entity) {
+                throw new NotFoundException(sprintf('Entity of class "%s" with id "%s" not found'), static::ENTITY_CLASS, $this->entity);
+            }
+            $this->entity = $entity;
+        }
         return $this->entity;
     }
 
     /**
-     * @param Entity $entity
+     * @param EntityInterface $entity
      */
     public function setEntity($entity)
     {
@@ -43,7 +48,7 @@ class Comment extends ContentEntity implements NamedEntityInterface, DelegatingI
     /**
      * @return Collection|CommentFile[]
      */
-    public function getFiles()
+    public function getFiles():Collection
     {
         if (!$this->files instanceof Collection) {
             if (is_array($this->files)) {
@@ -51,7 +56,7 @@ class Comment extends ContentEntity implements NamedEntityInterface, DelegatingI
             } else {
                 $criteria = ["entity" => $this];
             }
-            $this->files = $this->getOperator()->find(static::ENTITY_FILES_CLASS, $criteria);
+            $this->files = $this->delegate((new FindCommand(static::ENTITY_FILES_CLASS))->setCriteria($criteria));
         }
         return $this->files;
     }
