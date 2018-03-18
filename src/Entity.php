@@ -57,6 +57,8 @@ class Entity extends BaseEntity implements EntityInterface
             } else {
                 $this->changed = new Carbon($this->changed);
             }
+        } else {
+            $this->changed = $this->getCreated();
         }
         return $this->changed;
     }
