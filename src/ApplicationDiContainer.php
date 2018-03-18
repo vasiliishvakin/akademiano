@@ -7,6 +7,7 @@ namespace Akademiano\Core;
 use Akademiano\Acl\AccessCheckIncludeInterface;
 use Akademiano\Config\ConfigurableInterface;
 use Akademiano\DI\Container;
+use Akademiano\HttpWarp\EnvironmentIncludeInterface;
 use Akademiano\User\CustodianIncludeInterface;
 use Pimple\Exception\UnknownIdentifierException;
 
@@ -25,6 +26,9 @@ class ApplicationDiContainer extends Container
         }
         if ($value instanceof ConfigurableInterface) {
             $value->setConfig($this['config']);
+        }
+        if ($value instanceof EnvironmentIncludeInterface) {
+            $value->setEnvironment($this['environment']);
         }
         return $value;
     }
