@@ -5,6 +5,7 @@ namespace Akademiano\Operator\WorkersMap;
 
 
 use Akademiano\Delegating\Command\CommandInterface;
+use Akademiano\EntityOperator\Command\SaveCommand;
 use Akademiano\Operator\Command\SubCommandInterface;
 use Akademiano\Operator\WorkersMap\Filter\FieldFilter;
 use Akademiano\Operator\WorkersMap\Filter\Filter;
@@ -121,6 +122,7 @@ class WorkersMap
             return;
         }
 
+
         $filteredRelations = [];
 
         start_filtering:
@@ -136,7 +138,7 @@ class WorkersMap
             }
         }
 
-        if ($iterations<$commandRelations->count()) {
+        if ($iterations < $commandRelations->count()) {
             $commandRelations = $commandRelations->slice($iterations);
             goto start_filtering;
         }
