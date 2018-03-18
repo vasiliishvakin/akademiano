@@ -322,7 +322,7 @@ class Router implements EnvironmentIncludeInterface
         if (isset($routes[$currentMethod]) && count($routes[$currentMethod]) > 0) {
             $workedMethods[$currentMethod] = $routes[$currentMethod];
         }
-        if (isset($routes[Route::METHOD_ALL]) && count(isset($routes[Route::METHOD_ALL])) > 0) {
+        if (isset($routes[Route::METHOD_ALL]) && count($routes[Route::METHOD_ALL]) > 0) {
             $workedMethods[Route::METHOD_ALL] = $routes[Route::METHOD_ALL];
         }
 
