@@ -1,13 +1,16 @@
 <?php
 
 namespace Akademiano\Content\Countries\Model;
-use Akademiano\EntityOperator\Worker\PostgresWorker;
-use Akademiano\Operator\DelegatingInterface;
-use Akademiano\Operator\DelegatingTrait;
+use Akademiano\EntityOperator\Worker\NamedEntitiesWorker;
 
-class CountriesWorker extends PostgresWorker
+class CountriesWorker extends NamedEntitiesWorker
 {
-    const TABLE_ID = 19;
+    const WORKER_ID = 'countriesWorker';
+    const TABLE_ID = 22;
     const TABLE_NAME = "countries";
-    const EXPAND_FIELDS = ["title", "description"];
+
+    public static function getEntityClassForMapFilter()
+    {
+        return Country::class;
+    }
 }
