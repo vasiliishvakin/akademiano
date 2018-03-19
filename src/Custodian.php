@@ -10,15 +10,18 @@ use Akademiano\Entity\UserInterface;
 use Akademiano\Entity\UuidInterface;
 use Akademiano\EntityOperator\Command\FindCommand;
 use Akademiano\EntityOperator\Command\GetCommand;
+use Akademiano\HttpWarp\EnvironmentIncludeInterface;
+use Akademiano\HttpWarp\Parts\EnvironmentIncludeTrait;
 use Akademiano\User\GuestUser;
 use Akademiano\User\SimpleCustodian;
 use Akademiano\UserEO\Model\Request\HttpSessionDataTool;
 use Akademiano\UserEO\Model\Request\RequestDataToolInterface;
 use Akademiano\UserEO\Model\User;
 
-class Custodian extends SimpleCustodian implements DelegatingInterface
+class Custodian extends SimpleCustodian implements DelegatingInterface, EnvironmentIncludeInterface
 {
     use DelegatingTrait;
+    use EnvironmentIncludeTrait;
 
     /** @var  RequestDataToolInterface */
     protected $rdt;
@@ -47,8 +50,11 @@ class Custodian extends SimpleCustodian implements DelegatingInterface
     public function getCurrentUser()
     {
         if (!$this->currentUser) {
-            $uid = $this->getRdt()->getCurrentUserId();
-            if ($uid) {
+            $rdt = $this->getRdt();
+            if (!$this->getEnvironment()->isCli() || !$rdt instanceof HttpSessionDataTool) {
+                $uid = $rdt->getCurrentUserId();
+            }
+            if (isset($uid) && $uid) {
                 $user = $this->delegate((new GetCommand(User::class))->setId($uid));
                 $this->currentUser = $user instanceof UserInterface ? $user : new GuestUser();
             } else {
