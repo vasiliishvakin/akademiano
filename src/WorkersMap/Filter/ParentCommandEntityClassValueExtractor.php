@@ -13,7 +13,11 @@ class ParentCommandEntityClassValueExtractor extends RelationCommandEntityClassV
     public function extract(string $fieldName, CommandInterface $command): \Traversable
     {
         if ($command instanceof SubCommandInterface) {
-            if ($fieldName === SubCommandInterface::PARAM_PARENT_COMMAND) {
+            if (
+                $fieldName === SubCommandInterface::PARAM_PARENT_COMMAND
+                ||
+                $fieldName === EntityCommandInterface::FILTER_FIELD_ENTITY_CLASS
+            ) {
                 $parentCommand = $command->getParentCommand();
                 if ($parentCommand instanceof EntityCommandInterface) {
                     return $this->traversableEntityClass($parentCommand->getEntityClass());

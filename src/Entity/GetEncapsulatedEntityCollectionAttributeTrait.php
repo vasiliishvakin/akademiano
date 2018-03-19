@@ -4,30 +4,24 @@
 namespace Akademiano\EntityOperator\Entity;
 
 
+use Akademiano\Delegating\Command\CommandInterface;
+use Akademiano\Entity\EntityInterface;
+use Akademiano\EntityOperator\Command\FindCommand;
+use Akademiano\Utils\Object\Collection;
+
 trait GetEncapsulatedEntityCollectionAttributeTrait
 {
     abstract public function delegate(CommandInterface $command, bool $throwOnEmptyOperator = false);
 
-    private function getEncapsulatedEntityAttribute(string $class, &$variable): ?EntityInterface
+    public function getEncapsulatedEntityCollectionAttribute(string $class, &$variable, EntityInterface $entity): Collection
     {
-
-        if (null !== $variable && !$variable instanceof EntityInterface) {
-            $variable = $this->delegate((new GetCommand($class))->setId($variable));
+        if (!$variable instanceof Collection) {
+            if (is_array($variable)) {
+                $criteria["id"] = $variable;
+            }
+            $criteria["entity"] = $entity->getId()->getInt();
+            $variable = $this->delegate((new FindCommand($class))->setCriteria($criteria));
         }
         return $variable;
-
-    }
-    public function getComments()
-    {
-        if (!$this->comments instanceof Collection) {
-            if (is_array($this->comments)) {
-                $criteria["id"] = $this->comments;
-            }
-            $criteria["entity"] = (string)$this->getId();
-            /** @var EntityOperator $operator */
-            $operator = $this->getOperator();
-            $this->comments = $operator->find(static::ENTITY_COMMENTS_CLASS, $criteria);
-        }
-        return $this->comments;
     }
 }

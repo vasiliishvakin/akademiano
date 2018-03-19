@@ -353,8 +353,8 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
                                 $data = $parentCommand->getData();
                                 if ($data) {
                                     $data['id'] = $parentCommand->getEntity()->getId()->getInt();
+                                    $parentCommand->setData($data);
                                 }
-                                $parentCommand->setData($data);
                             }
                         }
                         break;
@@ -461,16 +461,14 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
         }
     }
 
-    public
-    function delete($id)
+    public function delete($id)
     {
         $adapter = $this->getAdapter();
         $table = $this->getTable();
         return $adapter->delete($table, ["id" => $id]);
     }
 
-    public
-    function load(EntityInterface $entity, array $data)
+    public function load(EntityInterface $entity, array $data)
     {
         $fields = $this->getFields();
         $extEntityFields = $this->getExtEntityFields();
@@ -493,8 +491,7 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
         return $entity;
     }
 
-    public
-    function reserve(EntityInterface $entity)
+    public function reserve(EntityInterface $entity)
     {
         $fields = $this->getFields();
         $data = [];
@@ -517,8 +514,7 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
         return $data;
     }
 
-    public
-    function filterFieldToPostgresType($value, $fieldName = null, EntityInterface $entity = null)
+    public function filterFieldToPostgresType($value, $fieldName = null, EntityInterface $entity = null)
     {
         if ($value instanceof EntityInterface) {
             $id = $value->getId();
@@ -544,8 +540,7 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
         }
     }
 
-    public
-    function merge(EntityInterface $entityA, EntityInterface $entityB)
+    public function merge(EntityInterface $entityA, EntityInterface $entityB)
     {
         $fields = $this->getFields();
         $unmergedFields = $this->getUnmergedFields();
@@ -567,8 +562,7 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
     }
 
 //TODO Check use tableId
-    public
-    function genId()
+    public function genId()
     {
         $tableIdRaw = $this->getTableId();
         $tableId = filter_var($tableIdRaw, FILTER_VALIDATE_INT, ["options" => ["min_range" => 1, "max_range" => 512]]);
@@ -581,8 +575,7 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
         return $result;
     }
 
-    public
-    function filterCriteria(array $criteria)
+    public function filterCriteria(array $criteria)
     {
         foreach ($criteria as $key => $value) {
             $criteria[$key] = $this->filterFieldToPostgresType($value, $key);
@@ -590,8 +583,7 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
         return $criteria;
     }
 
-    public
-    function getAttribute($attribute, array $params = [])
+    public function getAttribute($attribute, array $params = [])
     {
         switch ($attribute) {
             case KeeperWorkerInfoCommand::ATTRIBUTE_TABLE_ID :
@@ -614,16 +606,14 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
         }
     }
 
-    public
-    function createCriteria()
+    public function createCriteria()
     {
         $criteria = new Criteria();
         $criteria->setAdapter($this->getAdapter());
         return $criteria;
     }
 
-    public
-    function createSelect()
+    public function createSelect()
     {
         $select = new Select();
         $select->setAdapter($this->getAdapter());
@@ -631,8 +621,7 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
         return $select;
     }
 
-    public
-    function select(Select $select)
+    public function select(Select $select)
     {
         $select->addTable($this->getTable());
         $result = $this->getAdapter()->selectAndSmartFetch($select->toSql());

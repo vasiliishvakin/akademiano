@@ -10,9 +10,9 @@ abstract class EntityDataObjectCommand extends EntityObjectCommand implements En
     protected $data;
 
     /**
-     * @return array
+     * @return null|array
      */
-    public function getData(): array
+    public function getData(): ?array
     {
         return $this->data;
     }
