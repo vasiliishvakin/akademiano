@@ -7,6 +7,7 @@ use Akademiano\Attach\Command\ParseRequestFilesCommand;
 use Akademiano\Attach\Model\LinkedFile;
 use Akademiano\Attach\Model\LinkedFilesWorker;
 use Akademiano\Attach\Model\RequestFiles;
+use Akademiano\Attach\Module;
 use \Akademiano\Content\Files\Api\v1\FilesApi;
 use Akademiano\Entity\EntityInterface;
 use Akademiano\EntityOperator\Command\LoadCommand;
@@ -18,6 +19,7 @@ class LinkedFilesApi extends FilesApi
 {
     const API_ID = "linkedFilesApi";
     const ENTITY_CLASS = LinkedFile::class;
+    const MODULE_ID = Module::MODULE_ID;
 
     public function parseHttpRequestFiles(Request $request): RequestFiles
     {
