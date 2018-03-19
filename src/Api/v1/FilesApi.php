@@ -195,7 +195,7 @@ class FilesApi extends EntityApi implements ConfigurableInterface
         return static::IS_PUBLIC;
     }
 
-    public function formatFile(File $file, string $extension, string $template)
+    public function formatFile(File $file, string $extension, ?string $template)
     {
         $savePath = $this->getSavePath();
         $command = (new FileFormatCommand($file, $savePath, $extension))->setTemplate($template)->setPublic($this->isPublic());

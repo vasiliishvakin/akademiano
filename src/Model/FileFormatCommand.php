@@ -24,7 +24,7 @@ class FileFormatCommand implements CommandInterface
         $this->extension = $extension;
     }
 
-    public function setTemplate($template): self
+    public function setTemplate(?string $template): self
     {
         $this->template = $template;
         return $this;

@@ -3,10 +3,8 @@
 namespace Akademiano\Content\Files\Controller;
 
 use Akademiano\Content\Files\Api\v1\FilesApi;
-use Akademiano\Content\Files\Images\Model\ImageFormatCommand;
 use Akademiano\Content\Files\Model\File;
 use Akademiano\Core\Controller\AkademianoController;
-use Akademiano\Delegating\DelegatingInterface;
 use Akademiano\HttpWarp\Exception\AccessDeniedException;
 use Akademiano\HttpWarp\Exception\NotFoundException;
 use Akademiano\HttpWarp\Header;
@@ -18,6 +16,7 @@ abstract class FilesController extends AkademianoController
     const ENTITY_API_ID = FilesApi::API_ID;
     const ENV_ACCEL_VAR_NAME = 'SERVER_ACCEL_HEADER';
     const ROUTE_FILE_BY_NAME = null;
+    const INTERNAL_URL_PREFIX = 'files';
 
     /**
      * @return FilesApi
@@ -77,8 +76,8 @@ abstract class FilesController extends AkademianoController
             $path = ($this->getEntityApy()->isPublic() ? PUBLIC_DIR : DATA_DIR) . DIRECTORY_SEPARATOR . $outputFile->getPath();
             $url = '/' . static::INTERNAL_URL_PREFIX . '/' . $outputFile->getPosition();
         } else {
-            $path = ROOT_DIR . DIRECTORY_SEPARATOR . $outputFile->getPath();
-            $url = '/' . static::INTERNAL_URL_PREFIX . '/' . $outputFile->getPosition();
+            $path = ROOT_DIR . DIRECTORY_SEPARATOR . $file->getPath();
+            $url = '/' . static::INTERNAL_URL_PREFIX . '/' . $file->getPosition() . '/' . $file->getId()->getInt() . '.' . $file->getExtension();
         }
 
         $isAccel = $this->getRequest()->getEnvironment()->getVar(self::ENV_ACCEL_VAR_NAME, false);
