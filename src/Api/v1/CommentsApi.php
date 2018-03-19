@@ -8,6 +8,9 @@ use Akademiano\Api\v1\Items\ItemsPage;
 use Akademiano\Content\Comments\Model\Comment;
 use Akademiano\Core\Exception\AccessDeniedException;
 use Akademiano\Entity\EntityInterface;
+use Akademiano\EntityOperator\Command\CreateCommand;
+use Akademiano\EntityOperator\Command\LoadCommand;
+use Akademiano\EntityOperator\Command\SaveCommand;
 use Akademiano\Utils\Paging\PagingMetadata;
 use Akademiano\HttpWarp\Exception\NotFoundException;
 
@@ -58,12 +61,12 @@ class CommentsApi extends EntityApi
             if (!$this->accessCheck($resource)) {
                 throw new AccessDeniedException(sprintf('Access Denied to "%s"', $resource), null, null, $resource);
             }
-            $item = $this->getOperator()->create(static::ENTITY_CLASS);
+            $item = $this->delegate(new CreateCommand(static::ENTITY_CLASS));
 
             $data["entity"] = $entity->getId()->getInt();
         }
 
-        $this->getOperator()->load($item, $data);
+        $this->delegate((new LoadCommand($item))->setData($data));
 
         /** @var  $item Comment */
         $item->setChanged(new \DateTime());
@@ -72,9 +75,9 @@ class CommentsApi extends EntityApi
             $item->setOwner($this->getCustodian()->getCurrentUser());
         }
 
-        $this->getOperator()->save($item);
+        $this->delegate(new SaveCommand($item));
 
-        return $item;
+         return $item;
     }
 
     public function saveNotEmpty(EntityInterface $entity, array $data)
