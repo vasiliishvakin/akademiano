@@ -5,13 +5,19 @@ namespace Akademiano\Messages\Model;
 
 
 use Akademiano\Entity\EntityInterface;
-use Akademiano\EntityOperator\Worker\PostgresWorker;
+use Akademiano\EntityOperator\Worker\ContentEntitiesWorker;
 
-class MessagesWorker extends PostgresWorker
+class MessagesWorker extends ContentEntitiesWorker
 {
-    const TABLE_ID = 16;
+    const TABLE_ID = 17;
     const TABLE_NAME = "messages";
-    const EXPAND_FIELDS = ["title", "description", "content", "to", "from", "status", "params", "transport"];
+    const FIELDS = ["to", "from", "status", "params", "transport"];
+    const EXT_ENTITY_FIELDS = ['to', 'from'];
+
+    public static function getEntityClassForMapFilter()
+    {
+        return Message::class;
+    }
 
     public function filterFieldToPostgresType($value, $fieldName = null, EntityInterface $entity = null)
     {

@@ -4,16 +4,24 @@
 namespace Akademiano\Messages\Model;
 
 
-use Akademiano\Operator\Command\Command;
+use Akademiano\Delegating\Command\CommandInterface;
 
-class SendEmailCommand extends Command
+class SendEmailCommand implements CommandInterface
 {
-    const COMMAND_NAME = "send.email";
-    const PARAM_MESSAGE = "message";
+    /** @var Message */
+    protected $message;
+
 
     public function __construct(Message $message)
     {
-        $params[self::PARAM_MESSAGE] = $message;
-        parent::__construct($params, get_class($message));
+        $this->message = $message;
+    }
+
+    /**
+     * @return Message
+     */
+    public function getMessage(): Message
+    {
+        return $this->message;
     }
 }

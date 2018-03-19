@@ -60,8 +60,7 @@ class SendEmailsApi extends AbstractApi implements DelegatingInterface, Custodia
 
         $resultList = [];
         foreach ($messages as $message) {
-            $sendCommand = new SendEmailCommand($message);
-            $result = $this->getOperator()->execute($sendCommand);
+            $result = $this->delegate(new SendEmailCommand($message));
             if ($result) {
                 $resultList[Status::STATUS_DONE] [] = $message;
             } else {

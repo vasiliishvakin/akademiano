@@ -4,21 +4,35 @@
 namespace Akademiano\Messages\Model;
 
 
-use Akademiano\Operator\Command\Command;
+use Akademiano\Delegating\Command\CommandInterface;
 
-class ParseMessageCommand extends Command
+class ParseMessageCommand implements CommandInterface
 {
-    const COMMAND_NAME = "parse.message.template";
+    /** @var Message */
+    protected $message;
 
-    const PARAM_MESSAGE = "message";
-    const PARAM_TEMPLATE = "template";
+    /** @var string */
+    protected $template;
 
     public function __construct(Message $message, $template = null)
     {
-        $params[self::PARAM_MESSAGE] = $message;
-        if (null !== $template) {
-            $params[self::PARAM_TEMPLATE] = $template;
-        }
-        parent::__construct($params, get_class($message));
+        $this->message = $message;
+        $this->template = $template;
+    }
+
+    /**
+     * @return Message
+     */
+    public function getMessage(): Message
+    {
+        return $this->message;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTemplate(): ?string
+    {
+        return $this->template;
     }
 }

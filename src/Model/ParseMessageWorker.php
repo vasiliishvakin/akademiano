@@ -4,23 +4,36 @@
 namespace Akademiano\Messages\Model;
 
 
-use Akademiano\Operator\Command\CommandInterface;
+use Akademiano\Delegating\Command\CommandInterface;
 use Akademiano\Operator\Worker\WorkerInterface;
-use Akademiano\Operator\Worker\WorkerMetaMapPropertiesTrait;
+use Akademiano\Operator\Worker\WorkerMappingTrait;
+use Akademiano\Operator\Worker\WorkerSelfInstancedInterface;
+use Akademiano\Operator\Worker\WorkerSelfMapCommandsInterface;
+use Akademiano\Operator\WorkersContainer;
 use Akademiano\SimplaView\ViewInterface;
 use Akademiano\Utils\StringUtils;
 
-class ParseMessageWorker implements WorkerInterface
+class ParseMessageWorker implements WorkerInterface, WorkerSelfMapCommandsInterface, WorkerSelfInstancedInterface
 {
-    use WorkerMetaMapPropertiesTrait;
+    const WORKER_ID = 'parseMessageWorker';
+
+    use WorkerMappingTrait;
 
     /** @var  ViewInterface */
     protected $view;
 
-    protected static function getDefaultMapping()
+    public static function getSelfInstance(WorkersContainer $container): WorkerInterface
+    {
+        $worker = new static();
+        $view = $container->getDependencies()["view"];
+        $worker->setView($view);
+        return $worker;
+    }
+
+    public static function getSupportedCommands(): array
     {
         return [
-            ParseMessageCommand::COMMAND_NAME => null,
+            ParseMessageCommand::class,
         ];
     }
 
@@ -42,14 +55,10 @@ class ParseMessageWorker implements WorkerInterface
 
     public function execute(CommandInterface $command)
     {
-        switch ($command->getName()) {
-            case ParseMessageCommand::COMMAND_NAME : {
-                $message = $command->getParams(ParseMessageCommand::PARAM_MESSAGE);
-                $template = $command->getParams(ParseMessageCommand::PARAM_TEMPLATE);
-                return $this->parse($message, $template);
-            }
-            default:
-                throw new \InvalidArgumentException(sprintf('Command type "%s" ("%s") not supported in worker "%s"', $command->getName(), get_class($command), get_class($this)));
+        if ($command instanceof ParseMessageCommand) {
+            return $this->parse($command->getMessage(), $command->getTemplate());
+        } else {
+            throw new \InvalidArgumentException(sprintf('Command type "%s" ("%s") not supported in worker "%s"', $command->getName(), get_class($command), get_class($this)));
         }
     }
 

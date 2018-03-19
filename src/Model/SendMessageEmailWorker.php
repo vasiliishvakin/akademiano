@@ -4,44 +4,55 @@
 namespace Akademiano\Messages\Model;
 
 
-use Akademiano\EntityOperator\EntityOperator;
-use Akademiano\Operator\Command\CommandInterface;
-use Akademiano\Operator\DelegatingInterface;
-use Akademiano\Operator\DelegatingTrait;
+use Akademiano\Delegating\Command\CommandInterface;
+use Akademiano\Delegating\DelegatingInterface;
+use Akademiano\Delegating\DelegatingTrait;
+use Akademiano\EntityOperator\Command\SaveCommand;
 use Akademiano\Operator\Worker\WorkerInterface;
-use Akademiano\Operator\Worker\WorkerMetaMapPropertiesTrait;
+use Akademiano\Operator\Worker\WorkerMappingTrait;
+use Akademiano\Operator\Worker\WorkerSelfInstancedInterface;
+use Akademiano\Operator\Worker\WorkerSelfInstanceTrait;
+use Akademiano\Operator\Worker\WorkerSelfMapCommandsInterface;
+use Akademiano\Operator\WorkersContainer;
 
-/**
- * Class SendMessageEmailWorker
- * @package Akademiano\Messages\Model
- * @method EntityOperator getOperator()
- */
-class SendMessageEmailWorker implements WorkerInterface, DelegatingInterface
+class SendMessageEmailWorker implements WorkerInterface, DelegatingInterface, WorkerSelfInstancedInterface, WorkerSelfMapCommandsInterface
 {
+    const WORKER_ID = 'sendMessageEmailWorker';
+
     use DelegatingTrait;
-    use WorkerMetaMapPropertiesTrait;
+    use WorkerMappingTrait;
+    use WorkerSelfInstanceTrait;
 
     /** @var  \Swift_Mailer */
     protected $mailer;
 
     protected $from;
 
-    protected static function getDefaultMapping()
+    public static function getSelfInstance(WorkersContainer $container): WorkerInterface
+    {
+        $worker = new static();
+        $config = $container->getDependencies()["config"];
+        $worker->setMailer($container->getDependencies()["mailer"]);
+        $from = $config->getOrThrow(["email", "smtp", "from"]);
+        $from = ($from instanceof \Akademiano\Config\Config) ? $from->toArray() : $from;
+        $worker->setFrom($from);
+        return $worker;
+    }
+
+    public static function getSupportedCommands(): array
     {
         return [
-            SendEmailCommand::COMMAND_NAME => null,
+            SendEmailCommand::class,
         ];
     }
 
     public function execute(CommandInterface $command)
     {
-        switch ($command->getName()) {
-            case SendEmailCommand::COMMAND_NAME : {
-                $message = $command->getParams(ParseMessageCommand::PARAM_MESSAGE);
-                return $this->send($message);
-            }
-            default:
-                throw new \InvalidArgumentException(sprintf('Command type "%s" ("%s") not supported in worker "%s"', $command->getName(), get_class($command), get_class($this)));
+        if ($command instanceof SendEmailCommand) {
+            $message = $command->getMessage();
+            return $this->send($message);
+        } else {
+            throw new \InvalidArgumentException(sprintf('Command type "%s" ("%s") not supported in worker "%s"', $command->getName(), get_class($command), get_class($this)));
         }
     }
 
@@ -80,7 +91,7 @@ class SendMessageEmailWorker implements WorkerInterface, DelegatingInterface
     public function send(Message $message)
     {
         $message->setStatus(new Status(Status::STATUS_DO));
-        $this->getOperator()->save($message);
+        $this->delegate(new SaveCommand($message));
         try {
             $swiftMessage = $this->prepareMessage($message);
             $mailer = $this->getMailer();
@@ -90,11 +101,11 @@ class SendMessageEmailWorker implements WorkerInterface, DelegatingInterface
                 throw new \RuntimeException(sprintf('Message id "%s" with theme "%s" to "%s" not send', $message->getId(), $message->getTitle(), $message->getTo()->getEmail()));
             }
             $message->setStatus(new Status(Status::STATUS_DONE));
-            $this->getOperator()->save($message);
+            $this->delegate(new SaveCommand($message));
             return true;
         } catch (\Exception $e) {
             $message->setStatus(new Status(Status::STATUS_ERROR));
-            $this->getOperator()->save($message);
+            $this->delegate(new SaveCommand($message));
             return false;
         }
     }
@@ -109,7 +120,6 @@ class SendMessageEmailWorker implements WorkerInterface, DelegatingInterface
             ->setFrom($this->getFrom())
             ->setTo($message->getTo()->getEmail(), $message->getTo()->getTitle())
             ->setBody(strip_tags($message->getContent()))
-            ->addPart($message->getContent(), 'text/html')
-            ;
+            ->addPart($message->getContent(), 'text/html');
     }
 }

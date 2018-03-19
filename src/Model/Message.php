@@ -6,20 +6,12 @@ namespace Akademiano\Messages\Model;
 
 use Akademiano\Entity\ContentEntity;
 use Akademiano\Entity\UserInterface;
-use Akademiano\EntityOperator\EntityOperator;
-use Akademiano\Operator\DelegatingInterface;
-use Akademiano\Operator\DelegatingTrait;
+use Akademiano\EntityOperator\Command\GetCommand;
 use Akademiano\UserEO\Model\User;
 
-/**
- * Class Message
- * @package Akademiano\Messages\Model
- * @method EntityOperator getOperator()
- */
-class Message extends ContentEntity implements DelegatingInterface
-{
-    use DelegatingTrait;
 
+class Message extends ContentEntity
+{
 
     /** @var  User */
     protected $to;
@@ -40,7 +32,7 @@ class Message extends ContentEntity implements DelegatingInterface
     public function getTo()
     {
         if (null !== $this->to && !$this->to instanceof UserInterface) {
-            $this->to = $this->getOperator()->get(User::class, $this->to);
+            $this->to = $this->delegate((new GetCommand(User::class))->setId($this->to));
         }
         return $this->to;
     }
@@ -59,7 +51,7 @@ class Message extends ContentEntity implements DelegatingInterface
     public function getFrom()
     {
         if (null !== $this->from && !$this->from instanceof UserInterface) {
-            $this->from = $this->getOperator()->get(User::class, $this->from);
+            $this->from = $this->delegate((new GetCommand(User::class))->setId($this->from));
         }
         return $this->from;
     }
@@ -129,10 +121,8 @@ class Message extends ContentEntity implements DelegatingInterface
     public function getContent()
     {
         if (null === $this->content) {
-            $command = new ParseMessageCommand($this);
-            $this->content = $this->getOperator()->execute($command);
+            $this->content = $this->delegate(new ParseMessageCommand($this));
         }
         return $this->content;
     }
-
 }
