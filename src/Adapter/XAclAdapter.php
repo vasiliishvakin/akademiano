@@ -4,6 +4,7 @@ namespace Akademiano\Acl\Adapter;
 
 
 use Akademiano\Acl\XAclConf\File;
+use Akademiano\Entity\UuidableInterface;
 use Akademiano\Utils\ArrayTools;
 use Akademiano\Entity\GroupInterface;
 use Akademiano\Entity\UserInterface;
@@ -150,8 +151,8 @@ class XAclAdapter implements AdapterInterface, FileBasedAdapterInterface
             "-c" => $this->getAclFile(),
             "-g" => $group->getTitle(),
             "-r" => $resource,
-            "-u" => ($user instanceof UserInterface) ? $user->getId() : null,
-            "-o" => ($owner instanceof UserInterface) ? $owner->getId() : null,
+            "-u" => ($user instanceof UuidableInterface) ? $user->getUuid()->getInt() : null,
+            "-o" => ($owner instanceof UuidableInterface) ? $owner->getUuid()->getInt() : null,
         ];
         $params = ArrayTools::filterNulls($params);
         $params = ArrayTools::implodePairs(" ", $params, " ");
