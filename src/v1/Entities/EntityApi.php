@@ -197,12 +197,14 @@ class EntityApi extends AbstractApi implements EntityApiInterface, CustodianIncl
 
     public function saveEntity(EntityInterface $entity)
     {
+        $owner = null;
         if ($entity->isExistingEntity()) {
             $resource = sprintf('entityapi:save:%s:%s', static::ENTITY_CLASS, $entity->getId());
+            $owner = $entity->getOwner();
         } else {
             $resource = sprintf('entityapi:add:%s', static::ENTITY_CLASS);
         }
-        if (!$this->accessCheck($resource)) {
+        if (!$this->accessCheck($resource, $owner)) {
             throw new AccessDeniedException(sprintf('Access Denied to "%s"', $resource), null, null, $resource);
         }
 
