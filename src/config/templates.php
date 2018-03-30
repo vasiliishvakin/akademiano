@@ -82,4 +82,25 @@ return [
         $image->resize($width, $heigth, false);
         return $image->save($newPath, $format, 100);
     },
+    'facebook' => function (\PHPixie\Image\Drivers\Driver\Resource $image, $newPath, $format) {
+        $width = 1200;
+        $height = 630;
+
+        $image->fill($width, $height, false);
+        return $image->save($newPath, $format, 100);
+    },
+    'twitter' => function (\PHPixie\Image\Drivers\Driver\Resource $image, $newPath, $format) {
+        $width = 1024;
+        $height = 512;
+
+        $image->fill($width, $height, false);
+        return $image->save($newPath, $format, 100);
+    },
+    'socials' => function (\PHPixie\Image\Drivers\Driver\Resource $image, $newPath, $format) {
+        $width = 968;
+        $height = 504;
+
+        $image->fill($width, $height, false);
+        return $image->save($newPath, $format, 100);
+    },
 ];
