@@ -111,4 +111,10 @@ class ItemsPage implements \ArrayAccess, \Iterator, \Countable, \JsonSerializabl
     {
         return $this->toArray();
     }
+
+    public function first()
+    {
+        $this->rewind();
+        return $this->current();
+    }
 }
