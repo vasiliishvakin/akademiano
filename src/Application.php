@@ -265,7 +265,7 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
         $errorCode = $e->getCode();
         $closure = $this->getErrorFunction($errorCode);
         if (is_array($closure)) {
-            $this->action('error_catch', $closure[0], $closure[1], ["exception" => $e]);
+            $this->action($this->getRouter()->getCurrentRoute(), $closure[0], $closure[1], ["exception" => $e]);
         } elseif (is_callable($closure)) {
             call_user_func($closure);
         } elseif ($errorCode === 404) {
