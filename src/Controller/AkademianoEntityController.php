@@ -69,16 +69,27 @@ abstract class AkademianoEntityController extends AkademianoController
 
     public function listAction()
     {
+        $page = $this->getPage();
         $items = $this->getEntityApi()->find(
             $this->getListCriteria(),
-            $this->getPage(),
+            $page,
             $this->getListOrder(),
             $this->getItemsPerPage()
         );
+        if ($items->count() <= 0) {
+            throw new NotFoundException(sprintf('Not found items in page %d', $page));
+        }
 
-        return [
+        $result = [
             "items" => $items,
         ];
+
+        if ($page > 1) {
+            $url = $this->getRoute()->getUrl($this->getUrlParams());
+            $url->getQuery()->setItems([self::PAGE_PARAM_NAME => $page]);
+            $result['_url'] = $url;
+        }
+        return $result;
     }
 
     public function viewAction(array $params = [])
