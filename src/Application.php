@@ -317,16 +317,7 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
         }
     }
 
-    /**
-     * @param $routeId
-     * @param $controllerInfo
-     * @param $action
-     * @param array ...$arguments
-     * @throws AccessDeniedException
-     * @throws NotFoundException
-     * @throws \ErrorException
-     */
-    public function action($routeId, $controllerInfo, $action, ...$arguments)
+    public function action(Route $route, array $controllerInfo, string $action, ...$arguments)
     {
         $actionName = lcfirst($action);
         $action = $actionName . 'Action';
@@ -398,13 +389,21 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
             }
         }
         $view->setTemplate($template);
+        //TODO FIX
+        $urlParams = [];
+        if (isset($arguments[0])) {
+            $urlParams = $arguments[0];
+        }
+        $urlParams = array_merge($request->getParams(), $urlParams);
+
         $view->assignArray([
             '_controller' => $controllerId,
             '_action' => $actionName,
-            '_path' => $controllerId . '/' . $actionName
+            '_path' => $controllerId . '/' . $actionName,
+            '_url' => $route->getUrl($urlParams),
         ]);
 
-        $controller = new $controllerPath($request, $response, $view, $this->getRouter());
+        $controller = new $controllerPath($request, $response, $view, $this->getRouter(), $route, $arguments);
 
         if (!$controller instanceof ControllerInterface) {
             throw new \ErrorException("Controller mast be implement ControllerInterface");
