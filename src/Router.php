@@ -278,7 +278,7 @@ class Router implements EnvironmentIncludeInterface
         if (!empty($params)) {
             $args[] = $params;
         }
-        array_unshift($args, $route->getId());
+        array_unshift($args, $route);
         return call_user_func_array($route->getAction(), $args);
     }
 

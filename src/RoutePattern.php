@@ -159,8 +159,7 @@ class RoutePattern implements ArrayableInterface
         }
         switch ($this->getType()) {
             case self::TYPE_FULL:
-                throw new \InvalidArgumentException("Full type RoutePattern not use params (" . implode("|",
-                        (array)$params) . ") for calc value");
+                return $value;
             case self::TYPE_PREFIX:
             case self::TYPE_FIRST_PREFIX:
                 if (is_array($params)) {
