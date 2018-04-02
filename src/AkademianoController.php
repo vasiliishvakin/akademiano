@@ -5,12 +5,15 @@ namespace Akademiano\Core\Controller;
 use Akademiano\Config\ConfigurableTrait;
 use Akademiano\HttpWarp\Request;
 use Akademiano\HttpWarp\Response;
+use Akademiano\Router\Route;
 use Akademiano\Router\Router;
 use Akademiano\SimplaView\ViewInterface;
 use Akademiano\Utils\Parts\DIContainerTrait;
 
 class AkademianoController implements ControllerInterface
 {
+    const PAGE_PARAM_NAME = 'p';
+
     use ConfigurableTrait;
     use DIContainerTrait;
 
@@ -26,15 +29,23 @@ class AkademianoController implements ControllerInterface
     /** @var  Router */
     private $router;
 
+    /** @var Route */
+    private $route;
+
+    /** @var array */
+    private $arguments;
+
     private $autoRender = true;
     private $autoSend = true;
 
-    public function __construct(Request $request, Response $response, ViewInterface $view, Router $router)
+    public function __construct(Request $request, Response $response, ViewInterface $view, Router $router, Route $route, array $arguments)
     {
         $this->setRequest($request);
         $this->setResponse($response);
         $this->setView($view);
         $this->setRouter($router);
+        $this->setRoute($route);
+        $this->setArguments($arguments);
     }
 
     /**
@@ -51,6 +62,38 @@ class AkademianoController implements ControllerInterface
     public function setRouter($router)
     {
         $this->router = $router;
+    }
+
+    /**
+     * @return Route
+     */
+    public function getRoute(): Route
+    {
+        return $this->route;
+    }
+
+    /**
+     * @param Route $route
+     */
+    public function setRoute(Route $route): void
+    {
+        $this->route = $route;
+    }
+
+    /**
+     * @return array
+     */
+    public function getArguments(): array
+    {
+        return $this->arguments;
+    }
+
+    /**
+     * @param array $arguments
+     */
+    public function setArguments(array $arguments): void
+    {
+        $this->arguments = $arguments;
     }
 
     /**
@@ -161,7 +204,7 @@ class AkademianoController implements ControllerInterface
 
     public function getPage()
     {
-        return (integer) $this->getRequest()->getParam("p", 1);
+        return (integer) $this->getRequest()->getParam(self::PAGE_PARAM_NAME, 1);
     }
 
     public function redirect($routeId, array $params = [])
@@ -183,5 +226,17 @@ class AkademianoController implements ControllerInterface
     public function getRouteUrl($routeId, array $params = [])
     {
         return $this->getRouter()->getUrl($routeId, $params);
+    }
+
+    public function getUrlParams()
+    {
+        //TODO FIX
+        $arguments = $this->getArguments();
+        $urlParams = [];
+        if (isset($arguments[0])) {
+            $urlParams = $arguments[0];
+        }
+        $urlParams = array_merge($this->getRequest()->getParams(), $urlParams);
+        return $urlParams;
     }
 }
