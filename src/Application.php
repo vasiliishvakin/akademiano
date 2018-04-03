@@ -478,7 +478,7 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
                     $body = json_encode($result, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
                     $response->setBody($body);
                     break 2;
-                case "text/html":
+                default:
                     //case "text/html":
                     if ($controller->isAutoRender()) {
                         if (!empty($result)) {

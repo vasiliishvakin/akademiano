@@ -42,7 +42,14 @@ class ApplicationComponentsProvider implements ServiceProviderInterface
 
         if (!isset($pimple['response'])) {
             $pimple['response'] = function (Container $pimple) {
-                return new Response();
+                /** @var Config $config */
+                $config = $pimple['config'];
+                $respConfig = [
+                    'language' => $config->get('language', 'en'),
+                ];
+                $response = new Response();
+                $response->setDefaults($respConfig);
+                return $response;
             };
         }
 
@@ -57,7 +64,7 @@ class ApplicationComponentsProvider implements ServiceProviderInterface
                 $configLoader = new ConfigLoader($pimple);
                 $postProcessors = $pimple["sitesManager"]->getConfigLoaderPostProcessors();
                 foreach ($postProcessors as $configName => $processors) {
-                    $processors = (array) $processors;
+                    $processors = (array)$processors;
                     foreach ($processors as $processor) {
                         $configLoader->addPostProcessor($processor, $configName);
                     }
@@ -89,7 +96,7 @@ class ApplicationComponentsProvider implements ServiceProviderInterface
 
                 $postProcessors = $moduleManager->getConfigLoaderPostProcessors();
                 foreach ($postProcessors as $configName => $processors) {
-                    $processors = (array) $processors;
+                    $processors = (array)$processors;
                     foreach ($processors as $processor) {
                         $configLoader->addPostProcessor($processor, $configName);
                     }
@@ -102,7 +109,7 @@ class ApplicationComponentsProvider implements ServiceProviderInterface
                         $params = (isset($dirInfo["params"])) ? $dirInfo["params"] : (isset($dirInfo[1]) ? $dirInfo[1] : null);
                     } else {
                         $path = $dirInfo;
-                        $params= null;
+                        $params = null;
                     }
                     $configLoader->addConfigDir($path, self::CONFIG_LEVEL_MODULES, $params);
                 }
@@ -265,17 +272,14 @@ class ApplicationComponentsProvider implements ServiceProviderInterface
             $view->setDiContainer($pimple);
         }
 
-        $viewVars = $viewConfig->get(["vars"]);
-        if ($viewVars instanceof Config) {
-            $viewVars = $viewVars->toArray();
-        }
-        if (!empty($viewVars) && is_array($viewVars)) {
-            foreach ($viewVars as $name => $value) {
-                if (is_callable($value)) {
-                    $value = call_user_func($value, $this);
-                }
-                $view->assign($name, $value);
+        $viewVars = $viewConfig->get(["vars"], []);
+        $viewVars->set($config->getOneIs([['html','lang'], 'lang'], 'en'), ['html','lang']);
+
+        foreach ($viewVars as $name => $value) {
+            if (is_callable($value)) {
+                $value = call_user_func($value, $this);
             }
+            $view->assign($name, $value);
         }
         return $view;
     }
