@@ -76,7 +76,7 @@ abstract class AkademianoEntityController extends AkademianoController
             $this->getListOrder(),
             $this->getItemsPerPage()
         );
-        if ($items->count() <= 0) {
+        if ($items->count() <= 0 && $page !== 1) {
             throw new NotFoundException(sprintf('Not found items in page %d', $page));
         }
 
