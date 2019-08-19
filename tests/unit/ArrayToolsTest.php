@@ -6,7 +6,7 @@ class ArrayToolsTest extends \PHPUnit_Framework_TestCase
     {
     }
 
-    protected function tearDown(): void 
+    protected function tearDown(): void
     {
     }
 
