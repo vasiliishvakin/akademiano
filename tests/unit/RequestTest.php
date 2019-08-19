@@ -5,12 +5,12 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     /** @var  \Akademiano\HttpWarp\Request */
     protected $request;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->request = new \Akademiano\HttpWarp\Request();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->request);
     }
