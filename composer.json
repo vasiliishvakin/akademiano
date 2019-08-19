@@ -24,7 +24,7 @@
     "symfony/yaml": "^4.3.3",
     "pimple/pimple": "^3.0",
     "myclabs/php-enum": "^1.7",
-    "psr/log": "~1.0"
+    "psr/log": "~1.1"
   },
   "require-dev": {
     "codeception/codeception": "^3.1",
