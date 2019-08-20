@@ -5,8 +5,8 @@ namespace Akademiano\Router;
 
 use Akademiano\HttpWarp\EnvironmentIncludeInterface;
 use Akademiano\HttpWarp\Parts\EnvironmentIncludeTrait;
-use Akademiano\Router\RoutePattern;
 use Akademiano\Utils\ArrayTools;
+use Akademiano\Utils\Debug;
 use Akademiano\Utils\Object\Collection;
 use Akademiano\Utils\Parts\SetParams;
 use Akademiano\HttpWarp\Url;
@@ -211,7 +211,7 @@ class Route implements EnvironmentIncludeInterface
     public static function shortNormalize(array $routeData)
     {
         if (count($routeData) < 2) {
-            throw new \RuntimeException("Route mast have at least two parameters, first for pattern and second for action: " . \DeltaUtils\Debug::var2str($routeData));
+            throw new \RuntimeException("Route mast have at least two parameters, first for pattern and second for action: " . Debug::var2str($routeData));
         }
         if (isset($routeData["patterns"]) && isset($routeData["action"])){
             return $routeData;
@@ -247,7 +247,7 @@ class Route implements EnvironmentIncludeInterface
     public static function oldNormalize(array $routeData)
     {
         if (count($routeData) < 2) {
-            throw new \RuntimeException("Route mast have at least two parameters, first for pattern and second for action: " . \DeltaUtils\Debug::var2str($routeData));
+            throw new \RuntimeException("Route mast have at least two parameters, first for pattern and second for action: " . Debug::var2str($routeData));
         }
         $flag = explode("::", $routeData[0]);
         if (count($flag) < 2) {

@@ -60,11 +60,9 @@ class RoutingTest extends \Codeception\TestCase\Test
         $this->assertEquals("OK", $this->router->run());
     }
 
-    /**
-     * @expectedException \Akademiano\HttpWarp\Exception\NotFoundException
-     */
     public function testNotRouted()
     {
+        $this->expectException(\Akademiano\HttpWarp\Exception\NotFoundException::class);
         $route = [
             "methods" => [Route::METHOD_ALL],
             "patterns" => [
@@ -82,11 +80,9 @@ class RoutingTest extends \Codeception\TestCase\Test
         $this->assertEquals("OK", $this->router->run());
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testEmpty()
     {
+        $this->expectException(\RuntimeException::class);
         $this->router->setRoutes([]);
         $this->router->run();
     }
@@ -240,7 +236,7 @@ class RoutingTest extends \Codeception\TestCase\Test
                 "type" => RoutePattern::TYPE_REGEXP,
                 "value" => "/test/{:name}/data/{:id}",
             ],
-            "action" => function ($arg, $params) {
+            "action" => function (Route $route, $arg, array $params) {
                 return $arg . $params["name"] . $params ["id"];
             },
             "args" => ["arg1"=>"test"],

@@ -175,20 +175,20 @@ class Router implements EnvironmentIncludeInterface
                     case RoutePattern::TYPE_FULL:
                     case RoutePattern::TYPE_FIRST_PREFIX :
                     case RoutePattern::TYPE_PREFIX:
-                        {
-                            usort($routes, function (Route $a, Route $b) {
-                                /** @var Route $a */
-                                /** @var Route $b */
-                                $la = $a->getMaxLength();
-                                $lb = $b->getMaxLength();
-                                if ($la === $lb) {
-                                    return 0;
-                                }
+                    {
+                        usort($routes, function (Route $a, Route $b) {
+                            /** @var Route $a */
+                            /** @var Route $b */
+                            $la = $a->getMaxLength();
+                            $lb = $b->getMaxLength();
+                            if ($la === $lb) {
+                                return 0;
+                            }
 
-                                return ($la > $lb) ? -1 : 1;
-                            });
-                            break;
-                        }
+                            return ($la > $lb) ? -1 : 1;
+                        });
+                        break;
+                    }
                 }
             }
         }
@@ -223,23 +223,23 @@ class Router implements EnvironmentIncludeInterface
                 return $compare;
                 break;
             case RoutePattern::TYPE_PARAMS:
-                {
-                    if (!$value instanceof Url\Query && !$pattern instanceof Url\Query) {
-                        throw new \InvalidArgumentException("Value and pattern mast be type Query for pattern type " . RoutePattern::TYPE_PARAMS);
-                    }
-                    if ($pattern->count() > $value->count()) {
+            {
+                if (!$value instanceof Url\Query && !$pattern instanceof Url\Query) {
+                    throw new \InvalidArgumentException("Value and pattern mast be type Query for pattern type " . RoutePattern::TYPE_PARAMS);
+                }
+                if ($pattern->count() > $value->count()) {
+                    return false;
+                }
+                $compare = false;
+                foreach ($pattern as $name => $valueParam) {
+                    if (!isset($value[$name]) || (string)$value[$name] !== (string)$valueParam) {
                         return false;
                     }
-                    $compare = false;
-                    foreach ($pattern as $name => $valueParam) {
-                        if (!isset($value[$name]) || (string)$value[$name] !== (string)$valueParam) {
-                            return false;
-                        }
-                        $compare = true;
-                    }
-
-                    return $compare;
+                    $compare = true;
                 }
+
+                return $compare;
+            }
             default:
                 throw new \InvalidArgumentException("This type compare not realised");
         }
@@ -306,7 +306,7 @@ class Router implements EnvironmentIncludeInterface
     public function run()
     {
         if ($this->isRun) {
-            return;
+            return null;
         } //fix double run
         $this->isRun = true;
 
@@ -354,6 +354,7 @@ class Router implements EnvironmentIncludeInterface
         if (!$processed) {
             throw new NotFoundException();
         }
+        return null;
     }
 
     public function __invoke()
