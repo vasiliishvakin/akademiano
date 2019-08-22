@@ -37,6 +37,8 @@ interface EntityInterface extends BaseEntityInterface, DelegatingInterface
      */
     public function isActive():bool;
 
+    public function setActive($active);
+
     public function getOwner():?UserInterface;
 
     public function setOwner($owner);

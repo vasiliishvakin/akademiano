@@ -17,6 +17,7 @@
     },
     "require": {
         "akademiano/utils": "^1.1",
+        "akademiano/delegating": "^1.0",
         "nesbot/carbon": "^2.23"
     },
     "require-dev": {

@@ -29,11 +29,7 @@ class Entity extends BaseEntity implements EntityInterface
     public function getCreated(): \DateTime
     {
         if (null !== $this->created && !$this->created instanceof Carbon) {
-            if ($this->created instanceof \DateTime) {
-                $this->created = Carbon::instance($this->created);
-            } else {
-                $this->created = new Carbon($this->created);
-            }
+            $this->created = Carbon::make($this->created);
         }
         return $this->created;
     }
@@ -52,11 +48,7 @@ class Entity extends BaseEntity implements EntityInterface
     public function getChanged(): \DateTime
     {
         if (null !== $this->changed && !$this->changed instanceof Carbon) {
-            if ($this->changed instanceof \DateTime) {
-                $this->changed = Carbon::instance($this->changed);
-            } else {
-                $this->changed = new Carbon($this->changed);
-            }
+            $this->changed = Carbon::make($this->changed);
         } else {
             $this->changed = $this->getCreated();
         }
@@ -80,14 +72,16 @@ class Entity extends BaseEntity implements EntityInterface
     }
 
     /**
-     * @param boolean $active
+     * @param mixed $active
      */
     public function setActive($active)
     {
-        if ($active === "t" || $active === "true") {
-            $active = true;
-        } elseif ($active === "f" || $active === "false") {
-            $active = false;
+        if (is_string($active)) {
+            if ($active === "t" || $active === "true") {
+                $active = true;
+            } elseif ($active === "f" || $active === "false") {
+                $active = false;
+            }
         }
         $this->active = (boolean)$active;
     }
@@ -118,7 +112,7 @@ class Entity extends BaseEntity implements EntityInterface
         $this->owner = $owner;
     }
 
-    public function toArray():array
+    public function toArray(): array
     {
         $data = parent::toArray();
         $data['created'] = $this->getCreated();

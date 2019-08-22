@@ -25,45 +25,43 @@ class Uuid implements UuidInterface
         $this->value = (integer)$value;
     }
 
-    public function getValue()
+    public function getValue(): int
     {
         return $this->value;
     }
 
-    public function getHex()
+    public function getHex(): string
     {
-        return dechex($this->getInt());
+        return dechex($this->getValue());
     }
 
-    public function getInt()
+    /**
+     * @deprecated
+     */
+    public function getInt(): int
     {
-        return (integer)$this->value;
+        return $this->value;
     }
 
 
     public function __toString()
     {
-        return (string)$this->getHex();
+        return $this->getHex();
     }
 
     public function serialize()
     {
-        return serialize([
-            'value' => $this->getValue(),
-        ]);
+        return $this->getValue();
     }
 
     public function unserialize($serialized)
     {
-        $data = $this->unserialize($serialized);
-        $this->value = $data['value'];
+        $this->setValue(unserialize($serialized, ["allowed_classes"=>false]));
     }
 
     public function jsonSerialize()
     {
-        return [
-            'value' => $this->getHex(),
-        ];
+        $this->getHex();
     }
 
     public static function isHexUuid(string $string)
@@ -73,7 +71,7 @@ class Uuid implements UuidInterface
 
     public static function normalize($value)
     {
-        if (is_integer($value)) {
+        if (is_int($value)) {
             return $value;
         } elseif (is_string($value)) {
             if (self::isHexUuid($value)) {
