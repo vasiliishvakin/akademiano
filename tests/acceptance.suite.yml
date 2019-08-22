@@ -10,3 +10,8 @@ modules:
         - PhpBrowser:
             url: http://127.0.0.1:8888
         - \Helper\Acceptance
+extensions:
+    enabled:
+        - Codeception\Extension\RunProcess:
+              - php -S 127.0.0.1:8888 -t ./public router.php >/dev/null 2>&1
+#              sleep: 5
