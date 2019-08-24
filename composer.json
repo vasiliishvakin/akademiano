@@ -21,10 +21,10 @@
   "require": {
     "akademiano/core": "^1.2",
     "oomphinc/composer-installers-extender": "^1.1",
-    "almasaeed2010/adminlte":"^2.4",
+    "coreui/coreui": "^2.1",
 
-    "bower-asset/bootstrap": "^3.3",
-    "bower-asset/jquery": "^3.0",
+    "bower-asset/bootstrap": "^4.3",
+    "bower-asset/jquery": "^3.4",
     
     "bower-asset/html5shiv": "^3.7.3",
     "bower-asset/respond": "^1.4.2",
@@ -42,9 +42,9 @@
     "codeception/c3": "^2.4"
   },
   "extra" : {
-    "installer-types": ["template"],
+    "installer-types": ["library"],
     "installer-paths" : {
-      "public/assets/vendor/admin-lte/": ["almasaeed2010/adminlte"]
+      "public/assets/vendor/coreui/": ["coreui/coreui"]
     }
   },
   "config": {
