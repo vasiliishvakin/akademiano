@@ -62,7 +62,7 @@ class Environment
 
     public function getSrvServerName()
     {
-        return isset($_SERVER["HTTP_HOST"]) ? $_SERVER["HTTP_HOST"] :
+        return isset($_SERVER["HTTP_HOST"]) ? strtok($_SERVER['HTTP_HOST'], ':') :
             (isset($_SERVER["SERVER_NAME"]) ? $_SERVER["SERVER_NAME"] : null);
     }
 
