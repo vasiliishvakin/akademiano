@@ -346,7 +346,7 @@ class AssetExtension extends \Twig_Extension
                 $filePath = $asset->getSourceDirectory();
                 if (false !== $subDir = FileSystem::getSubDir($this->getPublicDir(), $filePath)) {
                     $subDir = !empty($subDir) ? $subDir . DIRECTORY_SEPARATOR : "";
-                    $version = md5(filemtime($asset->getSourceDirectory(). DIRECTORY_SEPARATOR . $asset->getSourcePath()));
+                    $version = md5(filemtime($asset->getSourceDirectory() . DIRECTORY_SEPARATOR . $asset->getSourcePath()));
                     $webPatches[] = $this->getWebPublic() . DIRECTORY_SEPARATOR . $subDir . basename($asset->getSourcePath()) . '?v=' . $version;
                 } else {
                     $filePath = $this->writeAsset($asset);
@@ -385,12 +385,30 @@ class AssetExtension extends \Twig_Extension
 
     public function assetCss($files, $filters = null, $debug = false)
     {
+        //prepare fo files with params
+        $filesParams = [];
+        foreach ($files as &$file) {
+            if (is_array($file)) {
+                $fileName = $file[0];
+                if (count($file) >= 1) {
+                    $name = basename($fileName);
+                    $filesParams[$name] = $file[1];
+                }
+                $file = $fileName;
+            }
+        }
         $this->addOnceAssets(self::ASSET_CSS, $files);
         $webPatches = $this->processAssets($files, $filters, $debug);
-        $webPatches = array_map(function ($path) {
-            return '<link rel="stylesheet" href="' . $path . '"/>';
-        }, $webPatches);
-
+        foreach ($webPatches as &$path) {
+            $name = basename(parse_url($path, PHP_URL_PATH));
+            $params = "";
+            if (isset($filesParams[$name])) {
+                if (isset($filesParams[$name]["class"])) {
+                    $params = sprintf('class="%s"', $filesParams[$name]["class"]);
+                }
+            }
+            $path = sprintf('<link rel="stylesheet" href="%s" %s/>', $path, $params);
+        }
         return implode("\n", $webPatches);
     }
 
@@ -399,7 +417,7 @@ class AssetExtension extends \Twig_Extension
         $this->addOnceAssets(self::ASSET_JS, $files);
         $webPatches = $this->processAssets($files, $filters, $debug);
         $webPatches = array_map(function ($path) {
-            return '<script type=\'text/javascript\' src="' . $path . '"></script>';
+            return '<script src="' . $path . '"></script>';
         }, $webPatches);
 
         return implode("\n", $webPatches);
@@ -426,7 +444,7 @@ class AssetExtension extends \Twig_Extension
             $this->addOnceAssets(self::ASSET_JS, $files);
             $webPatches = $this->processAssets($files, $filters, $debug);
             $webPatches = array_map(function ($path) {
-                return '<script type=\'text/javascript\' src="' . $path . '"></script>';
+                return '<script src="' . $path . '"></script>';
             }, $webPatches);
 
             return implode("\n", $webPatches);
