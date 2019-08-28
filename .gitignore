@@ -3,11 +3,7 @@ local.config.php
 data
 public/data
 public/assets
-
 tests/_output/*
-
 composer.lock
-
-tests/_output/*
-
 c3.php
+components

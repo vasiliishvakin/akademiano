@@ -1,224 +1,183 @@
-<!--
- * CoreUI - Open Source Bootstrap Admin Template
- * @version v1.0.0-alpha.6
- * @link http://coreui.io
- * Copyright (c) 2017 creativeLabs Łukasz Holeczek
- * @license MIT
- -->
-<!DOCTYPE html>
-<html lang={{ html.lang|default("ru") }}>
-
+<!doctype html>
+<html lang="{{ html.lang|default("ru") }}">
 <head>
-
+    <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    {{ asset_css([
+        ["font-awesome/css/fontawesome.min.css", {"class":"holderjs"}],
+        ["font-awesome/css/all.min.css", {"class":"holderjs"}],
+        "simple-line-icons/css/simple-line-icons.css",
+        "pace/themes/blue/pace-theme-minimal.css",
+        "coreui/dist/css/coreui.min.css",
+    ], default, true) }}
+
+    {#
+        "assets/css/coreui-fix.css",
+        "assets/css/akademiano.css",
+    #}
+
+    {% block css %}
+    {% endblock css %}
+
+    {#    counters#}
 
     <title>{{ pageTitle | default('Datamapper Site') }}</title>
     {% if pageDescription %}
         <meta name="description" content="{{ pageDescription }}"/>
     {% endif %}
-
-    {{ asset_css([
-    "font-awesome/css/font-awesome.min.css",
-    "simple-line-icons/css/simple-line-icons.css",
-    "coreui.io/Static_Full_Project_GULP/src/css/style.css",
-    "assets/css/coreui-fix.css",
-    "assets/css/akademiano.css",
-    ], default, true) }}
-
-    {% block css %}
-    {% endblock css %}
-
 </head>
 
-<!-- BODY options, add following classes to body to change options
-
-// Header options
-1. '.header-fixed'					- Fixed Header
-
-// Sidebar options
-1. '.sidebar-fixed'					- Fixed Sidebar
-2. '.sidebar-hidden'				- Hidden Sidebar
-3. '.sidebar-off-canvas'		- Off Canvas Sidebar
-4. '.sidebar-minimized'			- Minimized Sidebar (Only icons)
-5. '.sidebar-compact'			  - Compact Sidebar
-
-// Aside options
-1. '.aside-menu-fixed'			- Fixed Aside Menu
-2. '.aside-menu-hidden'			- Hidden Aside Menu
-3. '.aside-menu-off-canvas'	- Off Canvas Aside Menu
-
-// Footer options
-1. '.footer-fixed'						- Fixed footer
-
--->
-
 {% block body %}
-    <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
+    <body class="{{ template_body_class | default ('app header-fixed sidebar-fixed aside-menu-hidden sidebar-lg-show') }}">
 
+    <!-- app-header -->
     {% block navbar %}
         <header class="app-header navbar">
-            <button class="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button">☰</button>
-            <a class="navbar-brand" href="#"></a>
+            <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="#">
+                <!-- logo -->
+                <img class="navbar-brand-full" src="data:," data-src="holder.js/89x25/?theme=social&font='Font Awesome 5 Free'&text=&#xf0ce;&#x20;&#xf6ff;&size=16" width="89" height="25" alt="Logo">
+                <img class="navbar-brand-minimized" src="data:," data-src="holder.js/30x30?theme=social&font='Font Awesome 5 Free'&text=&#xf0ce;&size=12" width="30" height="30" alt="Logo">
+                <!-- /logo -->
+            </a>
+
+            <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" data-toggle="sidebar-lg-show">
+                <span class="navbar-toggler-icon"></span>
+            </button>
             <ul class="nav navbar-nav d-md-down-none">
-                <li class="nav-item">
-                    <a class="nav-link navbar-toggler sidebar-toggler" href="#">☰</a>
-                </li>
-
-                <li class="nav-item px-3">
-                    <a class="nav-link" href="#">Dashboard</a>
-                </li>
-
+                {% block navbarItems %}
+                    <li class="nav-item px-3">
+                        <a class="nav-link" href="#">Dashboard</a>
+                    </li>
+                {% endblock navbarItems %}
             </ul>
+
+            <!-- profile link -->
             <ul class="nav navbar-nav ml-auto">
-                <li class="nav-item d-md-down-none">
-                    <a class="nav-link" href="#"><i class="icon-bell"></i><span class="badge badge-pill badge-danger">5</span></a>
-                </li>
-                <li class="nav-item d-md-down-none">
-                    <a class="nav-link" href="#"><i class="icon-list"></i></a>
-                </li>
-                <li class="nav-item d-md-down-none">
-                    <a class="nav-link" href="#"><i class="icon-location-pin"></i></a>
-                </li>
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle nav-link" data-toggle="dropdown" href="#" role="button"
-                       aria-haspopup="true" aria-expanded="false">
-                        {#<img src="img/avatars/6.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">#}
-                        <span class="d-md-down-none">{{ current_user().title | default("Account") }}</span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right">
-
-                        <div class="dropdown-header text-center">
-                            <strong>Account</strong>
-                        </div>
-                        <a class="dropdown-item"
-                           href="{{ url(constant("Akademiano\\UserEO\\UsersOpsRoutesStore::LOGOUT_ROUTE")) }}"><i
-                                    class="fa fa-lock"></i> Logout</a>
-                    </div>
-                </li>
-
-                <li class="nav-item d-md-down-none">
-                    <a class="nav-link navbar-toggler aside-menu-toggler" href="#">☰</a>
-                </li>
-
-
+                {% block navbarUserItems %}
+                {% endblock navbarUserItems %}
             </ul>
+            <!-- /profile link -->
         </header>
     {% endblock navbar %}
+    <!-- /app-header -->
 
+    <!-- app-body -->
     {% block appBody %}
         <div class="app-body">
+
             {% block sidebar %}
+                <!-- sidebar -->
                 <div class="sidebar">
                     <nav class="sidebar-nav">
+                        <!-- sidebar-nav -->
                         <ul class="nav">
-                            <li class="nav-item">
-                                <a class="nav-link" href="index.html"><i class="icon-speedometer"></i> Dashboard <span class="badge badge-info">NEW</span></a>
-                            </li>
+                            {% block sidebarNavItems %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">
+                                        <i class="nav-icon icon-speedometer"></i> Dashboard
+                                    </a>
+                                </li>
+                            {% endblock sidebarNavItems %}
                         </ul>
+                        <!-- /sidebar-nav -->
                     </nav>
+                    <button class="sidebar-minimizer brand-minimizer" type="button"></button>
                 </div>
+                <!-- /sidebar -->
             {% endblock sidebar %}
 
-            <!-- Main content -->
+            <!-- main -->
             {% block main %}
                 <main class="main">
-
-                    <!-- Breadcrumb -->
+                    <!-- breadcrumb -->
                     {% block breadcrumb %}
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item">Home</li>
-                            <li class="breadcrumb-item active">Dashboard</li>
+                            {% block breadcrumbItems %}
+                                <li class="breadcrumb-item">Home</li>
+                                <li class="breadcrumb-item">
+                                    <a href="#">Admin</a>
+                                </li>
+                                <li class="breadcrumb-item active">Dashboard</li>
+                            {% endblock breadcrumbItems %}
                         </ol>
                     {% endblock breadcrumb %}
-                    <!-- End Breadcrumb -->
-
+                    <!-- /breadcrumb -->
 
                     {% block mainContainer %}
                         <div class="container-fluid">
-
-                            <div class="{{ mainContainerAnimated ? "animated fadeIn" }}">
-
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        {% block mainContainerContent %}
-
-                                        {% endblock mainContainerContent %}
-                                    </div>
-                                    <!--/.col-->
+                            <div id="ui-view">
+                                <div class="animated fadeIn">
+                                    {% block mainContainerContent %}
+                                        <div class="row justify-content-center">
+                                            <div class="col-8">
+                                                <div class="jumbotron jumbotron-fluid">
+                                                    <div class="container">
+                                                        <h1 class="display-4">Akademiano Default Site Template</h1>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endblock mainContainerContent %}
                                 </div>
-                                <!--/.row-->
                             </div>
-
-
                         </div>
                     {% endblock mainContainer %}
-                    <!-- /.conainer-fluid -->
                 </main>
             {% endblock main %}
-
-            {% block aside %}
-                <aside class="aside-menu">
-                    <ul class="nav nav-tabs" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#timeline" role="tab"><i class="icon-list"></i></a>
-                        </li>
-                    </ul>
-
-                    <!-- Tab panes -->
-                    <div class="tab-content">
-                        <div class="tab-pane active" id="timeline" role="tabpanel">
-                            <div class="callout m-0 py-2 text-muted text-center bg-faded text-uppercase">
-                                <small><b>Today</b>
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                </aside>
-            {% endblock aside %}
-
-
+            <!-- /main -->
         </div>
     {% endblock appBody %}
+    <!-- /app-body -->
 
-
+    <!-- app-footer -->
     {% block footer %}
         <footer class="app-footer">
-            <a href="http://coreui.io">CoreUI</a> © 2017 creativeLabs.
-            <span class="float-right">Powered by <a href="http://coreui.io">CoreUI</a>
-        </span>
+            {% block footerItems %}
+            {% endblock footerItems %}
+            <div>
+                <a href="https://github.com/mrdatamapper?utf8=✓&tab=repositories&q=akademiano">Akademiano Project</a>
+            </div>
+            <div class="ml-auto">
+                <a href="https://coreui.io/">CoreUI</a>
+            </div>
         </footer>
     {% endblock footer %}
+    <!-- /app-footer -->
 
-
-    <!--   Core JS Files   -->
+    <!-- jQuery first, then Popper.js, Bootstrap, then CoreUI  -->
     {{ asset_js([
-    "jquery/dist/jquery.min.js",
-    "tether/dist/js/tether.min.js",
-    "bootstrap/dist/js/bootstrap.min.js",
-    "pace/pace.min.js",
-    "chart.js/dist/Chart.min.js"
+        "jquery/dist/jquery.min.js",
+        "popper.js/dist/umd/popper.min.js",
+        "bootstrap/dist/js/bootstrap.min.js",
+        "perfect-scrollbar/dist/perfect-scrollbar.min.js",
+        "coreui/dist/js/coreui.min.js",
+        "coreui/dist/js/coreui-utilities.min.js",
+
+        "font-awesome/js/fontawesome.min.js",
+        "font-awesome/js/solid.min.js",
+
+        "holder/holder.min.js",
+        "tether/dist/js/tether.min.js",
+        "pace/pace.min.js",
+        "chart.js/dist/Chart.min.js",
     ], default, true) }}
-
-
-    <!-- Plugins and scripts required by this views -->
-
-    <!-- Custom scripts required by this view -->
-
-    {{ asset_js([
-    "coreui.io/Static_Full_Project_GULP/src/js/app.js",
-    "coreui.io/Static_Full_Project_GULP/src/js/views/main.js"
-    ], default, true) }}
-
 
     {% block js %}
 
     {% endblock js %}
 
+    <script>
+        Holder.run({
+            noFontFallback: false
+        });
+    </script>
+
 
     </body>
 {% endblock body %}
-
 </html>
