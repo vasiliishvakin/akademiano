@@ -16,17 +16,33 @@
     }
   },
   "provide": {
-        "akademiano/site-default-implementation": "1.0.0"
+        "akademiano/site-default-implementation": "1.1.0"
   },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/mrdatamapper/codeception-markup-validator"
+    }
+  ],
   "require": {
     "akademiano/core": "^1.1",
-    "akademiano/site-all": "^1.1"
+    "akademiano/site-all": "^1.1",
+    "akademiano/acl":  "^1.1"
   },
   "require-dev": {
-    "codeception/codeception": "^2.2.10",
-    "codeception/c3": "^2.0.10",
-    "satooshi/php-coveralls": "^1.0",
-    "mockery/mockery": "^0.9.9"
+    "codeception/codeception": "^3.1",
+    "php-coveralls/php-coveralls": "^2.1",
+    "mockery/mockery": "^1.2",
+    "codeception/c3": "^2.4",
+    "kolyunya/codeception-markup-validator": "^3.1"
+  },
+  "extra" : {
+    "installer-types": ["library", "component"],
+    "installer-paths" : {
+      "public/assets/vendor/coreui/": ["coreui/coreui"],
+      "public/assets/vendor/holder/": ["imsky/holder"],
+      "public/assets/vendor/{$name}/": ["type:component"]
+    }
   },
  "config": {
     "fxp-asset": {
