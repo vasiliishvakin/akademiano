@@ -22,11 +22,12 @@
     "akademiano/entity": "^1.1",
     "akademiano/db-adapter": "^1.1",
     "akademiano/core": "^1.1",
-    "robmorgan/phinx": "^0.10.8"
+    "robmorgan/phinx": ">=0.11.1 <1.0"
   },
   "require-dev": {
     "codeception/codeception": "^3.1",
     "php-coveralls/php-coveralls": "^2.1",
-    "mockery/mockery": "^1.2"
+    "mockery/mockery": "^1.2",
+    "codeception/c3": "^2.4"
   }
 }
