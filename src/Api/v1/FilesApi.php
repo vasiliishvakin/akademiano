@@ -35,6 +35,9 @@ class FilesApi extends EntityApi implements ConfigurableInterface
 
     protected $rootDir;
 
+    /** @var string */
+    protected $dataDir;
+
     /**
      * @return mixed
      */
@@ -63,6 +66,34 @@ class FilesApi extends EntityApi implements ConfigurableInterface
         $this->rootDir = $rootDir;
     }
 
+    /**
+     * @return string
+     */
+    public function getDataDir(): string
+    {
+        if (null === $this->dataDir) {
+            if (defined("DATA_DIR")) {
+                $this->dataDir = DATA_DIR;
+            } else {
+                $rootDir = $this->getRootDir();
+                if ($rootDir && is_dir($rootDir . DIRECTORY_SEPARATOR . 'data')) {
+                    $this->dataDir = $rootDir . DIRECTORY_SEPARATOR . 'data';
+                } else {
+                    throw new \RuntimeException("Data dir not defined and not found");
+                }
+            }
+        }
+        return $this->dataDir;
+    }
+
+    /**
+     * @param string $dataDir
+     */
+    public function setDataDir(string $dataDir): void
+    {
+        $this->dataDir = $dataDir;
+    }
+
     public function saveUploaded(FileInterface $file, array $attributes = null)
     {
         $fileExt = $file->getExt();
@@ -73,7 +104,7 @@ class FilesApi extends EntityApi implements ConfigurableInterface
         $newFilePatch = $this->getNewFilePath($position, $fileExt, $id);
         $savedPath = $this->getSavePath($fileExt, $tmpPath);
         $path = $savedPath . DIRECTORY_SEPARATOR . $newFilePatch;
-        $fullNewPath = $this->getRootDir() . DIRECTORY_SEPARATOR . $path;
+        $fullNewPath = $this->getDataDir() . DIRECTORY_SEPARATOR . $path;
         $dir = dirname($fullNewPath);
         if (!file_exists($dir)) {
             mkdir($dir, 0750, true);

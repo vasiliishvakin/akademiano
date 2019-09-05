@@ -14,6 +14,9 @@ class File extends NamedEntity implements DelegatingInterface
 {
     use FileProperties;
 
+    protected $rootDir;
+    protected $dataDir;
+
     protected $type;
     protected $subType;
     protected $path;
@@ -105,14 +108,44 @@ class File extends NamedEntity implements DelegatingInterface
         $this->position = $position;
     }
 
-    public function getRootDir()
+    public function getRootDir():string
     {
-        return ROOT_DIR;
+        if (null === $this->rootDir) {
+            if (defined("ROOT_DIR")) {
+                $this->rootDir = ROOT_DIR;
+            } else {
+                $rootDir = realpath(__DIR__ . '/../../../../');
+                if ($rootDir && is_dir($rootDir . DIRECTORY_SEPARATOR . 'vendor')) {
+                    $this->rootDir = $rootDir;
+                } else {
+                    throw new \RuntimeException("Root dir not defined and not found");
+                }
+            }
+        }
+        return $this->rootDir;
     }
+
+    public function getDataDir(): string
+    {
+        if (null === $this->dataDir) {
+            if (defined("DATA_DIR")) {
+                $this->dataDir = DATA_DIR;
+            } else {
+                $rootDir = $this->getRootDir();
+                if ($rootDir && is_dir($rootDir . DIRECTORY_SEPARATOR . 'data')) {
+                    $this->dataDir = $rootDir . DIRECTORY_SEPARATOR . 'data';
+                } else {
+                    throw new \RuntimeException("Data dir not defined and not found");
+                }
+            }
+        }
+        return $this->dataDir;
+    }
+
 
     public function getFullPath()
     {
-        return $this->getRootDir() . DIRECTORY_SEPARATOR . $this->getPath();
+        return $this->getDataDir() . DIRECTORY_SEPARATOR . $this->getPath();
     }
 
     public function getFileName()

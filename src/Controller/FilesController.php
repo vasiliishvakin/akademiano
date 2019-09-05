@@ -16,7 +16,7 @@ abstract class FilesController extends AkademianoController
     const ENTITY_API_ID = FilesApi::API_ID;
     const ENV_ACCEL_VAR_NAME = 'SERVER_ACCEL_HEADER';
     const ROUTE_FILE_BY_NAME = null;
-    const INTERNAL_URL_PREFIX = 'files';
+    const INTERNAL_URL_PREFIX = 'data/files';
 
     /**
      * @return FilesApi
@@ -73,10 +73,10 @@ abstract class FilesController extends AkademianoController
         $outputFile = $this->getEntityApy()->formatFile($file, $extension, $template);
 
         if ($outputFile) {
-            $path = ($this->getEntityApy()->isPublic() ? PUBLIC_DIR : DATA_DIR) . DIRECTORY_SEPARATOR . $outputFile->getPath();
+            $path = ($this->getEntityApy()->isPublic() ? PUBLIC_DIR .DIRECTORY_SEPARATOR . "data" : DATA_DIR) . DIRECTORY_SEPARATOR . $outputFile->getPath();
             $url = '/' . static::INTERNAL_URL_PREFIX . '/' . $outputFile->getPosition();
         } else {
-            $path = ROOT_DIR . DIRECTORY_SEPARATOR . $file->getPath();
+            $path = DATA_DIR. DIRECTORY_SEPARATOR . $file->getPath();
             $url = '/' . static::INTERNAL_URL_PREFIX . '/' . $file->getPosition() . '/' . $file->getId()->getInt() . '.' . $file->getExtension();
         }
 
