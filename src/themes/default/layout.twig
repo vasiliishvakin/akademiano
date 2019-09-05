@@ -11,6 +11,7 @@
         "simple-line-icons/css/simple-line-icons.css",
         "pace/themes/blue/pace-theme-minimal.css",
         "coreui/dist/css/coreui.min.css",
+        "assets/css/akademiano-coreui-fix.css"
     ], default, true) }}
 
     {#
@@ -59,6 +60,7 @@
             <!-- profile link -->
             <ul class="nav navbar-nav ml-auto">
                 {% block navbarUserItems %}
+                    {% include "Akademiano/layout/navbar-user.twig" %}
                 {% endblock navbarUserItems %}
             </ul>
             <!-- /profile link -->
@@ -113,14 +115,27 @@
                             <div id="ui-view">
                                 <div class="animated fadeIn">
                                     {% block mainContainerContent %}
-                                        <div class="row justify-content-center">
-                                            <div class="col-8">
-                                                <div class="jumbotron jumbotron-fluid">
-                                                    <div class="container">
-                                                        <h1 class="display-4">Akademiano Default Site Template</h1>
+                                        <div class="row">
+                                            <div class="col-12 col-xl-{{ isArticleLengthSmall ? '3' : '9' }}">
+                                                {% block mainContainerContentArticle %}
+                                                    <div class="card mainContainerContentArticle">
+                                                        <div class="card-body">
+                                                            <h1 class="card-title">Akademiano Default Site Template</h1>
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                {% endblock mainContainerContentArticle %}
                                             </div>
+                                            {% if block('mainContainerContentRight') is defined and block('mainContainerContentRight') != '' %}
+                                                <div class="col-xl-3 sticky-xl">
+                                                    {#{% block mainContainerContentRight %}#}
+                                                    {#<div class="card">#}
+                                                    {#<div class="card-body">#}
+                                                    {{ block('mainContainerContentRight') }}
+                                                    {#</div>#}
+                                                    {# </div>#}
+                                                    {#{% endblock mainContainerContentRight %}#}
+                                                </div>
+                                            {% endif %}
                                         </div>
                                     {% endblock mainContainerContent %}
                                 </div>

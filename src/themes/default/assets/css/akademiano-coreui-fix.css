@@ -1,0 +1,35 @@
+.app-body {
+    overflow-x: initial;
+}
+/*md*/
+@media (min-width: 768px) {
+    .sticky-md {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 5rem;
+        height: calc(100vh - 10rem);
+        overflow-y: auto;
+    }
+}
+
+/*lg*/
+@media (min-width: 992px) {
+    .sticky-lg {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 5rem;
+        height: calc(100vh - 10rem);
+        overflow-y: auto;
+    }
+}
+
+/*xl*/
+@media (min-width: 1200px) {
+    .sticky-xl {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 5rem;
+        height: calc(100vh - 10rem);
+        overflow-y: auto;
+    }
+}
