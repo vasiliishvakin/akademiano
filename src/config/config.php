@@ -2,6 +2,6 @@
 
 return [
     'akademianoContentArticles' => [
-        'filesPath' => 'data/files/articles',
+        'filesPath' => 'files/articles',
     ]
 ];

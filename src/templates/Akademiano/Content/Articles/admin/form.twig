@@ -1,6 +1,108 @@
 {% extends "adminLayout.twig" %}
 
-{% block mainContainer %}
+{% block mainContainerContentArticle %}
+    <div class="row">
+        <div class="col-12 col-lx-9">
+            <div class="card  card-accent-{{ item ? "warning" : "success" }}">
+                <div class="card-header">
+                    {{ item ? "Редактирование" : "Добавление" }} статьи {{ item ? "№ #{item.id.hex}" }}
+                </div>
+                <div class="card-body">
+                    <form action="{{ url(item_save_route) }}" method="POST" enctype="multipart/form-data">
+                        {% if item.id %}
+                            <input name="id" type="hidden" value="{{ item.id|dechex }}"/>
+                        {% endif %}
+
+                        <div class="card-block">
+                            <div class="form-group">
+                                <label class="form-control-label" for="title">Название</label>
+                                <input type="text" class="form-control" id="title" name="title"
+                                       value="{{ item.title }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Описание</label>
+                                <textarea class="form-control" id="description" name="description"
+                                          rows="3">{{ item.description }}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control-label">Тэги:</label>
+                                <input type="hidden" name="tags[]">
+                                {% for tag in tags %}
+                                    <div class="checkbox">
+                                        <label>
+                                            <input name="tags[]" type="checkbox" value="{{ tag.id }}"
+                                                    {% for itemTag in item.tags %}
+                                                        {% if tag.id.int == itemTag.id.int %}
+                                                            checked
+                                                        {% endif %}
+                                                    {% endfor %}
+                                            >
+                                            {{ tag.title }}
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="form-group">
+                                <label for="content">Содержание</label>
+                                <textarea class="form-control ckeditor" id="content" name="content"
+                                          rows=10">{{ item.content |raw }}</textarea>
+                            </div>
+                            {# {% if item.files|length == 0 %}
+                                 <div class="form-group">
+                                     <label for="files">Файл</label>
+                                     <input type="file" class="form-control" id="files" name="files[]" multiple>
+                                 </div>
+                             {% endif %} #}
+                            {% include "attachImagesFields.twig" %}
+
+                            {% if item %}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <table class="table table-sm table-responsive table-active">
+                                            <thead>
+                                            <tr>
+                                                <th>Создано</th>
+                                                <th>Изменено</th>
+                                                <th>Комментарии</th>
+                                                <th>Последний комментарий</th>
+                                                <th>Создатель</th>
+                                            </tr>
+
+                                            </thead>
+
+                                            <tbody>
+                                            <tr>
+                                                <td>{{ item.created | date ("d.m.Y") }}</td>
+                                                <td>{{ item.changed| date ("d.m.Y") }}</td>
+                                                <td>{{ item.comments|length }}</td>
+                                                <td>{{ item.comments.last| date ("d.m.Y") }}</td>
+                                                <td>{{ item.owner.title }}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+
+                            <div class="form-group">
+                                <a href="{{ url(items_list_route) }}" role="button" class="btn btn-outline-primary">Отмена</a>
+                                &nbsp;
+                                &nbsp;
+                                <button type="submit" class="btn btn-success">Сохранить</button>
+                            </div>
+
+                        </div>
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock mainContainerContentArticle %}
+
+{% block mainContainer1 %}
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
             <div class="box">
@@ -57,13 +159,7 @@
                                 <textarea class="form-control ckeditor" id="content" name="content"
                                           rows=10">{{ item.content |raw }}</textarea>
                             </div>
-                            {# {% if item.files|length == 0 %}
-                                 <div class="form-group">
-                                     <label for="files">Файл</label>
-                                     <input type="file" class="form-control" id="files" name="files[]" multiple>
-                                 </div>
-                             {% endif %}
- #}
+
                             {% include "attachImagesFields.twig" %}
 
                             {% if item %}
@@ -97,27 +193,19 @@
 
 
                             <div class="form-group">
-                                <a href="{{ url(items_list_route) }}" role="button" class="btn btn-outline-primary">Отмена</a>
-                                &nbsp;
-                                &nbsp;
-                                <button type="submit" class="btn btn-success">Сохранить</button>
+                                <a href="{{ url(items_list_route) }}" role="button" class="btn btn-outline-primary btn-lg">Отмена</a>
+                                <button type="submit" class="btn btn-success btn-lg">Сохранить</button>
                             </div>
 
                         </div>
                     </form>
                 </div>
-                <!-- /.box-body -->
-                {#<div class="box-footer">
-                </div>#}
-                <!-- box-footer -->
             </div>
-            <!-- /.box -->
         </div>
     </div>
-{% endblock mainContainer %}
+{% endblock mainContainer1 %}
 
 {% block js %}
-
     {{ asset_js_once(["akademiano/content-files-images/src/assets/js/imajesUploader.js"], default, true) }}
     {{ asset_js_once(["akademiano/content-files-images/src/assets/js/bootstrap.file-input.js"], default, true) }}
     <script>
@@ -126,18 +214,13 @@
         });
     </script>
 
-
     {{ asset_js([
         "ckeditor/ckeditor.js"
     ], default, true) }}
-
 
     <script>
         $(document).ready(function () {
             CKEDITOR.replace('content');
         });
     </script>
-
-
-
 {% endblock js %}

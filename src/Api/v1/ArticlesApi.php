@@ -53,8 +53,8 @@ class ArticlesApi extends CompositeEntityApi
     public function deleteEntity(EntityInterface $entity)
     {
         if ($entity instanceof Article) {
-            foreach ($entity->getFiles() as $file) {
-                $this->getFilesApi()->deleteEntity($file);
+            foreach ($entity->getImages() as $image) {
+                $this->getFilesApi()->deleteEntity($image);
             }
         }
         return parent::deleteEntity($entity);

@@ -1,81 +1,72 @@
 {% extends "adminLayout.twig" %}
 
-{% block mainContainer %}
-    <div class="box">
-        <div class="box-header with-border">
-            <h3 class="box-title">Статьи</h3>
-            {#<div class="box-tools pull-right">
-                <!-- Collapse Button -->
-                <button type="button" class="btn btn-box-tool" data-widget="collapse">
-                    <i class="fa fa-minus"></i>
-                </button>
-            </div>#}
-            <!-- /.box-tools -->
+{% block mainContainerContent %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    Статьи
+                    <span class="badge badge-pill badge-danger float-right">{{ items.count }}</span>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead class="thead-light">
+                        <tr>
+                            <th scope="col">id</th>
+                            <th scope="col">photo</th>
+                            <th scope="col">title</th>
+                            <th scope="col">description</th>
+                            <th>tags</th>
+                            <th>created</th>
+                            <th>actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in items %}
+                            <tr>
+                                <td scope="row">
+                                    <a href="{{ url(item_view_route, {"id": item.id.hex}) }}">{{ item.id.hex }}</a>
+                                </td>
+                                <td>
+                                    {% if item.mainImage %}
+                                        <img src="{{ object_url(item_file_view_route, item.mainImage, {'template': 'square150'}) }}" width="50" height="50">
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {{ item.title }}
+                                </td>
+                                <td>
+                                    {{ item.description }}
+                                </td>
+                                <td>
+                                    {% if not item.tags.empty %}
+                                        {% for tag in item.tags %}
+                                            {{ tag.title }}
+                                        {% endfor %}
+                                    {% else %}
+                                        ---
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {{ item.created |date("d.m.Y") }}
+                                </td>
+                                <td>
+                                    <a href="{{ url(item_edit_route, {"id": item.id.hex}) }}" rel="tooltip" title="Edit"
+                                       class="btn btn-warning btn-simple btn-md" role="button">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                    <a href="{{ url(item_delete_route, {"id": item.id.hex}) }}" rel="tooltip" title="Delete"
+                                       class="btn btn-danger btn-simple btn-md" role="button">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <a href="{{ url(item_add_route) }}" class="btn btn-success btn-lg" role="button"><i class="fa fa-plus"></i> <span>Добавить статью</span></a>
+                </div>
+            </div>
         </div>
-        <!-- /.box-header -->
-        <div class="box-body">
-            <table class="table table-bordered table-hover">
-                <thead>
-                <tr>
-                    <th>id</th>
-                    <th>photo</th>
-                    <th>title</th>
-                    <th>description</th>
-                    <th>tags</th>
-                    <th>created</th>
-                    <th>actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for item in items %}
-                    <tr>
-                        <td>
-                            {{ item.id.hex }}
-                        </td>
-                        <td>
-                            {% if item.mainImage %}
-                                <img src="{{ object_url(item_file_view_route, item.mainImage, {'template': 'square150'}) }}"
-                                     alt="">
-                            {% endif %}
-                        </td>
-                        <td>
-                            {{ item.title }}
-                        </td>
-                        <td>
-                            {{ item.description }}
-                        </td>
-                        <td>
-                            {% if not item.tags.empty %}
-                                {% for tag in item.tags %}
-                                    {{ tag.title }}
-                                {% endfor %}
-                            {% else %}
-                                ---
-                            {% endif %}
-                        </td>
-                        <td>
-                            {{ item.created |date("d.m.Y") }}
-                        </td>
-                        <td>
-                            <a href="{{ url(item_edit_route, {"id": item.id.hex}) }}" rel="tooltip" title="Edit"
-                               class="btn btn-warning btn-simple btn-sm">
-                                <i class="fa fa-edit"></i>
-                            </a>
-                            <a href="{{ url(item_delete_route, {"id": item.id.hex}) }}" rel="tooltip" title="Delete"
-                               class="btn btn-danger btn-simple btn-sm">
-                                <i class="fa fa-trash"></i>
-                            </a>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        <!-- /.box-body -->
-        <div class="box-footer">
-            <a href="{{ url(item_add_route) }}" class="btn btn-success btn-sm" role="button">Добавить статью</a>
-        </div>
-        <!-- box-footer -->
     </div>
-    <!-- /.box -->
-{% endblock mainContainer %}
+{% endblock mainContainerContent %}
