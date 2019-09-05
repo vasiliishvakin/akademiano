@@ -81,11 +81,11 @@ class LinkedImage extends LinkedFile
         return $this->getWidth() / $this->getHeight();
     }
 
-    public function isRatioLike(float $needDemension, float $percent = 10): bool
+    public function isRatioLike(float $needRatio, float $percent = 10): bool
     {
-        $valPart = ($needDemension / 100) * $percent;
-        $min = $needDemension - $valPart;
-        $max = $needDemension + $valPart;
-        return  $this->getDemension() > $min && $this->getDemension() < $max;
+        $valPart = ($needRatio / 100) * $percent;
+        $min = $needRatio - $valPart;
+        $max = $needRatio + $valPart;
+        return  $this->getRatio() > $min && $this->getRatio() < $max;
     }
 }
