@@ -8,19 +8,9 @@ use Akademiano\Utils\Object\Prototype\StringableInterface;
 
 interface UuidComplexInterface extends UuidInterface
 {
-    /**
-     * @return \DateTime
-     */
-    public function getDate();
+    public function getDate() :\DateTimeImmutable;
 
-    /**
-     * @return integer
-     */
-    public function getShard();
+    public function getShard(): int ;
 
-    /**
-     * @return integer
-     */
-    public function getId();
-
+    public function getId(): int ;
 }

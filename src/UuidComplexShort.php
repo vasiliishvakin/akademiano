@@ -3,31 +3,33 @@
 namespace Akademiano\UUID;
 
 use Akademiano\Entity\Uuid;
-use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 
 class UuidComplexShort extends Uuid implements UuidComplexInterface
 {
-    protected $value;
-    /** @var  \DateTime */
-    protected $date;
-    protected $shard;
-    protected $id;
-    protected $epoch = 1451317149374;
+    protected const EPOCH_FIELD = "epoch";
 
+    /** @var  CarbonImmutable */
+    protected $date;
+    /** @var int */
+    protected $shard;
+    /** @var int */
+    protected $id;
+    /** @var int */
+    protected $epoch = 1451317149374;
 
     public function __construct($value = null, $epoch = null)
     {
         if (null !== $epoch) {
             $this->setEpoch($epoch);
         }
-
         parent::__construct($value);
     }
 
     /**
      * @return integer
      */
-    public function getValue()
+    public function getValue(): int
     {
         return $this->value;
     }
@@ -40,98 +42,69 @@ class UuidComplexShort extends Uuid implements UuidComplexInterface
         $this->date = null;
         $this->shard = null;
         $this->id = null;
-        $this->value = (integer)$value;
+        parent::setValue($value);
     }
 
-    /**
-     * @return mixed
-     */
-    public function getEpoch()
+    public function getEpoch(): int
     {
         return $this->epoch;
     }
 
     /**
-     * @param mixed $epoch
+     * @param integer|string $epoch
      */
     public function setEpoch($epoch)
     {
-        $this->epoch = $epoch;
+        $this->epoch = (int)$epoch;
     }
 
-    /**
-     * @return Carbon
-     */
-    public function getDate()
+    public function getDate(): \DateTimeImmutable
     {
         if (null === $this->date) {
             $epoch = $this->getEpoch();
             $uuid = $this->getValue();
             $timestamp = $uuid >> 23;
-            $timestamp = ($timestamp + $epoch) / 1000;
-            $date = Carbon::createFromTimestampUTC($timestamp);
+            $timestamp = (int)(($timestamp + $epoch) / 1000);
+            $date = CarbonImmutable::createFromTimestampUTC($timestamp);
             $this->date = $date;
         }
         return $this->date;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getShard()
+    public function getShard(): int
     {
         return $this->shard;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getId()
+    public function getId(): int
     {
         if (null === $this->id) {
             $uuid = $this->getValue();
-            $id = $uuid << 54;
-            $id = $id >> 54;
-            $this->id = $id;
+            $this->id = ($uuid << 54) >> 54;
         }
         return $this->id;
-    }
-
-    public function getInt()
-    {
-        return $this->getValue();
-    }
-
-    public function getHex()
-    {
-        return dechex($this->getInt());
-    }
-
-    public function __toString()
-    {
-        return (string)$this->getValue();
     }
 
     public function serialize()
     {
         return serialize([
-            'value' => $this->getValue(),
-            'epoch' => $this->getEpoch(),
+            self::VALUE_FIELD => $this->getValue(),
+            self::EPOCH_FIELD => $this->getEpoch(),
         ]);
     }
 
     public function unserialize($serialized)
     {
         $data = unserialize($serialized);
-        $this->setEpoch($data['epoch']);
-        $this->setValue($data['value']);
+        $this->setEpoch($data[self::EPOCH_FIELD]);
+        $this->setValue($data[self::VALUE_FIELD]);
     }
 
     public function jsonSerialize()
     {
         return [
-            'value' => $this->getHex(),
-            'epoch' => $this->getEpoch(),
+            self::VALUE_FIELD => $this->getHex(),
+            self::EPOCH_FIELD => $this->getEpoch(),
         ];
     }
 }
