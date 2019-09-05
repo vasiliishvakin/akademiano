@@ -54,7 +54,7 @@ class MenuLoaderTest extends \Codeception\Test\Unit
         $route->shouldReceive("getId")->andReturn("root");
 
         $environment->shouldReceive("getPort")->andReturn(80);
-        $environment->shouldReceive("getServerName")->andReturn("example-example.com");
+        $environment->shouldReceive("getSrvServerName")->andReturn("example-example.com");
 
 
         $this->menuManager->loadMenu($this->menuRaw);

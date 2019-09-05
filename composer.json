@@ -16,15 +16,16 @@
     }
   },
   "require": {
-    "akademiano/entity": "^1.0.0-beta.1",
-    "akademiano/httpwarp": "^1.0.0-beta.3",
-    "akademiano/router": "^1.0.0-beta.1",
-    "akademiano/config": "^1.0.0-beta.3",
-    "akademiano/acl": "^1.0.0-beta.1"
+    "akademiano/entity": "^1.1",
+    "akademiano/httpwarp": "^1.1",
+    "akademiano/router": "^1.2",
+    "akademiano/config": "^1.1",
+    "akademiano/acl": "^1.1"
   },
   "require-dev": {
-    "codeception/codeception": "^2.2.10",
-    "satooshi/php-coveralls": "^1.0.1",
-    "mockery/mockery": "^0.9.9"
+    "codeception/codeception": "^3.1",
+    "php-coveralls/php-coveralls": "^2.1",
+    "mockery/mockery": "^1.2",
+    "codeception/c3": "^2.4"
   }
 }
