@@ -6,10 +6,12 @@ namespace Akademiano\Entity;
 
 class Uuid implements UuidInterface
 {
+    protected const VALUE_FIELD = "value";
+
+    /** @var int */
     protected $value;
 
     /**
-     * Uuid constructor.
      * @param $value
      */
     public function __construct($value = null)
@@ -18,7 +20,7 @@ class Uuid implements UuidInterface
     }
 
     /**
-     * @param null $value
+     * @param int|string $value
      */
     public function setValue($value)
     {
@@ -40,31 +42,37 @@ class Uuid implements UuidInterface
      */
     public function getInt(): int
     {
-        return $this->value;
+        return $this->getValue();
     }
 
 
     public function __toString()
     {
-        return $this->getHex();
+        return (string)$this->getHex();
     }
 
     public function serialize()
     {
-        return $this->getValue();
+        return serialize([
+                self::VALUE_FIELD => $this->getValue()
+            ]
+        );
     }
 
     public function unserialize($serialized)
     {
-        $this->setValue(unserialize($serialized, ["allowed_classes"=>false]));
+        $data = unserialize($serialized, ["allowed_classes" => false]);
+        $this->setValue($data[self::VALUE_FIELD]);
     }
 
     public function jsonSerialize()
     {
-        $this->getHex();
+        return [
+            self::VALUE_FIELD => $this->getHex(),
+        ];
     }
 
-    public static function isHexUuid(string $string)
+    public static function isHexUuid(string $string): bool
     {
         return !is_numeric($string) && ctype_xdigit($string);
     }
