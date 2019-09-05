@@ -527,7 +527,7 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
             } else {
                 return null;
             }
-        } elseif ($value instanceof \DateTime) {
+        } elseif ($value instanceof \DateTime || $value instanceof \DateTimeImmutable) {
             return $value->format("Y-m-d H:i:s");
         } elseif (is_bool($value)) {
             return $value ? 't' : 'f';
