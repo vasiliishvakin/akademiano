@@ -8,10 +8,12 @@ use Akademiano\Attach\Model\LinkedFile;
 
 class LinkedImage extends LinkedFile
 {
-    /** @var bool  */
+    /** @var bool */
     protected $isMain = false;
 
     protected $order = 0;
+
+    protected $imagesize;
 
     /**
      * @return bool
@@ -31,7 +33,7 @@ class LinkedImage extends LinkedFile
         } elseif ($isMain === "f" || $isMain === "false") {
             $isMain = false;
         } else {
-            $isMain =(bool) $isMain;
+            $isMain = (bool)$isMain;
         }
         $this->isMain = $isMain;
     }
@@ -50,5 +52,40 @@ class LinkedImage extends LinkedFile
     public function setOrder(int $order): void
     {
         $this->order = $order;
+    }
+
+    public function getImagesize(): ?array
+    {
+        if (null === $this->imagesize) {
+            $filepath = $this->getFullPath();
+            $this->imagesize = getimagesize($filepath);
+            if (!$this->imagesize) {
+                throw new \Exception(sprintf("Error in get imagesize in file %s", $filepath));
+            }
+        }
+        return $this->imagesize;
+    }
+
+    public function getWidth(): int
+    {
+        return $this->getImagesize()[0];
+    }
+
+    public function getHeight(): int
+    {
+        return $this->getImagesize()[1];
+    }
+
+    public function getRatio(): float
+    {
+        return $this->getWidth() / $this->getHeight();
+    }
+
+    public function isRatioLike(float $needDemension, float $percent = 10): bool
+    {
+        $valPart = ($needDemension / 100) * $percent;
+        $min = $needDemension - $valPart;
+        $max = $needDemension + $valPart;
+        return  $this->getDemension() > $min && $this->getDemension() < $max;
     }
 }

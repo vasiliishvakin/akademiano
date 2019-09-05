@@ -6,11 +6,11 @@
         <h3 class="box-title">Изображения</h3>
 
         <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            <button type="button" class="btn btn-outline-primary btn-sm m-1 " data-toggle="collapse" data-target="#imagesCollapse" aria-expanded="false" aria-controls="collapseExample"><i class="fa fa-minus"></i></button>
         </div>
     </div>
     <!-- /.box-header -->
-    <div class="box-body">
+    <div class="box-body collapse" id="imagesCollapse">
         <table class="table table-bordered table-hover">
             <thead>
             <th>Превью</th>
@@ -73,7 +73,7 @@
     <div class="box-footer no-padding">
         <div class="form-group">
             <label for="files">Добавить</label>
-            <input id="files" name="files[]" class="file-inputs btn-block btn-primary btn-lg" title="Выбрать файлы" type="file" multiple accept="photo">
+            <input id="files" name="files[]" class="file-inputs btn btn-primary" title="Выбрать файлы" type="file" multiple accept="photo">
         </div>
     </div>
     <!-- /.footer -->

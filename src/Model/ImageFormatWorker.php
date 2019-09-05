@@ -31,6 +31,10 @@ class ImageFormatWorker implements WorkerInterface, WorkerSelfMapCommandsInterfa
 
     /** @var string */
     protected $publicDir;
+
+    /** @var string */
+    protected $rootDir;
+
     /** @var string */
     protected $dataDir;
 
@@ -115,6 +119,31 @@ class ImageFormatWorker implements WorkerInterface, WorkerSelfMapCommandsInterfa
         return $this->templates[$name] ?? null;
     }
 
+    public function getRootDir():string
+    {
+        if (null === $this->rootDir) {
+            if (defined("ROOT_DIR")) {
+                $this->rootDir = ROOT_DIR;
+            } else {
+                $rootDir = realpath(__DIR__ . '/../../../../');
+                if ($rootDir && is_dir($rootDir . DIRECTORY_SEPARATOR . 'vendor')) {
+                    $this->rootDir = $rootDir;
+                } else {
+                    throw new \RuntimeException("Root dir not defined and not found");
+                }
+            }
+        }
+        return $this->rootDir;
+    }
+
+    /**
+     * @param string $rootDir
+     */
+    public function setRootDir(string $rootDir): void
+    {
+        $this->rootDir = $rootDir;
+    }
+
     /**
      * @return mixed
      */
@@ -128,6 +157,12 @@ class ImageFormatWorker implements WorkerInterface, WorkerSelfMapCommandsInterfa
             }
         }
         return $this->publicDir;
+    }
+
+    //TODO More universal
+    public function getPublicDataDir()
+    {
+        return $this->getPublicDir() . DIRECTORY_SEPARATOR ."data";
     }
 
     /**
@@ -144,10 +179,15 @@ class ImageFormatWorker implements WorkerInterface, WorkerSelfMapCommandsInterfa
     public function getDataDir(): string
     {
         if (null === $this->dataDir) {
-            if (defined('DATA_DIR')) {
+            if (defined("DATA_DIR")) {
                 $this->dataDir = DATA_DIR;
             } else {
-                throw new \LogicException('Data dir is not defined');
+                $rootDir = $this->getRootDir();
+                if ($rootDir && is_dir($rootDir . DIRECTORY_SEPARATOR . 'data')) {
+                    $this->dataDir = $rootDir . DIRECTORY_SEPARATOR . 'data';
+                } else {
+                    throw new \RuntimeException("Data dir not defined and not found");
+                }
             }
         }
         return $this->dataDir;
@@ -161,6 +201,7 @@ class ImageFormatWorker implements WorkerInterface, WorkerSelfMapCommandsInterfa
         $this->dataDir = $dataDir;
     }
 
+    //TODO Думать надо ли держать в публике, или делать реврайт нгинкса...
     public function prepareFile(File $file, string $savePath, string $extension, string $templateName, bool $isPublic = false)
     {
         if (empty($templateName)) {
@@ -184,18 +225,21 @@ class ImageFormatWorker implements WorkerInterface, WorkerSelfMapCommandsInterfa
         }
 
         $dir = $savePath . DIRECTORY_SEPARATOR . $templateName . DIRECTORY_SEPARATOR . $file->getPosition();
-        if (!file_exists($dir)) {
-            $result = mkdir($dir, 0750, true);
-            if (!$result) {
-                throw new \RuntimeException(sprintf('Could not create directory %s', $dir));
-            }
-        } elseif (!is_writable($dir)) {
-            throw new \RuntimeException(sprintf('Could not write file in directory %s', $dir));
-        }
 
         $newPath = $dir . DIRECTORY_SEPARATOR . 'id' . $file->getId()->getHex() . '.' . $extension;
 
-        $fullNewPath = ($isPublic ? $this->getPublicDir() : $this->getDataDir()) . DIRECTORY_SEPARATOR . $newPath;
+        $fullNewPath = ($isPublic ? $this->getPublicDataDir() : $this->getDataDir()) . DIRECTORY_SEPARATOR . $newPath;
+
+        $savedDir = dirname($fullNewPath);
+
+        if (!file_exists($savedDir)) {
+            $result = mkdir($savedDir, 0750, true);
+            if (!$result) {
+                throw new \RuntimeException(sprintf('Could not create directory %s', $savedDir));
+            }
+        } elseif (!is_writable($savedDir)) {
+            throw new \RuntimeException(sprintf('Could not write file in directory %s', $savedDir));
+        }
 
         call_user_func($template, $image, $fullNewPath, $format);
 
