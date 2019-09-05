@@ -6,7 +6,7 @@ use Akademiano\User\AuthInterface;
 
 class UserExtension extends \Twig_Extension
 {
-    /** @var  AuthInterface */
+    /** @var  AuthInterface|\Akademiano\UserEO\Custodian */
     protected $custodian;
 
     public function getName()
@@ -22,8 +22,8 @@ class UserExtension extends \Twig_Extension
                 [$this, 'currentUser']
             ),
             new \Twig_SimpleFunction(
-                'is_user_auth',
-                [$this, 'isAuth']
+                'is_user_authenticate',
+                [$this, 'isAuthenticate']
             ),
         ];
     }
@@ -49,8 +49,8 @@ class UserExtension extends \Twig_Extension
         return $this->getCustodian()->getCurrentUser();
     }
 
-    public function isAuth()
+    public function isAuthenticate()
     {
-        return $this->getCustodian()->isAuth();
+        return $this->getCustodian()->isAuthenticate();
     }
 }
