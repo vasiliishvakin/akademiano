@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Akademiano\Content\Knowledgebase\Thin;
+namespace Akademiano\Content\Knowledgebase\Thing;
 
 
 use Akademiano\EntityOperator\Ext\EntityOpsRoutesStore;
@@ -11,14 +11,14 @@ class AdminRoutesStore extends EntityOpsRoutesStore
     const FILE_VIEW_ROUTE_NAME = "item_file_view_route";
 
 
-    const LIST_ROUTE = "admin_articles_list";
-    const VIEW_ROUTE = "articles_view";
-    const ADD_ROUTE = "articles_add";
-    const EDIT_ROUTE = "articles_edit";
-    const SAVE_ROUTE = "articles_save";
-    const DELETE_ROUTE = "articles_delete";
+    const LIST_ROUTE = "admin_things_list";
+    const VIEW_ROUTE = "things_view";
+    const ADD_ROUTE = "things_add";
+    const EDIT_ROUTE = "things_edit";
+    const SAVE_ROUTE = "things_save";
+    const DELETE_ROUTE = "things_delete";
 
-    const FILE_VIEW_ROUTE = "articles_file";
+    const FILE_VIEW_ROUTE = "things_file";
 
 
     public function getFileViewRoute()

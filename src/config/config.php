@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'akademianoContentArticles' => [
-        'filesPath' => 'files/articles',
+    'akademianoContentKnowledgebaseThing' => [
+        'filesPath' => 'files/kb/thing',
     ]
 ];
