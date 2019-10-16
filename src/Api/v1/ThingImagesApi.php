@@ -1,12 +1,12 @@
 <?php
 
 
-namespace Akademiano\Content\Knowledgebase\Thing\Api\v1;
+namespace Akademiano\Content\Knowledgebase\It\Api\v1;
 
 
 use Akademiano\Content\Articles\Api\v1\ArticleImagesApi;
-use Akademiano\Content\Knowledgebase\Thing\Module;
-use Akademiano\Content\Knowledgebase\Thing\Model\ThingImage;
+use Akademiano\Content\Knowledgebase\It\Module;
+use Akademiano\Content\Knowledgebase\It\Model\ThingImage;
 
 class ThingImagesApi extends ArticleImagesApi
 {

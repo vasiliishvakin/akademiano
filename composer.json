@@ -1,5 +1,5 @@
 {
-  "name": "akademiano/content-kb-thing",
+  "name": "akademiano/content-kb-it",
   "description": "Articles module",
   "license": "Apache-2.0",
   "minimum-stability": "dev",
@@ -12,11 +12,11 @@
   ],
   "autoload": {
     "psr-4": {
-      "Akademiano\\Content\\Knowledgebase\\Thing\\": "src/"
+      "Akademiano\\Content\\Knowledgebase\\It\\": "src/"
     }
   },
   "require": {
-    "akademiano/content-articles": "^2.0"
+    "akademiano/content-kb-thing": "dev-master"
   },
   "require-dev": {
     "codeception/codeception": "^2.3.8",

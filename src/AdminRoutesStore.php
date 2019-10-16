@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Akademiano\Content\Knowledgebase\Thing;
+namespace Akademiano\Content\Knowledgebase\It;
 
 
 use Akademiano\EntityOperator\Ext\EntityOpsRoutesStore;

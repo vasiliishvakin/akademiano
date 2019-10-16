@@ -1,13 +1,13 @@
 <?php
 
 
-namespace Akademiano\Content\Knowledgebase\Thing\Api\v1;
+namespace Akademiano\Content\Knowledgebase\It\Api\v1;
 
 
 use Akademiano\Api\v1\Entities\CompositeEntityApi;
 use Akademiano\Content\Articles\Api\v1\ArticlesApi;
 use Akademiano\Content\Articles\Model\Article;
-use Akademiano\Content\Knowledgebase\Thing\Model\Thing;
+use Akademiano\Content\Knowledgebase\It\Model\Thing;
 use Akademiano\Entity\EntityInterface;
 
 class ThingsApi extends ArticlesApi

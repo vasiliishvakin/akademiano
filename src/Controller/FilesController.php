@@ -1,11 +1,11 @@
 <?php
 
 
-namespace Akademiano\Content\Knowledgebase\Thing\Controller;
+namespace Akademiano\Content\Knowledgebase\It\Controller;
 
 
-use Akademiano\Content\Knowledgebase\Thing\RoutesStore;
-use Akademiano\Content\Knowledgebase\Thing\Api\v1\ThingImagesApi;
+use Akademiano\Content\Knowledgebase\It\RoutesStore;
+use Akademiano\Content\Knowledgebase\It\Api\v1\ThingImagesApi;
 
 class FilesController extends \Akademiano\Content\Files\Controller\FilesController
 {

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Akademiano\Content\Knowledgebase\Thing\Model;
+namespace Akademiano\Content\Knowledgebase\It\Model;
 
 
 use Akademiano\Entity\RelationEntity;

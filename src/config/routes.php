@@ -1,7 +1,7 @@
 <?php
 
-use Akademiano\Content\Knowledgebase\Thing\RoutesStore;
-use Akademiano\Content\Knowledgebase\Thing\AdminRoutesStore;
+use Akademiano\Content\Knowledgebase\It\RoutesStore;
+use Akademiano\Content\Knowledgebase\It\AdminRoutesStore;
 use Akademiano\Router\RoutePattern;
 
 return [
@@ -9,7 +9,7 @@ return [
     RoutesStore::FILE_VIEW_ROUTE . '_short' => [
         "patterns" => [
             "type" => RoutePattern::TYPE_REGEXP,
-            "value" => "/things/files/id(?P<id>\w+)\.(?P<extension>\w+)$",
+            "value" => "/it/files/id(?P<id>\w+)\.(?P<extension>\w+)$",
         ],
         "action" => ["files", "name"],
     ],
@@ -17,14 +17,14 @@ return [
     RoutesStore::FILE_VIEW_ROUTE => [
         "patterns" => [
             "type" => RoutePattern::TYPE_REGEXP,
-            "value" => "/data/files/things/(?P<template>\w+)/(?P<position>[a-zA-Z0-9/]+)/id(?P<id>\w+)\.(?P<extension>\w+)$",
+            "value" => "/data/files/it/(?P<template>\w+)/(?P<position>[a-zA-Z0-9/]+)/id(?P<id>\w+)\.(?P<extension>\w+)$",
         ],
         "action" => ["files", "name"],
     ],
     'id_file_view' => [
         "patterns" => [
             "type" => RoutePattern::TYPE_REGEXP,
-            "value" => "/things/files/id(?P<id>\w+)$",
+            "value" => "/it/files/id(?P<id>\w+)$",
         ],
         "action" => ["files", "id"],
     ],
@@ -32,21 +32,21 @@ return [
     RoutesStore::EDIT_ROUTE => [
         "patterns" => [
             "type" => RoutePattern::TYPE_REGEXP,
-            "value" => "/admin/things/id(?P<id>\w+)/edit",
+            "value" => "/admin/it/id(?P<id>\w+)/edit",
         ],
         "action" => ["admin", "form"],
     ],
     RoutesStore::DELETE_ROUTE => [
         "patterns" => [
             "type" => RoutePattern::TYPE_REGEXP,
-            "value" => "/admin/things/(?P<id>\w+)/delete",
+            "value" => "/admin/it/(?P<id>\w+)/delete",
         ],
         "action" => ["admin", "delete"],
     ],
     RoutesStore::VIEW_ROUTE => [
         "patterns" => [
             "type" => RoutePattern::TYPE_REGEXP,
-            "value" => "^/things/id(?P<id>\w+)",
+            "value" => "^/it/id(?P<id>\w+)",
         ],
         "action" => ["index", "view"],
     ],
@@ -54,7 +54,7 @@ return [
     RoutesStore::TAG_ROUTE => [
         "patterns" => [
             "type" => RoutePattern::TYPE_REGEXP,
-            "value" => "^/things/tag/id(?P<id>\w+)",
+            "value" => "^/it/tag/id(?P<id>\w+)",
         ],
         "action" => ["index", "tag"],
     ],
@@ -62,28 +62,28 @@ return [
     RoutesStore::LIST_ROUTE => [
         "patterns" => [
             "type" => RoutePattern::TYPE_FULL,
-            "value" => "/things",
+            "value" => "/it",
         ],
         "action" => ["index", "list"],
     ],
     AdminRoutesStore::LIST_ROUTE => [
         "patterns" => [
             "type" => RoutePattern::TYPE_FULL,
-            "value" => "/admin/things",
+            "value" => "/admin/it",
         ],
         "action" => ["admin", "list"],
     ],
     RoutesStore::ADD_ROUTE => [
         "patterns" => [
             "type" => RoutePattern::TYPE_FULL,
-            "value" => "/admin/things/add",
+            "value" => "/admin/it/add",
         ],
         "action" => ["admin", "form"],
     ],
     RoutesStore::SAVE_ROUTE => [
         "patterns" => [
             "type" => RoutePattern::TYPE_FULL,
-            "value" => "/admin/things/save",
+            "value" => "/admin/it/save",
         ],
         "action" => ["admin", "save"],
     ],

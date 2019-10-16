@@ -2,6 +2,6 @@
 
 return [
     'akademianoContentKnowledgebaseThing' => [
-        'filesPath' => 'files/kb/thing',
+        'filesPath' => 'files/kb/it',
     ]
 ];

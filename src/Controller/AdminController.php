@@ -1,11 +1,11 @@
 <?php
 
 
-namespace Akademiano\Content\Knowledgebase\Thing\Controller;
+namespace Akademiano\Content\Knowledgebase\It\Controller;
 
 
-use Akademiano\Content\Knowledgebase\Thing\AdminRoutesStore;
-use Akademiano\Content\Knowledgebase\Thing\Model\ThingImagesWorker;
+use Akademiano\Content\Knowledgebase\It\AdminRoutesStore;
+use Akademiano\Content\Knowledgebase\It\Model\ThingImagesWorker;
 
 class AdminController extends \Akademiano\Content\Articles\Controller\AdminController
 {

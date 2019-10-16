@@ -1,7 +1,7 @@
 <?php
 
-use Akademiano\Content\Knowledgebase\Thing\Api\v1\ThingsApi;
-use Akademiano\Content\Knowledgebase\Thing\Api\v1\ThingImagesApi;
+use Akademiano\Content\Knowledgebase\It\Api\v1\ThingsApi;
+use Akademiano\Content\Knowledgebase\It\Api\v1\ThingImagesApi;
 use Akademiano\Operator\Operator;
 
 return [

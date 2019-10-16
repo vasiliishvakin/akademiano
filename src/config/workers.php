@@ -1,7 +1,7 @@
 <?php
 
 return [
-    \Akademiano\Content\Knowledgebase\Thing\Model\ThingWorker::class,
-    \Akademiano\Content\Knowledgebase\Thing\Model\ThingImagesWorker::class,
-    \Akademiano\Content\Knowledgebase\Thing\Model\ThingThingRelationsWorker::class,
+    \Akademiano\Content\Knowledgebase\It\Model\ThingWorker::class,
+    \Akademiano\Content\Knowledgebase\It\Model\ThingImagesWorker::class,
+    \Akademiano\Content\Knowledgebase\It\Model\ThingThingRelationsWorker::class,
 ];

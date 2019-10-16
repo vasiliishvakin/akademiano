@@ -1,9 +1,9 @@
 <?php
 
-namespace Akademiano\Content\Knowledgebase\Thing;
+namespace Akademiano\Content\Knowledgebase\It;
 
 
 class Module
 {
-    const MODULE_ID = 'akademianoContentKnowledgebaseThing';
+    const MODULE_ID = 'akademianoContentKnowledgebaseIt';
 }

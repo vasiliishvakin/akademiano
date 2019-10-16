@@ -1,9 +1,9 @@
 <?php
 
 use Phinx\Migration\AbstractMigration;
-use Akademiano\Content\Knowledgebase\Thing\Model\ThingWorker;
-use Akademiano\Content\Knowledgebase\Thing\Model\ThingImagesWorker;
-use Akademiano\Content\Knowledgebase\Thing\Model\ThingThingRelationsWorker;
+use Akademiano\Content\Knowledgebase\It\Model\ThingWorker;
+use Akademiano\Content\Knowledgebase\It\Model\ThingImagesWorker;
+use Akademiano\Content\Knowledgebase\It\Model\ThingThingRelationsWorker;
 use Akademiano\Content\Articles\Model\ArticlesWorker;
 use Akademiano\Content\Articles\Model\ArticleImagesWorker;
 use Akademiano\EntityOperator\Worker\RelationsWorker;
