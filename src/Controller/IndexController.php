@@ -3,7 +3,7 @@
 namespace Akademiano\Content\Knowledgebase\Thing\Controller;
 
 
-use Akademiano\Content\Articles\RoutesStore;
+use Akademiano\Content\Knowledgebase\Thing\RoutesStore;
 use Akademiano\Content\Knowledgebase\Thing\Api\v1\ThingsApi;
 
 /**

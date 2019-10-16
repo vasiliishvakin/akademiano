@@ -5,8 +5,7 @@ namespace Akademiano\Content\Knowledgebase\Thing\Api\v1;
 
 
 use Akademiano\Content\Articles\Api\v1\ArticleImagesApi;
-use Akademiano\Content\Articles\Api\v1\ArticlesApi;
-use Akademiano\Content\Articles\Module;
+use Akademiano\Content\Knowledgebase\Thing\Module;
 use Akademiano\Content\Knowledgebase\Thing\Model\ThingImage;
 
 class ThingImagesApi extends ArticleImagesApi

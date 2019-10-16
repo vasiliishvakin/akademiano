@@ -5,27 +5,27 @@ namespace Akademiano\Content\Knowledgebase\Thing\Api\v1;
 
 
 use Akademiano\Api\v1\Entities\CompositeEntityApi;
+use Akademiano\Content\Articles\Api\v1\ArticlesApi;
 use Akademiano\Content\Articles\Model\Article;
 use Akademiano\Content\Knowledgebase\Thing\Model\Thing;
 use Akademiano\Entity\EntityInterface;
 
-class ThingsApi extends CompositeEntityApi
+class ThingsApi extends ArticlesApi
 {
     const ENTITY_CLASS = Thing::class;
     const API_ID = "thingsApi";
     const DEFAULT_ORDER = ["id" => "DESC"];
 
+    const RELATIONS = [
+        //'tags' => TagsArticlesRelationsApi::API_ID,
+    ];
+
     /** @var  ThingImagesApi */
     protected $filesApi;
 
-
-    public function getFilesApi(): ThingImagesApi
+    //TODO Dirty hack
+    public function getRelatedAttributes(): array
     {
-        return $this->filesApi;
-    }
-
-    public function setFilesApi(ThingImagesApi $filesApi)
-    {
-        $this->filesApi = $filesApi;
+        return [];
     }
 }

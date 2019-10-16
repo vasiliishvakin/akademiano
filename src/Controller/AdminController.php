@@ -4,12 +4,14 @@
 namespace Akademiano\Content\Knowledgebase\Thing\Controller;
 
 
-use Akademiano\Content\Articles\AdminRoutesStore;
+use Akademiano\Content\Knowledgebase\Thing\AdminRoutesStore;
 use Akademiano\Content\Knowledgebase\Thing\Model\ThingImagesWorker;
 
-class AdminController extends IndexController
+class AdminController extends \Akademiano\Content\Articles\Controller\AdminController
 {
+    const ENTITY_API_ID = IndexController::ENTITY_API_ID;
     const ENTITY_OPSR_STORE_CLASS = AdminRoutesStore::class;
+    const FORM_FILES_FIELD = "files";
 
 
     public function saveAction()
@@ -21,12 +23,6 @@ class AdminController extends IndexController
 
         $this->getEntityApi()->getFilesApi()->processHttpRequestFiles($this->getRequest(), $entity);
 
-
-        $files = $this->getRequest()->getFiles(static::FORM_FILES_FIELD);
-
-        foreach ($files as $file) {
-            $this->getEntityApi()->getFilesApi()->saveUploaded($file, [ThingImagesWorker::LINKED_ENTITY_FIELD => $entity]);
-        }
         $this->redirect($this->getEntityOpsRoutesStore()->getListRoute());
     }
 }
