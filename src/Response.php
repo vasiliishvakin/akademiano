@@ -116,7 +116,7 @@ class Response
             $modified = $modified->getTimestamp();
         }
         $modified = (int)$modified;
-        $this->modified = (!$onlyBigger) ? $modified : ($modified > $this->modified) ? $modified : $this->modified;
+        $this->modified = !$onlyBigger ? $modified : (($modified > $this->modified) ? $modified : $this->modified);
     }
 
     /**
