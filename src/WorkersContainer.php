@@ -12,9 +12,11 @@ use Akademiano\Delegating\DelegatingInterface;
 use Akademiano\Delegating\IncludeOperatorInterface;
 use Akademiano\Delegating\IncludeOperatorTrait;
 use Akademiano\Delegating\OperatorInterface;
+use Akademiano\Utils\DIContainerIncludeInterface;
+use Akademiano\Utils\Parts\DIContainerTrait;
 use Pimple\Container;
 
-class WorkersContainer extends \Akademiano\DI\Container implements ConfigurableInterface, IncludeOperatorInterface
+class WorkersContainer extends \Akademiano\DI\Container implements ConfigurableInterface, IncludeOperatorInterface, DIContainerIncludeInterface
 {
     use ConfigurableTrait {
         getConfig as private configurableGetConfig;
@@ -24,41 +26,42 @@ class WorkersContainer extends \Akademiano\DI\Container implements ConfigurableI
         getOperator as private delegatingGetOperator;
     }
 
-    public function __construct(array $values = [], Container $dependencies = null)
+    use DIContainerTrait;
+
+    public function __construct(array $values = [], Container $diContainer = null)
     {
-        if (null !== $dependencies) {
-            $this->setDependencies($dependencies);
+        if (null !== $diContainer) {
+            $this->setDiContainer($diContainer);
         }
         parent::__construct($values);
     }
 
-
-    /** @var  Container */
-    protected $dependencies;
-
-    /**
-     * @return Container
-     */
-    public function getDependencies(): Container
-    {
-        return $this->dependencies;
-    }
-
     /**
      * @param Container $dependencies
+     * @deprecated
      */
     public function setDependencies(Container $dependencies)
     {
-        $this->dependencies = $dependencies;
+        $this->setDiContainer($dependencies);
+    }
+
+    /**
+     * @return Container
+     * @deprecated
+     */
+    public function getDependencies(): Container
+    {
+        return $this->getDiContainer();
     }
 
     public function getConfig($path = null, $default = null)
     {
         if (null === $this->config) {
-            if (!isset($this->getDependencies()[ConfigInterface::RESOURCE_ID])) {
+            if (isset($this->getDependencies()[ConfigInterface::RESOURCE_ID])) {
+                $this->config = $this->getDiContainer()[ConfigInterface::RESOURCE_ID];
+            } else {
                 $this->config = new Config([], $this->getDependencies());
             }
-            $this->config = $this->getDependencies()[ConfigInterface::RESOURCE_ID];
         }
         return $this->configurableGetConfig($path, $default);
     }

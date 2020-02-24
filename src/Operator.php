@@ -5,6 +5,7 @@ namespace Akademiano\Operator;
 
 use Akademiano\Config\Config;
 use Akademiano\Delegating\OperatorInterface;
+use Akademiano\EntityOperator\Command\KeeperWorkerInfoCommand;
 use Akademiano\Operator\Command\OperatorSpecialCommandInterface;
 use Akademiano\Operator\Command\PreCommandInterface;
 use Akademiano\Operator\Command\SubCommand;
@@ -25,11 +26,15 @@ use Akademiano\Operator\Worker\Exception\BreakException;
 use Akademiano\Operator\Worker\WorkerInterface;
 use Akademiano\Delegating\Command\CommandInterface;
 use Akademiano\Operator\Worker\Exception\TryNextException;
+use Akademiano\Utils\DIContainerIncludeInterface;
+use Akademiano\Utils\Parts\DIContainerTrait;
 use Pimple\Container;
 
 
-class Operator implements OperatorInterface
+class Operator implements OperatorInterface, DIContainerIncludeInterface
 {
+    use DIContainerTrait;
+
     const WORKERS_FILE = 'workers';
     const WORKERS_MAP_FILE = 'workers.map';
 
@@ -37,21 +42,13 @@ class Operator implements OperatorInterface
     /** @var  WorkersContainer */
     protected $workers;
 
-    /** @var  Container */
-    protected $dependencies;
-
-
     /** @var  WorkersMap */
     protected $workersMap;
 
-    /**
-     * Operator constructor.
-     * @param Container $dependencies
-     */
-    public function __construct(Container $dependencies = null)
+    public function __construct(Container $diContainer = null)
     {
-        if (null !== $dependencies) {
-            $this->setDependencies($dependencies);
+        if (null !== $diContainer) {
+            $this->setDiContainer($diContainer);
         }
     }
 
@@ -104,18 +101,20 @@ class Operator implements OperatorInterface
 
     /**
      * @return Container
+     * @deprecated
      */
     public function getDependencies(): Container
     {
-        return $this->dependencies;
+        return $this->getDiContainer();
     }
 
     /**
      * @param Container $dependencies
+     * @deprecated
      */
     public function setDependencies(Container $dependencies)
     {
-        $this->dependencies = $dependencies;
+        $this->setDiContainer($dependencies);
     }
 
     public function getWorker($workerId): WorkerInterface
@@ -226,6 +225,4 @@ class Operator implements OperatorInterface
     {
         return $this->execute($command);
     }
-
-
 }
