@@ -12,7 +12,7 @@ trait DIContainerTrait
     /** @var  Container */
     protected $diContainer;
 
-    public function setDiContainer(Container $diContainer)
+    public function setDiContainer(Container $diContainer): void
     {
         $this->diContainer = $diContainer;
     }
@@ -20,7 +20,7 @@ trait DIContainerTrait
     /**
      * @return Container
      */
-    public function getDiContainer()
+    public function getDiContainer(): Container
     {
         if (null === $this->diContainer) {
             $this->diContainer = new Container();
