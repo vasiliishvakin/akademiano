@@ -2,6 +2,9 @@
 
 namespace Akademiano\Config;
 
+use Akademiano\Config\Permanent\PermanentConfig;
+use Akademiano\Config\Permanent\PermanentFabric;
+use Akademiano\Config\Permanent\PermanentStorageInterface;
 use Akademiano\Utils\ArrayTools;
 use Akademiano\Utils\DIContainerIncludeInterface;
 use Akademiano\Utils\Object\Collection;
@@ -20,6 +23,9 @@ class Config implements \ArrayAccess, \IteratorAggregate, DIContainerIncludeInte
 
     protected $environment;
 
+    /** @var PermanentFabric */
+    private $permanentFabric;
+
     public function __construct(array $config = [], Container $diContainer = null)
     {
         $this->set($config);
@@ -36,6 +42,17 @@ class Config implements \ArrayAccess, \IteratorAggregate, DIContainerIncludeInte
         return $this->getDiContainer()["environment"];
     }
 
+    /**
+     * @return PermanentFabric
+     */
+    public function getPermanentFabric(): PermanentFabric
+    {
+        if (null === $this->permanentFabric) {
+            $this->permanentFabric = new PermanentFabric();
+        }
+        return $this->permanentFabric;
+    }
+
     public function set($data, array $path = null)
     {
         $this->childConfig = [];
@@ -47,6 +64,17 @@ class Config implements \ArrayAccess, \IteratorAggregate, DIContainerIncludeInte
         $this->configRaw = ArrayTools::set($this->configRaw, $path, $data);
     }
 
+    public function unset(array $path)
+    {
+        throw new \LogicException('Not Implemented');
+        $this->childConfig = [];
+        $this->configRaw = ArrayTools::set($this->configRaw, $path, null);
+    }
+
+    /**
+     * @param array|Config $data
+     * @return $this
+     */
     public function joinLeft($data)
     {
         if ($data instanceof Config) {
@@ -102,6 +130,12 @@ class Config implements \ArrayAccess, \IteratorAggregate, DIContainerIncludeInte
         return $this->childConfig[$pathKey];
     }
 
+    public function getOrCall($path, callable $callback, array $arguments = null)
+    {
+        $data = $this->get($path);
+        return $data ?? (empty($arguments) ? call_user_func($callback) : call_user_func_array($callback, $arguments));
+    }
+
     public function getAndCall($path, $callback, array $arguments = null)
     {
         if (ArrayTools::issetByPath($this->configRaw, $path)) {
@@ -119,6 +153,11 @@ class Config implements \ArrayAccess, \IteratorAggregate, DIContainerIncludeInte
         ));
     }
 
+    /**
+     * @param $path
+     * @return Config|mixed
+     * @throws \Exception
+     */
     public function getOrThrow($path)
     {
         $data = $this->get($path);
@@ -228,4 +267,8 @@ class Config implements \ArrayAccess, \IteratorAggregate, DIContainerIncludeInte
         return new \ArrayIterator($this->toArray());
     }
 
+    public function toPermanent(?PermanentStorageInterface $storage, ?array $prefix): PermanentConfig
+    {
+        return $this->getPermanentFabric()->build($this, $storage, $prefix);
+    }
 }

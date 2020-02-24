@@ -9,11 +9,11 @@ use Akademiano\Utils\Object\Prototype\StringableInterface;
 
 class ConfigFile implements StringableInterface
 {
-    const TYPE_LOCAL = 'local';
-    const TYPE_GLOBAL = 'global';
-    const TYPE_AUTO = 'auto';
+    public const TYPE_LOCAL = 'local';
+    public const TYPE_GLOBAL = 'global';
+    public const TYPE_AUTO = 'auto';
 
-    const EXT = "php";
+    public const EXT = "php";
 
     protected $id;
     protected $path;
@@ -25,7 +25,7 @@ class ConfigFile implements StringableInterface
      * @param $path
      * @param $type
      */
-    public function __construct($path, $type = self::TYPE_GLOBAL)
+    public function __construct(string $path, string $type = self::TYPE_GLOBAL)
     {
         $this->setPath($path);
         $this->setType($type);

@@ -61,9 +61,13 @@ class ConfigLoader implements DIContainerIncludeInterface
         if (array_key_exists($path, $this->settedPaths)) {
             if ($this->settedPaths[$path] >= $level) {
                 return;
-            } else {
-                unset($this->settedPaths[$path]);
             }
+
+            $currentLevel = $this->settedPaths[$path];
+            if ($key = array_search($path, $this->configDirs[$currentLevel])) {
+                unset($this->configDirs[$currentLevel][$key]);
+            }
+            unset($this->settedPaths[$path]);
         }
 
         $this->paths[$level][$path] = $path;
@@ -120,18 +124,17 @@ class ConfigLoader implements DIContainerIncludeInterface
     }
 
     /**
-     * @param $level
+     * @param int|array|null $levels
      * @return ConfigDir[]
      */
-    public function getConfigDirs($level = null)
+    public function getConfigDirs($levels = null)
     {
 
-        if (null === $level) {
+        if (null === $levels) {
             $levels = $this->getLevels();
         } else {
-            $levels = (array)$level;
+            $levels = (array)$levels;
         }
-
 
         $dirs = [];
         foreach ($levels as $level) {
@@ -217,7 +220,10 @@ class ConfigLoader implements DIContainerIncludeInterface
             $levels = $this->getLevels();
             $config = [];
             foreach ($levels as $level) {
-                $config = ConfigTools::merge($config, $this->read($level, $name));
+                $newConfig = $this->read($level, $name);
+                if (!empty($newConfig)) {
+                    $config = ConfigTools::merge($config, $newConfig);
+                }
             }
             $this->config[$name] = new Config($config, $this->getDiContainer());
         }
