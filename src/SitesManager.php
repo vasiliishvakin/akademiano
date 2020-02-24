@@ -88,7 +88,7 @@ class SitesManager implements EnvironmentIncludeInterface
         return [
             "_sites_published_default_route" => [
                 "patterns" => [
-                    "type" =>\Akademiano\Router\RoutePattern::TYPE_REGEXP,
+                    "type" => \Akademiano\Router\RoutePattern::TYPE_REGEXP,
                     "value" => "\/(?P<filePath>\w+\.\w+)$",
                 ],
                 "action" => [
@@ -164,29 +164,64 @@ class SitesManager implements EnvironmentIncludeInterface
                 /** @var Site $site */
                 $site = new $siteClass($this->getLoader());
                 $site->setRootDir($this->getRootDir());
-                $this->sites[$name]= $site;
+                $this->sites[$name] = $site;
             }
         }
         return (false !== $this->sites[$name]) ? $this->sites[$name] : null;
     }
 
-    public function getCurrentSite()
+    public function getSiteFromRootDir(): ?Site
+    {
+        $path = $this->getRootDir() . '/src/Site.php';
+        $siteClass = null;
+        $siteName = null;
+
+        $classMap = $this->getLoader()->getClassMap();
+        //try search in class map
+        $classMapPath = $this->getRootDir() . '/vendor/composer/../../src/Site.php';
+        $siteClass = array_search($classMapPath, $classMap, false);
+        if (!$siteClass) {
+            //try  get from readfile
+            if (file_exists($path)) {
+                $contents = file_get_contents($path);
+                if (preg_match('~(namespace)(\\s+)([A-Za-z0-9\\\\]+?)(\\s*);~sm', $contents, $m)) {
+                    $siteClass = $m[3];
+                }
+            }
+        }
+        if ($siteClass) {
+            if (preg_match('~^Sites\\\\+([\w_]+)\\\\?~', $siteClass, $m)) {
+                $siteName = $m[1];
+            }
+        }
+        return  $siteName ? $this->getSite($siteName) : null;
+    }
+
+    public
+    function getCurrentSite()
     {
         if (null === $this->currentSite) {
+            //try to get site from serverName;
             $siteName = $this->getEnvironment()->getServerName();
             $site = $this->getSite($siteName);
+            //try to get root dir site
+            if (!$site) {
+                $site = $this->getSiteFromRootDir();
+            }
+            //try to get default site
             if (!$site) {
                 $site = $this->getSite(self::SITE_DEFAULT);
-                if (!$site) {
-                    throw new NoAnySiteException($siteName);
-                }
+            }
+            if (!$site) {
+                throw new NoAnySiteException($siteName);
             }
             $this->currentSite = $site->getName();
         }
         return $this->getSite($this->currentSite);
     }
 
-    public function getSharedSite()
+    public
+    function getSharedSite()
     {
         $site = $this->getSite(self::SITE_SHARED);
         if (!$site) {
