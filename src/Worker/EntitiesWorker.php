@@ -8,15 +8,12 @@ use Akademiano\Entity\Entity;
 
 class EntitiesWorker extends PostgresEntityWorker
 {
-    const WORKER_ID = 'entitiesWorker';
-    const TABLE_ID = 1;
-    const TABLE_NAME = "entities";
-    const FIELDS = ['id', 'created', 'changed', 'owner',];
-    const UNMERGED_FIELDS = [ 'id', 'created', 'owner',];
-    const EXT_ENTITY_FIELDS = ['owner'];
+    public const WORKER_ID = 'entitiesWorker';
 
-    public static function getEntityClassForMapFilter()
-    {
-        return Entity::class;
-    }
+    public const TABLE_NAME = "entities";
+    protected const FIELDS = ['id', 'created', 'changed', 'owner',];
+    protected const UNMERGED_FIELDS = [ 'id', 'created', 'owner',];
+    protected const EXT_ENTITY_FIELDS = ['owner'];
+
+    public const ENTITY = Entity::class;
 }

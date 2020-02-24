@@ -23,7 +23,7 @@ use Akademiano\Operator\WorkersMap\Filter\ValueClassExtractor;
 
 class TranslatorObjectToDataEntityWorker implements EntityWorkerInterface, DelegatingInterface, WorkerSelfMapCommandsInterface, WorkerSelfInstancedInterface
 {
-    const WORKER_ID = 'translatorObjectToDataEntityWorker';
+    public const WORKER_ID = 'translatorObjectToDataEntityWorker';
 
     use DelegatingTrait;
     use WorkerMappingTrait;

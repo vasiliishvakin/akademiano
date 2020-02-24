@@ -23,7 +23,7 @@ use Akademiano\Operator\Worker\Exception\NotSupportedCommandException;
 
 class SetEntityExistingEntityWorker implements EntityWorkerInterface, WorkerSelfMapCommandsInterface, WorkerSelfInstancedInterface
 {
-    const WORKER_ID = 'setEntityExistingEntityWorker';
+    public const WORKER_ID = 'setEntityExistingEntityWorker';
 
     use WorkerSelfInstanceTrait;
     use WorkerMappingTrait;

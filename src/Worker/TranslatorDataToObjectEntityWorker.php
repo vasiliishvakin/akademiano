@@ -28,7 +28,7 @@ use Akademiano\Delegating\DelegatingTrait;
 
 class TranslatorDataToObjectEntityWorker implements EntityWorkerInterface, DelegatingInterface, WorkerSelfMapCommandsInterface, WorkerSelfInstancedInterface
 {
-    const WORKER_ID = 'translatorDataToObjectEntityWorker';
+    public const WORKER_ID = 'translatorDataToObjectEntityWorker';
 
     use DelegatingTrait;
     use WorkerSelfInstanceTrait;

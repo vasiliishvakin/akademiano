@@ -3,7 +3,6 @@
 
 namespace Akademiano\EntityOperator\Worker;
 
-
 use Akademiano\Db\Adapter\AbstractAdapter;
 use Akademiano\Db\Adapter\PgsqlAdapter;
 use Akademiano\Db\Adapter\D2QL\Criteria;
@@ -13,6 +12,7 @@ use Akademiano\Delegating\DelegatingTrait;
 use Akademiano\Entity\Entity;
 use Akademiano\Entity\Uuid;
 use Akademiano\EntityOperator\Command\EntityCommandInterface;
+use Akademiano\EntityOperator\Command\GetTableIdCommand;
 use Akademiano\EntityOperator\Command\KeeperWorkerInfoCommand;
 use Akademiano\EntityOperator\Command\MergeCommand;
 use Akademiano\EntityOperator\Command\CountCommand;
@@ -27,8 +27,6 @@ use Akademiano\EntityOperator\Command\CreateCriteriaCommand;
 use Akademiano\EntityOperator\Command\CreateSelectCommand;
 use Akademiano\EntityOperator\WorkersMap\Filter\RelationCommandEntityClassValueExtractor;
 use Akademiano\EntityOperator\WorkersMap\Filter\ParentCommandEntityClassValueExtractor;
-use Akademiano\Operator\Command\AfterCommand;
-use Akademiano\Operator\Command\AfterCommandInterface;
 use Akademiano\Operator\Command\PreCommand;
 use Akademiano\Operator\Command\PreCommandInterface;
 use Akademiano\EntityOperator\Command\SelectCommand;
@@ -47,6 +45,7 @@ use Akademiano\Utils\Object\Prototype\IntegerableInterface;
 use Akademiano\Utils\Object\Prototype\StringableInterface;
 use Akademiano\Delegating\Command\CommandInterface;
 use Akademiano\Entity\EntityInterface;
+use Akademiano\Utils\Parts\InheritClassConstantsTrait;
 use Akademiano\Utils\StringUtils;
 use Akademiano\Config\ConfigurableInterface;
 use Akademiano\Config\ConfigurableTrait;
@@ -57,18 +56,23 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
     use ConfigurableTrait;
     use DelegatingTrait;
     use WorkerMappingTrait;
+    use InheritClassConstantsTrait;
 
-    const WORKER_ID = 'postgresWorker';
+    public const WORKER_ID = 'postgresWorker';
 
-    const TABLE_ID = null;
-    const TABLE_NAME = null;
-    const FIELDS = [];
-    const UNMERGED_FIELDS = [];
-    const EXT_ENTITY_FIELDS = [];
-    const UNSAVED_FIELDS = [];
+    public const CONFIG_PATH = ['entityOperator', 'workers'];
 
+    protected const TABLE_NAME = null;
+    protected const FIELDS = [];
+    protected const UNMERGED_FIELDS = [];
+    protected const EXT_ENTITY_FIELDS = [];
+    protected const UNSAVED_FIELDS = [];
+
+    protected const ENTITY = Entity::class;
 
     protected $tableId;
+
+    protected $configPath;
 
     /** @var  PgsqlAdapter */
     private $adapter;
@@ -109,7 +113,7 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
 
     public static function getEntityClassForMapFilter()
     {
-        return Entity::class;
+        return static::ENTITY;
     }
 
     public static function modifyMapFieldFilter(string $command, string $fieldName, array $filter): array
@@ -210,33 +214,26 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
         return $this->workerId;
     }
 
+    /*public function getConfigPath()
+    {
+        if (null === $this->configPath) {
+            $currentPath = [$this->getWorkerId(), 'tableId'];
+            $configPath = self::CONFIG_PATH;
+            array_push($configPath, ...$currentPath);
+            $this->configPath = $configPath;
+        }
+        return $this->configPath;
+    }*/
+
     /**
      * @return int
      */
-    public function getTableId()
+    public function getTableId(): int
     {
         if (null === $this->tableId) {
-            $tableId = null;
-            //try get from const
-            if (!empty(static::TABLE_ID)) {
-                $tableId = static::TABLE_ID;
-            }
-
-            if (!$tableId) {
-                //try get from config
-                $path = ['entityOperator', 'workers', $this->getWorkerId()];
-                $tableId = $this->getConfig($path);
-            }
-
-            //then get from parent and increment
-            if (!$tableId) {
-                $parentClass = get_parent_class();
-                $parentWorkerId = constant($parentClass . '::' . 'WORKER_ID');
-                $tableId = $this->delegate(new KeeperWorkerInfoCommand($parentWorkerId, KeeperWorkerInfoCommand::ATTRIBUTE_TABLE_ID));
-                if (empty($tableId)) {
-                    throw new \RuntimeException(sprintf('Could not generate table id for worker', static::WORKER_ID));
-                }
-                $tableId = $tableId + 1;
+            $tableId = $this->delegate(new GetTableIdCommand($this->getWorkerId()));
+            if (empty($tableId) || !is_int($tableId)) {
+                throw new \RuntimeException(sprintf('Get empty table id'));
             }
             $this->tableId = $tableId;
         }
@@ -246,10 +243,18 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
     /**
      * @return array
      */
-    public function getFields(): array
+    /*public function getFields(): array
     {
         if (null === $this->fields) {
             $this->fields = ClassTools::getClassTreeArrayConstant(get_class($this), 'FIELDS');
+        }
+        return $this->fields;
+    }*/
+
+    public function getFields(): array
+    {
+        if (null === $this->fields) {
+            $this->fields = self::getClassTreeArrayConstant('FIELDS');
         }
         return $this->fields;
     }
@@ -260,7 +265,7 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
     public function getUnmergedFields(): array
     {
         if (null === $this->unmergedFields) {
-            $this->unmergedFields = ClassTools::getClassTreeArrayConstant(get_class($this), 'UNMERGED_FIELDS');
+            $this->unmergedFields = self::getClassTreeArrayConstant('UNMERGED_FIELDS');
         }
         return $this->unmergedFields;
     }
@@ -268,7 +273,7 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
     public function getExtEntityFields(): array
     {
         if (null === $this->extEntityFields) {
-            $this->extEntityFields = ClassTools::getClassTreeArrayConstant(get_class($this), 'EXT_ENTITY_FIELDS');
+            $this->extEntityFields = self::getClassTreeArrayConstant('EXT_ENTITY_FIELDS');
         }
         return $this->extEntityFields;
     }
@@ -279,7 +284,7 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
     public function getUnsavedFields(): array
     {
         if (null === $this->unsavedFields) {
-            $this->unsavedFields = ClassTools::getClassTreeArrayConstant(get_class($this), 'UNSAVED_FIELDS');
+            $this->unsavedFields = self::getClassTreeArrayConstant('UNSAVED_FIELDS');
         }
         return $this->unsavedFields;
     }
@@ -587,20 +592,20 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
     {
         switch ($attribute) {
             case KeeperWorkerInfoCommand::ATTRIBUTE_TABLE_ID :
-                {
-                    return $this->getTableId();
-                    break;
-                }
+            {
+                return $this->getTableId();
+                break;
+            }
             case KeeperWorkerInfoCommand::ATTRIBUTE_TABLE_NAME :
-                {
-                    return $this->getTable();
-                    break;
-                }
+            {
+                return $this->getTable();
+                break;
+            }
             case KeeperWorkerInfoCommand::ATTRIBUTE_FIELDS :
-                {
-                    return $this->getFields();
-                    break;
-                }
+            {
+                return $this->getFields();
+                break;
+            }
             default:
                 throw new \InvalidArgumentException(sprintf('"%s" command attribute "%d" not supported', KeeperWorkerInfoCommand::class, $attribute));
         }

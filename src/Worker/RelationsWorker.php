@@ -10,18 +10,21 @@ use Akademiano\Entity\RelationEntity;
 
 class RelationsWorker extends EntitiesWorker
 {
-    const FIELD_FIRST = "first";
-    const FIELD_SECOND = "second";
+    public const WORKER_ID = 'relationsWorker';
 
-    const FIRST_CLASS = RelationEntity::FIRST_CLASS;
-    const SECOND_CLASS = RelationEntity::SECOND_CLASS;
+    public const FIRST_FIELD = "first";
+    public const SECOND_FIELD = "second";
 
+/*    protected const FIRST_CLASS = RelationEntity::FIRST_CLASS;
+    protected const SECOND_CLASS = RelationEntity::SECOND_CLASS;*/
 
-    const WORKER_ID = 'relationsWorker';
-    const TABLE_NAME = 'relations';
-    const FIELDS = [self::FIELD_FIRST, self::FIELD_SECOND];
+    public const TABLE_NAME = 'relations';
 
-    const EXT_ENTITY_FIELDS = ['first', 'second'];
+    protected const FIELDS = [self::FIRST_FIELD, self::SECOND_FIELD];
+
+    protected const EXT_ENTITY_FIELDS = ['first', 'second'];
+
+    public const ENTITY = RelationEntity::class;
 
     use RelationsBetweenTrait;
 
@@ -32,19 +35,14 @@ class RelationsWorker extends EntitiesWorker
         return $commands;
     }
 
-    public static function getEntityClassForMapFilter()
-    {
-        return RelationEntity::class;
-    }
-
     public function getFirstField()
     {
-        return static::FIELD_FIRST;
+        return constant(static::FIRST_FIELD);
     }
 
     public function getSecondField()
     {
-        return static::FIELD_SECOND;
+        return constant(static::SECOND_FIELD);
     }
 
     /**
@@ -52,7 +50,7 @@ class RelationsWorker extends EntitiesWorker
      */
     public function getFirstClass()
     {
-        return static::FIRST_CLASS;
+        return constant(static::ENTITY . '::FIRST_CLASS');
     }
 
     /**
@@ -60,7 +58,7 @@ class RelationsWorker extends EntitiesWorker
      */
     public function getSecondClass()
     {
-        return static::SECOND_CLASS;
+        return constant(static::ENTITY . '::SECOND_CLASS');
     }
 
     public function execute(CommandInterface $command)

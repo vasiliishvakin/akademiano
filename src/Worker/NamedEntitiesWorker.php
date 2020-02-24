@@ -8,12 +8,10 @@ use Akademiano\Entity\NamedEntity;
 
 class NamedEntitiesWorker extends EntitiesWorker
 {
-    const WORKER_ID = 'namedEntitiesWorker';
-    const TABLE_NAME = 'named';
-    const FIELDS = [ 'title', 'description'];
+    public const WORKER_ID = 'namedEntitiesWorker';
+    public const TABLE_NAME = 'named';
+    protected const FIELDS = [ 'title', 'description'];
 
-    public static function getEntityClassForMapFilter()
-    {
-        return NamedEntity::class;
-    }
+    public const ENTITY = NamedEntity::class;
+
 }

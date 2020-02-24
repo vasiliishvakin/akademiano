@@ -23,7 +23,7 @@ use Carbon\Carbon;
 
 class EntityCreatorWorker implements EntityWorkerInterface, DelegatingInterface, WorkerSelfMapCommandsInterface, WorkerSelfInstancedInterface
 {
-    const WORKER_ID = 'entityCreatorWorker';
+    public const WORKER_ID = 'entityCreatorWorker';
 
     use DelegatingTrait;
     use WorkerSelfInstanceTrait;
