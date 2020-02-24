@@ -4,14 +4,16 @@
 namespace Akademiano\Entity;
 
 use Akademiano\Entity\Exception\Relations\BadRelatedClassException;
+use Akademiano\EntityOperator\Worker\RelationsWorker;
 
 class RelationEntity extends Entity
 {
-    const FIRST_CLASS = Entity::class;
-    const SECOND_CLASS = Entity::class;
+    public const FIRST_CLASS = Entity::class;
+    public const SECOND_CLASS = Entity::class;
 
-    const FIRST_FIELD = 'first';
-    const SECOND_FIELD = 'second';
+    // поля из воркера
+    public const FIRST_FIELD = RelationsWorker::FIRST_FIELD;
+    public const SECOND_FIELD = RelationsWorker::SECOND_FIELD;
 
     protected $first;
     protected $second;
