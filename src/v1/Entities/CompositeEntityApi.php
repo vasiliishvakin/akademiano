@@ -18,9 +18,9 @@ class CompositeEntityApi extends EntityApi
 {
     const RELATIONS = [];
 
-    public function getRelatedAttributes(): ?array
+    public function getRelatedAttributes(): array
     {
-        return ClassTools::getClassTreeArrayConstant(get_class($this), 'RELATIONS');
+        return (array) ClassTools::getClassTreeArrayConstant(get_class($this), 'RELATIONS');
     }
 
     public function getRelatedAttributeApi(string $apiId): RelationEntityApi
