@@ -1,6 +1,9 @@
 <?php
+
+use Akademiano\Core\ApplicationFactory;
+
 if (!defined("ROOT_DIR")) {
-    define('ROOT_DIR', realpath(__DIR__ . '/../../../../'));
+    define('ROOT_DIR', dirname(__DIR__, 4));
 }
 if (!defined("PUBLIC_DIR")) {
     define('PUBLIC_DIR', ROOT_DIR . '/public');
@@ -12,7 +15,6 @@ if (!defined("DATA_DIR")) {
     define('DATA_DIR', ROOT_DIR . '/data');
 }
 
-$loader = require ROOT_DIR . "/vendor/autoload.php";
-$app = new \Akademiano\Core\Application();
-$app->setLoader($loader);
-return $app;
+require_once __DIR__ . '/ApplicationFactory.php';
+
+return ApplicationFactory::factory();

@@ -12,7 +12,6 @@ use Akademiano\Utils\DIContainerIncludeInterface;
 use Akademiano\Utils\Exception\DIContainerAlreadyExistsServiceException;
 use Akademiano\HttpWarp\Environment;
 use Akademiano\HttpWarp\Exception\NotFoundException;
-use Akademiano\Entity\UserInterface;
 use Akademiano\Utils\Object\Prototype\ArrayableInterface;
 use Akademiano\Utils\Parts\DIContainerTrait;
 use Composer\Autoload\ClassLoader;
@@ -110,6 +109,7 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
     }
 
     /**
+     * @deprecated
      * @return ModuleManager
      */
     public function getModuleManager()
@@ -302,8 +302,8 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
             }
         }
 
-        $mm = $this->getModuleManager();
-        $mm->load($this->getDiContainer());
+        $mm = $this->getDiContainer()['moduleManager'];
+        $mm->load();
     }
 
     public function run()
@@ -317,7 +317,41 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
         }
     }
 
-    public function action(Route $route, array $controllerInfo, string $action, ...$arguments)
+    public function findTemplate(ViewInterface $view, string $controllerClass, string $actionName): ?string
+    {
+        $module = implode('/', array_slice(explode('\\', $controllerClass), 0, -2));
+        $controllerFullName = array_slice(explode('\\', $controllerClass), -1, 1)[0];
+        $controllerName = substr($controllerFullName, 0, -10);
+        $controllerId = lcfirst($controllerName);
+
+        if ($module) {
+            $possibleTemplates[] = $module . DIRECTORY_SEPARATOR . $controllerId . DIRECTORY_SEPARATOR . $actionName;
+        }
+        $possibleTemplates[] = $controllerId . DIRECTORY_SEPARATOR . $actionName;
+        $possibleTemplates[] = $controllerName . DIRECTORY_SEPARATOR . $actionName;
+
+        if (in_array($actionName, ['add', 'edit', 'form'])) {
+            if ($module) {
+                $possibleTemplates[] = $module . DIRECTORY_SEPARATOR . $controllerId . DIRECTORY_SEPARATOR . 'form';
+            }
+            $possibleTemplates[] = $controllerId . DIRECTORY_SEPARATOR . 'form';
+            $possibleTemplates[] = $controllerName . DIRECTORY_SEPARATOR . 'form';
+        }
+
+        foreach ($possibleTemplates as $template) {
+            if ($view->exist($template)) {
+                return  $template;
+            }
+        }
+
+        $parentClass = get_parent_class($controllerClass);
+        if ($parentClass) {
+            return  $this->findTemplate($view, $parentClass, $actionName);
+        }
+        return null;
+    }
+
+    public function action(Route $route, $controllerInfo, string $action, ...$arguments)
     {
         $actionName = lcfirst($action);
         $action = $actionName . 'Action';
@@ -333,28 +367,24 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
                 $controllerId = lcfirst($controllerInfo["controller"]);
                 $controllerName = ucfirst($controllerInfo["controller"]);
                 $controllerPath = "{$module}\\Controller\\" . $controllerName . 'Controller';
-                $template = $module . DIRECTORY_SEPARATOR . $controllerId . DIRECTORY_SEPARATOR . $actionName;
             } elseif ($controllerInfo["site"]) {
                 $site = ucfirst($controllerInfo["site"]);
                 $controllerId = lcfirst($controllerInfo["controller"]);
                 $controllerName = ucfirst($controllerInfo["controller"]);
                 $controllerPath = "\\Sites\\{$site}\\Controller\\" . $controllerName . 'Controller';
-                $template = $controllerId . DIRECTORY_SEPARATOR . $actionName;
             }
         } else {
             $possibleControllers = [];
             $controllerId = lcfirst($controllerInfo);
             $controllerName = ucfirst($controllerInfo);
 
-
-            $possibleControllers[] = "Sites\\_Default\\Controller\\" . $controllerName . 'Controller';
-
             $currentSite = $this->getCurrentSite();
             if (!empty($currentSite)) {
                 if ($currentSite->getName() !== "_default") {
-                    $possibleControllers[] = $currentSite->getNamespace() . "\\Controller\\" . $controllerName . 'Controller';
+                    $possibleControllers[] = ltrim($currentSite->getNamespace() . "\\Controller\\" . $controllerName . 'Controller', '\\');
                 }
             }
+            $possibleControllers[] = "Sites\\_Default\\Controller\\" . $controllerName . 'Controller';
             $possibleControllers[] = "Sites\\All\\Controller\\" . $controllerName . 'Controller';
 
             foreach ($possibleControllers as $pController) {
@@ -363,7 +393,6 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
                     break;
                 }
             }
-            $template = $controllerId . DIRECTORY_SEPARATOR . $actionName;
         }
 
         if (null === $controllerPath) {
@@ -380,15 +409,10 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
             $response->setDefaults($httpCacheParams);
         }
 
-        if (!$view->exist($template)) {
-            if ($actionName === "add" || $actionName === "edit") {
-                $template2 = "{$controllerName}/form";
-                if ($view->exist($template2)) {
-                    $template = $template2;
-                }
-            }
-        }
+        $template = $this->findTemplate($view, $controllerPath, $actionName);
+
         $view->setTemplate($template);
+
         //TODO FIX
         $urlParams = [];
         if (isset($arguments[0])) {
@@ -397,6 +421,7 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
         $urlParams = array_merge($request->getParams(), $urlParams);
 
         $view->assignArray([
+            '_module' => $module ?? '',
             '_controller' => $controllerId,
             '_action' => $actionName,
             '_path' => $controllerId . '/' . $actionName,

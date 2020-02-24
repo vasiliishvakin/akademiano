@@ -25,9 +25,23 @@ class ApplicationComponentsProvider implements ServiceProviderInterface
     const CONFIG_LEVEL_MODULES = -10;
     const CONFIG_LEVEL_SITES_SHARED = 10;
     const CONFIG_LEVEL_SITES_CURRENT = 20;
+    const CONFIG_LEVEL_ROOT = 30;
 
     public function register(Container $pimple)
     {
+        if (!isset($pimple['rootDir'])) {
+            $pimple['rootDir'] = defined('ROOT_DIR') ? constant('ROOT_DIR') : dirname(__DIR__, 4);
+        }
+        if (!isset($pimple['publicDir'])) {
+            $pimple['publicDir'] = defined('PUBLIC_DIR') ? constant('PUBLIC_DIR') : $pimple['rootDir'] . DIRECTORY_SEPARATOR . 'public';
+        }
+        if (!isset($pimple['vendorDir'])) {
+            $pimple['vendorDir'] = $pimple['vendorDir'] = defined('VENDOR_DIR') ? constant('VENDOR_DIR') : $pimple['rootDir'] . DIRECTORY_SEPARATOR . 'vendor';
+        }
+        if (!isset($pimple['dataDir'])) {
+            $pimple['dataDir'] = $pimple['dataDir'] = defined('DATA_DIR') ? constant('DATA_DIR') : $pimple['rootDir'] . DIRECTORY_SEPARATOR . 'data';
+        }
+
         if (!isset($pimple['sessions'])) {
             $pimple['sessions'] = function (Container $pimple) {
                 return new Session();
@@ -70,7 +84,6 @@ class ApplicationComponentsProvider implements ServiceProviderInterface
                     }
                 }
 
-
                 if (!empty($pimple["sharedSite"])) {
                     $configDir = $pimple["sharedSite"]->getConfigDir();
                     if ($configDir instanceof ConfigDir) {
@@ -83,7 +96,14 @@ class ApplicationComponentsProvider implements ServiceProviderInterface
                         $configLoader->attachConfigDir($configDir, self::CONFIG_LEVEL_SITES_CURRENT);
                     }
                 }
+                $rootConfigDir = $pimple['rootDir'] . '/src/config';
+                if (is_dir($rootConfigDir)) {
+                    $configLoader->addConfigDir($rootConfigDir, self::CONFIG_LEVEL_ROOT);
+                }
+                $configLoader->getConfig();
                 return $configLoader;
+
+
             };
         }
 

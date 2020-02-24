@@ -93,6 +93,9 @@ class ModuleManager
     public function load(Container $container = null)
     {
         $modules = $this->getModulesList();
+        if (null === $container) {
+            $container = $this->getDiContainer();
+        }
         foreach ($modules as $moduleName) {
             $class = "\\{$moduleName}\\Module";
             $module = new $class();
