@@ -1,29 +1,29 @@
 <?php
 
+use Akademiano\EntityOperator\Command\GetTableIdCommand;
+use Akademiano\EntityOperator\Worker\ContentEntitiesWorker;
 use Phinx\Migration\AbstractMigration;
+use Akademiano\EntityOperator\Worker\NamedEntitiesWorker;
 
 class EntityOperatorContent extends AbstractMigration
 {
     public function up()
     {
         $sql = <<<SQL
-CREATE TABLE content
+CREATE TABLE %s
 (
--- Унаследована from table named:  id bigint NOT NULL,
--- Унаследована from table named:  created timestamp without time zone,
--- Унаследована from table named:  changed timestamp without time zone,
--- Унаследована from table named:  active boolean DEFAULT true,
--- Унаследована from table named:  title text,
--- Унаследована from table named:  description text,
   content text,
-  CONSTRAINT content_pkey PRIMARY KEY (id)
+  CONSTRAINT %s_pkey PRIMARY KEY (id)
 )
-INHERITS (named);
+INHERITS (%s);
 SQL;
+        $sql = sprintf($sql, ContentEntitiesWorker::TABLE_NAME, ContentEntitiesWorker::TABLE_NAME, NamedEntitiesWorker::TABLE_NAME);
         $this->execute($sql);
 
-
-        $sql = "CREATE SEQUENCE uuid_complex_short_tables_3";
+        $sql = sprintf(
+            'CREATE SEQUENCE uuid_complex_short_tables_%d',
+            (include dirname(__DIR__, 2) . '/vendor/akademiano/entity-operator/src/bootstrap.php')(new GetTableIdCommand(ContentEntitiesWorker::WORKER_ID))
+        );
         $this->execute($sql);
     }
 }
