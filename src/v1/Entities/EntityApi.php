@@ -8,6 +8,7 @@ use Akademiano\Api\v1\AbstractApi;
 use Akademiano\Delegating\DelegatingInterface;
 use Akademiano\Delegating\DelegatingTrait;
 use Akademiano\Delegating\OperatorInterface;
+use Akademiano\DI\Container;
 use Akademiano\Entity\Entity;
 use Akademiano\Entity\EntityInterface;
 use Akademiano\Entity\Uuid;
@@ -20,6 +21,7 @@ use Akademiano\EntityOperator\Command\LoadCommand;
 use Akademiano\EntityOperator\Command\SaveCommand;
 use Akademiano\EntityOperator\Worker\KeeperInterface;
 use Akademiano\Operator\Command\WorkerInfoCommand;
+use Akademiano\Operator\Operator;
 use Akademiano\User\CustodianIncludeInterface;
 use Akademiano\User\CustodianIncludeTrait;
 use Akademiano\UUID\Command\UuidCreateCommand;
@@ -245,5 +247,16 @@ class EntityApi extends AbstractApi implements EntityApiInterface, CustodianIncl
         $command = new WorkerInfoCommand(KeeperInterface::WORKER_INFO_FIELDS, Message::class);
         $fields = $this->delegate($command);
         return $fields;
+    }
+
+    /**
+     * @return \Closure
+     * return function for instance in DI container
+     */
+    public static function getBuilder(): \Closure
+    {
+        return function (\Pimple\Container $c) {
+            return new static($c[Operator::RESOURCE_ID]);
+        };
     }
 }
