@@ -10,7 +10,7 @@ class WorkerInfoCommand implements CommandInterface, OperatorSpecialCommandInter
 
     protected $attribute;
 
-    public function __construct($workerId, $attribute)
+    public function __construct(string $workerId, $attribute)
     {
         $this->setWorkerId($workerId);
         $this->setAttribute($attribute);

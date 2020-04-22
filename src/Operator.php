@@ -6,6 +6,7 @@ namespace Akademiano\Operator;
 use Akademiano\Config\Config;
 use Akademiano\Delegating\OperatorInterface;
 use Akademiano\EntityOperator\Command\KeeperWorkerInfoCommand;
+use Akademiano\Operator\Command\GetWorkerCommand;
 use Akademiano\Operator\Command\OperatorSpecialCommandInterface;
 use Akademiano\Operator\Command\PreCommandInterface;
 use Akademiano\Operator\Command\SubCommand;
@@ -56,7 +57,7 @@ class Operator implements OperatorInterface, DIContainerIncludeInterface
     {
         if (null === $this->workers) {
             $this->workers = new WorkersContainer();
-            $this->workers->setDependencies($this->getDependencies());
+            $this->workers->setDiContainer($this->getDiContainer());
         }
         return $this->workers;
     }
@@ -211,13 +212,20 @@ class Operator implements OperatorInterface, DIContainerIncludeInterface
 
     public function internalExecute(CommandInterface $command)
     {
-        if ($command instanceof WorkerInfoCommand) {
-            $workerId = $command->getWorkerId();
-            /** @var WorkerInterface $worker */
-            $worker = $this->getWorker($workerId);
-            return $worker->execute($command);
-        } else {
-            throw new \InvalidArgumentException(sprintf('Special operator command "%s" not supported', get_class($command)));
+        switch (true) {
+            case $command instanceof GetWorkerCommand:
+                $subCommand = $command->getCommand();
+                foreach ($this->getCommandWorkers($subCommand) as $worker) {
+                    return $worker;
+                }
+                break;
+            case $command instanceof WorkerInfoCommand:
+                $workerId = $command->getWorkerId();
+                /** @var WorkerInterface $worker */
+                $worker = $this->getWorker($workerId);
+                return $worker->execute($command);
+            default:
+                throw new \InvalidArgumentException(sprintf('Special operator command "%s" not supported', get_class($command)));
         }
     }
 
