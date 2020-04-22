@@ -274,6 +274,13 @@ class ApplicationComponentsProvider implements ServiceProviderInterface
             if (empty($themeContainedDirs)) {
                 throw  new \RuntimeException("No any theme not exist");
             }
+
+            $themeContainedDirs = array_filter($themeContainedDirs,
+                function ($dir) {
+                    return file_exists($dir) && is_dir($dir) && is_readable($dir);
+                }
+            );
+
             $view->addTemplateDirs($themeContainedDirs);
 
             //module templates
@@ -293,11 +300,11 @@ class ApplicationComponentsProvider implements ServiceProviderInterface
         }
 
         $viewVars = $viewConfig->get(["vars"], []);
-        $viewVars->set($config->getOneIs([['html','lang'], 'lang'], 'en'), ['html','lang']);
+        $viewVars->set($config->getOneIs([['html', 'lang'], 'lang'], 'en'), ['html', 'lang']);
 
         foreach ($viewVars as $name => $value) {
             if (is_callable($value)) {
-                $value = call_user_func($value, $this);
+                $value = call_user_func($value, $pimple);
             }
             $view->assign($name, $value);
         }
