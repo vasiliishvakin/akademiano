@@ -84,6 +84,11 @@
                                         <i class="nav-icon icon-speedometer"></i> Dashboard
                                     </a>
                                 </li>
+                                {% for menuItem in menu.main.items %}
+                                    <li class="nav-item px-3">
+                                        <a class="nav-link" href="{{ menuItem.url }}">{{ menuItem.text }}</a>
+                                    </li>
+                                {% endfor %}
                             {% endblock sidebarNavItems %}
                         </ul>
                         <!-- /sidebar-nav -->

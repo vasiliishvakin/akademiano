@@ -42,7 +42,8 @@
     "bower-asset/pace": "^1.0",
     "bower-asset/chart.js": "^2.7",
     "bower-asset/popper.js": "^1.15",
-    "npm-asset/perfect-scrollbar": "^1.4"
+    "npm-asset/perfect-scrollbar": "^1.4",
+    "bower-asset/highlightjs": "^9.16"
   },
   "require-dev": {
     "codeception/codeception": "^3.1",

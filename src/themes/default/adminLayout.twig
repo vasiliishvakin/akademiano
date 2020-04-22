@@ -1,1 +1,203 @@
-{% extends "layout.twig" %}
+<!doctype html>
+<html lang="{{ html.lang|default("ru") }}">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    {{ asset_css([
+        ["font-awesome/css/fontawesome.min.css", {"class":"holderjs"}],
+        ["font-awesome/css/all.min.css", {"class":"holderjs"}],
+        "simple-line-icons/css/simple-line-icons.css",
+        "pace/themes/blue/pace-theme-minimal.css",
+        "coreui/dist/css/coreui.min.css",
+        "assets/css/akademiano-coreui-fix.css"
+    ], default, true) }}
+
+    {#
+        "assets/css/coreui-fix.css",
+        "assets/css/akademiano.css",
+    #}
+
+    {% block css %}
+    {% endblock css %}
+
+    {#    counters#}
+
+    <title>{{ pageTitle | default('Datamapper Site') }}</title>
+    {% if pageDescription %}
+        <meta name="description" content="{{ pageDescription }}"/>
+    {% endif %}
+</head>
+
+{% block body %}
+    <body class="{{ template_body_class | default ('app header-fixed sidebar-fixed aside-menu-hidden sidebar-lg-show') }}">
+
+    <!-- app-header -->
+    {% block navbar %}
+        <header class="app-header navbar">
+            <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="#">
+                <!-- logo -->
+                <img class="navbar-brand-full" src="data:," data-src="holder.js/89x25/?theme=social&font='Font Awesome 5 Free'&text=&#xf0ce;&#x20;&#xf6ff;&size=16" width="89" height="25" alt="Logo">
+                <img class="navbar-brand-minimized" src="data:," data-src="holder.js/30x30?theme=social&font='Font Awesome 5 Free'&text=&#xf0ce;&size=12" width="30" height="30" alt="Logo">
+                <!-- /logo -->
+            </a>
+
+            <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" data-toggle="sidebar-lg-show">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <ul class="nav navbar-nav d-md-down-none">
+                {% block navbarItems %}
+                    <li class="nav-item px-3">
+                        <a class="nav-link" href="#">Dashboard</a>
+                    </li>
+                {% endblock navbarItems %}
+            </ul>
+
+            <!-- profile link -->
+            <ul class="nav navbar-nav ml-auto">
+                {% block navbarUserItems %}
+                    {% include "Akademiano/layout/navbar-user.twig" %}
+                {% endblock navbarUserItems %}
+            </ul>
+            <!-- /profile link -->
+        </header>
+    {% endblock navbar %}
+    <!-- /app-header -->
+
+    <!-- app-body -->
+    {% block appBody %}
+        <div class="app-body">
+
+            {% block sidebar %}
+                <!-- sidebar -->
+                <div class="sidebar">
+                    <nav class="sidebar-nav">
+                        <!-- sidebar-nav -->
+                        <ul class="nav">
+                            {% block sidebarNavItems %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">
+                                        <i class="nav-icon icon-speedometer"></i> Dashboard
+                                    </a>
+                                </li>
+                                {% for menuItem in menu.main.items %}
+                                    <li class="nav-item px-3">
+                                        <a class="nav-link" href="{{ menuItem.url }}">{{ menuItem.text }}</a>
+                                    </li>
+                                {% endfor %}
+                            {% endblock sidebarNavItems %}
+                        </ul>
+                        <!-- /sidebar-nav -->
+                    </nav>
+                    <button class="sidebar-minimizer brand-minimizer" type="button"></button>
+                </div>
+                <!-- /sidebar -->
+            {% endblock sidebar %}
+
+            <!-- main -->
+            {% block main %}
+                <main class="main">
+                    <!-- breadcrumb -->
+                    {% block breadcrumb %}
+                        <ol class="breadcrumb">
+                            {% block breadcrumbItems %}
+                                <li class="breadcrumb-item">Home</li>
+                                <li class="breadcrumb-item">
+                                    <a href="#">Admin</a>
+                                </li>
+                                <li class="breadcrumb-item active">Dashboard</li>
+                            {% endblock breadcrumbItems %}
+                        </ol>
+                    {% endblock breadcrumb %}
+                    <!-- /breadcrumb -->
+
+                    {% block mainContainer %}
+                        <div class="container-fluid">
+                            <div id="ui-view">
+                                <div class="animated fadeIn">
+                                    {% block mainContainerContent %}
+                                        <div class="row">
+                                            <div class="col-12 col-xl-{{ isArticleLengthSmall ? '3' : '9' }}">
+                                                {% block mainContainerContentArticle %}
+                                                    <div class="card mainContainerContentArticle">
+                                                        <div class="card-body">
+                                                            <h1 class="card-title">Akademiano Default Site Template</h1>
+                                                        </div>
+                                                    </div>
+                                                {% endblock mainContainerContentArticle %}
+                                            </div>
+                                            {% if block('mainContainerContentRight') is defined and block('mainContainerContentRight') != '' %}
+                                                <div class="col-xl-3 sticky-xl">
+                                                    {#{% block mainContainerContentRight %}#}
+                                                    {#<div class="card">#}
+                                                    {#<div class="card-body">#}
+                                                    {{ block('mainContainerContentRight') }}
+                                                    {#</div>#}
+                                                    {# </div>#}
+                                                    {#{% endblock mainContainerContentRight %}#}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    {% endblock mainContainerContent %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endblock mainContainer %}
+                </main>
+            {% endblock main %}
+            <!-- /main -->
+        </div>
+    {% endblock appBody %}
+    <!-- /app-body -->
+
+    <!-- app-footer -->
+    {% block footer %}
+        <footer class="app-footer">
+            {% block footerItems %}
+            {% endblock footerItems %}
+            <div>
+                <a href="https://github.com/mrdatamapper?utf8=✓&tab=repositories&q=akademiano">Akademiano Project</a>
+            </div>
+            <div class="ml-auto">
+                <a href="https://coreui.io/">CoreUI</a>
+            </div>
+        </footer>
+    {% endblock footer %}
+    <!-- /app-footer -->
+
+    <!-- jQuery first, then Popper.js, Bootstrap, then CoreUI  -->
+    {{ asset_js([
+        "jquery/dist/jquery.min.js",
+        "popper.js/dist/umd/popper.min.js",
+        "bootstrap/dist/js/bootstrap.min.js",
+        "perfect-scrollbar/dist/perfect-scrollbar.min.js",
+        "coreui/dist/js/coreui.min.js",
+        "coreui/dist/js/coreui-utilities.min.js",
+
+        "font-awesome/js/fontawesome.min.js",
+        "font-awesome/js/solid.min.js",
+
+        "holder/holder.min.js",
+        "tether/dist/js/tether.min.js",
+        "pace/pace.min.js",
+        "chart.js/dist/Chart.min.js",
+    ], default, true) }}
+
+    {% block js %}
+
+    {% endblock js %}
+
+    <script>
+        Holder.run({
+            noFontFallback: false
+        });
+    </script>
+
+
+    </body>
+{% endblock body %}
+</html>
