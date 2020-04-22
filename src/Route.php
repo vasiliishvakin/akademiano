@@ -68,7 +68,7 @@ class Route implements EnvironmentIncludeInterface
     /**
      * @return array
      */
-    public function getMethods():array
+    public function getMethods(): array
     {
         return $this->methods;
     }
@@ -78,14 +78,14 @@ class Route implements EnvironmentIncludeInterface
      */
     public function setMethods($methods)
     {
-        $this->methods =(array) $methods;
+        $this->methods = (array)$methods;
     }
 
 
     /**
      * @return RoutePattern[]|Collection
      */
-    public function getPatterns():Collection
+    public function getPatterns(): Collection
     {
         return $this->patterns;
     }
@@ -152,7 +152,8 @@ class Route implements EnvironmentIncludeInterface
         switch ($type) {
             case RoutePattern::TYPE_FULL:
             case RoutePattern::TYPE_FIRST_PREFIX:
-            case RoutePattern::TYPE_PREFIX: {
+            case RoutePattern::TYPE_PREFIX:
+            {
                 $patterns = $this->getPatterns()->filter("type", $type);
                 $item = $patterns->max("value", "strlen");
                 if (!$item instanceof RoutePattern) {
@@ -161,7 +162,8 @@ class Route implements EnvironmentIncludeInterface
 
                 return strlen($item->getValue());
             }
-            default: {
+            default:
+            {
                 throw new \OverflowException("Route with base type {$type} not support length param");
             }
         }
@@ -202,7 +204,7 @@ class Route implements EnvironmentIncludeInterface
     public static function isShort($routeData)
     {
         if (is_array($routeData) && (!isset($routeData["patterns"]) || !isset($routeData["action"]))) {
-            return (count($routeData) === 2 && ArrayTools::getArrayType($routeData) === -1 && mb_strpos($routeData[0], "/") === 0);
+            return (count($routeData) === 2 && ArrayTools::getArrayType($routeData) === -1 && (mb_strpos($routeData[0], "/") === 0 || mb_strpos($routeData[0], "/") === 2));
         }
 
         return false;
@@ -213,13 +215,41 @@ class Route implements EnvironmentIncludeInterface
         if (count($routeData) < 2) {
             throw new \RuntimeException("Route mast have at least two parameters, first for pattern and second for action: " . Debug::var2str($routeData));
         }
-        if (isset($routeData["patterns"]) && isset($routeData["action"])){
+        if (isset($routeData["patterns"]) && isset($routeData["action"])) {
             return $routeData;
         }
+
+        $value = $routeData[0];
+        $type = RoutePattern::TYPE_DEFAULT;
+        if (is_string($value)) {
+            $secondChars = substr($value, 1, 1);
+            if ($secondChars === ":") {
+                $firstChars = substr($value, 0, 2);
+                switch ($firstChars) {
+                    case RoutePattern::KEY_TYPE_FULL:
+                        $type = RoutePattern::TYPE_FULL;
+                        break;
+                    case RoutePattern::KEY_TYPE_FIRST_PREFIX:
+                        $type = RoutePattern::TYPE_FIRST_PREFIX;
+                        break;
+                    case RoutePattern::KEY_TYPE_PREFIX:
+                        $type = RoutePattern::KEY_TYPE_PREFIX;
+                        break;
+                    case RoutePattern::KEY_TYPE_REGEXP:
+                        $type = RoutePattern::TYPE_REGEXP;
+                        break;
+                    default:
+                        throw new \Exception();
+                }
+                $value = substr($value, 2);
+            }
+        }
+
         $routeDataNew = [
             "patterns" => [
                 [
-                    "value" => $routeData[0],
+                    "type" => $type,
+                    "value" => $value,
                 ],
             ],
             "action" => $routeData[1],

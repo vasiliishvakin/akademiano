@@ -4,6 +4,7 @@ namespace Akademiano\Router;
 
 
 use Akademiano\Utils\Object\Prototype\ArrayableInterface;
+use Akademiano\Utils\Object\Prototype\StringableInterface;
 use Akademiano\Utils\Parts\SetParams;
 use Akademiano\Utils\RegexpUtils;
 use Akademiano\HttpWarp\Url;
@@ -23,9 +24,15 @@ class RoutePattern implements ArrayableInterface
     const TYPE_REGEXP = 3;
     const TYPE_PREFIX = 4;
     const TYPE_PARAMS = 5;
+    const TYPE_DEFAULT = self::TYPE_PREFIX;
+
+    public const KEY_TYPE_FULL = "f:";
+    public const KEY_TYPE_FIRST_PREFIX = "s:";
+    public const KEY_TYPE_PREFIX = "p:";
+    public const KEY_TYPE_REGEXP = "e:";
 
     protected $part = self::PART_PATH;
-    protected $type = self::TYPE_PREFIX;
+    protected $type = self::TYPE_DEFAULT;
     protected $value;
 
     public function __construct(array $params = null)
@@ -69,7 +76,6 @@ class RoutePattern implements ArrayableInterface
                 throw new \RuntimeException("Bad configuration for router pattern: pattern for url params may be only type " . self::TYPE_PARAMS);
             }
         }
-
         return $this->type;
     }
 

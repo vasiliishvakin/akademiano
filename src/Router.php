@@ -341,7 +341,6 @@ class Router implements EnvironmentIncludeInterface
                         $processed = true;
                         if ($runResult !== self::RUN_NEXT) {
                             $this->isRun = false;
-
                             return $runResult;
                             break;
                         }
