@@ -49,6 +49,7 @@ use Akademiano\Utils\Parts\InheritClassConstantsTrait;
 use Akademiano\Utils\StringUtils;
 use Akademiano\Config\ConfigurableInterface;
 use Akademiano\Config\ConfigurableTrait;
+use Carbon\CarbonInterval;
 
 
 abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, ConfigurableInterface, DelegatingInterface, WorkerSelfMapCommandsInterface, WorkerSelfInstancedInterface
@@ -534,6 +535,8 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
             }
         } elseif ($value instanceof \DateTime || $value instanceof \DateTimeImmutable) {
             return $value->format("Y-m-d H:i:s");
+        } elseif ($value instanceof CarbonInterval) {
+            return $value->spec();
         } elseif (is_bool($value)) {
             return $value ? 't' : 'f';
         } elseif ($value instanceof IntegerableInterface) {
