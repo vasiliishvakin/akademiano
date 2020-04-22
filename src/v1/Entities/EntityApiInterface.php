@@ -39,4 +39,8 @@ interface EntityApiInterface extends ApiInterface
     public function save(array $data);
 
     public function delete($id);
+
+    public function getFields(): array;
+
+    public function getFormFields(): array;
 }

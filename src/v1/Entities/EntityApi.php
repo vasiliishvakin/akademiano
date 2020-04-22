@@ -9,6 +9,7 @@ use Akademiano\Delegating\DelegatingInterface;
 use Akademiano\Delegating\DelegatingTrait;
 use Akademiano\Delegating\OperatorInterface;
 use Akademiano\DI\Container;
+use Akademiano\Entity\BaseEntity;
 use Akademiano\Entity\Entity;
 use Akademiano\Entity\EntityInterface;
 use Akademiano\Entity\Uuid;
@@ -17,11 +18,15 @@ use Akademiano\EntityOperator\Command\CreateCommand;
 use Akademiano\EntityOperator\Command\DeleteCommand;
 use Akademiano\EntityOperator\Command\FindCommand;
 use Akademiano\EntityOperator\Command\GetCommand;
+use Akademiano\EntityOperator\Command\KeeperWorkerInfoCommand;
 use Akademiano\EntityOperator\Command\LoadCommand;
 use Akademiano\EntityOperator\Command\SaveCommand;
+use Akademiano\EntityOperator\Worker\EntitiesWorker;
 use Akademiano\EntityOperator\Worker\KeeperInterface;
+use Akademiano\Operator\Command\GetWorkerCommand;
 use Akademiano\Operator\Command\WorkerInfoCommand;
 use Akademiano\Operator\Operator;
+use Akademiano\Operator\Worker\WorkerInterface;
 use Akademiano\User\CustodianIncludeInterface;
 use Akademiano\User\CustodianIncludeTrait;
 use Akademiano\UUID\Command\UuidCreateCommand;
@@ -242,10 +247,41 @@ class EntityApi extends AbstractApi implements EntityApiInterface, CustodianIncl
 
     }
 
-    public function getFields()
+    protected function getWorker(?string $entityClass = null): WorkerInterface
     {
-        $command = new WorkerInfoCommand(KeeperInterface::WORKER_INFO_FIELDS, Message::class);
-        $fields = $this->delegate($command);
+        if (null === $entityClass) {
+            $entityClass = static::ENTITY_CLASS;
+        }
+        return $this->delegate(new GetWorkerCommand(new FindCommand($entityClass)));
+    }
+
+    public function getWorkerId(?string $entityClass = null): string
+    {
+        $workerClass = get_class($this->getWorker($entityClass));
+        $constantName = $workerClass . "::WORKER_ID";
+        if (!defined($constantName)) {
+            throw new \Exception(sprintf('Constant %s not defined %s', "WORKER_ID", $workerClass));
+        }
+        return constant($constantName);
+    }
+
+    public function getFields(?string $entityClass = null): array
+    {
+        $workerId = $this->getWorkerId($entityClass);
+        $command = new KeeperWorkerInfoCommand($workerId, KeeperWorkerInfoCommand::ATTRIBUTE_FIELDS);
+        return $this->delegate($command);
+    }
+
+    public function getUntouchablesFields(): array
+    {
+        return $this->getFields(Entity::class);
+    }
+
+    public function getFormFields(): array
+    {
+        $fields = $this->getFields();
+        $untouchablesFields = $this->getUntouchablesFields();
+        $fields = array_diff_key($fields, $untouchablesFields);
         return $fields;
     }
 
