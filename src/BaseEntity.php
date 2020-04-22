@@ -43,4 +43,16 @@ abstract class BaseEntity implements BaseEntityInterface
         ];
     }
 
+    protected function toValuesArray(): array
+    {
+        return [
+            "id"=> $this->getId()->getInt(),
+        ];
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->toValuesArray();
+    }
+
 }
