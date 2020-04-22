@@ -1,68 +1,60 @@
 {% extends "adminLayout.twig" %}
 
-{% block mainContainer %}
-    <div class="box">
-        <div class="box-header with-border">
-            <h3 class="box-title">Список пользователей</h3>
-            <div class="box-tools pull-right">
-                <!-- Collapse Button -->
-                <button type="button" class="btn btn-box-tool" data-widget="collapse">
-                    <i class="fa fa-minus"></i>
-                </button>
+{% block mainContainerContent %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    Пользователи
+                    <span class="badge badge-pill badge-danger float-right">{{ items.count }}</span>
+                </div>
+                <div class="card-body">
+                    <table class="table" style="word-break: break-all;">
+                        <thead class="thead-light">
+                        <tr>
+                            <th>id</th>
+                            <th>title</th>
+                            <th>email</th>
+                            <th>created</th>
+                            <th>group</th>
+                            <th>actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in items %}
+                            <tr>
+                                <td>
+                                    {{ item.id.hex }}
+                                </td>
+                                <td>
+                                    {{ item.title }}
+                                </td>
+                                <td>
+                                    {{ item.email }}
+                                </td>
+                                <td>
+                                    {{ item.created |date("d.m.Y") }}
+                                </td>
+                                <td>
+                                    {{ item.group.title ?: item.group.id.hex }}
+                                </td>
+                                <td>
+                                    <a href="{{ url(item_edit_route, {"id": item.id.hex}) }}" rel="tooltip" title="Edit"
+                                       class="btn btn-warning btn-simple btn-sm">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                    <a href="{{ url(item_delete_route, {"id": item.id.hex}) }}" rel="tooltip" title="Delete"
+                                       class="btn btn-danger btn-simple btn-sm">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <a href="{{ url(item_add_route) }}" class="btn btn-success btn-lg" role="button"><i class="fa fa-plus"></i> <span>Добавить пользователя</span></a>
+                </div>
             </div>
-            <!-- /.box-tools -->
         </div>
-        <!-- /.box-header -->
-        <div class="box-body">
-            <table class="table table-bordered table-hover">
-                <thead>
-                <tr>
-                    <th>id</th>
-                    <th>title</th>
-                    <th>email</th>
-                    <th>created</th>
-                    <th>group</th>
-                    <th>actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for item in items %}
-                    <tr>
-                        <td>
-                            {{ item.id.hex }}
-                        </td>
-                        <td>
-                            {{ item.title }}
-                        </td>
-                        <td>
-                            {{ item.email }}
-                        </td>
-                        <td>
-                            {{ item.created |date("d.m.Y") }}
-                        </td>
-                        <td>
-                            {{ item.group.title ?: item.group.id.hex }}
-                        </td>
-                        <td>
-                            <a href="{{ url(item_edit_route, {"id": item.id.hex}) }}" rel="tooltip" title="Edit"
-                               class="btn btn-warning btn-simple btn-sm">
-                                <i class="fa fa-edit"></i>
-                            </a>
-                            <a href="{{ url(item_delete_route, {"id": item.id.hex}) }}" rel="tooltip" title="Delete"
-                               class="btn btn-danger btn-simple btn-sm">
-                                <i class="fa fa-trash"></i>
-                            </a>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        <!-- /.box-body -->
-        <div class="box-footer">
-            <a href="{{ url(item_add_route) }}" class="btn btn-success btn-sm" role="button">Добавить пользователя</a>
-        </div>
-        <!-- box-footer -->
     </div>
-    <!-- /.box -->
-{% endblock mainContainer %}
+{% endblock mainContainerContent %}

@@ -92,7 +92,7 @@ class User extends NamedEntity implements UserInterface
         return password_verify($password, $this->getPassword());
     }
 
-    public function getOwner():?UserInterface
+    public function getOwner(): ?UserInterface
     {
         return $this;
     }
@@ -111,5 +111,14 @@ class User extends NamedEntity implements UserInterface
     public function setPhone($phone): void
     {
         $this->phone = $phone;
+    }
+
+    public function toArray(): array
+    {
+        $data = parent::toArray();
+        $data['email'] = $this->getEmail();
+        $data['phone'] = $this->getPhone();
+        $data['group'] = $this->getGroup()->toArray();
+        return $data;
     }
 }
