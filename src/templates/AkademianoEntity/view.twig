@@ -1,0 +1,48 @@
+{% extends "layout.twig" %}
+
+{% set isArticleLengthSmall = false %}
+
+{% block mainContainerContentArticle %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h1 class="card-title">{{ item.title }}</h1>
+                            <pre><code class="json">{{ item | json_encode(constant('JSON_PRETTY_PRINT') b-or constant('JSON_UNESCAPED_UNICODE') b-or constant('JSON_UNESCAPED_SLASHES')) }}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock mainContainerContentArticle %}
+{% block mainContainerContentRight %}
+    <div class="card">
+        <div class="card-body">
+            {{ item.owner.title }}
+            {{ item.date|date("d.m.Y") }}
+        </div>
+    </div>
+{% endblock mainContainerContentRight %}
+
+{% block css %}
+ {{ asset_css([
+     "highlightjs/styles/atom-one-dark.css"
+ ], default, true) }}
+{% endblock css %}
+
+{% block js %}
+    {{ asset_js([
+        "highlightjs/highlight.pack.min.js"
+    ], default, true) }}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightBlock(block);
+            });
+        });
+    </script>
+{% endblock js %}

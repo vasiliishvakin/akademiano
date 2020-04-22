@@ -1,0 +1,70 @@
+{% extends "adminLayout.twig" %}
+
+{% block mainContainerContent %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    {{ _module }}: {{ _controller }}\{{ _action }}
+                    <span class="badge badge-pill badge-danger float-right">{{ items.count }}</span>
+                </div>
+                <div class="card-body">
+                    <table class="table" style="word-break: break-all;">
+                        <thead class="thead-light">
+                        <tr>
+                            <th scope="col">id</th>
+                            <th>fields</th>
+                            <th>created</th>
+                            <th>actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in items %}
+                            <tr>
+                                <td style="min-width: 10em;">
+                                    <a href="{{ url(item_view_route, {"id": item.id.hex}) }}">{{ item.id.hex }}</a>
+                                </td>
+                                <td><pre><code class="json">{{ item | json_encode(constant('JSON_PRETTY_PRINT') b-or constant('JSON_UNESCAPED_UNICODE') b-or constant('JSON_UNESCAPED_SLASHES')) }}</code></pre></td>
+                                <td  style="min-width: 7em;">
+                                    {{ item.created |date("d.m.Y") }}
+                                </td>
+                                <td  style="min-width: 8em;">
+                                    <a href="{{ url(item_edit_route, {"id": item.id.hex}) }}" rel="tooltip" title="Edit"
+                                       class="btn btn-warning btn-simple btn-md" role="button">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                    <a href="{{ url(item_delete_route, {"id": item.id.hex}) }}" rel="tooltip" title="Delete"
+                                       class="btn btn-danger btn-simple btn-md" role="button">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <a href="{{ url(item_add_route) }}" class="btn btn-success btn-lg" role="button"><i class="fa fa-plus"></i> <span>Добавить {{ _module }}: {{ _controller }} </span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock mainContainerContent %}
+
+{% block css %}
+    {{ asset_css([
+        "highlightjs/styles/atom-one-dark.css"
+    ], default, true) }}
+{% endblock css %}
+
+{% block js %}
+    {{ asset_js([
+        "highlightjs/highlight.pack.min.js"
+    ], default, true) }}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightBlock(block);
+            });
+        });
+    </script>
+{% endblock js %}

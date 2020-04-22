@@ -26,22 +26,4 @@ abstract class AkademianoCompositeEntityController extends AkademianoEntityContr
         }
         return $api;
     }
-
-    public function formAction(array $params = [])
-    {
-        $data = parent::formAction($params);
-
-        $relations = $this->getRelations();
-        foreach ($relations as $relationId=>$relationApiId) {
-            $currentRelationsGetMethod = 'get' . ucfirst($relationId) . 'FormList';
-            if (method_exists($this, $currentRelationsGetMethod)) {
-                $relatedItems = $this->$currentRelationsGetMethod();
-            } else {
-                $api = $this->getRelatedEntityApi($relationApiId);
-                $relatedItems = $api->find([]);
-            }
-            $data[$relationId] = $relatedItems;
-        }
-        return $data;
-    }
 }
