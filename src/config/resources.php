@@ -1,7 +1,9 @@
 <?php
 
+use Akademiano\Menu\Model\MenuManager;
+
 return [
-    "menuManager" => function (\Pimple\Container $c) {
+    MenuManager::RESOURCE_ID => function (\Pimple\Container $c) {
         /** @var \Akademiano\Router\Router $router */
         $router = $c["router"];
 
@@ -9,7 +11,7 @@ return [
         $configLoader = $c["configLoader"];
         $menuConfig = $configLoader->getConfig(\Akademiano\Menu\Model\MenuManager::NAME_CONFIG);
 
-        $manager = new \Akademiano\Menu\Model\MenuManager($menuConfig, $router);
+        $manager = new MenuManager($menuConfig, $router);
 
         return $manager;
     },

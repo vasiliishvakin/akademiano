@@ -12,7 +12,9 @@ class MenuManager implements \ArrayAccess, EnvironmentIncludeInterface
 {
     use EnvironmentIncludeTrait;
 
-    const NAME_CONFIG = "menu";
+    public const NAME_CONFIG = "menu";
+
+    public const RESOURCE_ID = "menuManager";
 
     protected $rawMenu;
 

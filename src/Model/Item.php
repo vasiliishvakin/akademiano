@@ -201,6 +201,9 @@ class Item implements EnvironmentIncludeInterface
      */
     public function getTitle()
     {
+        if (empty($this->title)) {
+            return $this->getText();
+        }
         return $this->title;
     }
 
