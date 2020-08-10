@@ -14,7 +14,9 @@ class Criteria extends Element implements CriteriaIncludeInterface, ElementInter
 
     public function __construct(PgsqlAdapter $adapter = null)
     {
-        $this->setAdapter($adapter);
+        if (null !== $adapter) {
+            $this->setAdapter($adapter);
+        }
     }
 
     /**
