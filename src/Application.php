@@ -8,6 +8,8 @@ use Akademiano\Config\Config;
 use Akademiano\Config\ConfigInterface;
 use Akademiano\Config\ConfigLoader;
 use Akademiano\Config\ConfigurableInterface;
+use Akademiano\Core\View\TwigView;
+use Akademiano\Utils\Debug;
 use Akademiano\Utils\DIContainerIncludeInterface;
 use Akademiano\Utils\Exception\DIContainerAlreadyExistsServiceException;
 use Akademiano\HttpWarp\Environment;
@@ -109,8 +111,8 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
     }
 
     /**
-     * @deprecated
      * @return ModuleManager
+     * @deprecated
      */
     public function getModuleManager()
     {
@@ -340,13 +342,13 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
 
         foreach ($possibleTemplates as $template) {
             if ($view->exist($template)) {
-                return  $template;
+                return $template;
             }
         }
 
         $parentClass = get_parent_class($controllerClass);
         if ($parentClass) {
-            return  $this->findTemplate($view, $parentClass, $actionName);
+            return $this->findTemplate($view, $parentClass, $actionName);
         }
         return null;
     }
@@ -453,7 +455,7 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
                 $resource = $aclManager->getResource();
 
                 switch ($action) {
-                     case 'listAction':
+                    case 'listAction':
                         $resourceArray = explode(':', $resource);
                         if (count($resourceArray) === 1) {
                             $resourceArray[] = 'list';
@@ -493,7 +495,12 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
 
     public function prepareResponse(ControllerInterface $controller, $result = null): Response
     {
-        $acceptTypes = $this->getEnvironment()->getAccept();
+        if ($controller->isOnlyJson()) {
+            $acceptTypes = ["application/json"];
+        } else {
+            $acceptTypes = $this->getEnvironment()->getAccept();
+        }
+
         $response = $controller->getResponse();
         foreach ($acceptTypes as $type) {
             switch ($type) {
@@ -512,7 +519,8 @@ class Application implements ConfigInterface, DIContainerIncludeInterface
                             }
                             $controller->getView()->assignArray($result);
                         }
-                        $body = $controller->getView()->render();
+                        $usableTemplate = $this->getView() instanceof TwigView ? $this->getView()->hasUsableTemplate() : true;
+                        $body = $usableTemplate ? $controller->getView()->render() : "<pre>\n" . json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_LINE_TERMINATORS) . "\n </pre>";
                         $response->setBody($body);
                     }
                     break 2;

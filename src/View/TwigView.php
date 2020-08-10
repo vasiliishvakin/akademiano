@@ -2,6 +2,7 @@
 
 namespace Akademiano\Core\View;
 
+use Akademiano\SimplaView\Exception\TemplateNotDefinedException;
 use Akademiano\Twig\Extensions\AssetExtension;
 use Akademiano\Twig\Extensions\UrlExtension;
 use Akademiano\User\AuthInterface;
@@ -77,7 +78,6 @@ class TwigView extends AbstractView implements ViewInterface, DIContainerInclude
     {
         $this->rootDir = $rootDir;
     }
-
 
 
     public function initExtension($extension, \Twig_Environment $render, \Twig_Loader_Filesystem $fileSystemLoader)
@@ -204,15 +204,28 @@ class TwigView extends AbstractView implements ViewInterface, DIContainerInclude
         }
         /** @var \Twig_Environment $template */
         $template = $this->getTemplate();
+        if (!$template) {
+            throw new TemplateNotDefinedException();
+        }
         $output = $render->render($template, $vars);
         return $output;
     }
 
     public function exist($template)
     {
-        $template = $template . "." . $this->getTemplateExtension();
+        $ext = $this->getTemplateExtension();
+        $currentExt = pathinfo($template, PATHINFO_EXTENSION);
+        if (empty($currentExt)  || $currentExt !== $ext) {
+            $template = $template. "." . $ext;
+        }
         $loader = $this->getRender()->getLoader();
         $result = $loader->exists($template);
         return $result;
+    }
+
+    public function hasUsableTemplate()
+    {
+        $template = $this->getTemplate();
+        return $template && $this->exist($template);
     }
 }
