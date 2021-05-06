@@ -36,14 +36,14 @@
     "bower-asset/html5shiv": "^3.7.3",
     "bower-asset/respond": "^1.4.2",
     "bower-asset/font-awesome": "^5.10",
-    "bower-asset/simple-line-icons": "^2.4",
+    "bower-asset/simple-line-icons": "^2.5.5",
     "bower-asset/ionicons": "^4.0",
-    "bower-asset/tether": "^1.4",
+    "npm-asset/tether": "^2.0",
     "bower-asset/pace": "^1.0",
     "bower-asset/chart.js": "^2.7",
     "bower-asset/popper.js": "^1.15",
     "npm-asset/perfect-scrollbar": "^1.4",
-    "bower-asset/highlightjs": "^9.16"
+    "npm-asset/highlightjs": "^9.16.2"
   },
   "require-dev": {
     "codeception/codeception": "^3.1",
