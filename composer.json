@@ -18,7 +18,8 @@
     "require": {
         "akademiano/utils": "^1.1",
         "akademiano/delegating": "^1.0",
-        "nesbot/carbon": "^2.23"
+        "nesbot/carbon": "^2.23",
+        "php-ds/php-ds": "^1.2"
     },
     "require-dev": {
         "codeception/codeception": "^3.1",

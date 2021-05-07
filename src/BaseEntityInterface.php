@@ -15,4 +15,6 @@ interface BaseEntityInterface extends UuidableInterface, StringableInterface, In
      */
     public function getId();
 
+    public function hasId(): bool;
+
 }

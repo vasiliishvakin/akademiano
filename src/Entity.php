@@ -118,7 +118,7 @@ class Entity extends BaseEntity implements EntityInterface
         $data['created'] = $this->getCreated();
         $data['changed'] = $this->getChanged();
         $data['active'] = $this->isActive();
-        $data['owner'] = $this->getOwner()->getId()->getInt();
+        $data['owner'] = $this->getOwner() ? $this->getOwner()->getId()->getInt() : null;
         return $data;
     }
 
