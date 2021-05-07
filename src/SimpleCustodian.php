@@ -9,10 +9,12 @@ use Akademiano\Entity\UserInterface;
 
 class SimpleCustodian implements AuthInterface
 {
+    public const RESOURCE_ID = "custodian";
+
     protected $currentUser;
 
 
-    public function authenticate($identifier, $password)
+    public function authenticate($identifier, $password): ?UserInterface
     {
         return null;
     }
@@ -28,7 +30,7 @@ class SimpleCustodian implements AuthInterface
         return $this->currentUser;
     }
 
-    public function isAuthenticate(UuidInterface $user = null)
+    public function isAuthenticate(UuidInterface $user = null): bool
     {
         return false;
     }

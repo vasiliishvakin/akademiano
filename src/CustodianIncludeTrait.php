@@ -4,17 +4,24 @@ namespace Akademiano\User;
 
 
 use Akademiano\Entity\UserInterface;
+use Akademiano\UserEO\Custodian;
+use Akademiano\Utils\DIContainerIncludeInterface;
 
 trait CustodianIncludeTrait
 {
     /** @var  AuthInterface */
-    protected $custodian;
+    protected AuthInterface $custodian;
 
     /**
      * @return AuthInterface
      */
     public function getCustodian()
     {
+        if (empty($this->custodian)) {
+            if ($this instanceof DIContainerIncludeInterface) {
+                $this->custodian = $this->getDiContainer()[Custodian::RESOURCE_ID];
+            }
+        }
         return $this->custodian;
     }
 
@@ -37,5 +44,10 @@ trait CustodianIncludeTrait
     public function getCurrentGroup()
     {
         return $this->getCurrentUser()->getGroup();
+    }
+
+    public function isAuthenticate(): bool
+    {
+        return $this->getCustodian()->isAuthenticate();
     }
 }

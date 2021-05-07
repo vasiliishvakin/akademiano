@@ -14,7 +14,7 @@ interface AuthInterface
      * @param $password
      * @return UserInterface|null
      */
-    public function authenticate($identifier, $password);
+    public function authenticate($identifier, $password): ?UserInterface;
 
     /**
      * @return UserInterface
@@ -25,7 +25,7 @@ interface AuthInterface
      * @param UuidInterface|null $user
      * @return bool
      */
-    public function isAuthenticate(UuidInterface $user = null);
+    public function isAuthenticate(UuidInterface $user = null):bool;
 
     /**
      * @param UserInterface|null $user
