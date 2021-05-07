@@ -27,37 +27,23 @@
   "require": {
     "akademiano/core": "^1.2",
     "oomphinc/composer-installers-extender": "^1.1",
-    "coreui/coreui": "^2.1@stable",
-    "imsky/holder": "^2.8@stable",
+    "coreui/coreui": "^2.1",
+    "imsky/holder": "^2.8",
 
-    "bower-asset/bootstrap": "^4.3@stable",
-    "bower-asset/jquery": "^3.4@stable",
-    
-<<<<<<< HEAD
-    "bower-asset/html5shiv": "^3.7.3@stable",
-    "bower-asset/respond": "^1.4.2@stable",
-    "bower-asset/font-awesome": "^5.10@stable",
-    "bower-asset/simple-line-icons": "^2.4@stable",
-    "bower-asset/ionicons": "^4.0@stable",
-    "bower-asset/tether": "^1.4@stable",
-    "bower-asset/pace": "^1.0@stable",
-    "bower-asset/chart.js": "^2.7@stable",
-    "bower-asset/popper.js": "^1.15@stable",
-    "npm-asset/perfect-scrollbar": "^1.4@stable",
-    "bower-asset/highlightjs": "^9.16@stable"
-=======
+    "bower-asset/bootstrap": "^4.3",
+    "bower-asset/jquery": "^3.4",
+
     "bower-asset/html5shiv": "^3.7.3",
     "bower-asset/respond": "^1.4.2",
     "bower-asset/font-awesome": "^5.10",
-    "bower-asset/simple-line-icons": "^2.5.5",
+    "bower-asset/simple-line-icons": "^2.4",
     "bower-asset/ionicons": "^4.0",
-    "npm-asset/tether": "^2.0",
+    "bower-asset/tether": "^1.4",
     "bower-asset/pace": "^1.0",
     "bower-asset/chart.js": "^2.7",
     "bower-asset/popper.js": "^1.15",
     "npm-asset/perfect-scrollbar": "^1.4",
-    "npm-asset/highlightjs": "^9.16.2"
->>>>>>> 35d3ee4bd0cadf2ac62011353210a2014c63fb53
+    "bower-asset/highlightjs": "^9.16"
   },
   "require-dev": {
     "codeception/codeception": "^3.1",
