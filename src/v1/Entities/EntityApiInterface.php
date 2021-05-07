@@ -8,23 +8,10 @@ use Akademiano\Api\ApiInterface;
 use Akademiano\Db\Adapter\AdapterInterface;
 use Akademiano\Entity\EntityInterface;
 
-interface EntityApiInterface extends ApiInterface
+interface EntityApiInterface extends EntityApiListInterface, EntityApiMetadataInterface
 {
 
-    const DEFAULT_ORDER = "id";
-
-    public function count($criteria = null);
-
     public function getDefaultOrder();
-
-    /**
-     * @param null $criteria
-     * @param int $page
-     * @param int $itemsPerPage
-     * @param string $orderBy
-     * @return \Akademiano\Api\v1\Items\ItemsPage
-     */
-    public function find($criteria = null, $page = 1, $orderBy = self::DEFAULT_ORDER, $itemsPerPage = 10);
 
     /**
      * @param $id
@@ -39,8 +26,4 @@ interface EntityApiInterface extends ApiInterface
     public function save(array $data);
 
     public function delete($id);
-
-    public function getFields(): array;
-
-    public function getFormFields(): array;
 }

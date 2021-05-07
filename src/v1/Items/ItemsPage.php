@@ -117,4 +117,9 @@ class ItemsPage implements \ArrayAccess, \Iterator, \Countable, \JsonSerializabl
         $this->rewind();
         return $this->current();
     }
+
+    public function isEmty(): bool
+    {
+        return $this->count() <= 0;
+    }
 }

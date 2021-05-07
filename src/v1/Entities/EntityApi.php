@@ -29,6 +29,8 @@ use Akademiano\Operator\Operator;
 use Akademiano\Operator\Worker\WorkerInterface;
 use Akademiano\User\CustodianIncludeInterface;
 use Akademiano\User\CustodianIncludeTrait;
+use Akademiano\Utils\Parts\ResourceBuilderTrait;
+use Akademiano\Utils\ResourceBuilderInterface;
 use Akademiano\UUID\Command\UuidCreateCommand;
 use Akademiano\UUID\UuidComplexShortTables;
 use PhpOption\Some;
@@ -38,13 +40,14 @@ use Akademiano\Api\v1\Items\ItemsPage;
 use Akademiano\Core\Exception\AccessDeniedException;
 use Akademiano\HttpWarp\Exception\NotFoundException;
 
-class EntityApi extends AbstractApi implements EntityApiInterface, CustodianIncludeInterface, DelegatingInterface
+class EntityApi extends AbstractApi implements EntityApiInterface, CustodianIncludeInterface, DelegatingInterface, ResourceBuilderInterface
 {
     const ENTITY_CLASS = Entity::class;
     const API_ID = 'entityApi';
 
     use DelegatingTrait;
     use CustodianIncludeTrait;
+    use ResourceBuilderTrait;
 
     final public function __construct(OperatorInterface $operator)
     {
@@ -73,6 +76,7 @@ class EntityApi extends AbstractApi implements EntityApiInterface, CustodianIncl
         return static::DEFAULT_ORDER;
     }
 
+    //TODO use Identity Map
     public function find($criteria = null, $page = 1, $orderBy = null, $itemsPerPage = null)
     {
         if (null === $criteria) {
@@ -285,14 +289,19 @@ class EntityApi extends AbstractApi implements EntityApiInterface, CustodianIncl
         return $fields;
     }
 
-    /**
-     * @return \Closure
-     * return function for instance in DI container
-     */
-    public static function getBuilder(): \Closure
+    public static function build(\Pimple\Container $container): object
     {
-        return function (\Pimple\Container $c) {
-            return new static($c[Operator::RESOURCE_ID]);
-        };
+        return new static($container[Operator::RESOURCE_ID]);
     }
+
+//    /**
+//     * @return \Closure
+//     * return function for instance in DI container
+//     */
+//    public static function getBuilder(): \Closure
+//    {
+//        return function (\Pimple\Container $c) {
+//            return new static($c[Operator::RESOURCE_ID]);
+//        };
+//    }
 }
