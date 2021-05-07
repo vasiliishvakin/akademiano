@@ -4,8 +4,9 @@ namespace Akademiano\EntityOperator\Ext;
 
 
 use Akademiano\Utils\ArrayTools;
+use Akademiano\Utils\Object\Prototype\ArrayableInterface;
 
-class EntityOpsRoutesStore
+class EntityOpsRoutesStore implements ArrayableInterface
 {
     const LIST_ROUTE_NAME = "items_list_route";
     const VIEW_ROUTE_NAME = "item_view_route";

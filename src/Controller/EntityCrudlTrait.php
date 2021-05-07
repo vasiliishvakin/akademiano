@@ -73,7 +73,7 @@ trait EntityCrudlTrait
 
     public function viewAction(array $params = [])
     {
-        $id = ArrayTools::get($params, "id");
+        $id = ArrayTools::getOrThrow($params, "id", new NotFoundException("Empty entity Id"));
         if ($id) {
             $id = hexdec($id);
             $item = $this->getEntityApi()->get($id)->getOrThrow(
