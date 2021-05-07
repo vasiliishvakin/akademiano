@@ -4,9 +4,13 @@ namespace Akademiano\SimplaView;
 
 
 use Akademiano\Config\Config;
+use Akademiano\HttpWarp\Parts\EnvironmentIncludeTrait;
+use Akademiano\SimplaView\Exception\TemplateNotDefinedException;
 
 abstract class AbstractView implements ViewInterface
 {
+    use EnvironmentIncludeTrait;
+
     const TPL_EXT = 'tpl';
     const THEMES_DIR = "themes";
 
@@ -67,9 +71,13 @@ abstract class AbstractView implements ViewInterface
     /**
      * @return mixed
      */
-    public function getTemplate()
+    public function getTemplate(): ?string
     {
-        return $this->template . '.' . $this->getTemplateExtension();
+        if (!empty($this->template)) {
+            $template =  $this->template . '.' . $this->getTemplateExtension();
+            return  $template;
+        }
+        return null;
     }
 
     public function setArrayTemplates($templates)
