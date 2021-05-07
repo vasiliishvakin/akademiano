@@ -4,7 +4,7 @@
 namespace Akademiano\EntityOperator\Worker;
 
 
-interface DatabaseEntityStorageInterface extends EntityWorkerInterface, KeeperInterface, FinderInterface, LoaderInterface, ReserveInterface, GenerateIdWorkerInterface
+interface DatabaseEntityStorageInterface extends EntityWorkerInterface, KeeperInterface, FinderInterface, GetterInterface, LoaderInterface, ReserveInterface, GenerateIdWorkerInterface
 {
 
 }

@@ -82,8 +82,7 @@ class SetEntityExistingEntityWorker implements EntityWorkerInterface, WorkerSelf
             return null;
         }
         if ($result instanceof Collection) {
-            $items = clone $result;
-            $items->map(function ($entity) {
+            $items = $result->map(function ($entity) {
                 return $this->setEntityExisting($entity);
             });
             return $items;

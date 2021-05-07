@@ -27,9 +27,7 @@ class EntityCreatorWorker implements EntityWorkerInterface, DelegatingInterface,
 
     use DelegatingTrait;
     use WorkerSelfInstanceTrait;
-    use WorkerMappingTrait {
-        getMapFieldFilters as private wmpGetFieldFilters;
-    }
+    use WorkerMappingTrait;
 
     public static function getSupportedCommands(): array
     {
@@ -49,7 +47,7 @@ class EntityCreatorWorker implements EntityWorkerInterface, DelegatingInterface,
                     ]
                 ];
             default:
-                return self::wmpGetFieldFilters($command);
+                return null;
         }
     }
 

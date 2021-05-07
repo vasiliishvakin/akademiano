@@ -25,6 +25,7 @@ use Akademiano\EntityOperator\Command\ReserveCommand;
 use Akademiano\EntityOperator\Command\SaveCommand;
 use Akademiano\EntityOperator\Command\CreateCriteriaCommand;
 use Akademiano\EntityOperator\Command\CreateSelectCommand;
+use Akademiano\EntityOperator\Utils\FilterToPostgresType;
 use Akademiano\EntityOperator\WorkersMap\Filter\RelationCommandEntityClassValueExtractor;
 use Akademiano\EntityOperator\WorkersMap\Filter\ParentCommandEntityClassValueExtractor;
 use Akademiano\Operator\Command\PreCommand;
@@ -69,11 +70,13 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
     protected const EXT_ENTITY_FIELDS = [];
     protected const UNSAVED_FIELDS = [];
 
-    protected const ENTITY = Entity::class;
+    public const ENTITY = Entity::class;
 
     protected $tableId;
 
     protected $configPath;
+
+    protected $filterToPostgresTypes;
 
     /** @var  PgsqlAdapter */
     private $adapter;
@@ -147,7 +150,7 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
                             FilterFieldInterface::PARAM_EXTRACTOR => ValueClassExtractor::class,
                         ]),
                         static::modifyMapFieldFilter($command, SubCommandInterface::PARAM_PARENT_COMMAND, [
-                            FilterFieldInterface::PARAM_ASSERTION => Entity::class,
+                            FilterFieldInterface::PARAM_ASSERTION => static::getEntityClassForMapFilter(),
                             FilterFieldInterface::PARAM_EXTRACTOR => ParentCommandEntityClassValueExtractor::class
                         ]),
                     ]
@@ -156,7 +159,7 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
                 return [
                     EntityCommandInterface::FILTER_FIELD_ENTITY_CLASS =>
                         static::modifyMapFieldFilter($command, EntityCommandInterface::FILTER_FIELD_ENTITY_CLASS, [
-                            FilterFieldInterface::PARAM_ASSERTION => Entity::class,
+                            FilterFieldInterface::PARAM_ASSERTION => static::getEntityClassForMapFilter(),
                             FilterFieldInterface::PARAM_EXTRACTOR => RelationCommandEntityClassValueExtractor::class,
                         ]),
                 ];
@@ -169,8 +172,10 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
     public static function getSelfInstance(WorkersContainer $container): WorkerInterface
     {
         $worker = new static();
-        $adapter = $container->getOperator()->getDependencies()[AbstractAdapter::RESOURCE_ID];
+        $dependencies = $container->getOperator()->getDependencies();
+        $adapter = $dependencies[AbstractAdapter::RESOURCE_ID];
         $worker->setAdapter($adapter);
+        $worker->setFilterToPostgresTypes($dependencies[FilterToPostgresType::RESOURCE_ID]);
         return $worker;
     }
 
@@ -188,6 +193,19 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
     public function setAdapter(PgsqlAdapter $adapter)
     {
         $this->adapter = $adapter;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFilterToPostgresTypes(): callable
+    {
+        return $this->filterToPostgresTypes;
+    }
+
+    public function setFilterToPostgresTypes(callable $filterToPostgresTypes): void
+    {
+        $this->filterToPostgresTypes = $filterToPostgresTypes;
     }
 
     /**
@@ -371,6 +389,11 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
         }
     }
 
+    protected function toCollection(array $data): Collection
+    {
+        return new Collection($data);
+    }
+
     protected function findByCriteria(Criteria $criteria, $limit = null, $offset = null, $orderBy = null)
     {
         $adapter = $this->getAdapter();
@@ -381,7 +404,7 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
             ->setCriteria($criteria);
         $sql = $query->toSql();
         $data = $adapter->select($sql);
-        $data = new Collection($data);
+        $data = $this->toCollection($data);
         return $data;
     }
 
@@ -390,7 +413,7 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
         $adapter = $this->getAdapter();
         $table = $this->getTable();
         $data = $adapter->selectBy($table, $criteria, $limit, $offset, $orderBy);
-        $data = new Collection($data);
+        $data = $this->toCollection($data);
         return $data;
     }
 
@@ -522,30 +545,8 @@ abstract class PostgresEntityWorker implements DatabaseEntityStorageInterface, C
 
     public function filterFieldToPostgresType($value, $fieldName = null, EntityInterface $entity = null)
     {
-        if ($value instanceof EntityInterface) {
-            $id = $value->getId();
-            if ($id instanceof IntegerableInterface) {
-                return $id->getValue();
-            } elseif (is_numeric($id)) {
-                return (int)$id;
-            } elseif (is_scalar($id)) {
-                return $id;
-            } else {
-                return null;
-            }
-        } elseif ($value instanceof \DateTime || $value instanceof \DateTimeImmutable) {
-            return $value->format("Y-m-d H:i:s");
-        } elseif ($value instanceof CarbonInterval) {
-            return $value->spec();
-        } elseif (is_bool($value)) {
-            return $value ? 't' : 'f';
-        } elseif ($value instanceof IntegerableInterface) {
-            return $value->getInt();
-        } elseif ($value instanceof StringableInterface) {
-            return $value->__toString();
-        } else {
-            return $value;
-        }
+        $filter = $this->getFilterToPostgresTypes();
+        return $filter($value);
     }
 
     public function merge(EntityInterface $entityA, EntityInterface $entityB)

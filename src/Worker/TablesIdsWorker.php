@@ -44,6 +44,12 @@ class TablesIdsWorker implements WorkerInterface, WorkerSelfMapCommandsInterface
         ];
     }
 
+    public static function getMapFieldFilters(string $command): ?array
+    {
+        return null;
+    }
+
+
     public function execute(CommandInterface $command)
     {
         switch (true) {
@@ -131,6 +137,7 @@ class TablesIdsWorker implements WorkerInterface, WorkerSelfMapCommandsInterface
         return $storage;
     }
 
+    //TODO Fix full workers config info save
     public function save(): void
     {
         if ($this->isChanged()) {

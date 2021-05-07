@@ -24,5 +24,7 @@ class ParentCommandEntityClassValueExtractor extends RelationCommandEntityClassV
                 }
             }
         }
+        //TODO HREN!
+        return (new \ArrayObject([]))->getIterator();
     }
 }

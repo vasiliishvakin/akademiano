@@ -9,6 +9,7 @@ use Akademiano\Entity\EntityInterface;
 use Akademiano\EntityOperator\Command\EntityCommandInterface;
 use Akademiano\EntityOperator\Command\FindCommand;
 use Akademiano\EntityOperator\Command\GetCommand;
+use Akademiano\EntityOperator\WorkersMap\Filter\ParentCommandEntityClassValueExtractor;
 use Akademiano\Operator\Command\AfterCommand;
 use Akademiano\Operator\Command\SubCommandInterface;
 use Akademiano\Operator\Worker\WorkerMappingTrait;
@@ -29,11 +30,11 @@ use Akademiano\Delegating\DelegatingTrait;
 class TranslatorDataToObjectEntityWorker implements EntityWorkerInterface, DelegatingInterface, WorkerSelfMapCommandsInterface, WorkerSelfInstancedInterface
 {
     public const WORKER_ID = 'translatorDataToObjectEntityWorker';
+    public const ENTITY = PostgresEntityWorker::ENTITY;
 
     use DelegatingTrait;
     use WorkerSelfInstanceTrait;
     use WorkerMappingTrait;
-
 
     public static function getSupportedCommands(): array
     {
@@ -42,11 +43,20 @@ class TranslatorDataToObjectEntityWorker implements EntityWorkerInterface, Deleg
         ];
     }
 
+    public static function getEntityClassForMapFilter()
+    {
+        return static::ENTITY;
+    }
+
     public static function getMapFieldFilters(string $command): ?array
     {
         switch (true) {
             case is_subclass_of($command, AfterCommandInterface::class):
                 return [
+                    EntityCommandInterface::FILTER_FIELD_ENTITY_CLASS => [
+                        FilterFieldInterface::PARAM_ASSERTION => static::getEntityClassForMapFilter(),
+                        FilterFieldInterface::PARAM_EXTRACTOR => ParentCommandEntityClassValueExtractor::class,
+                    ],
                     SubCommandInterface::PARAM_PARENT_COMMAND => [
                         FilterFieldInterface::PARAM_ASSERTION => [FindCommand::class, GetCommand::class],
                         FilterFieldInterface::PARAM_EXTRACTOR => ValueClassExtractor::class,
@@ -86,8 +96,8 @@ class TranslatorDataToObjectEntityWorker implements EntityWorkerInterface, Deleg
         $parentCommand = $command->getParentCommand();
         $class = $parentCommand->getEntityClass();
         if ($result instanceof Collection) {
-            $items = clone $result;
-            $items->map(function ($itemData) use ($class) {
+//            $items = clone $result;
+            $items = $result->map(function ($itemData) use ($class) {
                 if ($itemData instanceof EntityInterface) {
                     return $itemData;
                 }

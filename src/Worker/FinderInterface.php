@@ -18,10 +18,4 @@ interface FinderInterface extends CountableInterface
      */
     public function find($criteria, $limit = null, $offset = null, $orderBy = null);
 
-    /**
-     * @param $id
-     * @return EntityInterface
-     */
-    public function get($id);
-
 }
