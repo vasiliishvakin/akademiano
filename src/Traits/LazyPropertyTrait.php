@@ -3,20 +3,23 @@
 
 namespace Akademiano\LazyProperty\Traits;
 
+use Akademiano\Entity\BaseEntityInterface;
 use Akademiano\LazyProperty\Helper;
 use Akademiano\LazyProperty\LazyPropertyContainer;
 use Akademiano\LazyProperty\LazyPropertyContainerFactory;
 use Closure;
+use Ds\Hashable;
 
 
 trait LazyPropertyTrait
 {
     protected LazyPropertyContainer $lpContainer;
 
+
     protected function getLpContainer(): LazyPropertyContainer
     {
         if (!isset($this->lpContainer)) {
-            $this->lpContainer = LazyPropertyContainerFactory::factory();
+            $this->lpContainer = ($this instanceof BaseEntityInterface && $this->hasId()) ? LazyPropertyContainerFactory::factory() : LazyPropertyContainerFactory::build();
         }
         return $this->lpContainer;
     }
@@ -31,14 +34,14 @@ trait LazyPropertyTrait
                 return;
             }
         }
-        $this->getLpContainer()->setByMethod($methodName, $calculatedClosure);
+        $this->getLpContainer()->setByMethod(Helper::getObjectHash($this), $methodName, $calculatedClosure);
     }
 
     protected function getByMethodLazy(string $methodName)
     {
         $property = Helper::method2Property($methodName);
         if (!isset($this->{$property}) || null == $this->{$property}) {
-            $this->{$property} = $this->getLpContainer()->getByMethod($methodName);
+            $this->{$property} = $this->getLpContainer()->getByMethod(Helper::getObjectHash($this), $methodName);
         }
         return $this->{$property};
     }

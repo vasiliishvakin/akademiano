@@ -15,4 +15,9 @@ class LazyPropertyContainerFactory
         }
         return self::$container;
     }
+
+    static public function build(): LazyPropertyContainer
+    {
+       return new LazyPropertyContainer();
+    }
 }

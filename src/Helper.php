@@ -4,16 +4,19 @@
 namespace Akademiano\LazyProperty;
 
 
+use Akademiano\Utils\Exception;
+use Ds\Hashable;
+
 class Helper
 {
-    static private function clearMethod(string $methodName, ?string &$className): string
+    static private function clearMethod(string $methodName, ?string &$className = null): string
     {
         $className = null;
-        if ($classDelimiterPos = strpos($methodName, "::") !== false) {
+        if (false !== $classDelimiterPos = strpos($methodName, "::")) {
             $className = substr($methodName, 0, $classDelimiterPos);
             $methodOnlyName = substr($methodName, $classDelimiterPos + 2);
         }
-        return  $methodOnlyName ?? $methodName;
+        return $methodOnlyName ?? $methodName;
     }
 
     static private function methodCleared2Property(string $methodName)
@@ -41,10 +44,25 @@ class Helper
     static public function method2Property(string $methodName): string
     {
         $clearedMethod = self::clearMethod($methodName);
-        return  self::methodCleared2Property($clearedMethod);
+        return self::methodCleared2Property($clearedMethod);
     }
 
-    static public function propertyId(string $methodName): string
+    static public function getObjectHash(object $object): string
+    {
+        $hash = null;
+        if ($object instanceof Hashable) {
+            try {
+                $hash = $object->hash();
+            } catch (\Exception $e) {
+                $hash = (string)spl_object_id($object);
+            }
+        } else {
+            $hash = (string)spl_object_id($object);
+        }
+        return $hash;
+    }
+
+    static public function propertyId(string $objectHash, string $methodName): string
     {
         $clearedMethod = self::clearMethod($methodName, $className);
         if (empty($className)) {
@@ -52,6 +70,6 @@ class Helper
         }
         $property = self::methodCleared2Property($clearedMethod);
 
-        return sprintf("%s::%s", $className, $property);
+        return sprintf("%s::%s::%s", $className, $objectHash, $property);
     }
 }

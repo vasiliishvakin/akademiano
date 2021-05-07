@@ -30,6 +30,10 @@ class LazyPropertyContainer
 
     public function getProperty(string $propertyId, $default = null)
     {
+        $lazyStore = $this->getLazyStore();
+        if (!$lazyStore->hasKey($propertyId)) {
+            trigger_error(sprintf('PropertyId %s not found in current LazyStore (keys: "%s")', $propertyId, $lazyStore->keys()->join(' | ')), E_USER_NOTICE);
+        }
         $closure = $this->getLazyStore()->remove($propertyId, $default);
         return is_callable($closure) ? call_user_func($closure) : $default;
     }
@@ -40,21 +44,18 @@ class LazyPropertyContainer
     }
 
 
-    public
-    function hasByMethod(string $methodName): bool
+    public function hasByMethod(string $objectHash, string $methodName): bool
     {
-        return $this->hasProperty(Helper::propertyId($methodName));
+        return $this->hasProperty(Helper::propertyId($objectHash, $methodName));
     }
 
-    public
-    function setByMethod(string $methodName, \Closure $closure): void
+    public function setByMethod(string $objectHash, string $methodName, \Closure $closure): void
     {
-        $this->setProperty(Helper::propertyId($methodName), $closure);
+        $this->setProperty(Helper::propertyId($objectHash, $methodName), $closure);
     }
 
-    public
-    function getByMethod(string $methodName, $default = null)
+    public function getByMethod(string $objectHash, string $methodName, $default = null)
     {
-        return $this->getProperty(Helper::propertyId($methodName), $default);
+        return $this->getProperty(Helper::propertyId($objectHash, $methodName), $default);
     }
 }
