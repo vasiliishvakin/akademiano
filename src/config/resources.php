@@ -1,9 +1,10 @@
 <?php
 
 use Akademiano\Acl\Adapter\FileBasedAdapterInterface;
+use Akademiano\Acl\AclManager;
 
 return [
-    'aclManager' => function (\Pimple\Container $c) {
+    AclManager::RESOURCE_ID => function (\Pimple\Container $c) {
         $aclManager = new \Akademiano\Acl\AclManager();
         $aclManager->setCustodian($c['custodian']);
         $aclManager->setRequest($c["request"]);

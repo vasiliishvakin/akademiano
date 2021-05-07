@@ -17,6 +17,8 @@ class AclManager implements AccessCheckInterface, EnvironmentIncludeInterface
 {
     const ENV_VAR_DISABLE_CHECK_NAME = "AKADEMIANO_NO_ACL_CHECK";
 
+    const RESOURCE_ID = "aclManager";
+
     use EnvironmentIncludeTrait;
 
     /** @var  AuthInterface */
@@ -131,5 +133,13 @@ class AclManager implements AccessCheckInterface, EnvironmentIncludeInterface
         }
         $group = $user->getGroup();
         return $this->getAclAdapter()->accessCheck($resource, $owner, $group, $user);
+    }
+
+    public function withoutAccessCheck(callable $function)
+    {
+        $this->disableAccessCheck();
+        $result = call_user_func($function);
+        $this->enableAccessCheck();
+        return $result;
     }
 }
