@@ -27,23 +27,23 @@
   "require": {
     "akademiano/core": "^1.2",
     "oomphinc/composer-installers-extender": "^1.1",
-    "coreui/coreui": "^2.1",
-    "imsky/holder": "^2.8",
+    "coreui/coreui": "^2.1@stable",
+    "imsky/holder": "^2.8@stable",
 
-    "bower-asset/bootstrap": "^4.3",
-    "bower-asset/jquery": "^3.4",
+    "bower-asset/bootstrap": "^4.3@stable",
+    "bower-asset/jquery": "^3.4@stable",
     
-    "bower-asset/html5shiv": "^3.7.3",
-    "bower-asset/respond": "^1.4.2",
-    "bower-asset/font-awesome": "^5.10",
-    "bower-asset/simple-line-icons": "^2.4",
-    "bower-asset/ionicons": "^4.0",
-    "bower-asset/tether": "^1.4",
-    "bower-asset/pace": "^1.0",
-    "bower-asset/chart.js": "^2.7",
-    "bower-asset/popper.js": "^1.15",
-    "npm-asset/perfect-scrollbar": "^1.4",
-    "bower-asset/highlightjs": "^9.16"
+    "bower-asset/html5shiv": "^3.7.3@stable",
+    "bower-asset/respond": "^1.4.2@stable",
+    "bower-asset/font-awesome": "^5.10@stable",
+    "bower-asset/simple-line-icons": "^2.4@stable",
+    "bower-asset/ionicons": "^4.0@stable",
+    "bower-asset/tether": "^1.4@stable",
+    "bower-asset/pace": "^1.0@stable",
+    "bower-asset/chart.js": "^2.7@stable",
+    "bower-asset/popper.js": "^1.15@stable",
+    "npm-asset/perfect-scrollbar": "^1.4@stable",
+    "bower-asset/highlightjs": "^9.16@stable"
   },
   "require-dev": {
     "codeception/codeception": "^3.1",
