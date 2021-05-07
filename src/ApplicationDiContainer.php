@@ -13,7 +13,6 @@ use Pimple\Exception\UnknownIdentifierException;
 
 class ApplicationDiContainer extends Container
 {
-    protected $values = [];
 
     protected function prepare($value)
     {
@@ -33,20 +32,20 @@ class ApplicationDiContainer extends Container
         return $value;
     }
 
-    public function offsetGet($id)
-    {
-        if (!$this->offsetExists($id)) {
-            throw new UnknownIdentifierException($id);
-        }
-        if (!isset($this->values[$id])) {
-            $this->values[$id] = $this->prepare(parent::offsetGet($id));
-        }
-        return $this->values[$id];
-    }
-
-    public function offsetUnset($id)
-    {
-        unset($this->values[$id]);
-        parent::offsetUnset($id);;
-    }
+//    public function offsetGet($id)
+//    {
+//        if (!$this->offsetExists($id)) {
+//            throw new UnknownIdentifierException($id);
+//        }
+//        if (!isset($this->values[$id])) {
+//            $this->values[$id] = $this->prepare(parent::offsetGet($id));
+//        }
+//        return $this->values[$id];
+//    }
+//
+//    public function offsetUnset($id)
+//    {
+//        unset($this->values[$id]);
+//        parent::offsetUnset($id);;
+//    }
 }

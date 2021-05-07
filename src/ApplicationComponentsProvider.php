@@ -200,7 +200,7 @@ class ApplicationComponentsProvider implements ServiceProviderInterface
             };
         }
 
-        $pimple["currentUser"] = function (Container $pimple) {
+        $pimple["currentUser"] = $pimple->factory(function (Container $pimple) {
             if (!isset($pimple['custodian'])) {
                 return null;
             }
@@ -208,7 +208,7 @@ class ApplicationComponentsProvider implements ServiceProviderInterface
             $custodian = $pimple['custodian'];
 
             return $custodian->getCurrentUser();
-        };
+        });
 
         $pimple["sitesManager"] = function (Container $pimple) {
             return new SitesManager($pimple["loader"], $pimple["environment"]);
@@ -227,6 +227,11 @@ class ApplicationComponentsProvider implements ServiceProviderInterface
         };
 
         $pimple["applicationComponents"] = true;
+
+        $pimple["APP_ENV"] = function (Container $pimple) {
+            $environment = $pimple["environment"];
+            return $environment->getVar("APP_ENV", false, "dev");
+        };
     }
 
     public function getView(Container $pimple)
@@ -237,7 +242,7 @@ class ApplicationComponentsProvider implements ServiceProviderInterface
         $viewAdapter = $viewConfig->get('adapter', 'Twig');
 
         /** @var ViewInterface view */
-        $view = ViewFactory::getView($viewAdapter, $viewConfig);
+        $view = ViewFactory::getView($viewAdapter, $viewConfig, $pimple["environment"]);
         //set templates dir
         if ($view instanceof AbstractView) {
             //themes
@@ -301,6 +306,7 @@ class ApplicationComponentsProvider implements ServiceProviderInterface
 
         $viewVars = $viewConfig->get(["vars"], []);
         $viewVars->set($config->getOneIs([['html', 'lang'], 'lang'], 'en'), ['html', 'lang']);
+        $viewVars["APP_ENV"] = $pimple["APP_ENV"];
 
         foreach ($viewVars as $name => $value) {
             if (is_callable($value)) {
