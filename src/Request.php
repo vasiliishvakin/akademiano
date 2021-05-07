@@ -2,9 +2,13 @@
 
 namespace Akademiano\HttpWarp;
 
+use Akademiano\HttpWarp\Exception\InvalidRequestException;
+use Akademiano\HttpWarp\Exception\ParamRequestDeniedByFilterException;
+use Akademiano\HttpWarp\Exception\ParamRequestNotDefinedException;
 use Akademiano\HttpWarp\Parts\EnvironmentIncludeTrait;
 use Akademiano\Utils\CatchError;
 use Akademiano\HttpWarp\File\UploadFile;
+use Akademiano\HttpWarp\Request\ParamsStructure;
 
 class Request implements EnvironmentIncludeInterface
 {
@@ -194,5 +198,34 @@ class Request implements EnvironmentIncludeInterface
     public function isCheckModified()
     {
         return isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) ? $_SERVER['HTTP_IF_MODIFIED_SINCE'] : null;
+    }
+
+    public function getStructParams($structure): array
+    {
+        if (is_array($structure)) {
+            $structure = new ParamsStructure($structure);
+        }
+
+        $result = [];
+        foreach ($structure->getParams() as $param) {
+            $existByName = false;
+            $existByAlias = false;
+            if ($this->hasParam($param->getName())) {
+                $existByName = true;
+            } elseif
+            ($this->hasParam($param->getAlias())) {
+                $existByAlias = true;
+            }
+            $exist = $existByName || $existByAlias;
+            if ($param->isMandatory() && !$exist) {
+                throw new ParamRequestNotDefinedException(sprintf('Param %s not defined', $param->getName()), 400);
+            }
+            $value = $existByName ? $this->getParam($param->getName()) : ($existByAlias ? $this->getParam($param->getAlias()) : $param->getDefault());
+            if (is_callable($param->getFilter())) {
+                $value = call_user_func($param->getFilter(), $value);
+            }
+            $result[$param->getName()] = $value;
+        }
+        return $result;
     }
 }
