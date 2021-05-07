@@ -19,6 +19,7 @@ class UsersOpsRoutesStore extends EntityOpsRoutesStore
 
     const LOGIN_ROUTE = "login";
     const LOGOUT_ROUTE = "logout";
+    const PROFILE_ROUTE = "profile";
 
     public function getLoginRoute()
     {

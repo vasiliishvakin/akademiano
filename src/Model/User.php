@@ -22,6 +22,8 @@ class User extends NamedEntity implements UserInterface
 
     protected $password;
 
+    protected ?string $newPassword = null;
+
     public function getTitle()
     {
         if (empty($this->title)) {
@@ -90,6 +92,22 @@ class User extends NamedEntity implements UserInterface
             return false;
         }
         return password_verify($password, $this->getPassword());
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNewPassword(): ?string
+    {
+        return $this->newPassword;
+    }
+
+    /**
+     * @param mixed $newPassword
+     */
+    public function setNewPassword($newPassword): void
+    {
+        $this->newPassword = $newPassword;
     }
 
     public function getOwner(): ?UserInterface

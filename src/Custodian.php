@@ -14,6 +14,7 @@ use Akademiano\HttpWarp\EnvironmentIncludeInterface;
 use Akademiano\HttpWarp\Parts\EnvironmentIncludeTrait;
 use Akademiano\User\GuestUser;
 use Akademiano\User\SimpleCustodian;
+use Akademiano\UserEO\Exception\NotFoundUserException;
 use Akademiano\UserEO\Model\Request\HttpSessionDataTool;
 use Akademiano\UserEO\Model\Request\RequestDataToolInterface;
 use Akademiano\UserEO\Model\User;
@@ -42,9 +43,21 @@ class Custodian extends SimpleCustodian implements DelegatingInterface, Environm
         $this->rdt = $rdt;
     }
 
-    public function isAuthenticate(UuidInterface $user = null)
+    public function isAuthenticate(UuidInterface $user = null): bool
     {
-        return $this->getRdt()->isAuthenticate();
+        return ($this->getRdt()->isAuthenticate() && !$this->getCurrentUser() instanceof GuestUser);
+    }
+
+    public function setCurrentUser($user)
+    {
+        if (!$user instanceof UserInterface) {
+            $user = $this->delegate((new GetCommand(User::class))->setId($user));
+            if (!$user instanceof UserInterface) {
+                throw new \InvalidArgumentException(sprintf('User with id %s not found', $user));
+            }
+        }
+        $this->sessionStart($user);
+        $this->currentUser = $user;
     }
 
     public function getCurrentUser()
@@ -67,17 +80,23 @@ class Custodian extends SimpleCustodian implements DelegatingInterface, Environm
     /**
      * @param $identifier
      * @param $password
-     * @return UserInterface|bool|null
+     * @return UserInterface|null
      * @throws \Exception
      */
-    public function authenticate($identifier, $password)
+    public function authenticate($identifier, $password): ?UserInterface
     {
         /** @var User $user */
         $user = $this->delegate((new FindCommand(User::class))
-            ->setCriteria(["email" => $identifier])
+            ->setCriteria([
+                "email" => $identifier,
+                "active" => true,
+            ])
             ->setLimit(1)
-        )->firstOrFail();
-        return $user->verifyPassword($password);
+        )->firstOrFail(new NotFoundUserException(sprintf('User with identifier %s not found', $identifier)));
+        if (!$user->verifyPassword($password)) {
+            return null;
+        }
+        return $user;
     }
 
     public function sessionClose()

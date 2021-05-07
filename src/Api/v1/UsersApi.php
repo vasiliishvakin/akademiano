@@ -44,6 +44,7 @@ class UsersApi extends EntityApi
 
         if (isset($data["newPassword"])) {
             $newPassword = trim($data["newPassword"]);
+            $item->setNewPassword($newPassword);
             if ($newPassword !== "") {
                 $item->updatePassword($newPassword);
             }

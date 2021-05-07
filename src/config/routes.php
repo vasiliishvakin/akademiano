@@ -113,4 +113,11 @@ return [
         ],
         "action" => ["user", "logout"],
     ],
+    UsersRoutes::PROFILE_ROUTE => [
+        "patterns" => [
+            "type" => \Akademiano\Router\RoutePattern::TYPE_FULL,
+            "value" => "/user",
+        ],
+        "action" => ["user", "profile"],
+    ],
 ];
