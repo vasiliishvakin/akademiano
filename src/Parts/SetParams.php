@@ -12,5 +12,6 @@ trait SetParams
                 $this->{$method}($value);
             }
         }
+        return $this;
     }
 }

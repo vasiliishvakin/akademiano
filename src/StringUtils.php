@@ -199,8 +199,8 @@ class StringUtils
     /**
      * Get the plural form of the given english word.
      *
-     * @param  string $value
-     * @param  int $count
+     * @param string $value
+     * @param int $count
      * @return string
      */
     public static function pluralEn($value, $count = 2)
@@ -211,7 +211,7 @@ class StringUtils
     /**
      * Get the singular form of the given english word.
      *
-     * @param  string $value
+     * @param string $value
      * @return string
      */
     public static function singularEn($value)
@@ -221,7 +221,7 @@ class StringUtils
 
     public static function isText($value)
     {
-        return is_string($value) && $value!=='' && !is_numeric($value);
+        return is_string($value) && $value !== '' && !is_numeric($value);
     }
 
     public static function isFullClass($value)
@@ -240,9 +240,9 @@ class StringUtils
         $email = explode("@", $email);
 
         $pos = mt_rand(0, mb_strlen($email[0]));
-        $char = mb_substr($email[0], $pos-1, 1);
+        $char = mb_substr($email[0], $pos - 1, 1);
         $replaceArray = ["$", "#", "%", "&", "^", "!"];
-        $replaceChar = array_rand ($replaceArray);
+        $replaceChar = array_rand($replaceArray);
         $replaceChar = $replaceArray[$replaceChar];
         $email[0] = str_ireplace($char, "{$replaceChar}", $email[0]);
         $host = hash("adler32", $email[1]);
@@ -250,5 +250,13 @@ class StringUtils
         $email[1] = $host;
         $email = implode("-", $email);
         return $email;
+    }
+
+    public static function hexdec(string $value): int
+    {
+        if (!ctype_xdigit($value)) {
+            throw new \InvalidArgumentException(sprintf('Value must be a hex digit string, but get"%s".', $value));
+        }
+        return (int)hexdec($value);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Akademiano\Utils;
 
+use PhpOption\Option;
+
 final class ArrayTools
 {
     const FIRST_IN_ARRAY = '____first';
@@ -176,6 +178,11 @@ final class ArrayTools
             }
             return call_user_func_array($callback, $arguments);
         }
+    }
+
+    public static function getOrThrow(array $array, $path, \Exception $exception)
+    {
+        return self::getMaybe($array, $path)->getOrThrow($exception);
     }
 
     /**
@@ -364,7 +371,7 @@ final class ArrayTools
         return false;
     }
 
-    public static function renameKeys($array, Callable $function)
+    public static function renameKeys($array, callable $function)
     {
         $keys = array_keys($array);
         $keys = array_map($function, $keys);
@@ -427,10 +434,20 @@ final class ArrayTools
                     return false;
                 }
                 $result = self::filter($value, $item);
-            }
-            else {
+            } else {
 
             }
         }
+    }
+
+    public function getMaybeFromArrays($path, array ...$arrays): Option
+    {
+        foreach ($arrays as $array) {
+            $value = self::getMaybe($array, $path);
+            if ($value->isDefined()) {
+                return $value;
+            }
+        }
+        return \PhpOption\None::create();
     }
 }

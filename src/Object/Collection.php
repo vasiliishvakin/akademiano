@@ -73,7 +73,7 @@ class Collection extends ArrayObject implements ArrayableInterface, \JsonSeriali
                     if (is_callable([$item, $method])) {
                         return $item->{$method}();
                     } else {
-                        $method = 'is'.ucfirst($fieldName);
+                        $method = 'is' . ucfirst($fieldName);
                         if (is_callable([$item, $method])) {
                             return $item->{$method}();
                         }
@@ -220,13 +220,13 @@ class Collection extends ArrayObject implements ArrayableInterface, \JsonSeriali
         return $this;
     }
 
-    public function usort(Callable $function)
+    public function usort(callable $function)
     {
         usort($this->items, $function);
         return $this;
     }
 
-    protected function minMax($direction, $field, Callable $function = null)
+    protected function minMax($direction, $field, callable $function = null)
     {
         if ($this->isEmpty()) {
             throw new \LengthException("Empty collection");
@@ -257,12 +257,12 @@ class Collection extends ArrayObject implements ArrayableInterface, \JsonSeriali
         return $calcItem;
     }
 
-    public function min($field, Callable $valueCalcFunction = null)
+    public function min($field, callable $valueCalcFunction = null)
     {
         return $this->minMax("min", $field, $valueCalcFunction);
     }
 
-    public function max($field, Callable $valueCalcFunction = null)
+    public function max($field, callable $valueCalcFunction = null)
     {
         return $this->minMax("max", $field, $valueCalcFunction);
     }
@@ -273,16 +273,45 @@ class Collection extends ArrayObject implements ArrayableInterface, \JsonSeriali
         return new Collection($slice);
     }
 
-    public function map(Callable $function)
+    public function map(callable $function): Collection
     {
-        foreach ($this as $key => $item) {
-            $this[$key] = call_user_func($function, $item, $key);
+        $items = $this->getItems();
+        $result = [];
+        foreach ($items as $key => $item) {
+            $result[$key] = call_user_func($function, $item, $key);
         }
-        return $this;
+        return new Collection($result);
     }
 
     public function jsonSerialize()
     {
         return $this->toArray();
+    }
+
+    /**
+     * @param Collection|array $collection
+     * @return Collection
+     */
+    public function intersect($collection): Collection
+    {
+        if ($this->count() === 0) {
+            return new Collection([]);
+        }
+        if ($collection instanceof Collection) {
+            $collection = $collection->toArray();
+        }
+        $items = $this->getItems();
+        $intersect = array_intersect_key($items, $collection);
+        return new Collection($intersect);
+    }
+
+    public function reduce(callable $function, $initial = null)
+    {
+        $items = $this->getItems();
+        $result = $initial;
+        foreach ($items as $item) {
+            $result = call_user_func($function, $result, $item);
+        }
+        return $result;
     }
 }

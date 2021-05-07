@@ -25,4 +25,16 @@ class Debug
         return null;
     }
 
+    public static function var_dump($expression, $return = FALSE): ?string
+    {
+        $return && ob_start();
+        var_dump($expression);
+        if (!$return)  {
+            return null;
+        }
+        $result = ob_get_contents();
+        ob_end_clean();
+        return  $result;
+    }
+
 }
