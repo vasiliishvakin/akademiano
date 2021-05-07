@@ -6,6 +6,7 @@ use Akademiano\Config\ConfigurableTrait;
 use Akademiano\HttpWarp\Request;
 use Akademiano\HttpWarp\Response;
 use Akademiano\Router\Route;
+use Akademiano\Router\RoutePattern;
 use Akademiano\Router\Router;
 use Akademiano\SimplaView\ViewInterface;
 use Akademiano\Utils\Parts\DIContainerTrait;
@@ -13,6 +14,8 @@ use Akademiano\Utils\Parts\DIContainerTrait;
 class AkademianoController implements ControllerInterface
 {
     const PAGE_PARAM_NAME = 'p';
+
+    public const ROUTES_PARAMS = null;
 
     use ConfigurableTrait;
     use DIContainerTrait;
@@ -37,6 +40,7 @@ class AkademianoController implements ControllerInterface
 
     private $autoRender = true;
     private $autoSend = true;
+    private $onlyJson = false;
 
     public function __construct(Request $request, Response $response, ViewInterface $view, Router $router, Route $route, array $arguments)
     {
@@ -238,5 +242,46 @@ class AkademianoController implements ControllerInterface
         }
         $urlParams = array_merge($this->getRequest()->getParams(), $urlParams);
         return $urlParams;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOnlyJson(): bool
+    {
+        return $this->onlyJson;
+    }
+
+    /**
+     * @param bool $onlyJson
+     */
+    public function setOnlyJson(bool $onlyJson = true): void
+    {
+        $this->onlyJson = $onlyJson;
+    }
+
+    protected static function buildRouteData(string $controllerId, string $patternValue, string $actionId, int $patternType = RoutePattern::TYPE_DEFAULT, ?array $valueParams = null): array
+    {
+        if (empty($valueParams)) {
+            $valueParams = defined('static::ROUTES_PARAMS') ? static::ROUTES_PARAMS : null;
+        }
+        if (!empty($valueParams)) {
+            $patternValue = vsprintf($patternValue, $valueParams);
+        }
+
+        return [
+            "patterns" => [
+                "type" => $patternType,
+                "value" => $patternValue,
+            ],
+            "action" => [$controllerId, $actionId],
+        ];
+    }
+
+    public function forward(string $routerId)
+    {
+        $this->autoRenderOff();
+        $this->autoSendOff();
+        return $this->getRouter()->execById($routerId);
     }
 }

@@ -45,6 +45,7 @@ interface ControllerInterface extends DIContainerIncludeInterface, ConfigurableI
      * @param ViewInterface $view
      */
     public function setView(ViewInterface $view);
+
     /**
      * @return ViewInterface
      */
@@ -77,4 +78,8 @@ interface ControllerInterface extends DIContainerIncludeInterface, ConfigurableI
     public function finalize();
 
     public function getRouteUrl($routeId, array $params = []);
+
+    public function isOnlyJson(): bool;
+
+    public function setOnlyJson(bool $onlyJson = true): void;
 }
