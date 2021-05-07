@@ -8,6 +8,7 @@ use Akademiano\Db\Adapter\Exception\QueryException;
 use Akademiano\Db\Adapter\Exception\TransactionException;
 use Akademiano\Db\Adapter\Type\PgPoint;
 use Akademiano\Db\Adapter\WhereParams\Between;
+use Akademiano\Db\Adapter\WhereParams\Comparison;
 use Akademiano\Db\Adapter\WhereParams\ILike;
 use Akademiano\Entity\Uuid;
 use Akademiano\Utils\CatchError;
@@ -17,6 +18,8 @@ use Akademiano\Utils\StringUtils;
 
 class PgsqlAdapter extends AbstractAdapter
 {
+    const FILTER_VALUE_RESOURCE_ID = 'filterValueToPostgresType';
+
     protected $isTransaction = 0;
 
     public function connect()
@@ -224,19 +227,21 @@ class PgsqlAdapter extends AbstractAdapter
             if (is_object($value)) {
                 switch (true) {
                     case $value instanceof Between :
-                        /** @var Between $value */
                         $num++;
                         $num2 = $num + 1;
                         $where[] = $this->escapeIdentifier($field) . " between \${$num} and \${$num2}";
                         $num = $num2;
                         break;
                     case $value instanceof ILike:
-                        /** @var ILike $value */
                         $num++;
-                        $where[] = $this->escapeIdentifier($field) . " ILIKE \${$num}";
+                        $where[] = $this->escapeIdentifier($field) . " LIKE \${$num}";
                         break;
                     case $value instanceof PgPoint:
                         $where[] = $this->escapeIdentifier($field) . "=" . $value->pgFormat();
+                        break;
+                    case $value instanceof Comparison:
+                        $num++;
+                        $where[] = $this->escapeIdentifier($field) . $value->getOperator() . "\${$num}";
                         break;
                     case $value instanceof IntegerableInterface:
                     case $value instanceof StringableInterface:
@@ -280,14 +285,17 @@ class PgsqlAdapter extends AbstractAdapter
                 switch (true) {
                     case $value instanceof Between :
                         /** @var Between $value */
-                        $whereParams[] = $value->getStart();
-                        $whereParams[] = $value->getEnd();
+                        $whereParams[] = $this->filterValue($value->getStart());
+                        $whereParams[] = $this->filterValue($value->getEnd());
                         break;
                     case $value instanceof ILike:
                         /** @var ILike $value */
                         $whereParams[] = $value->getQuery();
                         break;
                     case $value instanceof PgPoint:
+                        break;
+                    case $value instanceof Comparison:
+                        $whereParams[] = $this->filterValue($value->getValue());
                         break;
                     case $value instanceof IntegerableInterface:
                         $whereParams[] = $value->getInt();
@@ -301,12 +309,12 @@ class PgsqlAdapter extends AbstractAdapter
 
             } elseif (is_array($value)) {
                 foreach ($value as $valueItem) {
-                    $whereParams[] = $valueItem;
+                    $whereParams[] = $this->filterValue($valueItem);
                 }
             } elseif (is_null($value)) {
                 continue;
             } else {
-                $whereParams[] = $value;
+                $whereParams[] = $this->filterValue($value);
             }
         }
         return $whereParams;

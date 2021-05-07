@@ -4,14 +4,18 @@ namespace Akademiano\Db\Adapter;
 
 
 use Akademiano\Utils\ArrayTools;
+use phpDocumentor\Reflection\Types\Callable_;
 
 abstract class AbstractAdapter implements AdapterInterface
 {
     const RESOURCE_ID = 'dbAdapter';
+    const FILTER_VALUE_RESOURCE_ID = "filterValueToDbType";
 
     protected $connection;
     protected $dsn;
     protected $params = [];
+
+    protected $filterValue;
 
     abstract public function escapeIdentifier($identifier);
 
@@ -75,6 +79,32 @@ abstract class AbstractAdapter implements AdapterInterface
         return $this->connection;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getFilterValue(): callable
+    {
+        if (!isset($this->filterValue)) {
+            $this->filterValue = function ($value) {
+                return $value;
+            };
+        }
+        return $this->filterValue;
+    }
+
+    /**
+     * @param mixed $filterValue
+     */
+    public function setFilterValue(callable $filterValue): void
+    {
+        $this->filterValue = $filterValue;
+    }
+
+    public function filterValue($value)
+    {
+        return $this->getFilterValue()($value);
+    }
+
     public function getOrderBy($orderBy)
     {
         $orderStr = "";
@@ -94,7 +124,7 @@ abstract class AbstractAdapter implements AdapterInterface
                     if (empty($orderStr)) {
                         return null;
                     }
-                    $orderStr = " order by ". implode(",", $orderStr);
+                    $orderStr = " order by " . implode(",", $orderStr);
                 }
             } else {
                 $orderStr = " order by {$orderBy}";
