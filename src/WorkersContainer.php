@@ -82,6 +82,9 @@ class WorkersContainer extends \Akademiano\DI\Container implements ConfigurableI
         if ($value instanceof DelegatingInterface) {
             $value->setOperator($this->getOperator());
         }
+        if ($value instanceof DIContainerIncludeInterface) {
+            $value->setDIContainer($this->getDiContainer());
+        }
         return $value;
     }
 }

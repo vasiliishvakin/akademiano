@@ -122,7 +122,6 @@ class WorkersMap
             return;
         }
 
-
         $filteredRelations = [];
 
         start_filtering:

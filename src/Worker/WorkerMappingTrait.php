@@ -28,8 +28,5 @@ trait WorkerMappingTrait
 
     abstract public static function getSupportedCommands(): array;
 
-    public static function getMapFieldFilters(string $command): ?array
-    {
-        return null;
-    }
+    abstract public static function getMapFieldFilters(string $command): ?array;
 }
