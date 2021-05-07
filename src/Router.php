@@ -282,6 +282,12 @@ class Router implements EnvironmentIncludeInterface
         return call_user_func_array($route->getAction(), $args);
     }
 
+    public function execById(string $routeId)
+    {
+        $route = $this->getRoute($routeId);
+        return $this->exec($route);
+    }
+
     public function getCurrentUrl()
     {
         return $this->getRequest()->getUrl();
