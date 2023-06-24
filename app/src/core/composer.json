@@ -1,0 +1,38 @@
+{
+  "name": "akademiano/core",
+  "description": "Akademiano PHP framework - fast, light, easy (core)",
+  "license": "Apache-2.0",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "authors": [
+    {
+      "name": "Vasiliy Shvakin",
+      "email": "mrdatamapper@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Akademiano\\Core\\": "src/",
+      "Akademiano\\Core\\Tests\\Data\\": "tests/_data/"
+    }
+  },
+  "require": {
+    "akademiano/core-controller": "^1.1",
+    "akademiano/sites": "^1.1",
+    "akademiano/utils": "^1.1",
+    "akademiano/config": "^1.1",
+    "akademiano/router": "^1.2",
+    "akademiano/entity": "^1.1",
+    "akademiano/httpwarp": "^1.1",
+    "akademiano/simplaview": "^1.1",
+    "akademiano/user": "^1.1",
+    "akademiano/twig-extensions": "^1.1",
+    "akademiano/acl": "^1.1",
+    "akademiano/di": "^1.1"
+  },
+  "require-dev": {
+    "codeception/codeception": "^3.1",
+    "php-coveralls/php-coveralls": "^2.1",
+    "mockery/mockery": "^1.2"
+  }
+}
