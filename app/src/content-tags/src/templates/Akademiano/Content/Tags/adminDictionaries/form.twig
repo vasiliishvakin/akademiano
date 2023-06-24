@@ -1,0 +1,79 @@
+{% extends "adminLayout.twig" %}
+
+{% block mainContainer %}
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Словари</h3>
+                    <div class="box-tools pull-right">
+                        <!-- Collapse Button -->
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                    <!-- /.box-tools -->
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <form action="{{ url(item_save_route) }}" method="POST" enctype="multipart/form-data">
+                        {% if item.id %}
+                            <input name="id" type="hidden" value="{{ item.id|dechex }}"/>
+                        {% endif %}
+                        <div class="card-header card-header-{{ item ? "primary" : "success" }}">
+                            {{ item ? "Редактирование" : "Добавление" }} словаря {{ item ? "№ #{item.id.hex}" }}
+                        </div>
+                        <div class="card-block">
+                            <div class="form-group">
+                                <label class="form-control-label" for="title">Название</label>
+                                <input type="text" class="form-control" id="title" name="title"
+                                       value="{{ item.title }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Описание</label>
+                                <textarea class="form-control" id="description" name="description"
+                                          rows="3">{{ item.description }}</textarea>
+                            </div>
+                            {% if item %}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <table class="table table-sm table-responsive table-active">
+                                            <thead>
+                                            <tr>
+                                                <th>Создано</th>
+                                                <th>Изменено</th>
+                                                <th>Создатель</th>
+                                            </tr>
+
+                                            </thead>
+
+                                            <tbody>
+                                            <tr>
+                                                <td>{{ item.created | date ("d.m.Y") }}</td>
+                                                <td>{{ item.changed| date ("d.m.Y") }}</td>
+                                                <td>{{ item.owner.title }}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <div class="form-group">
+                                <a href="{{ url(items_list_route) }}" role="button" class="btn btn-outline-primary">Отмена</a>
+                                &nbsp;
+                                &nbsp;
+                                <button type="submit" class="btn btn-success">Сохранить</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.box-body -->
+                {#<div class="box-footer">
+                </div>#}
+                <!-- box-footer -->
+            </div>
+            <!-- /.box -->
+        </div>
+    </div>
+{% endblock mainContainer %}
