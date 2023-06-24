@@ -1,0 +1,28 @@
+{
+  "name": "akademiano/user",
+  "description": "User manager base classes",
+  "license": "Apache-2.0",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "authors": [
+    {
+      "name": "Vasiliy Shvakin",
+      "email": "mrdatamapper@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Akademiano\\User\\": "src/"
+    }
+  },
+  "require": {
+    "akademiano/entity": "^1.1",
+    "nesbot/carbon": "^2.23",
+    "twig/twig": "^2.4.4"
+  },
+  "require-dev": {
+    "codeception/codeception": "^3.1",
+    "php-coveralls/php-coveralls": "^2.1",
+    "mockery/mockery": "^1.2"
+  }
+}

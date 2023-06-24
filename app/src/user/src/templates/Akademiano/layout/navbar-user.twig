@@ -1,0 +1,26 @@
+<li class="nav-item dropdown">
+    <a class="nav-link nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+        {% if is_user_authenticate() %}
+        <img class="img-avatar" src="data:," data-src="holder.js/35x35?theme=sky&font='Font Awesome 5 Free'&text=&#xf508;&size=22" alt="admin@example.com">
+        {% else %}
+            <img class="img-avatar" src="data:," data-src="holder.js/35x35?theme=lava&font='Font Awesome 5 Free'&text=&#xf21b;&size=22" alt="admin@example.com">
+        {% endif %}
+    </a>
+    <div class="dropdown-menu dropdown-menu-right">
+        <div class="dropdown-header text-center">
+            <strong>Account</strong>
+        </div>
+        <div class="dropdown-item text-center">
+            <strong>{{ current_user().title | default("Guest") }}</strong>
+        </div>
+        {% if not is_user_authenticate() %}
+            <a class="dropdown-item" href="{{ url(constant("Akademiano\\UserEO\\UsersOpsRoutesStore::LOGIN_ROUTE")) }}">
+                <i class="fa fa-lock"></i> Login
+            </a>
+        {% else %}
+            <a class="dropdown-item" href="{{ url(constant("Akademiano\\UserEO\\UsersOpsRoutesStore::LOGOUT_ROUTE")) }}">
+                <i class="fa fa-lock"></i> Logout
+            </a>
+        {% endif %}
+    </div>
+</li>
