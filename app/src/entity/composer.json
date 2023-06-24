@@ -1,0 +1,29 @@
+{
+    "name": "akademiano/entity",
+    "description": "A library of entity",
+    "license": "Apache-2.0",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "authors": [
+        {
+            "name": "Vasiliy Shvakin",
+            "email": "mrdatamapper@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Akademiano\\Entity\\": "src/"
+        }
+    },
+    "require": {
+        "akademiano/utils": "^1.1",
+        "akademiano/delegating": "^1.0",
+        "nesbot/carbon": "^2.23",
+        "php-ds/php-ds": "^1.2"
+    },
+    "require-dev": {
+        "codeception/codeception": "^3.1",
+        "php-coveralls/php-coveralls": "^2.1",
+        "mockery/mockery": "^1.2"
+    }
+}
