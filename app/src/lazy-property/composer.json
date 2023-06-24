@@ -1,0 +1,26 @@
+{
+  "name": "akademiano/lazy-property",
+  "description": "A library for set lazy loading properties with closures",
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "Vasiliy Shvakin",
+      "email": "mrdatamapper@gmail.com"
+    }
+  ],
+  "require": {
+    "php-ds/php-ds": "^1.2"
+  },
+  "require-dev": {
+    "codeception/codeception": "^3.1",
+    "mockery/mockery": "^1.2",
+    "php-coveralls/php-coveralls": "^2.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Akademiano\\LazyProperty\\": "src/"
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
