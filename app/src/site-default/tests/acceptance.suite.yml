@@ -1,0 +1,20 @@
+# Codeception Test Suite Configuration
+#
+# Suite for acceptance tests.
+# Perform tests in browser using the WebDriver or PhpBrowser.
+# If you need both WebDriver and PHPBrowser tests - create a separate suite.
+
+class_name: AcceptanceTester
+modules:
+    enabled:
+        - PhpBrowser:
+            url: http://127.0.0.1:8888
+            headers:
+              Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+        - \Helper\Acceptance
+        - Kolyunya\Codeception\Module\MarkupValidator
+extensions:
+    enabled:
+        - Codeception\Extension\RunProcess:
+              0: php -S 127.0.0.1:8888 -t ./public router.php >/dev/null 2>&1
+              sleep: 3

@@ -1,0 +1,86 @@
+{
+  "name": "akademiano/site-default",
+  "description": "akademiano site default",
+  "license": "Apache-2.0",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "authors": [
+    {
+      "name": "Vasiliy Shvakin",
+      "email": "mrdatamapper@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Sites\\_Default\\": "src"
+    }
+  },
+  "provide": {
+        "akademiano/site-default-implementation": "1.1.0"
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/mrdatamapper/codeception-markup-validator"
+    }
+  ],
+  "require": {
+    "akademiano/core": "^1.1",
+    "akademiano/site-all": "^1.1",
+    "akademiano/acl":  "^1.1"
+  },
+  "require-dev": {
+    "codeception/codeception": "^3.1",
+    "php-coveralls/php-coveralls": "^2.1",
+    "mockery/mockery": "^1.2",
+    "codeception/c3": "^2.4",
+    "kolyunya/codeception-markup-validator": "^3.1"
+  },
+  "extra" : {
+    "installer-types": ["library", "component"],
+    "installer-paths" : {
+      "public/assets/vendor/coreui/": ["coreui/coreui"],
+      "public/assets/vendor/holder/": ["imsky/holder"],
+      "public/assets/vendor/{$name}/": ["type:component"]
+    }
+  },
+ "config": {
+    "fxp-asset": {
+      "installer-paths": {
+        "npm-asset-library": "public/assets/vendor",
+        "bower-asset-library": "public/assets/vendor"
+      },
+      "ignore-files": {
+        "bower-asset/bootstrap": [
+          "/.*",
+          "_config.yml",
+          "CNAME",
+          "composer.json",
+          "CONTRIBUTING.md",
+          "docs",
+          "js/tests",
+          "test-infra",
+          "fonts",
+          "grunt",
+          "js",
+          "less",
+          "Gruntfile.js",
+          "package.json",
+          "package.js"
+        ],
+        "bower-asset/jquery": [
+          "**/.*",
+          "build",
+          "dist/cdn",
+          "speed",
+          "test",
+          "*.md",
+          "AUTHORS.txt",
+          "Gruntfile.js",
+          "package.json",
+          "src"
+        ]
+      }
+    }
+  }
+}
