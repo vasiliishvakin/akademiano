@@ -1,0 +1,73 @@
+{% extends "layout.twig" %}
+
+
+{% block mainContainerContent %}
+
+{% endblock mainContainerContent %}
+
+
+{% block mainContainer %}
+    <div class="container-fluid">
+
+        <div class="{{ mainContainerAnimated ? "animated fadeIn" }}">
+
+            <div class="row">
+                <div class="col-md-7 mr-md-auto">
+                    {% block mainContainerContent %}
+
+                        {% for item in items %}
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3>{{ item.title }}</h3>
+                                </div>
+                                <div class="card-block">
+                                    {% if item.firstImage %}
+                                        <img src="{{ object_url(item_file_view_route, item.firstImage, {'template': 'square150'}) }}"
+                                             alt="">
+                                    {% endif %}
+                                    {{ item.description }}
+                                </div>
+
+                                <div class="card-footer">
+                                    <a href="{{ url(item_view_route, {"id": item.id.hex}) }}" rel="tooltip" title="View"
+                                       class="btn btn-success btn-simple btn-sm">
+                                        <i class="fa fa-folder-open "></i>
+                                        Читать
+                                    </a>
+                                    <a href="{{ url(item_edit_route, {"id": item.id.hex}) }}" rel="tooltip" title="Edit"
+                                       class="btn btn-warning btn-simple btn-sm">
+                                        <i class="fa fa-pencil-square"></i>
+                                        Редактировать
+                                    </a>
+                                    <a href="{{ url(item_delete_route, {"id": item.id.hex}) }}" rel="tooltip" title="Delete"
+                                       class="btn btn-danger btn-simple btn-sm">
+                                        <i class="fa fa-trash"></i>
+                                        Удалить
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                        {% if items.PageMetadata|length >1 %}
+                            <div class="card">
+                                <div class="card-block">
+                                    {% include "utils/pagination.twig" %}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <div class="card">
+                            <div class="card-block">
+                                <a href="{{ url(item_add_route) }}" class="btn btn-success btn-sm" role="button">Добавить</a>
+                            </div>
+                        </div>
+                    {% endblock mainContainerContent %}
+                </div>
+                <!--/.col-->
+            </div>
+            <!--/.row-->
+        </div>
+
+
+    </div>
+{% endblock mainContainer %}

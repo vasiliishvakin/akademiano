@@ -1,0 +1,54 @@
+{% extends "layout.twig" %}
+
+{% set isArticleLengthSmall = item.content | length < 250 ? true : false %}
+
+{% block mainContainerContentArticle %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                {% if item.mainImage and item.mainImage.RatioLike(4) %}
+                    <img class="card-img-top" src="{{ object_url(item_file_view_route, item.mainImage, {'template': '1129x250'}) }}">
+                {% endif %}
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h1 class="card-title">{{ item.title }}</h1>
+                            {% if item.mainImage  and not item.mainImage.RatioLike(4) %}
+                                <a href="{{ object_url(item_file_view_route, item.mainImage, {'template': 'orig1200'}) }}">
+                                    <img src="{{ object_url(item_file_view_route, item.mainImage, {'template': isArticleLengthSmall ? 'square300': 'square150'}) }}" class="rounded m-1 mr-3 {{ not isArticleLengthSmall ? 'float-left'}}">
+                                </a>
+                            {% endif %}
+                            {{ include(template_from_string(item.content, "Article view " ~ item.id )) }}
+                        </div>
+                    </div>
+
+                    {% if item.otherImages | length > 0 %}
+                        <div class="row mx-auto text-center">
+                            <div class="row mx-auto">
+                                {% for image in item.otherImages %}
+                                    <div class="card border-0 m-2">
+                                        <a href="{{ object_url(item_file_view_route, image, {'template': 'orig1200'}) }}">
+                                            <picture>
+                                                <source srcset="{{ object_url(item_file_view_route, image, {'template': 'square150'}) }}" media="(max-width: 720px)" }}>
+                                                <source srcset="{{ object_url(item_file_view_route, image, {'template': 'square200'}) }}" media="(max-width: 960px)" }}>
+                                                <img src="{{ object_url(item_file_view_route, image, {'template': 'square250'}) }}" class="rounded img-thumbnail">
+                                            </picture>
+                                        </a>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock mainContainerContentArticle %}
+{% block mainContainerContentRight %}
+    <div class="card">
+        <div class="card-body">
+            {{ item.owner.title }}
+            {{ item.date|date("d.m.Y") }}
+        </div>
+    </div>
+{% endblock mainContainerContentRight %}
