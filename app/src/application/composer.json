@@ -1,0 +1,83 @@
+{
+  "name": "akademiano/application",
+  "description": "Skeleton application on akademiano php framework",
+  "license": "Apache-2.0",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "authors": [
+    {
+      "name": "Vasiliy Shvakin",
+      "email": "mrdatamapper@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Akademiano\\App\\": "App"
+    }
+  },
+  "provide": {
+        "akademiano/application-implementation": "1.0.0"
+  },
+  "require": {
+    "akademiano/core": "^1.0.0-beta.7",
+    "akademiano/menu": "^1.0.0-beta.1",
+    "akademiano/site-all": "^1.0.0-beta.3",
+    "akademiano/site-default": "^1.0.0-beta.2",
+
+    "symfony/process": "^3.0",
+    "symfony/yaml": "^3.0",
+
+    "bower-asset/bootstrap": "^3.3.5",
+    "bower-asset/jquery": "^2.1.4",
+    "bower-asset/html5shiv": "^3.7.3",
+    "bower-asset/respond": "^1.4.2"
+  },
+  "require-dev": {
+    "codeception/codeception": "^2.2.10",
+    "codeception/c3": "^2.0.10",
+    "satooshi/php-coveralls": "^1.0",
+    "mockery/mockery": "^0.9.9"
+  },
+  "suggest": {
+    "fxp/composer-asset-plugin": "Need be installed in global space for support frontend libraries load"
+  },
+  "config": {
+    "fxp-asset": {
+      "installer-paths": {
+        "npm-asset-library": "public/assets/vendor",
+        "bower-asset-library": "public/assets/vendor"
+      },
+      "ignore-files": {
+        "bower-asset/bootstrap": [
+          "/.*",
+          "_config.yml",
+          "CNAME",
+          "composer.json",
+          "CONTRIBUTING.md",
+          "docs",
+          "js/tests",
+          "test-infra",
+          "fonts",
+          "grunt",
+          "js",
+          "less",
+          "Gruntfile.js",
+          "package.json",
+          "package.js"
+        ],
+        "bower-asset/jquery": [
+          "**/.*",
+          "build",
+          "dist/cdn",
+          "speed",
+          "test",
+          "*.md",
+          "AUTHORS.txt",
+          "Gruntfile.js",
+          "package.json",
+          "src"
+        ]
+      }
+    }
+  }
+}

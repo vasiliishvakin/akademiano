@@ -1,0 +1,10 @@
+/vendor/
+local.config.php
+/data/
+/public/data/
+/public/assets/
+/published/
+
+tests/_output/*
+
+composer.lock
