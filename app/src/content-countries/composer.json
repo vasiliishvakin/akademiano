@@ -1,0 +1,32 @@
+{
+  "name": "akademiano/content-countries",
+  "description": "akademiano countries",
+  "license": "Apache-2.0",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "authors": [
+    {
+      "name": "Vasiliy Shvakin",
+      "email": "mrdatamapper@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Akademiano\\Content\\Countries\\": "src/"
+    }
+  },
+  "require": {
+    "akademiano/entity-operator": "^2.0",
+    "akademiano/acl": "^1.1",
+    "akademiano/api": "^2.0",
+    "akademiano/entity": "^1.1",
+    "akademiano/router": "^1.2",
+    "akademiano/entity-operator-ext": "^1.1",
+    "akademiano/core-controller": "^1.1"
+  },
+  "require-dev": {
+    "codeception/codeception": "^2.3.8",
+    "satooshi/php-coveralls": "^2.0",
+    "mockery/mockery": "^1.0"
+  }
+}

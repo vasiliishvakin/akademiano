@@ -1,0 +1,35 @@
+{% extends "adminLayout.twig" %}
+
+{% block mainContainerContent %}
+    <div class="row">
+        <div class="col-md-8 offset-1">
+            <div class="card">
+                <form action="{{ url(item_save_route) }}" method="POST" enctype="multipart/form-data">
+                    {% if item.id %}
+                        <input name="id" type="hidden" value="{{ item.id|dechex }}"/>
+                    {% endif %}
+                    <div class="card-header card-header-{{ item ? "primary" : "success" }}">
+                        {{ item ? "Редактирование" : "Добавление" }} категории {{ item ? "№ #{item.id.hex}" }}
+                    </div>
+                    <div class="card-block">
+                        <div class="form-group">
+                            <label class="form-control-label" for="title">Название</label>
+                            <input type="text" class="form-control" id="title" name="title" value="{{ item.title }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="content">Описание</label>
+                            <textarea class="form-control" id="content" name="content" rows="5">{{ item.content |raw }}</textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <a href="{{ url(items_list_route) }}" role="button" class="btn btn-outline-primary">Отмена</a>
+                            &nbsp;
+                            &nbsp;
+                            <button type="submit" class="btn btn-success">Сохранить</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock mainContainerContent %}
