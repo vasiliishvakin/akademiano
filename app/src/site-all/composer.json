@@ -1,0 +1,102 @@
+{
+  "name": "akademiano/site-all",
+  "description": "akademiano shared sites data",
+  "license": "Apache-2.0",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "authors": [
+    {
+      "name": "Vasiliy Shvakin",
+      "email": "mrdatamapper@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Sites\\All\\": "src"
+    }
+  },
+  "provide": {
+    "akademiano/site-all-implementation": "1.1.0"
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/mrdatamapper/codeception-markup-validator"
+    }
+  ],
+  "require": {
+    "akademiano/core": "^1.2",
+    "oomphinc/composer-installers-extender": "^1.1",
+    "coreui/coreui": "^2.1",
+    "imsky/holder": "^2.8",
+
+    "bower-asset/bootstrap": "^4.3",
+    "bower-asset/jquery": "^3.4",
+
+    "bower-asset/html5shiv": "^3.7.3",
+    "bower-asset/respond": "^1.4.2",
+    "bower-asset/font-awesome": "^5.10",
+    "bower-asset/simple-line-icons": "^2.4",
+    "bower-asset/ionicons": "^4.0",
+    "bower-asset/tether": "^1.4",
+    "bower-asset/pace": "^1.0",
+    "bower-asset/chart.js": "^2.7",
+    "bower-asset/popper.js": "^1.15",
+    "npm-asset/perfect-scrollbar": "^1.4",
+    "bower-asset/highlightjs": "^9.16"
+  },
+  "require-dev": {
+    "codeception/codeception": "^3.1",
+    "php-coveralls/php-coveralls": "^2.1",
+    "mockery/mockery": "^1.2",
+    "codeception/c3": "^2.4",
+    "kolyunya/codeception-markup-validator": "^3.1"
+  },
+  "extra" : {
+    "installer-types": ["library", "component"],
+    "installer-paths" : {
+      "public/assets/vendor/coreui/": ["coreui/coreui"],
+      "public/assets/vendor/holder/": ["imsky/holder"],
+      "public/assets/vendor/{$name}/": ["type:component"]
+    }
+  },
+  "config": {
+    "fxp-asset": {
+      "installer-paths": {
+        "npm-asset-library": "public/assets/vendor",
+        "bower-asset-library": "public/assets/vendor"
+      },
+      "ignore-files": {
+        "bower-asset/bootstrap": [
+          "/.*",
+          "_config.yml",
+          "CNAME",
+          "composer.json",
+          "CONTRIBUTING.md",
+          "docs",
+          "js/tests",
+          "test-infra",
+          "fonts",
+          "grunt",
+          "js",
+          "less",
+          "Gruntfile.js",
+          "package.json",
+          "package.js"
+        ],
+        "bower-asset/jquery": [
+          "**/.*",
+          "build",
+          "dist/cdn",
+          "speed",
+          "test",
+          "*.md",
+          "AUTHORS.txt",
+          "Gruntfile.js",
+          "package.json",
+          "src"
+        ]
+      }
+    }
+  }
+}
