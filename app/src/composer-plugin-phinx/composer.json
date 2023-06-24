@@ -1,0 +1,29 @@
+{
+  "name": "akademiano/composer-plugin-phinx",
+  "type": "composer-plugin",
+  "description": "composer plugin for migrations auto copy",
+  "license": "Apache-2.0",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "authors": [
+    {
+      "name": "Vasiliy Shvakin",
+      "email": "mrdatamapper@gmail.com"
+    }
+  ],
+
+
+  "autoload": {
+    "psr-4": {
+      "Akademiano\\Composer\\Phinx\\": "src"
+    }
+  },
+  "require": {
+    "composer-plugin-api": "^1.1",
+    "composer/composer": "^1.9",
+    "akademiano/project-tools": "@dev"
+  },
+  "extra": {
+    "class": "Akademiano\\Composer\\Phinx\\Plugin"
+  }
+}
