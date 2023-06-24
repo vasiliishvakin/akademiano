@@ -1,0 +1,28 @@
+{
+  "name": "akademiano/httpwarp",
+  "description": "Request, response, session and other tools for base web development",
+  "license": "Apache-2.0",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "authors": [
+    {
+      "name": "Vasiliy Shvakin",
+      "email": "mrdatamapper@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Akademiano\\HttpWarp\\": "src/"
+    }
+  },
+  "require": {
+    "akademiano/utils": "^1.1@dev",
+    "psr/log": "^1.1",
+    "guzzlehttp/guzzle": "^6.3.3"
+  },
+  "require-dev": {
+    "codeception/codeception": "^3.1",
+    "php-coveralls/php-coveralls": "^2.1",
+    "mockery/mockery": "^1.2"
+  }
+}
