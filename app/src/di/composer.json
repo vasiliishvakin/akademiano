@@ -1,0 +1,22 @@
+{
+  "name": "akademiano/di",
+  "description": "Attach files to other objects",
+  "license": "Apache-2.0",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "authors": [
+    {
+      "name": "Vasiliy Shvakin",
+      "email": "mrdatamapper@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Akademiano\\DI\\": "src/"
+    }
+  },
+  "require": {
+    "pimple/pimple": "~3.0",
+    "akademiano/config": "^1.1@dev"
+  }
+}
