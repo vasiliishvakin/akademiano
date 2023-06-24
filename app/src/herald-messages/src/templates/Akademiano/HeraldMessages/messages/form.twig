@@ -1,0 +1,96 @@
+{% extends "layout.twig" %}
+
+{% block mainContainerContent %}
+    <div class="row">
+        <div class="col-md-8 offset-1">
+            <div class="card">
+                <form action="{{ item.id ? url(item_change_route, {"id": item.id.hex}) : url(item_save_route) }}"
+                      method="POST" enctype="multipart/form-data">
+                    {% if item.id %}
+                        <input name="id" type="hidden" value="{{ item.id|dechex }}"/>
+                    {% endif %}
+                    <div class="card-header card-header-{{ item ? "primary" : "success" }}">
+                        {{ item ? "Редактирование" : "Добавление" }} сообщения {{ item ? "№ #{item.id.hex}" }}
+                    </div>
+                    <div class="card-block">
+                        <div class="form-group">
+                            <label class="form-control-label" for="to">Кому</label>
+                            <input type="text" class="form-control" id="to" name="to" value="{{ item.to }}">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-control-label" for="title">Тема</label>
+                            <input type="text" class="form-control" id="title" name="title" value="{{ item.title }}">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="content">Текст</label>
+                            <textarea class="form-control" id="content" name="content"
+                                      rows="5">{{ item.content |raw }}</textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <fieldset class="form-group">
+                                <legend class="col-form-legend col-sm-2">Radios</legend>
+                                {% for transport in transports %}
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="radio" name="transport" id="transport"
+                                                   value="{{ transport }}">
+                                            {% if transport == constant("Akademiano\\HeraldMessages\\Model\\TransportType::EMAIL") %}
+                                                <i class="fa fa-envelope-o" aria-hidden="true"></i> Электронная почта
+                                            {% else %}
+                                                <i class="fa fa-question" aria-hidden="true"></i>
+                                            {% endif %}
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            </fieldset>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-control-label" for="from">От кого</label>
+                            <input type="text" class="form-control" id="title" name="from" value="{{ item.from }}">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-control-label" for="replayTo">Ответ</label>
+                            <input type="text" class="form-control" id="title" name="replayTo" value="{{ item.replayTo }}">
+                        </div>
+
+                        {% if item %}
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table class="table table-sm table-responsive table-active">
+                                        <thead>
+                                        <tr>
+                                            <th>Создано</th>
+                                            <th>Изменено</th>
+                                        </tr>
+
+                                        </thead>
+
+                                        <tbody>
+                                        <tr>
+                                            <td>{{ item.created | date ("d.m.Y") }}</td>
+                                            <td>{{ item.changed| date ("d.m.Y") }}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <div class="form-group">
+                            <a href="{{ url(items_list_route) }}" role="button"
+                               class="btn btn-outline-primary">Отмена</a>
+                            &nbsp;
+                            &nbsp;
+                            <button type="submit" class="btn btn-success">Сохранить</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock mainContainerContent %}

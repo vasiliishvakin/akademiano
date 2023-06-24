@@ -1,0 +1,104 @@
+{% extends "layout.twig" %}
+
+{% block body %}
+    <body class="app">
+    {% block appBody %}
+        <div class="app-body">
+            <!-- Main content -->
+            {% block main %}
+                <main class="main">
+                    {% block mainContainer %}
+                        <div class="container-fluid">
+                            <div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        {% block mainContainerContent %}
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h2>Результат обработки сообщений</h2>
+                                                </div>
+                                                <div class="card-block">
+                                                    <div class="card">
+                                                        <div class="card-block">
+                                                            <ul>
+                                                                <li>
+                                                                    Обработано: {{ items[constant("\\Akademiano\\HeraldMessages\\Model\\Status::STATUS_ERROR")]|length + items[constant("\\Akademiano\\HeraldMessages\\Model\\Status::STATUS_DONE")]|length }}</li>
+                                                                <li>С
+                                                                    ошибками: {{ items[constant("\\Akademiano\\HeraldMessages\\Model\\Status::STATUS_ERROR")]|length }}</li>
+                                                                <li>
+                                                                    Успешно: {{ items[constant("\\Akademiano\\HeraldMessages\\Model\\Status::STATUS_DONE")]|length }}</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+
+                                                    {% if items[constant("\\Akademiano\\HeraldMessages\\Model\\Status::STATUS_ERROR")]|length>0 %}
+                                                        <div class="card">
+                                                            <div class="card-header card-header-danger">
+                                                                Сообщения с ошибками
+                                                            </div>
+                                                            <div class="card-block">
+                                                                {% include "Akademiano/Messages/sender/emails-list.twig" with {"items": items[constant("\\Akademiano\\HeraldMessages\\Model\\Status::STATUS_ERROR")]} %}
+                                                            </div>
+                                                        </div>
+                                                    {% endif %}
+                                                    {% if items[constant("\\Akademiano\\HeraldMessages\\Model\\Status::STATUS_DONE")]|length>0 %}
+                                                        <div class="card">
+                                                            <div class="card-header card-header-success">
+                                                                Сообщения отправлены
+                                                            </div>
+                                                            <div class="card-block">
+                                                                {% include "Akademiano/Messages/sender/emails-list.twig" with {"items": items[constant("\\Akademiano\\HeraldMessages\\Model\\Status::STATUS_DONE")]} %}
+                                                            </div>
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        {% endblock mainContainerContent %}
+                                    </div>
+                                    <!--/.col-->
+                                </div>
+                                <!--/.row-->
+                            </div>
+                        </div>
+                    {% endblock mainContainer %}
+                </main>
+            {% endblock main %}
+        </div>
+    {% endblock appBody %}
+
+    {% block footer %}
+        <footer class="app-footer">
+            <a href="http://coreui.io">CoreUI</a> © 2017 creativeLabs.
+            <span class="float-right">Powered by <a href="http://coreui.io">CoreUI</a>
+        </span>
+        </footer>
+    {% endblock footer %}
+
+
+    <!--   Core JS Files   -->
+    {{ asset_js([
+    "jquery/dist/jquery.min.js",
+    "tether/dist/js/tether.min.js",
+    "bootstrap/dist/js/bootstrap.min.js",
+    "pace/pace.min.js",
+    "chart.js/dist/Chart.min.js"
+    ], default, true) }}
+
+
+    <!-- Plugins and scripts required by this views -->
+
+    <!-- Custom scripts required by this view -->
+
+    {{ asset_js([
+    "assets/js/app.js",
+    "assets/js/views/main.js"
+    ], default, true) }}
+
+
+    {% block js %}
+
+    {% endblock js %}
+
+
+    </body>
+{% endblock body %}
