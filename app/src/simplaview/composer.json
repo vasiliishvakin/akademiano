@@ -1,0 +1,25 @@
+{
+  "name": "akademiano/simplaview",
+  "description": "small base template engine",
+  "license": "Apache-2.0",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "authors": [
+    {
+      "name": "Vasiliy Shvakin",
+      "email": "mrdatamapper@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Akademiano\\SimplaView\\": "src/"
+    }
+  },
+  "require": {
+    "akademiano/utils": "^1.1@dev"
+  },
+  "require-dev": {
+    "codeception/codeception": "^2.2.10",
+    "satooshi/php-coveralls": "^1.0.1"
+  }
+}
