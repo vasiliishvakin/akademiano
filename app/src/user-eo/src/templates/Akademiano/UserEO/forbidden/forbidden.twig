@@ -1,0 +1,84 @@
+{% extends "layout.twig" %}
+
+{% block body %}
+
+    <body class="app flex-row align-items-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card-group mb-0">
+                    <div class="card p-4">
+                        <div class="card-block">
+                            <h1>Forbidden Access in this place</h1>
+                            <p>{{ exception.message }}</p>
+                            <p>error code: {{ exception.code }}</p>
+                        </div>
+                    </div>
+                    <div class="card card-inverse card-primary py-5 d-md-down-none" style="width:44%">
+                        <div class="card-block text-center">
+                            {% if exception %}
+                                <div>
+                                    <h3>Access info</h3>
+                                    <table class="table table-sm">
+                                        <tbody>
+                                        {% if exception.resource %}
+                                            <tr>
+                                                <td>Resource:</td>
+                                                <td>{{ exception.resource }}</td>
+                                            </tr>
+                                        {% endif %}
+                                        {% if exception.url %}
+                                            <tr>
+                                                <td>Url:</td>
+                                                <td>{{ exception.url }}</td>
+                                            </tr>
+                                        {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% endif %}
+                            <hr>
+                            {% if user %}
+                                <div>
+                                    <h3>User info</h3>
+                                    <table class="table table-sm">
+                                        <tbody>
+                                        <tr>
+                                            <td>ID:</td>
+                                            <td>{{ user.id }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Login:</td>
+                                            <td>{{ user.title }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>email:</td>
+                                            <td>{{ user.email }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>group:</td>
+                                            <td>{{ user.group.title }}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div>
+                                    <a href="{{ url(logout_route) }}" class="btn btn-warning btn-lg" role="button">Выйти</a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--   Core JS Files   -->
+    {{ asset_js([
+    "jquery/dist/jquery.min.js",
+    "tether/dist/js/tether.min.js",
+    "bootstrap/dist/js/bootstrap.min.js",
+    ], default, true) }}
+    </body>
+
+{% endblock body %}
