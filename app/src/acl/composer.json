@@ -1,0 +1,30 @@
+{
+  "name": "akademiano/acl",
+  "description": "Acl for user manager module",
+  "license": "Apache-2.0",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "authors": [
+    {
+      "name": "Vasiliy Shvakin",
+      "email": "mrdatamapper@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Akademiano\\Acl\\": "src/"
+    }
+  },
+  "require": {
+    "akademiano/user": "^1.1",
+    "akademiano/utils": "^1.1",
+    "akademiano/entity": "^1.1",
+    "akademiano/config": "^1.1"
+  },
+  "require-dev": {
+    "codeception/codeception": "^3.1",
+    "php-coveralls/php-coveralls": "^2.1",
+    "mockery/mockery": "^1.2",
+    "codeception/c3": "^2.4"
+  }
+}
