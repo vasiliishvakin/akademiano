@@ -1,0 +1,10 @@
+.env
+compose.override.yml
+
+nginx/conf.d
+php/conf.d
+mysql/conf.d
+
+mysql_db
+cache
+

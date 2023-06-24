@@ -1,0 +1,96 @@
+version: "3"
+services:
+  nginx:
+    image: nginx:latest
+    build: ./nginx
+    depends_on:
+      - php
+      - phpmyadmin
+      - mailhog
+    ports:
+      - "127.0.0.1:80:80"
+    volumes:
+      - "../app:/app"
+      - "./nginx/nginx.conf:/etc/nginx/nginx.conf"
+      - "./nginx/conf.d:/etc/nginx/conf.d"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  php:
+    image: vasiliishavkin/php:8.2-fpm-development
+    container_name: php
+    volumes:
+      - "../app:/app"
+      - "./php/conf.d/php.local.ini:/usr/local/etc/php/conf.d/php.local.ini"
+      - "./cache/composer:/root/.cache/composer"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    working_dir: /app
+
+  python:
+    image: python:3-bullseye
+    container_name: python
+    build:
+      context: ./python
+    volumes:
+      - "../app:/app"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    profiles:
+      - donotstart
+
+  mysql:
+    image: mariadb:latest
+    container_name: mysql
+    ports:
+      - "127.0.0.1:3306:3306"
+    volumes:
+      - "./mysql_db:/var/lib/mysql"
+      - "./mysql/conf.d:/etc/mysql/conf.d"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  node:
+    image: node:latest
+    container_name: node
+    ports:
+      - "127.0.0.1:5173:5173"
+    volumes:
+      - "../app:/app"
+    working_dir: "/app"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command: npm start
+    profiles:
+      - donotstart
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    depends_on:
+      - mysql
+    ports:
+      - "127.0.0.1:5500:80"
+    environment:
+      PMA_ARBITRARY: 1
+      PMA_PMADB: "phpmyadmin"
+      PMA_QUERYHISTORYDB: true
+      PMA_HOST: mysql
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    logging:
+      driver: "none" # disable saving logs
+    ports:
+      - "127.0.0.1:1025:1025" # smtp server
+      - "127.0.0.1:8025:8025" # web ui
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+networks:
+  web-development:
