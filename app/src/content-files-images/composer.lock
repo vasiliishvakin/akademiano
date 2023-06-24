@@ -1,0 +1,258 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "65b1b0f2fbf4da5e5fbdcc862bddc3c3",
+    "content-hash": "f75052138a8007ec95b8bcd226b017ad",
+    "packages": [
+        {
+            "name": "deltaphp/deltacore",
+            "version": "2.0.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DeltaPHP/DeltaCore.git",
+                "reference": "6e836c5694933ee81d9057669198c30f76e2bd43"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DeltaPHP/DeltaCore/zipball/6e836c5694933ee81d9057669198c30f76e2bd43",
+                "reference": "6e836c5694933ee81d9057669198c30f76e2bd43",
+                "shasum": ""
+            },
+            "require": {
+                "deltaphp/deltarouter": "^1.0",
+                "deltaphp/deltautils": "^1.0",
+                "deltaphp/dtpl": "^1.0",
+                "deltaphp/httpwarp": "^1.0",
+                "pimple/pimple": "^3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "DeltaCore": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Vasiliy Shvakin",
+                    "email": "zen4dev@gmail.com"
+                }
+            ],
+            "description": "Delta PHP framework - fast, light, easy (core)",
+            "time": "2015-11-16 05:57:05"
+        },
+        {
+            "name": "deltaphp/deltarouter",
+            "version": "1.0.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DeltaPHP/DeltaRouter.git",
+                "reference": "e35c27c4f54258f0d0c0e0b8d46a29c23931c93b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DeltaPHP/DeltaRouter/zipball/e35c27c4f54258f0d0c0e0b8d46a29c23931c93b",
+                "reference": "e35c27c4f54258f0d0c0e0b8d46a29c23931c93b",
+                "shasum": ""
+            },
+            "require": {
+                "deltaphp/deltautils": "^1.2.2",
+                "deltaphp/httpwarp": "~1.0",
+                "ext-fileinfo": "*",
+                "php": "~5.6"
+            },
+            "require-dev": {
+                "codeception/codeception": "*",
+                "codeception/mockery-module": "*",
+                "ext-ctype": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "DeltaRouter": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "orbisnull",
+                    "email": "zen4dev@gmail.com"
+                }
+            ],
+            "description": "Simple router for php applications",
+            "time": "2015-11-11 11:35:06"
+        },
+        {
+            "name": "deltaphp/deltautils",
+            "version": "1.2.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DeltaPHP/DeltaUtils.git",
+                "reference": "67cd41ea7be5d336f2e6d4eab9d21700ac7876df"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DeltaPHP/DeltaUtils/zipball/67cd41ea7be5d336f2e6d4eab9d21700ac7876df",
+                "reference": "67cd41ea7be5d336f2e6d4eab9d21700ac7876df",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "ext-pcre": "*",
+                "php": "~5.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "DeltaUtils": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Vasiliy Shvakin",
+                    "email": "zen4dev@gmail.com"
+                }
+            ],
+            "description": "good tools and utils",
+            "time": "2015-11-11 11:31:09"
+        },
+        {
+            "name": "deltaphp/dtpl",
+            "version": "1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DeltaPHP/dTpl.git",
+                "reference": "8cf4e5169a97c6dc3cf85aa7671b4fd98d224a28"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DeltaPHP/dTpl/zipball/8cf4e5169a97c6dc3cf85aa7671b4fd98d224a28",
+                "reference": "8cf4e5169a97c6dc3cf85aa7671b4fd98d224a28",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "dTpl": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "orbisnull",
+                    "email": "zen4dev@gmail.com"
+                }
+            ],
+            "description": "small base template engine",
+            "time": "2015-04-07 17:04:19"
+        },
+        {
+            "name": "deltaphp/httpwarp",
+            "version": "1.0.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DeltaPHP/HttpWarp.git",
+                "reference": "af133e6d817e9a773de8a67b3e49aca5cf96b8c4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DeltaPHP/HttpWarp/zipball/af133e6d817e9a773de8a67b3e49aca5cf96b8c4",
+                "reference": "af133e6d817e9a773de8a67b3e49aca5cf96b8c4",
+                "shasum": ""
+            },
+            "require": {
+                "deltaphp/deltautils": "^1.2.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "HttpWarp": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Vasiliy Shvakin",
+                    "email": "zen4dev@gmail.com"
+                }
+            ],
+            "description": "request, response, session and other tools for base web development",
+            "time": "2015-11-19 23:32:28"
+        },
+        {
+            "name": "pimple/pimple",
+            "version": "v3.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/silexphp/Pimple.git",
+                "reference": "a30f7d6e57565a2e1a316e1baf2a483f788b258a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/silexphp/Pimple/zipball/a30f7d6e57565a2e1a316e1baf2a483f788b258a",
+                "reference": "a30f7d6e57565a2e1a316e1baf2a483f788b258a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Pimple": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                }
+            ],
+            "description": "Pimple, a simple Dependency Injection Container",
+            "homepage": "http://pimple.sensiolabs.org",
+            "keywords": [
+                "container",
+                "dependency injection"
+            ],
+            "time": "2015-09-11 15:10:35"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "dev",
+    "stability-flags": [],
+    "prefer-stable": true,
+    "prefer-lowest": false,
+    "platform": {
+        "ext-imagick": "*"
+    },
+    "platform-dev": []
+}

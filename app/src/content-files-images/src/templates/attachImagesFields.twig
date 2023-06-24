@@ -1,0 +1,114 @@
+<!-- files -->
+
+
+<div class="box box-warning">
+    <div class="box-header with-border">
+        <h3 class="box-title">Изображения</h3>
+
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-outline-primary btn-sm m-1 " data-toggle="collapse" data-target="#imagesCollapse" aria-expanded="false" aria-controls="collapseExample"><i class="fa fa-minus"></i></button>
+        </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body collapse" id="imagesCollapse">
+        <table class="table table-bordered table-hover">
+            <thead>
+            <th>Превью</th>
+            <th>Параметры</th>
+            <th>Удалить</th>
+            </thead>
+
+            <tbody>
+            {% for image in item.images %}
+                <tr>
+                    <td>
+                        <input type="hidden" name="filesUpdate[]" value="{{ image.id.hex }}">
+                        <img class="img-rounded img-responsive" src="{{ object_url(item_file_view_route, image, {'template': 'square150'}) }}" alt=""/>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <label class="form-control-label" for="title_{{ image.id }}">Название</label>
+                            <input type="text" class="form-control" id="title_{{ image.id }}" name="filesData[title][{{ image.id }}]" value="{{ image.title }}">
+                        </div>
+
+                        <div class="form-group">
+                            <div class="radio">
+                                <label>
+                                    <input name="filesData[__segregated__][main]" value="{{ image.id }}" {{ image.main ? "checked" }} type="radio">
+                                    Главное
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-control-label" for="order_{{ image.id }}">Порядок</label>
+                            <input type="number" class="form-control" id="order_{{ image.id }}" name="filesData[order][{{ image.id }}]" value="{{ image.order }}">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-control-label" for="description_{{ image.id }}">Описание</label>
+                            <textarea id="description_{{ image.id }}" name="filesData[description][{{ image.id }}]" class="form-control" rows="3">{{ image.description }}</textarea>
+                        </div>
+
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="filesDelete[]" value="{{ image.id }}">
+                                </label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <div id="preview" style="margin-bottom: 15px"></div>
+
+
+    </div>
+    <!-- /.box-body -->
+    <div class="box-footer no-padding">
+        <div class="form-group">
+            <label for="files">Добавить</label>
+            <input id="files" name="files[]" class="file-inputs btn btn-primary" title="Выбрать файлы" type="file" multiple accept="photo">
+        </div>
+    </div>
+    <!-- /.footer -->
+</div>
+
+{#
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h3>Файлы:</h3>
+    </div>
+</div>
+
+
+
+<hr width="90%">
+
+<div class="row">
+    <div class="col-md-12">
+        <div id="preview" style="margin-bottom: 15px"></div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label" for="files">Добавить:</label>
+            <div class="col-md-8">
+                <input id="files" name="files[]" class="file-inputs btn-primary" title="Выбрать файлы" type="file" multiple accept="photo">
+            </div>
+        </div>
+
+    </div>
+</div>#}
+
+{#{{ asset_js_once(["akademiano/attach/src/assets/js/imajesUploader.js"], default, true) }}#}
+{#{{ asset_js_once(["akademiano/attach/src/assets/js/bootstrap.file-input.js"], default, true) }}#}
+{#<script>
+    $(document).ready(function () {
+        $('.file-inputs').bootstrapFileInput();
+    });
+</script>#}
+
